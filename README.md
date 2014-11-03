@@ -1,3 +1,5 @@
+# !! Not prepared for use at this moment, please keep in touch !!
+
 # CleverBus 
 
 ESB made by developers for developers
