@@ -1,0 +1,130 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.cleverbus</groupId>
+        <artifactId>integration</artifactId>
+        <version>1.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>web-admin</artifactId>
+    <packaging>war</packaging>
+
+    <name>CleverBus Web Admin</name>
+    <description>CleverBus web administration</description>
+
+    <dependencies>
+        <!-- inner modules -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>components</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>examples</artifactId>
+        </dependency>
+
+        <!-- Monitoring -->
+        <dependency>
+            <groupId>net.bull.javamelody</groupId>
+            <artifactId>javamelody-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jolokia</groupId>
+            <artifactId>jolokia-core</artifactId>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <!-- default settings common for all environments -->
+            <id>esb.dev</id>
+            <activation>
+                <property>
+                    <name>!prod</name>
+                </property>
+            </activation>
+            <properties>
+                <!-- folder with log files (can be empty) -->
+                <log.folder />
+                <!-- true/false if enabled logging to console -->
+                <log.console.enabled>true</log.console.enabled>
+                <!-- true/false if enabled logging to file -->
+                <log.file.enabled>false</log.file.enabled>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>c3p0</groupId>
+                    <artifactId>c3p0</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>com.h2database</groupId>
+                    <artifactId>h2</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <!-- settings for production -->
+            <id>esb.prod</id>
+            <properties>
+                <prod>defined</prod>
+                <!-- folder with log files (can be empty) -->
+                <log.folder>/srv/cbssesb/logs/j2ee/</log.folder>
+                <!-- true/false if enabled logging to console -->
+                <log.console.enabled>false</log.console.enabled>
+                <!-- true/false if enabled logging to file -->
+                <log.file.enabled>true</log.file.enabled>
+            </properties>
+        </profile>
+
+        <profile>
+            <!-- profile for PostgreSQL -->
+            <id>esb.psSql</id>
+            <dependencies>
+                <dependency>
+                    <groupId>net.sourceforge.jtds</groupId>
+                    <artifactId>jtds</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.postgresql</groupId>
+                    <artifactId>postgresql</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <!-- profile for PostgreSQL (libraries are provided) -->
+            <id>esb.psSql.prod</id>
+            <dependencies>
+                <dependency>
+                    <groupId>net.sourceforge.jtds</groupId>
+                    <artifactId>jtds</artifactId>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.postgresql</groupId>
+                    <artifactId>postgresql</artifactId>
+                    <scope>provided</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
+
+    <build>
+        <!-- default name of CleverBus integration platform -->
+        <finalName>esb</finalName>
+
+        <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+    </build>
+</project>

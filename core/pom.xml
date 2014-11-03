@@ -1,0 +1,309 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.cleverbus</groupId>
+        <artifactId>integration</artifactId>
+        <version>1.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>core</artifactId>
+    <packaging>jar</packaging>
+
+    <name>CleverBus Core</name>
+    <description>CleverBus integration core</description>
+
+    <properties>
+        <modules.root.directory>src/main/resources/org/cleverbus/core/modules</modules.root.directory>
+        <modules.import.directory>${project.build.directory}/modules-import</modules.import.directory>
+        <modules.output.directory>${project.build.directory}/generated-sources</modules.output.directory>
+        <modules.other.resources.directory>${project.build.directory}/other-modules-resources</modules.other.resources.directory>
+    </properties>
+
+    <dependencies>
+        <!-- inner modules -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>core-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>core-spi</artifactId>
+        </dependency>
+
+
+        <!-- Spring framework -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-oxm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
+
+        <!-- Spring web services -->
+        <dependency>
+            <groupId>org.springframework.ws</groupId>
+            <artifactId>spring-ws-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.ws</groupId>
+            <artifactId>spring-ws-support</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ws.xmlschema</groupId>
+            <artifactId>xmlschema-core</artifactId>
+        </dependency>
+
+
+        <!-- Spring security -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-taglibs</artifactId>
+            <version>${spring-security-version}</version>
+        </dependency>
+
+        <!-- persistence -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>c3p0</groupId>
+            <artifactId>c3p0</artifactId>
+        </dependency>
+
+
+        <!-- logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>log4j-over-slf4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.janino</groupId>
+            <artifactId>janino</artifactId>
+        </dependency>
+
+
+        <!-- Apache commons -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+
+
+        <!-- misc -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jcifs</groupId>
+            <artifactId>jcifs</artifactId>
+        </dependency>
+
+
+        <!-- test dependencies -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <forkCount>1C</forkCount>
+                    <argLine>-Xmx1024m -XX:MaxPermSize=256m</argLine>
+                </configuration>
+            </plugin>
+
+            <!--
+                Copies resources (xjb, xsd) from core-api module.
+            -->
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-dependencies</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includes>**/*.xjb,**/*.xsd</includes>
+                            <includeGroupIds>org.cleverbus</includeGroupIds>
+                            <includeArtifactIds>core-api</includeArtifactIds>
+                            <outputDirectory>${modules.other.resources.directory}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <!--
+                        Copies all xjb, wsdl and xsd files to a single directory for generating Java model from WSDL/XSD,
+                        allowing WSDL/XSD files to reference each other easily with a simple relative path.
+                        -->
+                        <id>copy-in-for-import</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${modules.import.directory}</outputDirectory>
+                            <!-- the directories are specified explicitly to ensure flat structure -->
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources/jaxb</directory>
+                                </resource>
+                                <resource>
+                                   <directory>${modules.other.resources.directory}/jaxb</directory>
+                               </resource>
+                               <resource>
+                                   <directory>
+                                       ${modules.other.resources.directory}/org/cleverbus/api/modules/in/common
+                                   </directory>
+                               </resource>
+                                <resource>
+                                    <directory>${modules.root.directory}/out/asynch/ws/v1_0</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+                <configuration>
+                    <clearOutputDir>false</clearOutputDir>
+                    <outputDirectory>${modules.output.directory}</outputDirectory>
+                    <schemaDirectory>${modules.import.directory}</schemaDirectory>
+                    <bindingDirectory>${modules.import.directory}</bindingDirectory>
+                </configuration>
+                <executions>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxws-maven-plugin</artifactId>
+                <configuration>
+                    <sourceDestDir>${modules.output.directory}</sourceDestDir>
+                    <wsdlDirectory>${modules.import.directory}</wsdlDirectory>
+                    <bindingDirectory>${modules.import.directory}</bindingDirectory>
+                    <bindingFiles>
+                        <bindingFile>jaxb_global_bindings.xjb</bindingFile>
+                    </bindingFiles>
+                </configuration>
+                <executions>
+
+                    <execution>
+                        <id>WSDL-import-out-asynch-confirmation</id>
+                        <goals>
+                            <goal>wsimport</goal>
+                        </goals>
+                        <configuration>
+                            <staleFile>${project.build.directory}/jaxws/.out.asynch.model</staleFile>
+                            <packageName>org.cleverbus.modules.out.asynch.model</packageName>
+                            <wsdlFiles>
+                                <wsdlFile>asynchConfirmation-v1.0.wsdl</wsdlFile>
+                            </wsdlFiles>
+                            <bindingFiles>
+                                <bindingFile>jaxb_global_bindings.xjb</bindingFile>
+                            </bindingFiles>
+                        </configuration>
+                    </execution>
+
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

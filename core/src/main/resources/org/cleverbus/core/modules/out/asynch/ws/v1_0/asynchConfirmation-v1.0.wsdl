@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tns="http://cleverbus.cleverlance.com/ws/AsynchConfirmationService-v1"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  targetNamespace="http://cleverbus.cleverlance.com/ws/AsynchConfirmationService-v1">
+
+    <wsdl:types>
+        <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified">
+            <xs:import namespace="http://cleverbus.cleverlance.com/ws/AsynchConfirmationService-v1"
+                       schemaLocation="asynchConfirmationOperations-v1.0.xsd"/>
+        </xs:schema>
+    </wsdl:types>
+
+    <wsdl:message name="confirmProcessingRequestMsg">
+        <wsdl:part element="tns:confirmProcessingRequest" name="confirmProcessingRequest"/>
+    </wsdl:message>
+    <wsdl:message name="confirmProcessingResponseMsg">
+        <wsdl:part element="tns:confirmProcessingResponse" name="confirmProcessingResponse"/>
+    </wsdl:message>
+
+    <wsdl:portType name="asynchConfirmation-v1.0">
+        <wsdl:operation name="confirmProcessing">
+            <wsdl:input message="tns:confirmProcessingRequestMsg" name="confirmProcessingRequest"/>
+            <wsdl:output message="tns:confirmProcessingResponseMsg" name="confirmProcessingResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:binding name="asynchConfirmationBindingSoap11-v1.0" type="tns:asynchConfirmation-v1.0">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+        <wsdl:operation name="confirmProcessing">
+            <soap:operation soapAction="http://cleverbus.cleverlance.com/ws/AsynchConfirmationService-v1/confirmProcessing"/>
+            <wsdl:input name="confirmProcessingRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="confirmProcessingResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:service name="asynchConfirmationService-v1.0">
+        <wsdl:port binding="tns:asynchConfirmationBindingSoap11-v1.0" name="asynchConfirmationSoap11-v1.0">
+            <soap:address location="/ws/asynchConfirmation/v1"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

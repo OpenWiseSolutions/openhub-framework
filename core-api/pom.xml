@@ -1,0 +1,166 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.cleverbus</groupId>
+        <artifactId>integration</artifactId>
+        <version>1.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>core-api</artifactId>
+    <packaging>jar</packaging>
+
+    <name>CleverBus Core API</name>
+    <description>CleverBus integration core API</description>
+
+    <properties>
+        <modules.root.directory>src/main/resources/org/cleverbus/api/modules</modules.root.directory>
+        <modules.import.directory>${project.build.directory}/modules-import</modules.import.directory>
+        <modules.output.directory>${project.build.directory}/generated-sources</modules.output.directory>
+    </properties>
+
+    <dependencies>
+
+        <!-- inner modules -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
+
+
+        <!-- Spring framework -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+
+
+        <!-- Apache Camel -->
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-spring</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-servlet</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-spring-ws</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-jaxb</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-mvel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-mail</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-quartz2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-http4</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-spring-security</artifactId>
+        </dependency>
+
+
+        <!-- misc -->
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.0-api</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <!--
+                        Copies all xjb, wsdl and xsd files to a single directory for generating Java model from WSDL/XSD,
+                        allowing WSDL/XSD files to reference each other easily with a simple relative path.
+                        -->
+                        <id>copy-in-for-import</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${modules.import.directory}</outputDirectory>
+                            <!-- the directories are specified explicitly to ensure flat structure -->
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources/jaxb</directory>
+                                </resource>
+                                <resource>
+                                    <directory>${modules.root.directory}/in/common</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+                <configuration>
+                    <clearOutputDir>false</clearOutputDir>
+                    <outputDirectory>${modules.output.directory}</outputDirectory>
+                    <schemaDirectory>${modules.import.directory}</schemaDirectory>
+                    <bindingDirectory>${modules.import.directory}</bindingDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>XSD-import-in-common-model</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                        <configuration>
+                            <staleFile>${project.build.directory}/jaxb2/.in.common.model</staleFile>
+                            <packageName>org.cleverbus.api.asynch.model</packageName>
+                            <schemaFiles>commonTypes-v1.0.xsd</schemaFiles>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

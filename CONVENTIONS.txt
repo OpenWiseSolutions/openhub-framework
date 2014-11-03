@@ -1,0 +1,73 @@
+Conventions for CleverBSS integration platform
+====================================================================
+
+1. Obecné
+- Základní pravidla psaní zdrojového kódu jsou převzata ze specifikace společnosti Sun a jsou popsány v Java Code Conventions.
+    (http://www.oracle.com/technetwork/java/codeconvtoc-136057.html)
+- Základní jednotka odsazení jsou 4 znaky. Tabulátor je konvertován na mezery.
+- Délka řádky nesmí překročit délku 120 znaků. Maximální délka jedné třídy je 1000 řádek.
+- vse v UTF-8
+- hierarchie vyjímek je definována v org.cleverbus.core.common.exceptions;
+    pokud budeme vyhazovat sami nějaké vyjímky, tak vždy to musí být vyjímka odvozená od IntegrationException
+- veškeré komentáře jsou v anglickém jazyce
+
+
+2. Názvosloví objektů a vzorů
+2.1. Jmenná konvence pro třídy a rozhraní
+
+Základní package pro všechny námi vytvořené třídy je org.cleverbus.modules
+
+Pojmenování rozhraní nebo tříd vychází z jejich účelu:
+...Routes       Definice Camel routes
+...Exception    Výjimky
+...Test	        Testovací třída
+...Tools	    Třída s pomocnými užitečnými metodami
+...Helper	    Pomocná třída, většinou pouze pro lokální užití
+...Enum	        Výčtový typ
+
+2.2. Jmenná konvence pojmenování metod
+
+Pro základní operace prováděné metodami se používají následující jmenné konvence:
+set...	    nastavení hodnoty, reference, apod.
+get...	    získání hodnoty, kolekce hodnot, reference, apod.
+add...	    vložení dat do nečeho
+insert...   uložení dat do DB
+update...	změna dat
+delete...	odstranění dat
+create...	vytvoření nového objektu, bez uložení
+exists...	kontrola existence, vrací true nebo false.
+check...	obecně kontrola	 vrací true nebo false.
+validate...	validace vstupních dat nebo stavu objektu
+findAll...	nalezení seznamu všech možných hodnot, výsledkem nikdy nemůže být null, ale jen prázdná kolekce.
+findBy...   nebo findXyzBy...	 nalezení hodnoty nebo seznamu hodnot odpovídajícím zadaným parametrům
+test...	    testovací metoda, většinou označena pomocí anotace @Test
+
+Pokud nějaký vstupní parametr může být null nebo metoda může mít na výstupu null, pak tento parametr/metoda musí
+být označena pomocí anotace javax.annotation.Nullable.
+
+
+3. Návrh WSDL
+- WSDL navrhovat pomocí Contract-first přístupu (http://static.springsource.org/spring-ws/site/reference/html/why-contract-first.html)
+
+
+4. Definice route
+Při vytváření routovacích pravidel je potřeba dodržovat několik pravidel:
+- extends AbstractBasicRoute
+- definovat jednoznačné ID Spring beanu a route ID => inspirace SubscriberRoutes
+- implementace asynchronnich procesu je popsana v JIRE - https://jira.cleverlance.com/jira/browse/CBSS-48
+
+4.1. Konvence pojmenovani route ID
+a) synchronni zprava - route ID: SERVICE_OPERATION_SUFFIX, kde
+SERVICE je nazev sluzby (=modulu),
+OPERATION je nazev operace
+SUFFIX je konstanta (AbstractBasicRoute#ROUTE_SUFFIX) pro synchronni routes
+
+napr. ServiceEnum.CUSTOMER + "_" + "getCustomer" + ROUTE_SUFFIX
+
+b) asynchronni zprava (prichozi) - route ID: SERVICE_OPERATION_INSUFFIX, kde
+INSUFFIX je konstanta (AbstractBasicRoute#IN_ROUTE_SUFFIX) pro asynchronni prichozi routes
+
+c) asynchronni zprava (odchozi) - route ID: SERVICE_OPERATION_OUTSUFFIX, kde
+OUTSUFFIX je konstanta (AbstractBasicRoute#OUT_ROUTE_SUFFIX) pro asynchronni odchozi routes
+
+Toto route ID je take pouzito pro dynamicke smerovani z hlavni route pro zpracovani asynchronnich procesu.

@@ -1,0 +1,15 @@
+===============================================================================
+CHANGES - API changes history
+
+Syntax description:
++: adding (new attribute, method, parameter ...)
+-: deleting
+*: change of the existing attribute, method, parameter
+
+Example:
+#1304
+[customer.wsdl]
++ pridani atributu passportNo pro operaci getCustomer
+* operace getCustomer nyni vyzaduje aby alespon jeden atribut byl specifikovan
+===============================================================================
+

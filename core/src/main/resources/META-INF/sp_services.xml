@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <description>
+        Spring configuration of common services.
+    </description>
+
+    <bean id="messageService" class="org.cleverbus.core.common.asynch.msg.MessageServiceImpl"/>
+    <bean id="messageOperationService" class="org.cleverbus.core.common.asynch.msg.MessageOperationServiceImpl"/>
+
+    <!-- direct call -->
+    <bean class="org.cleverbus.core.common.directcall.DirectCallRegistryMemoryImpl"/>
+    <bean class="org.cleverbus.core.common.directcall.DirectCallHttpImpl"/>
+
+    <!-- context call -->
+    <bean class="org.cleverbus.core.common.contextcall.ContextCallRegistryMemoryImpl"/>
+    <bean class="org.cleverbus.core.common.contextcall.ContextCallHttpImpl"/>
+
+    <!-- stopping -->
+    <bean id="stoppingService" class="org.cleverbus.core.common.asynch.stop.StopServiceNodeImpl"/>
+
+    <!-- request/response saving -->
+    <bean id="reqResService" class="org.cleverbus.core.reqres.RequestResponseServiceDefaultImpl"/>
+
+    <!-- file repository -->
+    <bean id="fileRepository" class="org.cleverbus.core.common.file.DefaultFileRepository"/>
+
+</beans>

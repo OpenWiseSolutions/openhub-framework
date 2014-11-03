@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <description>
+        Basic Spring configuration of the Spring WS (child) application context.
+    </description>
+
+    <import resource="classpath:/META-INF/sp_async.xml"/>
+    <import resource="classpath:/META-INF/sp_camel.xml"/>
+    <import resource="classpath:/META-INF/sp_ws.xml"/>
+    <import resource="classpath:/META-INF/sp_ws_wsdl.xml"/>
+    <import resource="classpath:/META-INF/sp_jmx.xml"/>
+
+    <context:annotation-config />
+    <tx:annotation-driven transaction-manager="jpaTxManager"/>
+
+    <!-- init all routes from modules -->
+    <context:component-scan base-package="org.cleverbus.core, org.cleverbus.modules" use-default-filters="false"
+            name-generator="org.cleverbus.core.common.route.RouteBeanNameGenerator">
+        <context:include-filter type="custom" expression="org.cleverbus.core.common.spring.SystemIncludeRegexPatternTypeFilter"/>
+        <context:exclude-filter type="custom" expression="org.cleverbus.core.common.spring.SystemExcludeRegexPatternTypeFilter"/>
+    </context:component-scan>
+
+    <!-- property configuration files -->
+    <context:property-placeholder ignore-resource-not-found="true" properties-ref="confProperties"/>
+
+    <bean id="confProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="ignoreResourceNotFound" value="true"/>
+        <property name="locations">
+            <list>
+                <value>classpath:applicationCore.cfg</value>
+                <value>classpath:application.cfg</value>
+                <value>classpath:application0.cfg</value>
+                <value>classpath:throttlingCore.cfg</value>
+                <value>classpath:throttling.cfg</value>
+                <value>classpath:throttling0.cfg</value>
+                <value>classpath:alertsCore.cfg</value>
+                <value>classpath:alerts.cfg</value>
+                <value>classpath:alerts0.cfg</value>
+                <value>classpath:extensions.cfg</value>
+                <value>classpath:extensions0.cfg</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean class="org.cleverbus.core.conf.ConfigurationChecker"/>
+
+</beans>

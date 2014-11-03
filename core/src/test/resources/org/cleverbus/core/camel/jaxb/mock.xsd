@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="urn:testXmlObject"
+           elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+
+    <xs:element name="testXmlObject" >
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="testDate" type="xs:date"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

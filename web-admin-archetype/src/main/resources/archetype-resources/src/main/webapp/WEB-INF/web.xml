@@ -1,0 +1,180 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/javaee/web-app_2_4.xsd"
+         version="2.4">
+
+    <display-name>${cleverBusServerDescription}</display-name>
+    <description>${cleverBusServerDescription}</description>
+
+    <!--
+        Location of the XML file that defines the root application context.
+        Applied by ContextLoaderListener (or ContextLoaderServlet).
+    -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:net/bull/javamelody/monitoring-spring.xml, WEB-INF/rootApplicationContext.xml, WEB-INF/rootSecurity.xml</param-value>
+    </context-param>
+
+    <!-- default Spring profile - development environment -->
+    <context-param>
+        <param-name>spring.profiles.default</param-name>
+        <param-value>dev,h2</param-value>
+    </context-param>
+
+    <!--
+        Loads the root application context of this web app at startup.
+        The application context is then available via
+        WebApplicationContextUtils.getWebApplicationContext(servletContext).
+    -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <!-- Spring security filter -->
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!--
+        A filter that provides web-application specific context information to the logging subsystem.
+    -->
+    <filter>
+        <filter-name>logContextFilter</filter-name>
+        <filter-class>org.cleverbus.common.log.LogContextFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>logContextFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!--
+    A filter that provides way to specify a character encoding for requests.
+    -->
+    <filter>
+        <filter-name>charsetFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>charsetFilter</filter-name>
+        <servlet-name>spring-admin-mvc</servlet-name>
+    </filter-mapping>
+
+    <!-- Camel servlet-->
+    <servlet>
+        <servlet-name>CamelServlet</servlet-name>
+        <servlet-class>org.apache.camel.component.servlet.CamelHttpTransportServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CamelServlet</servlet-name>
+        <url-pattern>/http/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Spring WS servlet -->
+    <servlet>
+        <servlet-name>spring-ws</servlet-name>
+        <servlet-class>org.springframework.ws.transport.http.MessageDispatcherServlet</servlet-class>
+        <init-param>
+            <!-- Transform the location attributes in WSDLs -->
+            <param-name>transformWsdlLocations</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>spring-ws</servlet-name>
+        <url-pattern>/ws/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Spring MVC -->
+    <servlet>
+        <servlet-name>spring-admin-mvc</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>spring-admin-mvc</servlet-name>
+        <url-pattern>/web/admin/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Monitoring -->
+    <filter>
+        <filter-name>monitoring</filter-name>
+        <filter-class>net.bull.javamelody.MonitoringFilter</filter-class>
+        <init-param>
+            <param-name>monitoring-path</param-name>
+            <param-value>/monitoring/javamelody</param-value>
+        </init-param>
+        <!--
+           javamelody monitoring is by default disabled,
+           for enable please use parameter -Djavamelody.disabled=false on start JVM
+        -->
+        <init-param>
+            <param-name>disabled</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>monitoring</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <listener>
+        <listener-class>net.bull.javamelody.SessionListener</listener-class>
+    </listener>
+
+    <servlet>
+        <servlet-name>jolokia-agent</servlet-name>
+        <servlet-class>org.jolokia.http.AgentServlet</servlet-class>
+        <load-on-startup>3</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>jolokia-agent</servlet-name>
+        <url-pattern>/monitoring/jolokia/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Error handling -->
+    <error-page>
+        <error-code>400</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>403</error-code>
+        <location>/error_403.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+
+    <!-- Welcome page -->
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
+</web-app>

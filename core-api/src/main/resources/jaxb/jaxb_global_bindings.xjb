@@ -1,0 +1,11 @@
+<jxb:bindings version="2.1" xmlns:jxb="http://java.sun.com/xml/ns/jaxb" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <jxb:globalBindings>
+        <jxb:javaType name="org.joda.time.DateTime" xmlType="xs:date"
+                      parseMethod="org.cleverbus.common.jaxb.JaxbDateAdapter.parseDate"
+                      printMethod="org.cleverbus.common.jaxb.JaxbDateAdapter.printDate"/>
+
+        <jxb:javaType name="org.joda.time.DateTime" xmlType="xs:dateTime"
+                      parseMethod="org.cleverbus.common.jaxb.JaxbDateAdapter.parseDateTime"
+                      printMethod="org.cleverbus.common.jaxb.JaxbDateAdapter.printDateTime"/>
+    </jxb:globalBindings>
+</jxb:bindings>

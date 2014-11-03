@@ -1,0 +1,156 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.cleverbus</groupId>
+        <artifactId>integration</artifactId>
+        <version>1.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>examples</artifactId>
+    <packaging>jar</packaging>
+
+    <name>CleverBus Examples</name>
+    <description>CleverBus examples</description>
+
+    <properties>
+        <modules.root.directory>src/main/resources/org/cleverbus/modules</modules.root.directory>
+        <modules.import.directory>${project.build.directory}/modules-import</modules.import.directory>
+        <modules.output.directory>${project.build.directory}/generated-sources</modules.output.directory>
+        <modules.other.resources.directory>${project.build.directory}/other-modules-resources</modules.other.resources.directory>
+        <modules.common.xsd.directory>${modules.other.resources.directory}/org/cleverbus/api/modules/in/common</modules.common.xsd.directory>
+    </properties>
+
+    <dependencies>
+        <!-- inner modules -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>core-api</artifactId>
+        </dependency>
+
+        <!-- test dependencies -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>components</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>core</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+
+        <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <forkCount>1C</forkCount>
+                    <argLine>-Xmx1024m -XX:MaxPermSize=256m</argLine>
+                </configuration>
+            </plugin>
+
+            <!--
+                Copies resources (xjb, xsd) from other modules.
+                Note: when I call "mvn compile" only, then error occurs because of "Artifact has not been packaged yet."
+            -->
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-dependencies</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includes>**/*.xjb,**/*.xsd</includes>
+                            <includeGroupIds>${project.groupId}</includeGroupIds>
+                            <outputDirectory>${modules.other.resources.directory}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <!--
+                        Copies all xjb, wsdl and xsd files to a single directory for generating Java model from WSDL/XSD,
+                        allowing WSDL/XSD files to reference each other easily with a simple relative path.
+                        -->
+                        <id>copy-in-for-import</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${modules.import.directory}</outputDirectory>
+                            <!-- the directories are specified explicitly to ensure flat structure -->
+                            <resources>
+                                <resource>
+                                    <directory>${modules.other.resources.directory}/jaxb</directory>
+                                </resource>
+                                <resource>
+                                    <directory>${modules.other.resources.directory}/org/cleverbus/api/modules/in/common</directory>
+                                </resource>
+                                <resource>
+                                    <directory>${modules.root.directory}/in/hello/ws/v1_0</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxws-maven-plugin</artifactId>
+                <configuration>
+                    <sourceDestDir>${modules.output.directory}</sourceDestDir>
+                    <wsdlDirectory>${modules.import.directory}</wsdlDirectory>
+                    <bindingDirectory>${modules.import.directory}</bindingDirectory>
+                    <bindingFiles>
+                        <bindingFile>jaxb_global_bindings.xjb</bindingFile>
+                    </bindingFiles>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>WSDL-import-in-hello-model</id>
+                        <goals>
+                            <goal>wsimport</goal>
+                        </goals>
+                        <configuration>
+                            <staleFile>${project.build.directory}/jaxws/.in.hello.model</staleFile>
+                            <packageName>org.cleverbus.modules.in.hello.model</packageName>
+                            <wsdlFiles>
+                                <wsdlFile>hello-v1.0.wsdl</wsdlFile>
+                            </wsdlFiles>
+                            <bindingFiles>
+                                <bindingFile>jaxb_global_bindings.xjb</bindingFile>
+                                <bindingFile>jaxb_common_bindings.xjb</bindingFile>
+                            </bindingFiles>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

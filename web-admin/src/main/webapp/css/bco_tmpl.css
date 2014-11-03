@@ -1,0 +1,242 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+#wrapper {
+    margin: 1em;
+    height: 100%;
+    width: auto;
+}
+
+#notificator {
+    position: absolute;
+    top: 10px;
+    left: 735px;
+    height: 70px;
+    width: 325px;
+    padding: 5px 5px 5px 5px;
+    font-size: small;
+}
+
+@-moz-document url-prefix() {
+#notificator {
+    font-size: smaller;
+    text-align: right;
+    height: 80px;
+    left: 395px;
+    padding: 5px;
+    position: absolute;
+    top: 80px;
+    width: 300px;
+}}
+
+#footer {
+    float: left;
+}
+
+#search-panel {
+    overflow: auto;
+    margin: 0 0 25px 0;
+    padding: 0;
+}
+
+#search-results {
+    overflow: auto;
+}
+
+#result-options {
+    overflow: auto;
+}
+
+#search-panel form {
+    overflow: auto;
+    margin-bottom: 0;
+}
+
+#search-panel form label {
+    margin: 0 5px 0 10px;
+}
+
+#search-panel ul.search-panel-options {
+    display: table-row;
+    margin: 0;
+    padding: 0;
+    text-align: right;
+}
+
+@-moz-document url-prefix() {
+#search-panel ul.search-panel-options {
+    display: -moz-inline-box;
+    margin: 0;
+    padding: 0;
+    text-align: right;
+}
+}
+
+#search-panel ul.search-panel-options li {
+    list-style-type: none;
+}
+
+#search-panel ul.search-panel-options li.sinputselect {
+    padding: 0;
+    display: table-cell;
+}
+
+#search-panel ul li.sinputselect select#bcStates {
+    vertical-align: middle;
+}
+
+#search-panel ul li.sinputselect label {
+    vertical-align: top;
+    margin: 0 5px 0 10px;
+}
+
+#search-panel ul li.stextinputs {
+    vertical-align: top;
+    display: inline-block;
+}
+
+@-moz-document url-prefix() {
+#search-panel ul li.stextinputs {
+    display: list-item;
+}
+}
+#search-panel ul  li.stextinputs label {
+    display: inline;
+    vertical-align: middle;
+}
+
+li.sbuttons {
+    margin-left: 0;
+    margin-top: 3px;
+}
+
+@-moz-document url-prefix() {
+li.sbuttons {
+    margin-left: 10px;
+    margin-top: 0;
+}
+}
+
+#bcStatsTab {
+    float: left;
+    margin-right: 0;
+    border-bottom: 1px solid #ACACAC;
+    border-collapse: collapse;
+    font-size: 80%;
+}
+
+#bcStatsTab caption {
+
+    text-align: left;
+    padding: 5px 10px 5px 10px;
+    background-color: #C0D9FF;
+}
+
+#bcStatsTab thead {
+    text-align: left;
+}
+
+#bcStatsTab th {
+    background-color: #E0E0E0;
+    border: 1px solid #ACACAC;
+    padding: 5px 10px 5px 10px;
+    text-align: center;
+}
+
+#bcStatsTab td {
+    border: 1px solid #ACACAC;
+    padding: 10px;
+}
+
+/* resultTable region */
+#resultTable {
+    float: left;
+    margin-right: 0;
+    border-bottom: 1px solid #ACACAC;
+    border-collapse: collapse;
+}
+
+#resultTable caption {
+    font-size: 80%;
+    padding: 5px 10px;
+    text-align: left;
+    background-color: #C0D9FF;
+}
+
+#resultTable tr th {
+    font-size: 80%;
+    text-align: center;
+    border-right: 1px solid #ACACAC;
+    border-left: 1px solid #ACACAC;
+    padding: 0 0 0 0;
+}
+
+#resultTable tr th input[type="radio"] {
+    margin: 10px;
+}
+
+#resultTable tr td {
+    font-size: smaller;
+    border-right: 1px solid #ACACAC;
+    text-align: center;
+    padding: 0 10px 0 10px;
+}
+
+#resultTable tr.selected {
+    background-color: #C0D9FF;
+}
+
+#resultTable tr.talbe-header {
+    border: 1px solid #ACACAC;
+}
+
+#resultTable tr.talbe-header th {
+    border: 1px solid #ACACAC;
+    text-align: center;
+    background-color: #E0E0E0;
+    padding: 5px 10px 5px 10px;
+}
+
+div#result-options ul.rofields {
+
+    display: none;
+    float: left;
+    margin: 20px 0 0 0;
+    padding: 0;
+}
+
+div#result-options ul.rofields input[type="text"] {
+    font-size: x-small;
+    background-color: #E8E8E8;
+    text-align: center;
+}
+
+div#result-options ul li {
+    display: table-cell;
+    list-style-type: none;
+}
+
+div#result-options ul.robuttons button {
+    margin-left: 0;
+}
+
+div#result-options ul.robuttons {
+    display: table-row;
+    float: left;
+    margin: 10px 0 0 0;
+    padding: 0;
+}
+
+div#result-options ul li button[disabled] {
+}
+
+div#result-options ul li.res-op-btn-last {
+    margin-right: 0;
+}
+
+div#result-options input[type="text"]:disabled {
+    background-color: #C0D9FF;
+}

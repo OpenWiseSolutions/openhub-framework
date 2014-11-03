@@ -1,0 +1,75 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <description>
+        Basic Spring configuration of the Spring MVC (child) application context.
+    </description>
+
+    <context:annotation-config/>
+    <tx:annotation-driven transaction-manager="jpaTxManager"/>
+
+    <!-- init web admin part only -->
+    <context:component-scan base-package="${package}.admin"/>
+
+    <!-- property configuration files -->
+    <context:property-placeholder ignore-resource-not-found="true"
+                                  location="classpath:applicationCore.cfg,classpath:application.cfg,classpath:application0.cfg"/>
+
+    <bean id="logFileFilter" class="${package}.admin.services.log.LogFileFilter">
+        <property name="formatPattern" value="${symbol_dollar}{log.file.pattern}"/>
+    </bean>
+
+    <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="templateLoaderPath" value="/freemarker/"/>
+        <property name="freemarkerSettings">
+            <props>
+                <prop key="url_escaping_charset">UTF-8</prop>
+                <prop key="default_encoding">UTF-8</prop>
+                <prop key="output_encoding">UTF-8</prop>
+                <prop key="auto_import">spring.ftl as spring</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+        <property name="cache" value="true"/>
+        <property name="prefix" value=""/>
+        <property name="suffix" value=".ftl"/>
+        <property name="contentType" value="text/html;charset=utf-8"/>
+    </bean>
+
+    <!-- internationalization and localization -->
+    <bean id="messageSource"
+          class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="classpath:messages/messages" />
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+    <bean id="localeChangeInterceptor"
+          class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+        <property name="paramName" value="lang" />
+    </bean>
+
+    <bean id="localeResolver"
+          class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+        <property name="defaultLocale" value="cs_CZ"/>
+    </bean>
+
+    <!-- error codes catalog -->
+    <util:map id="errorCodesCatalog" value-type="java.util.List">
+        <entry key="Core" >
+            <bean id="errorCoreCodes" class="org.cleverbus.modules.ErrorEnum" factory-method="values" />
+        </entry>
+    </util:map>
+
+</beans>

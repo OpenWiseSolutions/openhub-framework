@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+          http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+
+    <description>
+        Spring persistence configuration for tests.
+    </description>
+
+    <jdbc:embedded-database id="dataSource" type="H2"/>
+
+    <bean id="jpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+        <property name="database" value="H2"/>
+    </bean>
+
+    <bean id="entityManagerFactoryTemplate" abstract="true" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="persistenceUnitName" value="CleverBus"/>
+        <property name="jpaVendorAdapter" ref="jpaVendorAdapter"/>
+        <property name="packagesToScan">
+            <list>
+                <value>org.cleverbus.api.entity</value>
+            </list>
+        </property>
+        <property name="jpaProperties" ref="jpaProperties"/>
+    </bean>
+
+    <bean id="entityManagerFactory" parent="entityManagerFactoryTemplate"/>
+
+    <bean id="jpaTxManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+
+    <tx:annotation-driven transaction-manager="jpaTxManager"/>
+
+    <bean id="jpaProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="properties">
+            <props>
+                <prop key="hibernate.hbm2ddl.auto">create</prop> <!-- validate | update | create | create-drop -->
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.use_sql_comments">true</prop>
+                <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.generate_statistics">true</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
+            </props>
+        </property>
+    </bean>
+
+</beans>

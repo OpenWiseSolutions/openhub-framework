@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <description>
+        Base Spring configuration for core tests.
+    </description>
+
+    <!-- property configuration files -->
+    <context:property-placeholder ignore-resource-not-found="true" properties-ref="testProperties"/>
+
+    <bean id="testProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="ignoreResourceNotFound" value="true"/>
+        <property name="locations">
+            <list>
+                <value>classpath:applicationCore.cfg</value>
+                <value>classpath:applicationCore0.cfg</value>
+                <value>classpath:throttlingCore.cfg</value>
+                <value>classpath:alertsCore.cfg</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean class="org.cleverbus.core.common.asynch.ExceptionTranslationRoute"/>
+
+    <bean id="emailService" class="org.cleverbus.core.common.asynch.notification.DummyEmailServiceImpl"/>
+
+    <!-- throttling -->
+    <bean class="org.cleverbus.core.throttling.ThrottlingPropertiesConfiguration">
+        <constructor-arg ref="testProperties"/>
+    </bean>
+
+    <bean class="org.cleverbus.core.throttling.ThrottleCounterMemoryImpl" />
+    <bean class="org.cleverbus.core.throttling.ThrottleProcessorImpl" />
+
+    <!-- direct call -->
+    <bean class="org.cleverbus.core.common.directcall.DirectCallRegistryMemoryImpl"/>
+    <bean class="org.cleverbus.core.common.directcall.DirectCallWsRoute"/>
+
+    <!-- context call -->
+    <bean class="org.cleverbus.core.common.contextcall.ContextCallRegistryMemoryImpl"/>
+    <bean class="org.cleverbus.core.common.contextcall.ContextCallRoute"/>
+
+    <!-- stopping -->
+    <bean id="stoppingService" class="org.cleverbus.core.common.asynch.stop.StopServiceNodeImpl"/>
+
+</beans>

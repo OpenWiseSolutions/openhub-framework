@@ -1,0 +1,563 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>${groupId}</groupId>
+    <artifactId>${artifactId}</artifactId>
+
+    <packaging>war</packaging>
+
+    <name>${cleverBusServerName}</name>
+    <description>${cleverBusServerDescription}</description>
+    <version>${version}</version>
+
+    <scm>
+        <connection>scm:svn:https://repo.cleverlance.com/svn/clv.CleverBus/trunk</connection>
+        <developerConnection>scm:svn:https://repo.cleverlance.com/svn/clv.CleverBus/trunk</developerConnection>
+        <url>https://repo.cleverlance.com/svn/clv.CleverBus/trunk</url>
+    </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>nexus</id>
+            <name>Cleverlance Release Repository</name>
+            <url>https://maven.cleverlance.com/nexus/content/repositories/releases</url>
+            <uniqueVersion>false</uniqueVersion>
+        </repository>
+        <snapshotRepository>
+            <id>nexus</id>
+            <name>Cleverlance Snapshot Repository</name>
+            <url>https://maven.cleverlance.com/nexus/content/repositories/snapshots</url>
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <properties>
+        <!-- java language version -->
+        <java.version>1.6</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <cleverBus-version>${cleverBusVersion}</cleverBus-version>
+
+        <modules.root.directory>src/main/resources/${packageInPathFormat}/modules</modules.root.directory>
+        <modules.import.directory>${project.build.directory}/modules-import</modules.import.directory>
+        <modules.output.directory>${project.build.directory}/generated-sources</modules.output.directory>
+        <modules.other.resources.directory>${project.build.directory}/other-modules-resources
+        </modules.other.resources.directory>
+        <modules.common.xsd.directory>
+            ${modules.other.resources.directory}/com/cleverlance/cleverbus/core/modules/in/common
+        </modules.common.xsd.directory>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- CleverBus modules -->
+            <dependency>
+                <groupId>org.cleverbus</groupId>
+                <artifactId>core</artifactId>
+                <version>${cleverBus-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.cleverbus</groupId>
+                <artifactId>components</artifactId>
+                <version>${cleverBus-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.cleverbus</groupId>
+                <artifactId>examples</artifactId>
+                <version>${cleverBus-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.cleverbus</groupId>
+                <artifactId>test</artifactId>
+                <version>${cleverBus-version}</version>
+            </dependency>
+
+            <!-- Monitoring -->
+            <dependency>
+                <groupId>net.bull.javamelody</groupId>
+                <artifactId>javamelody-core</artifactId>
+                <version>1.49.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jolokia</groupId>
+                <artifactId>jolokia-core</artifactId>
+                <version>1.2.0</version>
+            </dependency>
+
+            <!-- Database layer -->
+            <dependency>
+                <groupId>c3p0</groupId>
+                <artifactId>c3p0</artifactId>
+                <version>0.9.1.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>1.3.173</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.cleverbus</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.cleverbus</groupId>
+            <artifactId>components</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.cleverbus</groupId>
+            <artifactId>examples</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.cleverbus</groupId>
+            <artifactId>test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.bull.javamelody</groupId>
+            <artifactId>javamelody-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jolokia</groupId>
+            <artifactId>jolokia-core</artifactId>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <!-- default settings common for all environments -->
+            <id>esb.dev</id>
+            <activation>
+                <property>
+                    <name>!prod</name>
+                </property>
+            </activation>
+            <properties>
+                <!-- folder with log files (can be empty) -->
+                <log.folder/>
+                <!-- true/false if enabled logging to console -->
+                <log.console.enabled>true</log.console.enabled>
+                <!-- true/false if enabled logging to file -->
+                <log.file.enabled>false</log.file.enabled>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>c3p0</groupId>
+                    <artifactId>c3p0</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>com.h2database</groupId>
+                    <artifactId>h2</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <!-- settings for production -->
+            <id>esb.prod</id>
+            <properties>
+                <prod>defined</prod>
+                <!-- folder with log files (can be empty) -->
+                <log.folder>/srv/cbssesb/logs/j2ee/</log.folder>
+                <!-- true/false if enabled logging to console -->
+                <log.console.enabled>false</log.console.enabled>
+                <!-- true/false if enabled logging to file -->
+                <log.file.enabled>true</log.file.enabled>
+            </properties>
+        </profile>
+
+        <profile>
+            <!-- profile for PostgreSQL -->
+            <id>esb.psSql</id>
+            <dependencies>
+                <dependency>
+                    <groupId>net.sourceforge.jtds</groupId>
+                    <artifactId>jtds</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.postgresql</groupId>
+                    <artifactId>postgresql</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <!-- profile for PostgreSQL (libraries are provided) -->
+            <id>esb.psSql.prod</id>
+            <dependencies>
+                <dependency>
+                    <groupId>net.sourceforge.jtds</groupId>
+                    <artifactId>jtds</artifactId>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.postgresql</groupId>
+                    <artifactId>postgresql</artifactId>
+                    <scope>provided</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
+
+    <build>
+        <!-- default name of CleverBus integration platform -->
+        <finalName>esb</finalName>
+
+        <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>2.9.1</version>
+                    <configuration>
+                        <configLocation>${basedir}/cleverlance-cs.xml</configLocation>
+                        <propertyExpansion>cacheFile=${project.build.directory}/checkstyle-cachefile</propertyExpansion>
+                        <excludes>**/modules/out/*/ws/*,**/modules/in/*/ws/*</excludes>
+                    </configuration>
+                </plugin>
+
+                <!-- configure Java compilers -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.5.1</version>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                        <encoding>UTF-8</encoding>
+                        <showDeprecation>true</showDeprecation>
+                        <showWarnings>true</showWarnings>
+                    </configuration>
+                </plugin>
+
+                <!-- build source artifacts by default -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>2.1.2</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>2.6</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.15</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>2.8</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.7</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-archetype-plugin</artifactId>
+                    <version>2.2</version>
+                </plugin>
+
+                <!-- add revision and timestamp to all jar and war artifacts -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>buildnumber-maven-plugin</artifactId>
+                    <version>1.1</version>
+                    <executions>
+                        <execution>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>create</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <doCheck>false</doCheck>
+                        <doUpdate>false</doUpdate>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>2.4</version>
+                    <configuration>
+                        <archive>
+                            <addMavenDescriptor>false</addMavenDescriptor>
+                            <manifest>
+                                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            </manifest>
+                            <manifestEntries>
+                                <!--suppress MavenModelInspection -->
+                                <Implementation-Build>${buildNumber}</Implementation-Build>
+                                <!--suppress MavenModelInspection -->
+                                <Implementation-Timestamp>${timestamp}</Implementation-Timestamp>
+                            </manifestEntries>
+                        </archive>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>2.3</version>
+                    <configuration>
+                        <archive>
+                            <addMavenDescriptor>false</addMavenDescriptor>
+                            <manifest>
+                                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            </manifest>
+                            <manifestEntries>
+                                <!--suppress MavenModelInspection -->
+                                <Implementation-Build>${buildNumber}</Implementation-Build>
+                                <!--suppress MavenModelInspection -->
+                                <Implementation-Timestamp>${timestamp}</Implementation-Timestamp>
+                            </manifestEntries>
+                        </archive>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>findbugs-maven-plugin</artifactId>
+                    <version>2.5.2</version>
+                    <configuration>
+                        <findbugsXmlOutput>true</findbugsXmlOutput>
+                        <xmlOutput>true</xmlOutput>
+                        <excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-pmd-plugin</artifactId>
+                    <version>3.0.1</version>
+                    <configuration>
+                        <sourceEncoding>utf-8</sourceEncoding>
+                        <targetJdk>1.6</targetJdk>
+                        <!-- exclude generated code -->
+                        <excludes>
+                            <exclude>**/in/**/ws/*</exclude>
+                            <exclude>**/out/**/ws/*</exclude>
+                        </excludes>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>jaxb2-maven-plugin</artifactId>
+                    <version>1.5</version>
+                    <configuration>
+                        <arguments>-no-header</arguments>
+                        <bindingDirectory>${basedir}/src/main/resources/jaxb/</bindingDirectory>
+                        <bindingFiles>jaxb_global_bindings.xjb</bindingFiles>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>jaxws-maven-plugin</artifactId>
+                    <version>1.12</version>
+                    <configuration>
+                        <xjcArgs>
+                            <arg>-no-header</arg>
+                        </xjcArgs>
+                        <bindingDirectory>${basedir}/src/main/resources/jaxb/</bindingDirectory>
+                        <bindingFiles>
+                            <bindingFile>jaxb_global_bindings.xjb</bindingFile>
+                        </bindingFiles>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.mortbay.jetty</groupId>
+                    <artifactId>jetty-maven-plugin</artifactId>
+                    <version>8.1.11.v20130520</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>tomcat-maven-plugin</artifactId>
+                    <version>1.1</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>2.9.1</version>
+                    <configuration>
+                        <links>
+                            <link>http://camel.apache.org/maven/camel-2.12.0/camel-core/apidocs/</link>
+                            <link>http://camel.apache.org/maven/camel-2.12.0/camel-spring/apidocs/</link>
+                            <link>http://camel.apache.org/maven/camel-2.12.0/camel-spring-ws/apidocs/</link>
+                            <link>http://docs.spring.io/spring-ws/sites/2.0/apidocs/</link>
+                            <link>http://docs.spring.io/spring/docs/3.2.4.RELEASE/javadoc-api/</link>
+                        </links>
+                        <aggregate>true</aggregate>
+                        <additionalDependencies>
+                            <additionalDependency>
+                                <groupId>org.hibernate.javax.persistence</groupId>
+                                <artifactId>hibernate-jpa-2.0-api</artifactId>
+                                <version>1.0.1.Final</version>
+                            </additionalDependency>
+                        </additionalDependencies>
+                    </configuration>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <forkCount>1C</forkCount>
+                    <argLine>-Xmx1024m -XX:MaxPermSize=256m</argLine>
+                </configuration>
+            </plugin>
+
+            <!--
+                Copies resources (xjb, xsd) from other modules.
+            -->
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-dependencies</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includes>**/*.xjb,**/*.xsd</includes>
+                            <includeGroupIds>org.cleverbus</includeGroupIds>
+                            <outputDirectory>${modules.other.resources.directory}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <!--
+                        Copies all xjb, wsdl and xsd files to a single directory for generating Java model from WSDL/XSD,
+                        allowing WSDL/XSD files to reference each other easily with a simple relative path.
+                        -->
+                        <id>copy-in-for-import</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${modules.import.directory}</outputDirectory>
+                            <!-- the directories are specified explicitly to ensure flat structure -->
+                            <resources>
+                                <resource>
+                                    <directory>${modules.other.resources.directory}/jaxb</directory>
+                                </resource>
+                                <resource>
+                                    <directory>
+                                        ${modules.other.resources.directory}/org/cleverbus/core/modules/in/common
+                                    </directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxws-maven-plugin</artifactId>
+                <configuration>
+                    <sourceDestDir>${modules.output.directory}</sourceDestDir>
+                    <wsdlDirectory>${modules.import.directory}</wsdlDirectory>
+                    <bindingDirectory>${modules.import.directory}</bindingDirectory>
+                    <bindingFiles>
+                        <bindingFile>jaxb_global_bindings.xjb</bindingFile>
+                    </bindingFiles>
+                </configuration>
+                <executions>
+                    <!-- next execution -->
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

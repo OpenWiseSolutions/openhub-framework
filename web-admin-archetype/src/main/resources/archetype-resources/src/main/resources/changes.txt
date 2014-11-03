@@ -1,0 +1,18 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+===============================================================================
+CHANGES - API changes history
+
+Syntax description:
++: adding (new attribute, method, parameter ...)
+-: deleting
+*: change of the existing attribute, method, parameter
+
+Example:
+${symbol_pound}1304
+[customer.wsdl]
++ pridani atributu passportNo pro operaci getCustomer
+* operace getCustomer nyni vyzaduje aby alespon jeden atribut byl specifikovan
+===============================================================================
+

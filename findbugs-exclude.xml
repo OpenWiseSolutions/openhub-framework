@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- http://findbugs.sourceforge.net/manual/filter.html -->
+<FindBugsFilter>
+    <Match>
+        <Or>
+            <Package name="org.cleverbus.core.modules.out.*.ws.*"/>
+        </Or>
+    </Match>
+</FindBugsFilter>

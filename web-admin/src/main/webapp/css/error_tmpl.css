@@ -1,0 +1,36 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+#error-out {
+    margin: 1em 1em 1em 2em;
+    padding: 0;
+}
+
+#error-out h1 {
+    /*background-color: #E8E8E8;*/
+    /*width: 700px;*/
+    padding: 10px;
+}
+
+#error-out-desc {
+    background-color: #F8F8F8;
+}
+
+#error-out-desc h3 {
+    padding: 10px;
+    margin: 0;
+    border-bottom: 1px solid #E8E8E8;
+}
+
+#error-out-desc p {
+    padding: 10px;
+    margin: 0;
+}
+
+pre {
+    background-color: #FAEBD7;
+    padding: 10px;
+}

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archetype-descriptor
+        xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0 http://maven.apache.org/xsd/archetype-descriptor-1.0.0.xsd"
+        name="sc-web-admin"
+        xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <requiredProperties>
+        <requiredProperty key="cleverBusVersion">
+            <defaultValue>0.4-SNAPSHOT</defaultValue>
+        </requiredProperty>
+        <requiredProperty key="cleverBusServerName">
+            <defaultValue>CleverBus Web Admin</defaultValue>
+        </requiredProperty>
+        <requiredProperty key="cleverBusServerDescription">
+            <defaultValue>CleverBus web administration</defaultValue>
+        </requiredProperty>
+    </requiredProperties>
+
+    <fileSets>
+        <fileSet filtered="true" packaged="true" encoding="UTF-8">
+            <directory>src/main/java</directory>
+            <includes>
+                <include>**/*.java</include>
+            </includes>
+        </fileSet>
+        <fileSet filtered="true" encoding="UTF-8">
+            <directory>src/main/webapp</directory>
+            <includes>
+                <include>**/*.jsp</include>
+                <include>**/*.xml</include>
+            </includes>
+        </fileSet>
+        <fileSet filtered="true" encoding="UTF-8">
+            <directory>src/main/resources</directory>
+            <includes>
+                <include>**/*.xml</include>
+                <include>**/*.properties</include>
+                <include>**/*.txt</include>
+                <include>**/*.cfg</include>
+            </includes>
+        </fileSet>
+        <fileSet packaged="true" encoding="UTF-8">
+            <directory>src/main/resources</directory>
+            <includes>
+                <include>**/*.wsdl</include>
+                <include>**/*.xsd</include>
+            </includes>
+        </fileSet>
+        <fileSet encoding="UTF-8">
+            <directory>src/main/webapp</directory>
+            <includes>
+                <include>**/*.png</include>
+                <include>**/*.js</include>
+                <include>**/*.ftl</include>
+                <include>**/*.htm</include>
+                <include>**/*.gif</include>
+                <include>**/*.css</include>
+            </includes>
+        </fileSet>
+        <fileSet filtered="true" packaged="true" encoding="UTF-8">
+            <directory>src/test/java</directory>
+            <includes>
+                <include>**/*.java</include>
+            </includes>
+        </fileSet>
+        <fileSet filtered="true" encoding="UTF-8">
+            <directory>src/test/resources</directory>
+            <includes>
+                <include>**/*.xml</include>
+            </includes>
+        </fileSet>
+        <fileSet filtered="true" encoding="UTF-8">
+            <directory></directory>
+            <includes>
+                <include>cleverlance-cs.xml</include>
+                <include>README.txt</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+</archetype-descriptor>

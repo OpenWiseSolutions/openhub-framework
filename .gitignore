@@ -1,0 +1,6 @@
+# IDE files
+.idea
+*.iml
+
+# working directories
+/*/target

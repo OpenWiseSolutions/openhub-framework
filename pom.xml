@@ -1,0 +1,819 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.cleverbus</groupId>
+    <artifactId>integration</artifactId>
+    <packaging>pom</packaging>
+    <version>1.1-SNAPSHOT</version>
+
+    <name>CleverBus Root</name>
+    <description>CleverBus integration framework</description>
+
+    <modules>
+        <module>common</module>
+        <module>core</module>
+        <module>core-api</module>
+        <module>core-spi</module>
+        <module>components</module>
+        <module>examples</module>
+        <module>test</module>
+        <module>web-admin</module>
+        <module>web-admin-archetype</module>
+    </modules>
+
+    <scm>
+        <connection>scm:svn:https://repo.cleverlance.com/svn/clv.CleverBus/trunk</connection>
+        <developerConnection>scm:svn:https://repo.cleverlance.com/svn/clv.CleverBus/trunk</developerConnection>
+        <url>https://repo.cleverlance.com/svn/clv.CleverBus/trunk</url>
+    </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>nexus</id>
+            <name>Cleverlance Release Repository</name>
+            <url>https://maven.cleverlance.com/nexus/content/repositories/releases</url>
+            <uniqueVersion>false</uniqueVersion>
+        </repository>
+        <snapshotRepository>
+            <id>nexus</id>
+            <name>Cleverlance Snapshot Repository</name>
+            <url>https://maven.cleverlance.com/nexus/content/repositories/snapshots</url>
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <properties>
+        <!-- java language version -->
+        <java.version>1.6</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <camel-version>2.13.2</camel-version>
+        <junit-version>4.11</junit-version>
+        <spring-version>3.2.4.RELEASE</spring-version>
+        <spring-ws-version>2.1.2.RELEASE</spring-ws-version>
+        <spring-security-version>3.1.3.RELEASE</spring-security-version>
+        <hibernate-version>4.2.0.Final</hibernate-version>
+        <slf4j-version>1.7.3</slf4j-version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- inner modules -->
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>core-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>core-spi</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>components</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>test</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>examples</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+
+            <!-- Spring framework -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-aop</artifactId>
+                <version>${spring-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-beans</artifactId>
+                <version>${spring-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>${spring-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context-support</artifactId>
+                <version>${spring-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-core</artifactId>
+                <version>${spring-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-expression</artifactId>
+                <version>${spring-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-jdbc</artifactId>
+                <version>${spring-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-test</artifactId>
+                <version>${spring-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-tx</artifactId>
+                <version>${spring-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-web</artifactId>
+                <version>${spring-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-webmvc</artifactId>
+                <version>${spring-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-oxm</artifactId>
+                <version>${spring-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-orm</artifactId>
+                <version>${spring-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-jms</artifactId>
+                <version>${spring-version}</version>
+            </dependency>
+
+
+            <!-- Spring web services -->
+            <dependency>
+                <groupId>org.springframework.ws</groupId>
+                <artifactId>spring-ws-core</artifactId>
+                <version>${spring-ws-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-oxm</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-web</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-webmvc</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.ws</groupId>
+                <artifactId>spring-ws-support</artifactId>
+                <version>${spring-ws-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-jms</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-tx</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.ws.xmlschema</groupId>
+                <artifactId>xmlschema-core</artifactId>
+                <version>2.0.2</version>
+            </dependency>
+
+
+            <!-- Spring security -->
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-core</artifactId>
+                <version>${spring-security-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-web</artifactId>
+                <version>${spring-security-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-config</artifactId>
+                <version>${spring-security-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-taglibs</artifactId>
+                <version>${spring-security-version}</version>
+            </dependency>
+
+
+            <!-- Apache Camel -->
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-parent</artifactId>
+                <version>${camel-version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-core</artifactId>
+                <version>${camel-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-spring</artifactId>
+                <version>${camel-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-context</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-aop</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-tx</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-spring-ws</artifactId>
+                <version>${camel-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-webmvc</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework.ws</groupId>
+                        <artifactId>spring-ws-core</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-servlet</artifactId>
+                <version>${camel-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-test</artifactId>
+                <version>${camel-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-jaxb</artifactId>
+                <version>${camel-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-mvel</artifactId>
+                <version>${camel-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-test-spring</artifactId>
+                <version>${camel-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-test</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-jpa</artifactId>
+                <version>${camel-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-orm</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-jdbc</artifactId>
+                <version>${camel-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-mail</artifactId>
+                <version>${camel-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-quartz2</artifactId>
+                <version>${camel-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-http4</artifactId>
+                <version>${camel-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-spring-security</artifactId>
+                <version>${camel-version}</version>
+            </dependency>
+
+
+            <!-- persistence -->
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-entitymanager</artifactId>
+                <version>${hibernate-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate.javax.persistence</groupId>
+                <artifactId>hibernate-jpa-2.0-api</artifactId>
+                <version>1.0.1.Final</version>
+                <scope>compile</scope>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>xml-apis</artifactId>
+                        <groupId>xml-apis</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>9.2-1003-jdbc4</version>
+            </dependency>
+            <dependency>
+                <groupId>c3p0</groupId>
+                <artifactId>c3p0</artifactId>
+                <version>0.9.1.2</version>
+            </dependency>
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>1.3.173</version>
+            </dependency>
+            <dependency>
+                <groupId>net.sourceforge.jtds</groupId>
+                <artifactId>jtds</artifactId>
+                <version>1.2.8</version>
+            </dependency>
+
+
+            <!-- logging -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>log4j-over-slf4j</artifactId>
+                <version>${slf4j-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>1.0.13</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.janino</groupId>
+                <artifactId>janino</artifactId>
+                <version>2.6.1</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>1.1.1</version>
+            </dependency>
+
+            <!-- Apache commons -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.1</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>2.5</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>4.3.1</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-servlet_2.5_spec</artifactId>
+                <version>1.2</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- monitoring-->
+            <dependency>
+                <groupId>net.bull.javamelody</groupId>
+                <artifactId>javamelody-core</artifactId>
+                <version>1.49.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jolokia</groupId>
+                <artifactId>jolokia-core</artifactId>
+                <version>1.2.0</version>
+            </dependency>
+
+            <!-- misc -->
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>servlet-api</artifactId>
+                <scope>provided</scope>
+                <version>2.4</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kubek2k</groupId>
+                <artifactId>springockito-annotations</artifactId>
+                <version>1.0.8</version>
+            </dependency>
+            <dependency>
+                <groupId>xmlunit</groupId>
+                <artifactId>xmlunit</artifactId>
+                <version>1.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-all</artifactId>
+                <version>1.9.5</version>
+            </dependency>
+            <dependency>
+                <groupId>org.freemarker</groupId>
+                <artifactId>freemarker</artifactId>
+                <version>2.3.20</version>
+            </dependency>
+            <dependency>
+                <groupId>jcifs</groupId>
+                <artifactId>jcifs</artifactId>
+                <version>1.3.17</version>
+            </dependency>
+            <dependency>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time</artifactId>
+                <version>2.2</version>
+            </dependency>
+            <dependency>
+            	<groupId>net.sourceforge.findbugs</groupId>
+            	<artifactId>jsr305</artifactId>
+            	<version>1.3.7</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.archetype</groupId>
+                <artifactId>archetype-packaging</artifactId>
+                <version>2.2</version>
+            </extension>
+        </extensions>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>2.9.1</version>
+                    <configuration>
+                        <configLocation>${basedir}/cleverlance-cs.xml</configLocation>
+                        <propertyExpansion>cacheFile=${project.build.directory}/checkstyle-cachefile</propertyExpansion>
+                        <excludes>**/modules/out/*/ws/*,**/modules/in/*/ws/*</excludes>
+                    </configuration>
+                </plugin>
+
+                <!-- configure Java compilers -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.5.1</version>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                        <encoding>UTF-8</encoding>
+                        <showDeprecation>true</showDeprecation>
+                        <showWarnings>true</showWarnings>
+                    </configuration>
+                </plugin>
+
+                <!-- build source artifacts by default -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>2.1.2</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>2.6</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.15</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>2.8</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.7</version>
+                </plugin>
+
+                <plugin>
+                  <artifactId>maven-archetype-plugin</artifactId>
+                  <version>2.2</version>
+                </plugin>
+
+                <!-- add revision and timestamp to all jar and war artifacts -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>buildnumber-maven-plugin</artifactId>
+                    <version>1.1</version>
+                    <executions>
+                        <execution>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>create</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <doCheck>false</doCheck>
+                        <doUpdate>false</doUpdate>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>2.4</version>
+                    <configuration>
+                        <archive>
+                            <addMavenDescriptor>false</addMavenDescriptor>
+                            <manifest>
+                                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            </manifest>
+                            <manifestEntries>
+                                <!--suppress MavenModelInspection -->
+                                <Implementation-Build>${buildNumber}</Implementation-Build>
+                                <!--suppress MavenModelInspection -->
+                                <Implementation-Timestamp>${timestamp}</Implementation-Timestamp>
+                            </manifestEntries>
+                        </archive>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>2.3</version>
+                    <configuration>
+                        <archive>
+                            <addMavenDescriptor>false</addMavenDescriptor>
+                            <manifest>
+                                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            </manifest>
+                            <manifestEntries>
+                                <!--suppress MavenModelInspection -->
+                                <Implementation-Build>${buildNumber}</Implementation-Build>
+                                <!--suppress MavenModelInspection -->
+                                <Implementation-Timestamp>${timestamp}</Implementation-Timestamp>
+                            </manifestEntries>
+                        </archive>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>findbugs-maven-plugin</artifactId>
+                    <version>2.5.2</version>
+                    <configuration>
+                        <findbugsXmlOutput>true</findbugsXmlOutput>
+                        <xmlOutput>true</xmlOutput>
+                        <excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-pmd-plugin</artifactId>
+                    <version>3.0.1</version>
+                    <configuration>
+                        <sourceEncoding>utf-8</sourceEncoding>
+                        <targetJdk>1.6</targetJdk>
+                        <!-- exclude generated code -->
+                        <excludes>
+                            <exclude>**/in/**/ws/*</exclude>
+                            <exclude>**/out/**/ws/*</exclude>
+                        </excludes>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>jaxb2-maven-plugin</artifactId>
+                    <version>1.5</version>
+                    <configuration>
+                        <arguments>-no-header</arguments>
+                        <bindingDirectory>${basedir}/src/main/resources/jaxb/</bindingDirectory>
+                        <bindingFiles>jaxb_global_bindings.xjb</bindingFiles>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>jaxws-maven-plugin</artifactId>
+                    <version>1.12</version>
+                    <configuration>
+                        <xjcArgs>
+                            <arg>-no-header</arg>
+                        </xjcArgs>
+                        <bindingDirectory>${basedir}/src/main/resources/jaxb/</bindingDirectory>
+                        <bindingFiles>
+                            <bindingFile>jaxb_global_bindings.xjb</bindingFile>
+                        </bindingFiles>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.mortbay.jetty</groupId>
+                    <artifactId>jetty-maven-plugin</artifactId>
+                    <version>8.1.11.v20130520</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>tomcat-maven-plugin</artifactId>
+                    <version>1.1</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>2.9.1</version>
+                    <configuration>
+                        <links>
+                            <link>http://camel.apache.org/maven/camel-2.13.2/camel-core/apidocs/</link>
+                            <link>http://camel.apache.org/maven/camel-2.13.2/camel-spring/apidocs/</link>
+                            <link>http://camel.apache.org/maven/camel-2.13.2/camel-spring-ws/apidocs/</link>
+                            <link>http://docs.spring.io/spring-ws/sites/2.0/apidocs/</link>
+                            <link>http://docs.spring.io/spring/docs/3.2.4.RELEASE/javadoc-api/</link>
+                        </links>
+                        <aggregate>true</aggregate>
+                        <additionalDependencies>
+                            <additionalDependency>
+                                <groupId>org.hibernate.javax.persistence</groupId>
+                                <artifactId>hibernate-jpa-2.0-api</artifactId>
+                                <version>1.0.1.Final</version>
+                            </additionalDependency>
+                        </additionalDependencies>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.4.2</version>
+                    <configuration>
+                        <autoVersionSubmodules>true</autoVersionSubmodules>
+                        <releaseProfiles>releases</releaseProfiles>
+                        <username>pjuza</username>
+                        <password>Sputnik8863</password>
+                        <!--<username>repo_cbss_release</username>-->
+                        <!--<password>WvWaoYk4</password>-->
+                    </configuration>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxws-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+            </plugin>
+
+        </plugins>
+    </build>
+</project>

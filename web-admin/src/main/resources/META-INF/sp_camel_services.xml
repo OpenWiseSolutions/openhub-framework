@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <description>
+        Configuration of services which use/are for Apache Camel.
+    </description>
+
+    <bean class="org.cleverbus.core.common.route.EndpointRegistryImpl"/>
+    <bean class="org.cleverbus.core.common.ws.WsdlRegistrySpringImpl"/>
+
+    <!-- picked up by SpringWebserviceComponent to skip setting camel headers/attachments to outbound SOAP message -->
+    <bean id="messageFilter" class="org.cleverbus.core.common.ws.component.NoopMessageFilter"/>
+
+    <!-- throttling -->
+    <bean id="throttlingConfiguration" class="org.cleverbus.core.throttling.ThrottlingPropertiesConfiguration">
+        <constructor-arg ref="confProperties"/>
+        <property name="throttlingDisabled" value="${disable.throttling}"/>
+    </bean>
+    <bean class="org.cleverbus.core.throttling.ThrottleCounterMemoryImpl" />
+    <bean class="org.cleverbus.core.throttling.ThrottleProcessorImpl" />
+
+    <!-- alerts -->
+    <bean id="alertsConfiguration" class="org.cleverbus.core.alerts.AlertsPropertiesConfiguration">
+        <constructor-arg ref="confProperties"/>
+    </bean>
+    <bean id="alertsCheckingService" class="org.cleverbus.core.alerts.AlertsCheckingServiceDbImpl"/>
+    <bean class="org.cleverbus.core.alerts.EmailAlertListenerSupport"/>
+
+    <!-- extensions -->
+    <bean class="org.cleverbus.core.common.extension.PropertiesExtensionConfigurationLoader" depends-on="camelContext">
+        <constructor-arg ref="confProperties"/>
+    </bean>
+
+    <bean class="org.cleverbus.core.common.route.SpringWsUriBuilder" />
+
+    <beans profile="prod">
+        <bean id="confirmationCallback" class="org.cleverbus.core.common.asynch.confirm.DelegateConfirmationCallback"/>
+
+        <bean id="quartz" class="org.apache.camel.component.quartz2.QuartzComponent">
+            <property name="startDelayedSeconds" value="30"/>
+        </bean>
+    </beans>
+
+</beans>
