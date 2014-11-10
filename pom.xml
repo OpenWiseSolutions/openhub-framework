@@ -36,9 +36,9 @@
     </developers>
 
     <scm>
-        <connection>scm:git:https://github.com/paslyg/cleverbus.git</connection>
-        <developerConnection>scm:git:https://github.com/paslyg/cleverbus.git</developerConnection>
-        <url>https://github.com/paslyg/cleverbus.git</url>
+        <connection>scm:git:https://github.com/integram/cleverbus.git</connection>
+        <developerConnection>scm:git:https://github.com/integram/cleverbus.git</developerConnection>
+        <url>https://github.com/integram/cleverbus.git</url>
     </scm>
 
     <modules>
