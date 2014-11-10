@@ -1,4 +1,4 @@
-Conventions for DTAG Lean HCS Solution
+Conventions for CleverBus ESB
 ====================================================================
 
 1. General
@@ -7,14 +7,14 @@ Conventions for DTAG Lean HCS Solution
 - Basic unit of tab are 4 chars. Tab is converted into backspace.
 - Length of line is wrapped fo 120 chars. Maximum length of the java class is 1000 lines.
 - Uncoding is UTF-8
-- Hierarchy of exceptions is defined in com.cleverlance.dtag.leanhcs.core.common.exception;
+- Hierarchy of exceptions is defined in org.cleverbus.api.exception;
     Each exception is subclass of IntegrationException.
 - Javadoc and comments are in English
 
 2. Naming convection of objects and patterns
 2.1 Naming convection of class and interfaces
 
-General package for all classes is com.cleverlance.dtag.leanhcs
+General package for all classes is org.cleverbus
 
 Naming convection of class:
 ...Route        Camel route
@@ -46,8 +46,8 @@ be marked using the annotation javax.annotation.Nullable.
 
 3. Directory
 Structure of packages:
-com.cleverlance.dtag.leanhcs.core.common  - common classes
-com.cleverlance.dtag.leanhcs.modules
+org.cleverbus.common  - common classes
+org.cleverbus.modules
     - in: inbound modules = modules, which publishes WSDL contract
     - out: outbound modules = modules, which calls external systems
 
@@ -58,9 +58,9 @@ com.cleverlance.dtag.leanhcs.modules
 
 5. Definition of route
 During creating of routing rules is necessary to:
-- extends com.cleverlance.dtag.leanhcs.core.common.AbstractHcsRoute
+- extends org.cleverbus.api.route.AbstractBasicRoute
 - defines unique ID of Spring Bean and route ID
-- implementation of asnych process is described - https://jira.cleverlance.com/jira/browse/CBSS-48
+- implementation of asnych process is described in WIKI
 
 5.1. Naming convection of route ID
 a) synchronous message - route ID: SERVICE_OPERATION_SUFFIX, where
@@ -80,18 +80,3 @@ This route ID is used for dynamic routing among inbound and outbound part of asy
 
 5.2. Naming convection of route bean
 a) ROUTE_BEAN = OPERATION_NAME + "RouteBean"
-
-6. Scheduled tasks (route)
-
-Necessary to extends base class for scheduled routes - com.cleverlance.dtag.leanhcs.core.common.AbstractScheduledHcsRoute.
-You have to:
-    1. override getCronExpression() to get cron expression of trigger, e.g.: 0 0 3 ? * *
-    2. override getJobName() to get name of job, e.g.: GetRdmCapabilitiesTask
-    3. override getJobGroupName() to get name of job group, e.g.: DeviceCapabilitiesJobs
-
-Best practice is also override isTaskEnabled() method to configure starting state of task.
-
-7. Autowired beans for database layer
-
-Best practice is use to getApplicationContext().getBean(DeviceCapabilityService.class) instead @Autowired in routes,
-because routes are by default auto scanned too for test purposes
