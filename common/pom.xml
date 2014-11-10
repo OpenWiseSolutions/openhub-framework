@@ -45,7 +45,10 @@
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
         </dependency>
-
+        <dependency>
+        	<groupId>net.sourceforge.findbugs</groupId>
+        	<artifactId>jsr305</artifactId>
+        </dependency>
 
         <!-- test dependencies -->
         <dependency>
