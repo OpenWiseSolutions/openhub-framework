@@ -13,26 +13,34 @@
     <description>${cleverBusServerDescription}</description>
     <version>${version}</version>
 
-    <scm>
-        <connection>scm:svn:https://repo.cleverlance.com/svn/clv.CleverBus/trunk</connection>
-        <developerConnection>scm:svn:https://repo.cleverlance.com/svn/clv.CleverBus/trunk</developerConnection>
-        <url>https://repo.cleverlance.com/svn/clv.CleverBus/trunk</url>
-    </scm>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>manual</distribution>
+        </license>
+    </licenses>
 
-    <distributionManagement>
-        <repository>
-            <id>nexus</id>
-            <name>Cleverlance Release Repository</name>
-            <url>https://maven.cleverlance.com/nexus/content/repositories/releases</url>
-            <uniqueVersion>false</uniqueVersion>
-        </repository>
-        <snapshotRepository>
-            <id>nexus</id>
-            <name>Cleverlance Snapshot Repository</name>
-            <url>https://maven.cleverlance.com/nexus/content/repositories/snapshots</url>
-            <uniqueVersion>false</uniqueVersion>
-        </snapshotRepository>
-    </distributionManagement>
+    <developers>
+        <developer>
+            <name>Petr Juza</name>
+            <email>petr.juza@cleverlance.com</email>
+            <organization>Cleverlance</organization>
+            <organizationUrl>http://www.cleverlance.com</organizationUrl>
+        </developer>
+        <developer>
+            <name>Tomas Hanus</name>
+            <email>tomas.hanus@cleverlance.com</email>
+            <organization>Cleverlance</organization>
+            <organizationUrl>http://www.cleverlance.com</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:https://github.com/integram/cleverbus.git</connection>
+        <developerConnection>scm:git:https://github.com/integram/cleverbus.git</developerConnection>
+        <url>https://github.com/integram/cleverbus.git</url>
+    </scm>
 
     <properties>
         <!-- java language version -->
@@ -46,9 +54,7 @@
         <modules.output.directory>${project.build.directory}/generated-sources</modules.output.directory>
         <modules.other.resources.directory>${project.build.directory}/other-modules-resources
         </modules.other.resources.directory>
-        <modules.common.xsd.directory>
-            ${modules.other.resources.directory}/com/cleverlance/cleverbus/core/modules/in/common
-        </modules.common.xsd.directory>
+        <modules.common.xsd.directory>${modules.other.resources.directory}/org/cleverbus/api/modules/in/common</modules.common.xsd.directory>
     </properties>
 
     <dependencyManagement>
@@ -400,9 +406,9 @@
                     <version>2.9.1</version>
                     <configuration>
                         <links>
-                            <link>http://camel.apache.org/maven/camel-2.12.0/camel-core/apidocs/</link>
-                            <link>http://camel.apache.org/maven/camel-2.12.0/camel-spring/apidocs/</link>
-                            <link>http://camel.apache.org/maven/camel-2.12.0/camel-spring-ws/apidocs/</link>
+                            <link>http://camel.apache.org/maven/camel-2.13.2/camel-core/apidocs/</link>
+                            <link>http://camel.apache.org/maven/camel-2.13.2/camel-spring/apidocs/</link>
+                            <link>http://camel.apache.org/maven/camel-2.13.2/camel-spring-ws/apidocs/</link>
                             <link>http://docs.spring.io/spring-ws/sites/2.0/apidocs/</link>
                             <link>http://docs.spring.io/spring/docs/3.2.4.RELEASE/javadoc-api/</link>
                         </links>
