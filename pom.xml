@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -10,6 +11,35 @@
 
     <name>CleverBus Root</name>
     <description>CleverBus integration framework</description>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Petr Juza</name>
+            <email>petr.juza@cleverlance.com</email>
+            <organization>Cleverlance</organization>
+            <organizationUrl>http://www.cleverlance.com</organizationUrl>
+        </developer>
+        <developer>
+            <name>Tomas Hanus</name>
+            <email>tomas.hanus@cleverlance.com</email>
+            <organization>Cleverlance</organization>
+            <organizationUrl>http://www.cleverlance.com</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:https://github.com/paslyg/cleverbus.git</connection>
+        <developerConnection>scm:git:https://github.com/paslyg/cleverbus.git</developerConnection>
+        <url>https://github.com/paslyg/cleverbus.git</url>
+    </scm>
 
     <modules>
         <module>common</module>
@@ -22,27 +52,6 @@
         <module>web-admin</module>
         <module>web-admin-archetype</module>
     </modules>
-
-    <scm>
-        <connection>scm:svn:https://repo.cleverlance.com/svn/clv.CleverBus/trunk</connection>
-        <developerConnection>scm:svn:https://repo.cleverlance.com/svn/clv.CleverBus/trunk</developerConnection>
-        <url>https://repo.cleverlance.com/svn/clv.CleverBus/trunk</url>
-    </scm>
-
-    <distributionManagement>
-        <repository>
-            <id>nexus</id>
-            <name>Cleverlance Release Repository</name>
-            <url>https://maven.cleverlance.com/nexus/content/repositories/releases</url>
-            <uniqueVersion>false</uniqueVersion>
-        </repository>
-        <snapshotRepository>
-            <id>nexus</id>
-            <name>Cleverlance Snapshot Repository</name>
-            <url>https://maven.cleverlance.com/nexus/content/repositories/snapshots</url>
-            <uniqueVersion>false</uniqueVersion>
-        </snapshotRepository>
-    </distributionManagement>
 
     <properties>
         <!-- java language version -->
@@ -508,9 +517,9 @@
                 <version>2.2</version>
             </dependency>
             <dependency>
-            	<groupId>net.sourceforge.findbugs</groupId>
-            	<artifactId>jsr305</artifactId>
-            	<version>1.3.7</version>
+                <groupId>net.sourceforge.findbugs</groupId>
+                <artifactId>jsr305</artifactId>
+                <version>1.3.7</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -555,11 +564,11 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
-                    <version>2.1.2</version>
+                    <version>2.2.1</version>
                     <executions>
                         <execution>
                             <goals>
-                                <goal>jar</goal>
+                                <goal>jar-no-fork</goal>
                             </goals>
                         </execution>
                     </executions>
@@ -586,8 +595,8 @@
                 </plugin>
 
                 <plugin>
-                  <artifactId>maven-archetype-plugin</artifactId>
-                  <version>2.2</version>
+                    <artifactId>maven-archetype-plugin</artifactId>
+                    <version>2.2</version>
                 </plugin>
 
                 <!-- add revision and timestamp to all jar and war artifacts -->
@@ -739,17 +748,14 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
-                    <version>2.4.2</version>
+                    <version>2.5</version>
                     <configuration>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
-                        <releaseProfiles>releases</releaseProfiles>
-                        <username>pjuza</username>
-                        <password>Sputnik8863</password>
-                        <!--<username>repo_cbss_release</username>-->
-                        <!--<password>WvWaoYk4</password>-->
+                        <useReleaseProfile>false</useReleaseProfile>
+                        <releaseProfiles>release</releaseProfiles>
+                        <goals>deploy</goals>
                     </configuration>
                 </plugin>
-
             </plugins>
         </pluginManagement>
 
@@ -813,7 +819,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
             </plugin>
-
         </plugins>
     </build>
 </project>
