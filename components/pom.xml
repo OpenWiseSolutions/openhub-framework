@@ -14,14 +14,7 @@
     <name>CleverBus Components</name>
     <description>CleverBus integration components</description>
 
-    <properties>
-        <modules.root.directory>src/main/resources/com/cleverlance/cleverbus/core/modules</modules.root.directory>
-        <modules.import.directory>${project.build.directory}/modules-import</modules.import.directory>
-        <modules.output.directory>${project.build.directory}/generated-sources</modules.output.directory>
-    </properties>
-
     <dependencies>
-
         <!-- inner modules -->
         <dependency>
             <groupId>${project.groupId}</groupId>

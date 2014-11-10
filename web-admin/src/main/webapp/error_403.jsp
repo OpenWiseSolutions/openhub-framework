@@ -40,8 +40,7 @@
 </div>
 <div class="footer">
     <div class="footerWrapper">
-        <div class="companyLogo"><a href="http://www.cleverlance.com">
-            <img class="logo" src="${pageContext.request.contextPath}/css/images/cleverlance-logo.png" alt="CleverBus"/></a></div>
+        <span class="companyLogo"><a href="http://www.cleverbus.org" target="_blank">CleverBus</a></span>
     </div>
 </div>
 </body>
