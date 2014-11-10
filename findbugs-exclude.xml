@@ -2,8 +2,10 @@
 <!-- http://findbugs.sourceforge.net/manual/filter.html -->
 <FindBugsFilter>
     <Match>
+        <!-- exclude generated classes -->
         <Or>
-            <Package name="org.cleverbus.core.modules.out.*.ws.*"/>
+            <Package name="org.cleverbus.modules.in.*.ws.*"/>
+            <Package name="org.cleverbus.modules.out.*.ws.*"/>
         </Or>
     </Match>
 </FindBugsFilter>

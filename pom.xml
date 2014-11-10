@@ -516,11 +516,6 @@
                 <artifactId>joda-time</artifactId>
                 <version>2.2</version>
             </dependency>
-            <dependency>
-                <groupId>net.sourceforge.findbugs</groupId>
-                <artifactId>jsr305</artifactId>
-                <version>1.3.7</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -540,7 +535,7 @@
                     <artifactId>maven-checkstyle-plugin</artifactId>
                     <version>2.9.1</version>
                     <configuration>
-                        <configLocation>${basedir}/cleverlance-cs.xml</configLocation>
+                        <configLocation>${basedir}/checkstyle-cs.xml</configLocation>
                         <propertyExpansion>cacheFile=${project.build.directory}/checkstyle-cachefile</propertyExpansion>
                         <excludes>**/modules/out/*/ws/*,**/modules/in/*/ws/*</excludes>
                     </configuration>
@@ -675,7 +670,7 @@
                     <version>3.0.1</version>
                     <configuration>
                         <sourceEncoding>utf-8</sourceEncoding>
-                        <targetJdk>1.6</targetJdk>
+                        <targetJdk>${java.version}</targetJdk>
                         <!-- exclude generated code -->
                         <excludes>
                             <exclude>**/in/**/ws/*</exclude>
@@ -708,18 +703,6 @@
                             <bindingFile>jaxb_global_bindings.xjb</bindingFile>
                         </bindingFiles>
                     </configuration>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.mortbay.jetty</groupId>
-                    <artifactId>jetty-maven-plugin</artifactId>
-                    <version>8.1.11.v20130520</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>tomcat-maven-plugin</artifactId>
-                    <version>1.1</version>
                 </plugin>
 
                 <plugin>

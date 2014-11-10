@@ -81,12 +81,12 @@
         <module name="MutableException"/>
         <module name="LineLength">
             <property name="ignorePattern" value="^${symbol_dollar}|HeadURL|http|&amp;lt|@see"/>
-            <property name="max" value="125"/>
+            <property name="max" value="120"/>
         </module>
         <module name="FallThrough"/>
         <module name="RightCurly"/>
         <module name="LeftCurly">
-            <property name="maxLineLength" value="125"/>
+            <property name="maxLineLength" value="120"/>
         </module>
         <module name="InterfaceIsType"/>
     </module>

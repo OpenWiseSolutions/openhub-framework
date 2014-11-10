@@ -73,7 +73,7 @@
         <fileSet filtered="true" encoding="UTF-8">
             <directory></directory>
             <includes>
-                <include>cleverlance-cs.xml</include>
+                <include>checkstyle-cs.xml</include>
                 <include>README.txt</include>
             </includes>
         </fileSet>

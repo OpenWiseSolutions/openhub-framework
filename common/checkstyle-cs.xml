@@ -2,10 +2,6 @@
 <!--
     This configuration file was written by the eclipse-cs plugin configuration editor
 -->
-<!--
-    Checkstyle-Configuration: sc-cleverlance
-    Description: none
--->
 <!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.2//EN"
         "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
 <module name="Checker">
@@ -78,12 +74,12 @@
         <module name="MutableException"/>
         <module name="LineLength">
             <property name="ignorePattern" value="^$|HeadURL|http|&amp;lt|@see"/>
-            <property name="max" value="125"/>
+            <property name="max" value="120"/>
         </module>
         <module name="FallThrough"/>
         <module name="RightCurly"/>
         <module name="LeftCurly">
-            <property name="maxLineLength" value="125"/>
+            <property name="maxLineLength" value="120"/>
         </module>
         <module name="InterfaceIsType"/>
     </module>
