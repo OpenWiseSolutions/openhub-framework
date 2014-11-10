@@ -2,4 +2,4 @@ language: java
 jdk:
   - openjdk6
 install: mvn install -DskipTests=true
-script: mvn test -DskipTests
+script: mvn test
