@@ -62,8 +62,7 @@ public class DateCompatibilityTest {
         assertThat(JaxbDateAdapter.printDateTime(xmlDate), is("2013-10-05T00:00:00.000+02:00"));
 
         xmlDate = JaxbDateAdapter.parseDate("2013-10-05");
-        // printed date depends on location/timezone
-        assertThat(JaxbDateAdapter.printDate(xmlDate), startsWith("2013-10-05+"));
+        assertThat(JaxbDateAdapter.printDate(xmlDate), startsWith("2013-10-05+02:00"));
     }
 
     @Test
@@ -114,8 +113,7 @@ public class DateCompatibilityTest {
         // without timezone
         xmlDate = JaxbDateAdapter.parseDate("2013-10-05");
 
-        // printed date depends on location/timezone
-        assertThat(JaxbDateAdapter.printDate(xmlDate), startsWith("2013-10-05+"));
+        assertThat(JaxbDateAdapter.printDate(xmlDate), startsWith("2013-10-05+02:00"));
 
         // converts to UTC
         DateTime localDate = new DateTime(2013, 10, 5, 0, 0, DateTimeZone.forID(TIMEZONE_PRAGUE));
