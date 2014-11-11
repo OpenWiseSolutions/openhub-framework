@@ -15,11 +15,9 @@
     </appender>
 
     <!-- CleverBSS integration namespaces -->
-    <logger name="org.springframework" level="info"/>
-    <logger name="org.springframework.ws" level="info"/>
-    <logger name="org.springframework.ws.client.MessageTracing" level="info"/>
+    <logger name="org.cleverbus" level="debug"/>
     <logger name="org.apache.camel" level="info"/>
-    <root level="info">
+    <root level="error">
         <appender-ref ref="CONSOLE"/>
     </root>
 </configuration>

@@ -41,9 +41,9 @@
         <property name="properties">
             <props>
                 <prop key="hibernate.hbm2ddl.auto">create</prop> <!-- validate | update | create | create-drop -->
-                <prop key="hibernate.show_sql">true</prop>
-                <prop key="hibernate.use_sql_comments">true</prop>
-                <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.show_sql">false</prop>
+                <prop key="hibernate.use_sql_comments">false</prop>
+                <prop key="hibernate.format_sql">false</prop>
                 <prop key="hibernate.generate_statistics">true</prop>
                 <prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
             </props>
