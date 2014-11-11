@@ -17,6 +17,7 @@
 package org.cleverbus.core;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.startsWith;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assume.assumeThat;
@@ -59,7 +60,8 @@ public class DateCompatibilityTest {
         assertThat(JaxbDateAdapter.printDateTime(xmlDate), is("2013-10-05T00:00:00.000+02:00"));
 
         xmlDate = JaxbDateAdapter.parseDate("2013-10-05");
-        assertThat(JaxbDateAdapter.printDate(xmlDate), is("2013-10-05+02:00"));
+        // printed date depends on location/timezone
+        assertThat(JaxbDateAdapter.printDate(xmlDate), startsWith("2013-10-05+"));
     }
 
     @Test
@@ -110,7 +112,8 @@ public class DateCompatibilityTest {
         // without timezone
         xmlDate = JaxbDateAdapter.parseDate("2013-10-05");
 
-        assertThat(JaxbDateAdapter.printDate(xmlDate), is("2013-10-05+02:00"));
+        // printed date depends on location/timezone
+        assertThat(JaxbDateAdapter.printDate(xmlDate), startsWith("2013-10-05+"));
 
         // converts to UTC
         utcDate = Tools.toUTC(xmlDate);
