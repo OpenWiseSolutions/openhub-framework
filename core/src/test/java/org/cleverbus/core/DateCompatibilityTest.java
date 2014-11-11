@@ -38,14 +38,16 @@ import org.junit.Test;
  */
 public class DateCompatibilityTest {
 
+    private static final String TIMEZONE_PRAGUE = "Europe/Prague";
+
     @Before
     public void setDefaultTimeZone() {
-        DateTimeZone.setDefault(DateTimeZone.forID("Europe/Prague"));
+        DateTimeZone.setDefault(DateTimeZone.forID(TIMEZONE_PRAGUE));
     }
 
     @Test
     public void testXmlConversion() {
-        assumeThat(DateTimeZone.getDefault().getID(), is("Europe/Prague"));
+        assumeThat(DateTimeZone.getDefault().getID(), is(TIMEZONE_PRAGUE));
 
         DateTime xmlDate = JaxbDateAdapter.parseDateTime("2013-10-05T00:00:00.000+02:00");
         assertThat(JaxbDateAdapter.printDateTime(xmlDate), is("2013-10-05T00:00:00.000+02:00"));
@@ -66,7 +68,7 @@ public class DateCompatibilityTest {
 
     @Test
     public void testConversionToUTC() {
-        assumeThat(DateTimeZone.getDefault().getID(), is("Europe/Prague"));
+        assumeThat(DateTimeZone.getDefault().getID(), is(TIMEZONE_PRAGUE));
 
         DateTime xmlDate = JaxbDateAdapter.parseDateTime("2013-10-05T00:00:00.000+02:00");
 
@@ -116,7 +118,8 @@ public class DateCompatibilityTest {
         assertThat(JaxbDateAdapter.printDate(xmlDate), startsWith("2013-10-05+"));
 
         // converts to UTC
-        utcDate = Tools.toUTC(xmlDate);
+        DateTime localDate = new DateTime(2013, 10, 5, 0, 0, DateTimeZone.forID(TIMEZONE_PRAGUE));
+        utcDate = Tools.toUTC(localDate);
         assertThat(JaxbDateAdapter.printDateTime(utcDate), is("2013-10-04T22:00:00.000+02:00"));
         assertThat(utcDate.isEqual(xmlDate), is(false));
         assertThat(utcDate.isBefore(xmlDate), is(true));
