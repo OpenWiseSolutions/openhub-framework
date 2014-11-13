@@ -57,14 +57,6 @@
         </resources>
 
         <plugins>
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <forkCount>1C</forkCount>
-                    <argLine>-Xmx1024m -XX:MaxPermSize=256m</argLine>
-                </configuration>
-            </plugin>
-
             <!--
                 Copies resources (xjb, xsd) from other modules.
                 Note: when I call "mvn compile" only, then error occurs because of "Artifact has not been packaged yet."

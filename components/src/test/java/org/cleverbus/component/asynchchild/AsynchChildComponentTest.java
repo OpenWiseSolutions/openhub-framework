@@ -16,6 +16,7 @@
 
 package org.cleverbus.component.asynchchild;
 
+import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -110,7 +111,7 @@ public class AsynchChildComponentTest extends AbstractComponentsDbTest {
             callComponent("asynch-child:customer:createCustomer?bindingType=MEDIUM");
         } catch (Exception ex) {
             assertThat(ExceptionUtils.getRootCause(ex).getMessage(),
-                    is("No enum const class org.cleverbus.api.entity.BindingTypeEnum.MEDIUM"));
+                    endsWith("org.cleverbus.api.entity.BindingTypeEnum.MEDIUM"));
         }
     }
 
