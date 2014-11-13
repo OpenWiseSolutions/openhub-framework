@@ -146,7 +146,7 @@ public final class Tools {
     }
 
     /**
-     * Converts local {@link DateTime} to UTC {@link DateTime} with UTC time zone.
+     * Converts local instant of {@link DateTime} to standard UTC instant of {@link DateTime} with UTC time zone.
      *
      * @param localDateTime the local time
      * @return the UTC time
@@ -158,7 +158,7 @@ public final class Tools {
     }
 
     /**
-     * Converts UTC {@link DateTime} to local {@link DateTime} with default time zone.
+     * Converts UTC instant of {@link DateTime} to local instant of {@link DateTime} with default time zone.
      *
      * @param utcTime the UTC time
      * @return the local time

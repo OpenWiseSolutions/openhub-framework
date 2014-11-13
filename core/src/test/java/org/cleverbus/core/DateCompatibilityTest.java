@@ -118,18 +118,21 @@ public class DateCompatibilityTest {
 
         // converts to UTC
         DateTime localDate = new DateTime(2013, 10, 5, 0, 0, DateTimeZone.forID(TIMEZONE_PRAGUE));
-        utcDate = Tools.toUTC(localDate);
-        assertThat(JaxbDateAdapter.printDateTime(utcDate), is("2013-10-04T22:00:00.000+02:00"));
+        utcDate = Tools.toUTC(localDate); // 2012-10-05 22:00 (UTC time zone)
+        assertThat(JaxbDateAdapter.printDateTime(utcDate), is("2013-10-04T22:00:00.000+02:00")); // default timezone
         assertThat(utcDate.isEqual(xmlDate), is(false));
         assertThat(utcDate.isBefore(xmlDate), is(true));
+        assertThat(utcDate.isBefore(localDate), is(true));
         assertThat(utcDate.toDate().equals(xmlDate.toDate()), is(false));
 
         // converts back to local time
         DateTime localDt = Tools.fromUTC(utcDate);
-        Log.warn("utcDate: " + utcDate + ", localDate:" + localDate);
-        assertThat(localDt.isEqual(xmlDate), is(true));
+        // utcDate: 2013-10-04T20:00:00.000Z, localDate: 2013-10-05T00:00:00.000+02:00, localDt: 2013-10-05T00:00:00.000+02:00
+        Log.warn("utcDate: " + utcDate + ", localDate:" + localDate + ", localDt:" + localDt);
+        assertThat(localDt.isEqual(localDate), is(true));
+        assertThat(localDt.toInstant(), is(localDate.toInstant()));
 
         localDt = Tools.fromUTC(utcDate.getMillis());
-        assertThat(localDt.isEqual(xmlDate), is(true));
+        assertThat(localDt.isEqual(localDate), is(true));
     }
 }
