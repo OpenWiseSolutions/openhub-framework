@@ -46,7 +46,6 @@ public class JaxbDateAdapter {
             return null;
         }
 
-        //TODO (juza) check adding DateTimeZone
         return new DateTime(DatatypeConverter.parseDate(dateStr), DateTimeZone.getDefault());
     }
 

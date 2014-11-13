@@ -124,11 +124,12 @@ public class DateCompatibilityTest {
         assertThat(utcDate.toDate().equals(xmlDate.toDate()), is(false));
 
         // converts back to local time
-        //TODO (juza) check adding DateTimeZone
-//        DateTime localDt = Tools.fromUTC(utcDate);
-//        assertThat(localDt.isEqual(xmlDate), is(true));
-//
-//        localDt = Tools.fromUTC(utcDate.getMillis());
-//        assertThat(localDt.isEqual(xmlDate), is(true));
+        DateTime localDt = Tools.fromUTC(utcDate);
+        System.out.println(utcDate);
+        System.out.println(localDate);
+        assertThat(localDt.isEqual(xmlDate), is(true));
+
+        localDt = Tools.fromUTC(utcDate.getMillis());
+        assertThat(localDt.isEqual(xmlDate), is(true));
     }
 }
