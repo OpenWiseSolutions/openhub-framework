@@ -129,7 +129,7 @@ public class MessagePollExecutor implements Runnable {
                             @Override
                             public void process(Exchange exchange) throws Exception {
                                 IntegrationException ex = new IntegrationException(InternalErrorEnum.E121,
-                                        "Message (" + paramMsg.toHumanString() + ") exceeded interval for starting "
+                                        "Message " + paramMsg.toHumanString() + " exceeded interval for starting "
                                                 + "processing => changed to FAILED state");
 
                                 exchange.setProperty(Exchange.EXCEPTION_CAUGHT, ex);
