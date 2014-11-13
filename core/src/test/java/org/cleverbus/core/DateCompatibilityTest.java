@@ -24,6 +24,7 @@ import static org.junit.Assume.assumeThat;
 
 import org.cleverbus.common.Tools;
 import org.cleverbus.common.jaxb.JaxbDateAdapter;
+import org.cleverbus.common.log.Log;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -125,8 +126,7 @@ public class DateCompatibilityTest {
 
         // converts back to local time
         DateTime localDt = Tools.fromUTC(utcDate);
-        System.out.println(utcDate);
-        System.out.println(localDate);
+        Log.warn("utcDate: " + utcDate + ", localDate:" + localDate);
         assertThat(localDt.isEqual(xmlDate), is(true));
 
         localDt = Tools.fromUTC(utcDate.getMillis());
