@@ -30,7 +30,7 @@ import org.apache.commons.lang.StringUtils;
 /**
  * Helper class for message manipulation.
  */
-//TODO (juza) adept na presun do API
+//TODO (juza) applicant for moving to API
 public final class MessageHelper {
 
     private MessageHelper() {

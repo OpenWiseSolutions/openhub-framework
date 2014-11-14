@@ -55,7 +55,7 @@ import org.w3c.dom.Node;
  *
  * @author <a href="mailto:petr.juza@cleverlance.com">Petr Juza</a>
  */
-//TODO (juza) adept na presun do API
+//TODO (juza) applicant for moving to API
 public abstract class AbstractSoapExceptionFilter implements Processor {
 
     private boolean asynchMessage;

@@ -268,7 +268,7 @@ public class MessageDaoJpaImpl implements MessageDao {
 
     @Override
     public List<Message> getMessagesForGuaranteedOrderForRoute(String funnelValue, boolean excludeFailedState) {
-        //TODO (juza) omezit select na nejaky pocet + tridit jeste pres msgId DESC (parent vs. child)
+        //TODO (juza) limit select to specific number of items + add msgId DESC to sorting (parent vs. child)
         String jSql = "SELECT m "
                 + "FROM " + Message.class.getName() + " m "
                 + "WHERE (m.state = '" + MsgStateEnum.PROCESSING + "' "
@@ -311,7 +311,7 @@ public class MessageDaoJpaImpl implements MessageDao {
                 + "      AND m.startProcessTimestamp >= :startTime"
                 + " ORDER BY m.msgTimestamp";
 
-        //TODO (juza) omezit select na nejaky pocet + tridit jeste pres msgId (parent vs. child)
+        //TODO (juza) limit select to specific number of items + add msgId DESC to sorting (parent vs. child)
 
         TypedQuery<Message> q = em.createQuery(jSql, Message.class);
         q.setParameter("startTime", new Timestamp(DateUtils.addSeconds(new Date(), -idleInterval).getTime()));

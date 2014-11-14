@@ -147,7 +147,7 @@ public class MsgFunnelEndpoint extends DefaultEndpoint {
         return id;
     }
 
-    //TODO (juza) kontrola unikatnosti ID
+    //TODO (juza) check unique ID
 
     public void setId(String id) {
         this.id = id;
