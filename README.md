@@ -35,7 +35,7 @@ Please refer to the website for details of finding the issue tracker, email list
 
 If you need support or help then read this page first: [https://github.com/integram/cleverbus](https://github.com/integram/cleverbus)
 
-If you hit any problems please talk to us on the Camel Forums: [https://github.com/integram/cleverbus](https://github.com/integram/cleverbus)
+If you hit any problems please talk to us on the Camel Forums: [https://groups.google.com/d/forum/cleverbus](https://groups.google.com/d/forum/cleverbus)
 
 
 We appreciate any feedback on how Cleverbus fits your requirements. It helps us keep the right direction.
