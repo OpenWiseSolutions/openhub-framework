@@ -7,7 +7,7 @@
 
     <requiredProperties>
         <requiredProperty key="cleverBusVersion">
-            <defaultValue>0.4-SNAPSHOT</defaultValue>
+            <defaultValue>1.1</defaultValue>
         </requiredProperty>
         <requiredProperty key="cleverBusServerName">
             <defaultValue>CleverBus Web Admin</defaultValue>
