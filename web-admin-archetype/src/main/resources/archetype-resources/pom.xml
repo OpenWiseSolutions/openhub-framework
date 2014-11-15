@@ -62,22 +62,22 @@
             <!-- CleverBus modules -->
             <dependency>
                 <groupId>org.cleverbus</groupId>
-                <artifactId>core</artifactId>
+                <artifactId>cleverbus-core</artifactId>
                 <version>${cleverBus-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.cleverbus</groupId>
-                <artifactId>components</artifactId>
+                <artifactId>cleverbus-components</artifactId>
                 <version>${cleverBus-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.cleverbus</groupId>
-                <artifactId>examples</artifactId>
+                <artifactId>cleverbus-examples</artifactId>
                 <version>${cleverBus-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.cleverbus</groupId>
-                <artifactId>test</artifactId>
+                <artifactId>cleverbus-test</artifactId>
                 <version>${cleverBus-version}</version>
             </dependency>
 
@@ -111,19 +111,19 @@
     <dependencies>
         <dependency>
             <groupId>org.cleverbus</groupId>
-            <artifactId>core</artifactId>
+            <artifactId>cleverbus-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.cleverbus</groupId>
-            <artifactId>components</artifactId>
+            <artifactId>cleverbus-components</artifactId>
         </dependency>
         <dependency>
             <groupId>org.cleverbus</groupId>
-            <artifactId>examples</artifactId>
+            <artifactId>cleverbus-examples</artifactId>
         </dependency>
         <dependency>
             <groupId>org.cleverbus</groupId>
-            <artifactId>test</artifactId>
+            <artifactId>cleverbus-test</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -214,7 +214,7 @@
 
     <build>
         <!-- default name of CleverBus integration platform -->
-        <finalName>esb</finalName>
+        <finalName>cleverbus</finalName>
 
         <resources>
             <resource>

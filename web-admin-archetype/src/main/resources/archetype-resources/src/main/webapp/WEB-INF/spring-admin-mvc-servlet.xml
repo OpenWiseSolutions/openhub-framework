@@ -20,13 +20,13 @@
     <tx:annotation-driven transaction-manager="jpaTxManager"/>
 
     <!-- init web admin part only -->
-    <context:component-scan base-package="${package}.admin"/>
+    <context:component-scan base-package="${package}"/>
 
     <!-- property configuration files -->
     <context:property-placeholder ignore-resource-not-found="true"
                                   location="classpath:applicationCore.cfg,classpath:application.cfg,classpath:application0.cfg"/>
 
-    <bean id="logFileFilter" class="${package}.admin.services.log.LogFileFilter">
+    <bean id="logFileFilter" class="${package}.services.log.LogFileFilter">
         <property name="formatPattern" value="${symbol_dollar}{log.file.pattern}"/>
     </bean>
 

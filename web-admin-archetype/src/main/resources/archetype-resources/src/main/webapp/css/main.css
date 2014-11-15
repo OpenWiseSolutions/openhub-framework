@@ -220,6 +220,20 @@ div.footer {
     padding-left: 20px;
 }
 
+span.companyLogo {
+    float: right;
+    margin: 10px 30px 0 0;
+    color: #7D3CBE;
+}
+
+span.companyLogo a {
+    text-decoration: none;
+}
+
+span.companyLogo a:hover {
+    text-decoration: underline;
+}
+
 div.companyLogo {
     float: right;
     margin: 10px 30px 0 0;

@@ -19,7 +19,7 @@
     <context:annotation-config />
 
     <!-- init ping and version routes -->
-    <context:component-scan base-package="org.cleverbus.api.common.route, org.cleverbus.api.common.version"/>
+    <context:component-scan base-package="org.cleverbus.core.common.route, org.cleverbus.core.common.version"/>
 
     <!-- property configuration files -->
     <context:property-placeholder ignore-resource-not-found="true"

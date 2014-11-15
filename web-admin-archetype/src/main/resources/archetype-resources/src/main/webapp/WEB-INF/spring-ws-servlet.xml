@@ -22,9 +22,10 @@
     <tx:annotation-driven transaction-manager="jpaTxManager"/>
 
     <!-- init all routes from modules -->
-    <context:component-scan base-package="org.cleverbus.api, org.cleverbus.modules, ${groupId}.${artifactId}.modules" use-default-filters="false">
-        <context:include-filter type="custom" expression="org.cleverbus.api.common.spring.SystemIncludeRegexPatternTypeFilter"/>
-        <context:exclude-filter type="custom" expression="org.cleverbus.api.common.spring.SystemExcludeRegexPatternTypeFilter"/>
+    <context:component-scan base-package="org.cleverbus.core, org.cleverbus.modules" use-default-filters="false"
+            name-generator="org.cleverbus.core.common.route.RouteBeanNameGenerator">
+        <context:include-filter type="custom" expression="org.cleverbus.core.common.spring.SystemIncludeRegexPatternTypeFilter"/>
+        <context:exclude-filter type="custom" expression="org.cleverbus.core.common.spring.SystemExcludeRegexPatternTypeFilter"/>
     </context:component-scan>
 
     <!-- property configuration files -->
@@ -49,6 +50,6 @@
         </property>
     </bean>
 
-    <bean class="org.cleverbus.api.conf.ConfigurationChecker"/>
+    <bean class="org.cleverbus.core.conf.ConfigurationChecker"/>
 
 </beans>

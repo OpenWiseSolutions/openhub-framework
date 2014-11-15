@@ -36,8 +36,8 @@
         </encoder>
     </appender>
 
-    <!-- ${cleverBusServerDescription} namespaces -->
-    <logger name="${groupId}.${artifactId}" level="debug"/>
+    <!-- CleverBus integration namespaces -->
+    <logger name="org.cleverbus" level="debug"/>
     <logger name="org.springframework.ws" level="debug"/>
     <!--<logger name="org.apache.camel" level="debug"/>-->
     <logger name="org.apache.camel.converter.jaxb.JaxbDataFormat" level="warn"/>

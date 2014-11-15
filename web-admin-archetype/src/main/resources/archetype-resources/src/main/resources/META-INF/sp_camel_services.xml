@@ -10,36 +10,36 @@
         Configuration of services which use/are for Apache Camel.
     </description>
 
-    <bean class="org.cleverbus.api.common.route.EndpointRegistryImpl"/>
-    <bean class="org.cleverbus.api.common.ws.WsdlRegistrySpringImpl"/>
+    <bean class="org.cleverbus.core.common.route.EndpointRegistryImpl"/>
+    <bean class="org.cleverbus.core.common.ws.WsdlRegistrySpringImpl"/>
 
     <!-- picked up by SpringWebserviceComponent to skip setting camel headers/attachments to outbound SOAP message -->
-    <bean id="messageFilter" class="org.cleverbus.api.common.ws.component.NoopMessageFilter"/>
+    <bean id="messageFilter" class="org.cleverbus.core.common.ws.component.NoopMessageFilter"/>
 
     <!-- throttling -->
-    <bean id="throttlingConfiguration" class="org.cleverbus.api.throttling.ThrottlingPropertiesConfiguration">
+    <bean id="throttlingConfiguration" class="org.cleverbus.core.throttling.ThrottlingPropertiesConfiguration">
         <constructor-arg ref="confProperties"/>
         <property name="throttlingDisabled" value="${symbol_dollar}{disable.throttling}"/>
     </bean>
-    <bean class="org.cleverbus.api.throttling.ThrottleCounterMemoryImpl" />
-    <bean class="org.cleverbus.api.throttling.ThrottleProcessorImpl" />
+    <bean class="org.cleverbus.core.throttling.ThrottleCounterMemoryImpl" />
+    <bean class="org.cleverbus.core.throttling.ThrottleProcessorImpl" />
 
     <!-- alerts -->
-    <bean id="alertsConfiguration" class="org.cleverbus.api.alerts.AlertsPropertiesConfiguration">
+    <bean id="alertsConfiguration" class="org.cleverbus.core.alerts.AlertsPropertiesConfiguration">
         <constructor-arg ref="confProperties"/>
     </bean>
-    <bean id="alertsCheckingService" class="org.cleverbus.api.alerts.AlertsCheckingServiceDbImpl"/>
-    <bean class="org.cleverbus.api.alerts.EmailAlertListenerSupport"/>
+    <bean id="alertsCheckingService" class="org.cleverbus.core.alerts.AlertsCheckingServiceDbImpl"/>
+    <bean class="org.cleverbus.core.alerts.EmailAlertListenerSupport"/>
 
     <!-- extensions -->
-    <bean class="org.cleverbus.api.common.extension.PropertiesExtensionConfigurationLoader" depends-on="camelContext">
+    <bean class="org.cleverbus.core.common.extension.PropertiesExtensionConfigurationLoader" depends-on="camelContext">
         <constructor-arg ref="confProperties"/>
     </bean>
 
-    <bean class="org.cleverbus.api.common.route.SpringWsUriBuilder" />
+    <bean class="org.cleverbus.core.common.route.SpringWsUriBuilder" />
 
     <beans profile="prod">
-        <bean id="confirmationCallback" class="org.cleverbus.api.common.asynch.confirm.DelegateConfirmationCallback"/>
+        <bean id="confirmationCallback" class="org.cleverbus.core.common.asynch.confirm.DelegateConfirmationCallback"/>
 
         <bean id="quartz" class="org.apache.camel.component.quartz2.QuartzComponent">
             <property name="startDelayedSeconds" value="30"/>

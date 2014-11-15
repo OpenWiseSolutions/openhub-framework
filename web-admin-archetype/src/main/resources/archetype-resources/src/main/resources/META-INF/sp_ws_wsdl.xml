@@ -14,7 +14,7 @@
     </description>
 
     <bean id="commonTypes-v1.0" class="org.springframework.xml.xsd.SimpleXsdSchema">
-        <property name="xsd" value="classpath:org/cleverbus/core/modules/in/common/commonTypes-v1.0.xsd" />
+        <property name="xsd" value="classpath:org/cleverbus/api/modules/in/common/commonTypes-v1.0.xsd" />
     </bean>
 
     <!-- WSDL will be available at http://[localhost:8080/ip]/ws/hello.wsdl -->

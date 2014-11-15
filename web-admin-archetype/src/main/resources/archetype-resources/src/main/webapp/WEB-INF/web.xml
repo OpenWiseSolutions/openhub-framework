@@ -6,8 +6,8 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/javaee/web-app_2_4.xsd"
          version="2.4">
 
-    <display-name>${cleverBusServerDescription}</display-name>
-    <description>${cleverBusServerDescription}</description>
+    <display-name>CleverBus integration server</display-name>
+    <description>CleverBus integration server</description>
 
     <!--
         Location of the XML file that defines the root application context.

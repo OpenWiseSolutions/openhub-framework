@@ -89,6 +89,18 @@
             <td><#if msg.funnelValue??>${msg.funnelValue}</#if>&nbsp;</td>
         </tr>
         <tr>
+            <td><@spring.message "msg.detail.funnelComponentId"/></td>
+            <td><#if msg.funnelComponentId??>${msg.funnelComponentId}</#if>&nbsp;</td>
+        </tr>
+        <tr>
+            <td><@spring.message "msg.detail.guaranteedOrder"/></td>
+            <td>${msg.guaranteedOrder}&nbsp;</td>
+        </tr>
+        <tr>
+            <td><@spring.message "msg.detail.excludeFailedState"/></td>
+            <td>${msg.excludeFailedState}&nbsp;</td>
+        </tr>
+        <tr>
             <td><@spring.message "msg.detail.businessError"/></td>
             <td><#if msg.businessError??>${msg.businessError}</#if>&nbsp;</td>
         </tr>
