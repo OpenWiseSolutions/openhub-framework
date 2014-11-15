@@ -4,11 +4,11 @@
 
     <parent>
         <groupId>org.cleverbus</groupId>
-        <artifactId>integration</artifactId>
+        <artifactId>cleverbus-integration</artifactId>
         <version>1.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>common</artifactId>
+    <artifactId>cleverbus-common</artifactId>
     <name>CleverBus Common</name>
     <description>CleverBus integration framework - common library</description>
     <packaging>jar</packaging>

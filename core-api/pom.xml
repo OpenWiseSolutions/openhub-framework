@@ -4,11 +4,11 @@
 
     <parent>
         <groupId>org.cleverbus</groupId>
-        <artifactId>integration</artifactId>
+        <artifactId>cleverbus-integration</artifactId>
         <version>1.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>core-api</artifactId>
+    <artifactId>cleverbus-core-api</artifactId>
     <packaging>jar</packaging>
 
     <name>CleverBus Core API</name>
@@ -25,7 +25,7 @@
         <!-- inner modules -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>cleverbus-common</artifactId>
         </dependency>
 
 

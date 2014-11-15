@@ -4,11 +4,11 @@
 
     <parent>
         <groupId>org.cleverbus</groupId>
-        <artifactId>integration</artifactId>
+        <artifactId>cleverbus-integration</artifactId>
         <version>1.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>web-admin</artifactId>
+    <artifactId>cleverbus-web-admin</artifactId>
     <packaging>war</packaging>
 
     <name>CleverBus Web Admin</name>
@@ -18,15 +18,15 @@
         <!-- inner modules -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>core</artifactId>
+            <artifactId>cleverbus-core</artifactId>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>components</artifactId>
+            <artifactId>cleverbus-components</artifactId>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>examples</artifactId>
+            <artifactId>cleverbus-examples</artifactId>
         </dependency>
 
         <!-- Monitoring -->
@@ -118,7 +118,7 @@
 
     <build>
         <!-- default name of CleverBus integration platform -->
-        <finalName>esb</finalName>
+        <finalName>cleverbus</finalName>
 
         <resources>
             <resource>

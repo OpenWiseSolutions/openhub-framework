@@ -4,11 +4,11 @@
 
     <parent>
         <groupId>org.cleverbus</groupId>
-        <artifactId>integration</artifactId>
+        <artifactId>cleverbus-integration</artifactId>
         <version>1.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>core</artifactId>
+    <artifactId>cleverbus-core</artifactId>
     <packaging>jar</packaging>
 
     <name>CleverBus Core</name>
@@ -25,15 +25,15 @@
         <!-- inner modules -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>cleverbus-common</artifactId>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>core-api</artifactId>
+            <artifactId>cleverbus-core-api</artifactId>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>core-spi</artifactId>
+            <artifactId>cleverbus-core-spi</artifactId>
         </dependency>
 
 
@@ -177,7 +177,7 @@
         <!-- test dependencies -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>test</artifactId>
+            <artifactId>cleverbus-test</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -206,7 +206,7 @@
                         <configuration>
                             <includes>**/*.xjb,**/*.xsd</includes>
                             <includeGroupIds>org.cleverbus</includeGroupIds>
-                            <includeArtifactIds>core-api</includeArtifactIds>
+                            <includeArtifactIds>cleverbus-core-api</includeArtifactIds>
                             <outputDirectory>${modules.other.resources.directory}</outputDirectory>
                         </configuration>
                     </execution>

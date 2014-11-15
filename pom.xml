@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.cleverbus</groupId>
-    <artifactId>integration</artifactId>
+    <artifactId>cleverbus-integration</artifactId>
     <packaging>pom</packaging>
     <version>1.1-SNAPSHOT</version>
 
@@ -72,37 +72,37 @@
             <!-- inner modules -->
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>common</artifactId>
+                <artifactId>cleverbus-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>core-api</artifactId>
+                <artifactId>cleverbus-core-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>core-spi</artifactId>
+                <artifactId>cleverbus-core-spi</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>core</artifactId>
+                <artifactId>cleverbus-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>components</artifactId>
+                <artifactId>cleverbus-components</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>test</artifactId>
+                <artifactId>cleverbus-test</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>examples</artifactId>
+                <artifactId>cleverbus-examples</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

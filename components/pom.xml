@@ -4,11 +4,11 @@
 
     <parent>
         <groupId>org.cleverbus</groupId>
-        <artifactId>integration</artifactId>
+        <artifactId>cleverbus-integration</artifactId>
         <version>1.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>components</artifactId>
+    <artifactId>cleverbus-components</artifactId>
     <packaging>jar</packaging>
 
     <name>CleverBus Components</name>
@@ -18,18 +18,18 @@
         <!-- inner modules -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>core-spi</artifactId>
+            <artifactId>cleverbus-core-spi</artifactId>
         </dependency>
 
         <!-- test dependencies -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>test</artifactId>
+            <artifactId>cleverbus-test</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>core</artifactId>
+            <artifactId>cleverbus-core</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
