@@ -241,9 +241,11 @@
                                        ${modules.other.resources.directory}/org/cleverbus/api/modules/in/common
                                    </directory>
                                </resource>
-                                <resource>
-                                    <directory>${modules.root.directory}/out/asynch/ws/v1_0</directory>
-                                </resource>
+                               <resource>
+                                    <directory>
+                                        src/main/resources/org/cleverbus/core/common/asynch/confirm/ws/v1_0
+                                    </directory>
+                               </resource>
                             </resources>
                         </configuration>
                     </execution>
@@ -282,8 +284,8 @@
                             <goal>wsimport</goal>
                         </goals>
                         <configuration>
-                            <staleFile>${project.build.directory}/jaxws/.out.asynch.model</staleFile>
-                            <packageName>org.cleverbus.modules.out.asynch.model</packageName>
+                            <staleFile>${project.build.directory}/jaxws/.core.common.asynch.confirm.ws.model</staleFile>
+                            <packageName>org.cleverbus.core.common.asynch.confirm.ws.model</packageName>
                             <wsdlFiles>
                                 <wsdlFile>asynchConfirmation-v1.0.wsdl</wsdlFile>
                             </wsdlFiles>
