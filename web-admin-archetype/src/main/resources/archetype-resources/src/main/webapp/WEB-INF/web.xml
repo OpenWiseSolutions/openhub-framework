@@ -57,7 +57,7 @@
     </filter-mapping>
 
     <!--
-    A filter that provides way to specify a character encoding for requests.
+        A filter that provides way to specify a character encoding for requests.
     -->
     <filter>
         <filter-name>charsetFilter</filter-name>

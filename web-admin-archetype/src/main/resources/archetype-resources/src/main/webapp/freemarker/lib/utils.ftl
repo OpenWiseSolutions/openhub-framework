@@ -7,7 +7,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <title><#if title?has_content>${title} | </#if>CleverBus - integrační framework</title>
+    <title><#if title?has_content>${title} | </#if><@spring.message "index.title"/></title>
     <meta http-equiv="X-UA-Compatible" content="IE=9">
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <link rel="shortcut icon" href="${rootContext}/css/images/favicon.ico" type="image/x-icon">
@@ -29,7 +29,7 @@
         <span class="logo"><a href="${rootContext}/web/admin/console"><img class="logo"
                                                                            src="${rootContext}/css/images/logo-cbs.png"
                                                                            alt="CleverBus"/></a></span>
-        <span class="headline">Integrační framework</span>
+        <span class="headline"><@spring.message "index.integrationFramework"/></span>
         <@sec.authorize access="isAuthenticated()">
             <span class="logout"><a href="${rootContext}/j_spring_security_logout"
                     ><@spring.message "login.text.logout"/> | <@sec.authentication property="principal.username"/></a>
@@ -45,7 +45,7 @@
 </div>
 <div class="footer">
     <div class="footerWrapper">
-        <span class="companyLogo"><a href="http://www.cleverbus.org" target="_blank">CleverBus</a></span>
+        <span class="companyLogo"><a href="http://www.cleverbus.org" target="_blank"><@spring.message "index.name"/></a></span>
     </div>
 </div>
 </body>

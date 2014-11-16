@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * Controller for displaying catalog of errors.
  *
  * @author <a href="mailto:tomas.hanus@cleverlance.com">Tomas Hanus</a>
+ * @since 0.4
  */
 @Controller
 public class ErrorCatalogController {
@@ -40,8 +41,8 @@ public class ErrorCatalogController {
     @Autowired
     private ErrorCatalogService errorCodesCatalog;
 
-    @RequestMapping("/errorCatalog")
-    public String showConsole(@ModelAttribute("model") ModelMap model) {
+    @RequestMapping("/" + VIEW_NAME)
+    public String showErrorCatalog(@ModelAttribute("model") ModelMap model) {
 
         model.addAttribute("errorCodesCatalog", errorCodesCatalog.getErrorCatalog());
         return VIEW_NAME;

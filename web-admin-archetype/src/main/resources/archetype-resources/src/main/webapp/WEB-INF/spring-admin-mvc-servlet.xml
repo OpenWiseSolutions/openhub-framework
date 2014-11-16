@@ -61,8 +61,8 @@
     </bean>
 
     <bean id="localeResolver"
-          class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
-        <property name="defaultLocale" value="cs_CZ"/>
+          class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+        <property name="defaultLocale" value="en_US"/>
     </bean>
 
     <!-- error codes catalog -->
