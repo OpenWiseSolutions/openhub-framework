@@ -94,11 +94,11 @@
         </tr>
         <tr>
             <td><@spring.message "msg.detail.guaranteedOrder"/></td>
-            <td>${msg.guaranteedOrder}&nbsp;</td>
+            <td>${msg.guaranteedOrder?string("true", "false")}</td>
         </tr>
         <tr>
             <td><@spring.message "msg.detail.excludeFailedState"/></td>
-            <td>${msg.excludeFailedState}&nbsp;</td>
+            <td>${msg.excludeFailedState?string("true", "false")}</td>
         </tr>
         <tr>
             <td><@spring.message "msg.detail.businessError"/></td>

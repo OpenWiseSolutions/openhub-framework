@@ -9,7 +9,7 @@ Syntax description:
 Example:
 #1304
 [customer.wsdl]
-+ pridani atributu passportNo pro operaci getCustomer
-* operace getCustomer nyni vyzaduje aby alespon jeden atribut byl specifikovan
++ added attribute passportNo in operation getCustomer
+* operation getCustomer requires at least one element
 ===============================================================================
 
