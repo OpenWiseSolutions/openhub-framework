@@ -32,7 +32,7 @@ Building: [https://github.com/integram/cleverbus](https://github.com/integram/cl
 We welcome contributions of all kinds, for details of how you can help: [https://github.com/integram/cleverbus/blob/master/CONTRIBUTING.md](https://github.com/integram/cleverbus/blob/master/CONTRIBUTING.md)
   
 Please refer to the website for details of finding the issue tracker or wiki: 
-[https://github.com/integram/cleverbus/issues](https://github.com/integram/cleverbus/issues), [https://github.com/integram/cleverbus/wiki](https://github.com/integram/cleverbus/wiki)
+[https://github.com/integram/cleverbus/issues](https://github.com/integram/cleverbus/issues), [https://cleverbus.atlassian.net/wiki/display/CLVBUS/CleverBus](https://cleverbus.atlassian.net/wiki/display/CLVBUS/CleverBus)
 
 If you need support or help then read this page first: [https://github.com/integram/cleverbus](https://github.com/integram/cleverbus)
 
