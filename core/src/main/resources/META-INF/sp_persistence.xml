@@ -29,6 +29,10 @@
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
 
+    <bean id="jpa" class="org.apache.camel.component.jpa.JpaComponent">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+
     <tx:annotation-driven transaction-manager="jpaTxManager"/>
 
     <!-- DAOs -->

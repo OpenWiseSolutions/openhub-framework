@@ -40,6 +40,7 @@ import org.cleverbus.common.log.Log;
 import org.cleverbus.common.log.LogContextFilter;
 import org.cleverbus.core.common.asynch.msg.MessageTransformer;
 import org.cleverbus.core.common.asynch.stop.StopService;
+import org.cleverbus.core.common.dao.DbConst;
 import org.cleverbus.core.common.event.AsynchEventHelper;
 import org.cleverbus.core.common.exception.ExceptionTranslator;
 import org.cleverbus.core.common.validator.TraceIdentifierValidator;
@@ -148,7 +149,7 @@ public class AsynchInMessageRoute extends AbstractBasicRoute {
                 }).id("throttleProcess")
 
                 // save it to DB
-                .to("jpa:" + Message.class.getName() + "?usePersist=true")
+                .to("jpa:" + Message.class.getName() + "?usePersist=true&persistenceUnit=" + DbConst.UNIT_NAME)
 
                 // check guaranteed order
 //                .to(ExchangePattern.InOnly, URI_GUARANTEED_ORDER_ROUTE)
