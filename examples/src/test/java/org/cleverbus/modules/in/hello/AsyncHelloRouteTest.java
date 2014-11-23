@@ -48,7 +48,7 @@ import org.junit.Test;
 public class AsyncHelloRouteTest extends AbstractModulesDbTest {
 
     private static final String REQ_XML =
-            "<asyncHelloRequest xmlns=\"http://cleverbus.cleverlance.com/ws/HelloService-v1\">"
+            "<asyncHelloRequest xmlns=\"http://cleverbus.org/ws/HelloService-v1\">"
           + "    <name>Mr. Parker</name>"
           + "</asyncHelloRequest>";
 

@@ -48,7 +48,7 @@ import org.springframework.ws.client.WebServiceIOException;
           &lt;faultcode>SOAP-ENV:Server</faultcode>
           &lt;faultstring xml:lang="en">E102: the validation error (PredicateValidationException: Validation failed
             for Predicate[header{header(chargingKey)} is not null]. Exchange[SpringWebserviceMessage[SaajSoapMessage
-            {http://cleverbss.cleverlance.com/ws/SubscriberService-v1}getCounterDataRequest]] )</faultstring>
+            {http://cleverbus.org/ws/SubscriberService-v1}getCounterDataRequest]] )</faultstring>
        &lt;/SOAP-ENV:Fault>
     &lt;/SOAP-ENV:Body>
     &lt;/SOAP-ENV:Envelope>

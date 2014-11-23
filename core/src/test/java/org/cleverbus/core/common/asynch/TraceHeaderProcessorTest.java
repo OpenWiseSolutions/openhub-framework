@@ -73,8 +73,8 @@ public class TraceHeaderProcessorTest extends AbstractCoreTest {
     public void testParsingTraceHeaderFromBody() throws Exception {
         prepareRoute(new TraceHeaderProcessor(true, null));
 
-        String request = "<notifyCollectionStepRequest xmlns=\"http://cleverbss.cleverlance.com/ws/NotificationsService-v1\">"
-                + "            <traceIdentifier xmlns=\"http://cleverbss.cleverlance.com/ws/Common-v1\">"
+        String request = "<notifyCollectionStepRequest xmlns=\"http://cleverbus.org/ws/NotificationsService-v1\">"
+                + "            <traceIdentifier xmlns=\"http://cleverbus.org/ws/Common-v1\">"
                 + "                <applicationID>ERP</applicationID>"
                 + "                <timestamp>2013-09-27T10:23:34.6987744+02:00</timestamp>"
                 + "                <correlationID>da793349-b486-489a-9180-200789b7007f</correlationID>"
@@ -116,8 +116,8 @@ public class TraceHeaderProcessorTest extends AbstractCoreTest {
                         }));
         prepareRoute(processor);
 
-        String request = "<notifyCollectionStepRequest xmlns=\"http://cleverbss.cleverlance.com/ws/NotificationsService-v1\">"
-                + "            <traceIdentifier xmlns=\"http://cleverbss.cleverlance.com/ws/Common-v1\">"
+        String request = "<notifyCollectionStepRequest xmlns=\"http://cleverbus.org/ws/NotificationsService-v1\">"
+                + "            <traceIdentifier xmlns=\"http://cleverbus.org/ws/Common-v1\">"
                 + "                <applicationID>ERP</applicationID>"
                 + "                <timestamp>2013-09-27T10:23:34.6987744+02:00</timestamp>"
                 + "                <correlationID>da793349-b486-489a-9180-200789b7007f</correlationID>"
@@ -141,7 +141,6 @@ public class TraceHeaderProcessorTest extends AbstractCoreTest {
             assertThat(((ValidationIntegrationException) origExp).getError().getErrorCode(),
                     is(InternalErrorEnum.E120.getErrorCode()));
         }
-
     }
 
     @Test
@@ -165,8 +164,8 @@ public class TraceHeaderProcessorTest extends AbstractCoreTest {
                 )));
         prepareRoute(processor);
 
-        String request = "<notifyCollectionStepRequest xmlns=\"http://cleverbss.cleverlance.com/ws/NotificationsService-v1\">"
-                + "            <traceIdentifier xmlns=\"http://cleverbss.cleverlance.com/ws/Common-v1\">"
+        String request = "<notifyCollectionStepRequest xmlns=\"http://cleverbus.org/ws/NotificationsService-v1\">"
+                + "            <traceIdentifier xmlns=\"http://cleverbus.org/ws/Common-v1\">"
                 + "                <applicationID>ERP</applicationID>"
                 + "                <timestamp>2013-09-27T10:23:34.6987744+02:00</timestamp>"
                 + "                <correlationID>da793349-b486-489a-9180-200789b7007f</correlationID>"
@@ -196,7 +195,7 @@ public class TraceHeaderProcessorTest extends AbstractCoreTest {
     public void testParsingNoTraceHeader() throws Exception {
         prepareRoute(new TraceHeaderProcessor(false, null));
 
-        String request = "<notifyCollectionStepRequest xmlns=\"http://cleverbss.cleverlance.com/ws/NotificationsService-v1\">"
+        String request = "<notifyCollectionStepRequest xmlns=\"http://cleverbus.org/ws/NotificationsService-v1\">"
                 + "            <externalCustomerAccountID>2065</externalCustomerAccountID>"
                 + "            <eventDate>2013-09-26T00:00:00</eventDate>"
                 + "            <stepType>1</stepType>"

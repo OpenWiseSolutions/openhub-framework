@@ -74,8 +74,8 @@ import org.springframework.beans.factory.annotation.Value;
 public class ExternalCallComponentTest extends AbstractComponentsDbTest {
 
     private static final String REQUEST_XML =
-            "  <cus:setCustomerRequest xmlns=\"http://cleverbss.cleverlance.com/ws/Customer-v1\""
-                    + "         xmlns:cus=\"http://cleverbss.cleverlance.com/ws/CustomerService-v1\">"
+            "  <cus:setCustomerRequest xmlns=\"http://cleverbus.org/ws/Customer-v1\""
+                    + "         xmlns:cus=\"http://cleverbus.org/ws/CustomerService-v1\">"
                     + "         <cus:customer>"
                     + "            <externalCustomerID>12</externalCustomerID>"
                     + "            <customerNo>23</customerNo>"

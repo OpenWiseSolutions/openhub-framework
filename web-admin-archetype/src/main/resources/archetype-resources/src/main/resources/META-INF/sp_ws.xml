@@ -44,7 +44,7 @@
         <property name="validateResponse" value="true"/>
         <property name="ignoreRequests">
             <set>
-                <value>{http://cleverbus.cleverlance.com/ws/HelloService-v1}syncHelloRequest</value>
+                <value>{http://cleverbus.org/ws/HelloService-v1}syncHelloRequest</value>
             </set>
         </property>
     </bean>

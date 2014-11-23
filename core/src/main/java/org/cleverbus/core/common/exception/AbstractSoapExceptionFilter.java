@@ -159,7 +159,7 @@ public abstract class AbstractSoapExceptionFilter implements Processor {
               &lt;faultcode>SOAP-ENV:Server</faultcode>
               &lt;faultstring xml:lang="en">E102: the validation error</faultstring>
               &lt;detail>
-                &lt;errorCode xmlns="http://cleverbus.cleverlance.com">E102&lt;/errorCode>
+                &lt;errorCode xmlns="http://cleverbus.org">E102&lt;/errorCode>
               &lt;/detail>
            &lt;/SOAP-ENV:Fault>
         &lt;/SOAP-ENV:Body>
@@ -174,7 +174,7 @@ public abstract class AbstractSoapExceptionFilter implements Processor {
               &lt;SOAP-ENV:Code>&lt;SOAP-ENV:Value><SOAP-ENV:Server</SOAP-ENV:Value>&lt;/SOAP-ENV:Code>
               &lt;SOAP-ENV:Reason xml:lang="en">E102: the validation error</SOAP-ENV:Reason>
               &lt;SOAP-ENV:Detail>
-                &lt;errorCode xmlns="http://cleverbus.cleverlance.com">E102&lt;/errorCode>
+                &lt;errorCode xmlns="http://cleverbus.org">E102&lt;/errorCode>
               &lt;/SOAP-ENV:Detail>
            &lt;/SOAP-ENV:Fault>
         &lt;/SOAP-ENV:Body>

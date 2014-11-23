@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
-           targetNamespace="http://cleverbss.cleverlance.com/ws/Common-v1"
-           xmlns:cc="http://cleverbss.cleverlance.com/ws/Common-v1"
+           targetNamespace="http://cleverbus.org/ws/Common-v1"
+           xmlns:cc="http://cleverbus.org/ws/Common-v1"
            xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
     <xs:element name="traceHeader" type="cc:traceHeader">

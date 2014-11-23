@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
-           xmlns:cc="http://cleverbss.cleverlance.com/ws/Common-v1"
+           xmlns:cc="http://cleverbus.org/ws/Common-v1"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           targetNamespace="http://cleverbus.cleverlance.com/ws/HelloService-v1">
+           targetNamespace="http://cleverbus.org/ws/HelloService-v1">
 
     <!--
         Note: all XSD/WSDL files are copied together at one place during XJC (Maven) code generation
     -->
-    <xs:import namespace="http://cleverbss.cleverlance.com/ws/Common-v1" schemaLocation="commonTypes-v1.0.xsd"/>
+    <xs:import namespace="http://cleverbus.org/ws/Common-v1" schemaLocation="commonTypes-v1.0.xsd"/>
 
     <!-- syncHello -->
     <xs:element name="syncHelloRequest">

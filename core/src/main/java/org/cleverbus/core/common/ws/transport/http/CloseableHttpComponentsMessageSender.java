@@ -217,9 +217,9 @@ public class CloseableHttpComponentsMessageSender extends HttpComponentsMessageS
      * per host can be set in a form accepted by the {@code java.util.Properties} class, like as follows:
      * <p/>
      * <pre>
-     * https://esb.cleverlance.com/esb/=1
-     * http://esb.cleverlance.com:8080/esb/=7
-     * http://esb.cleverlance.com/esb/=10
+     * https://esb.cleverbus.org/esb/=1
+     * http://esb.cleverbus.org:8080/esb/=7
+     * http://esb.cleverbus.org/esb/=10
      * </pre>
      * <p/>
      * The host can be specified as a URI (with scheme and port).

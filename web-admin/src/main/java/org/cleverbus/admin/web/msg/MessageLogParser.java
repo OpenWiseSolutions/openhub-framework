@@ -169,7 +169,7 @@ public class MessageLogParser {
                     //  for all repeated scheduled jobs for processing of partly failed messages
 
                     // 2013-05-23 20:22:36,754 [MACHINE_IS_UNDEFINED, ajp-bio-8009-exec-19, /esb/ws/account/v1, ...
-                    // <checkCustomerCreditRequest xmlns="http://cleverbss.cleverlance.com/ws/AccountService-v1">
+                    // <checkCustomerCreditRequest xmlns="http://cleverbus.org/ws/AccountService-v1">
                     //    <firstName>csd</firstName>
                     //    <lastName>acs</lastName>
                     //    <birthNumber>111111/1111</birthNumber>

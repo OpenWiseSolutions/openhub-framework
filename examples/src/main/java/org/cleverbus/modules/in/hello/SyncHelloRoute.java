@@ -46,7 +46,7 @@ public class SyncHelloRoute extends AbstractBasicRoute {
 
     public static final String ROUTE_ID_SYNC_HELLO = getRouteId(ServiceEnum.HELLO, OPERATION_NAME);
 
-    public static final String HELLO_SERVICE_NS = "http://cleverbus.cleverlance.com/ws/HelloService-v1";
+    public static final String HELLO_SERVICE_NS = "http://cleverbus.org/ws/HelloService-v1";
 
     @Override
     protected void doConfigure() throws Exception {

@@ -59,7 +59,7 @@ public class HeaderAndPayloadValidatingInterceptor extends PayloadValidatingInte
     private static final String DEFAULT_FAULT_HEADER_REASON
             = InternalErrorEnum.E104.getErrorCode() + ": " + InternalErrorEnum.E104.getErrDesc();
 
-    public static QName TRACE_HEADER_ELM = new QName("http://cleverbss.cleverlance.com/ws/Common-v1", "traceHeader");
+    public static QName TRACE_HEADER_ELM = new QName("http://cleverbus.org/ws/Common-v1", "traceHeader");
 
     private boolean validateHeader = true;
 
@@ -184,7 +184,7 @@ public class HeaderAndPayloadValidatingInterceptor extends PayloadValidatingInte
      * Sets request root element names which will be ignored from trace header checking.
      *
      * @param ignoreRequests the array of element names, e.g.
-     *                       {@code {http://cleverbss.cleverlance.com/ws/SubscriberService-v1}getCounterDataRequest }
+     *                       {@code {http://cleverbus.org/ws/SubscriberService-v1}getCounterDataRequest }
      */
     public void setIgnoreRequests(Collection<String> ignoreRequests) {
         this.ignoreRequests = new HashSet<QName>();

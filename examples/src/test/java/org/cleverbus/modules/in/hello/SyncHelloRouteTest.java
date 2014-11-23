@@ -52,7 +52,7 @@ public class SyncHelloRouteTest extends AbstractModulesTest {
      */
     @Test
     public void testSyncHelloRoute() throws Exception {
-        String xml = "<syncHelloRequest xmlns=\"http://cleverbus.cleverlance.com/ws/HelloService-v1\">"
+        String xml = "<syncHelloRequest xmlns=\"http://cleverbus.org/ws/HelloService-v1\">"
                 + "    <name>Mr. Parker</name>"
                 + "</syncHelloRequest>";
 

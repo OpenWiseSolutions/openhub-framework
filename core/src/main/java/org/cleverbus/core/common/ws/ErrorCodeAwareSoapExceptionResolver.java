@@ -48,7 +48,7 @@ import org.springframework.ws.soap.SoapMessage;
           &lt;faultcode>SOAP-ENV:Server</faultcode>
           &lt;faultstring xml:lang="en">E102: the validation error</faultstring>
           &lt;detail>
-            &lt;errorCode xmlns="http://cleverbus.cleverlance.com">E102&lt;/errorCode>
+            &lt;errorCode xmlns="http://cleverbus.org">E102&lt;/errorCode>
           &lt;/detail>
        &lt;/SOAP-ENV:Fault>
     &lt;/SOAP-ENV:Body>
@@ -62,7 +62,7 @@ public class ErrorCodeAwareSoapExceptionResolver extends AbstractEndpointExcepti
     private Locale locale = Locale.ENGLISH;
     private boolean throttlingAsServerError = false;
 
-    private static final QName ERR_CODE = new QName("http://cleverbus.cleverlance.com", "errorCode");
+    private static final QName ERR_CODE = new QName("http://cleverbus.org", "errorCode");
 
     /**
      * Returns the locale for the faultstring or reason of the SOAP Fault.

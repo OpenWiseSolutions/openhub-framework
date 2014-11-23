@@ -2,13 +2,13 @@
 <wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
                   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
                   xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                  xmlns:cc="http://cleverbss.cleverlance.com/ws/Common-v1"
-                  xmlns:tns="http://cleverbus.cleverlance.com/ws/HelloService-v1"
-                  targetNamespace="http://cleverbus.cleverlance.com/ws/HelloService-v1">
+                  xmlns:cc="http://cleverbus.org/ws/Common-v1"
+                  xmlns:tns="http://cleverbus.org/ws/HelloService-v1"
+                  targetNamespace="http://cleverbus.org/ws/HelloService-v1">
 
     <wsdl:types>
         <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified">
-            <xs:import namespace="http://cleverbus.cleverlance.com/ws/HelloService-v1" schemaLocation="helloOperations-v1.0.xsd"/>
+            <xs:import namespace="http://cleverbus.org/ws/HelloService-v1" schemaLocation="helloOperations-v1.0.xsd"/>
         </xs:schema>
     </wsdl:types>
 
