@@ -10,7 +10,4 @@ We welcome any new member of the community, who volunteers to add new piece of c
 Generally it's very simple: you don't need to ask if you can help, you don't need to apply to join the team - all you do is you fork the repository of your choice. In your own fork you can implement and test any enhancements or fixes you would like to contribute. Once you feel your code is ready, just let us know by starting a pull request. The pull request informs the team that there is a new contribution ready to get merged into the main line of code.
 
 ## Contribute to forum and documentation
-We welcome any new volunteers who help us create comprehensive [documentation](https://cleverbus.atlassian.net/wiki/display/CLVBUS) and knowledge base on [forum](https://groups.google.com/d/forum/cleverbus). 
-
-## Be patiant
-CleverBus has been developed for one year as proprietary software in [Cleverlance company](http://www.cleverlance.com). We decided to make it as open-source few months ago. We need to move everything from private to public systems (issues, wiki, build server, Maven repository etc.), translate everything to English and change our internal processes how we will use CleverBus. **Please be patiant, it's time consuming to make all these changes.**
+We welcome any new volunteers who help us create comprehensive [documentation](https://cleverbus.atlassian.net/wiki/display/CLVBUS) and knowledge base on [forum](https://groups.google.com/d/forum/cleverbus).
