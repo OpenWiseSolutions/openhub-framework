@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.cleverbus</groupId>
         <artifactId>cleverbus-integration</artifactId>
-        <version>1.1-SNAPSHOT</version>
+        <version>1.1</version>
     </parent>
 
     <artifactId>cleverbus-test</artifactId>
