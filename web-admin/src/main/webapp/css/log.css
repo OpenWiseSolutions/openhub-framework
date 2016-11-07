@@ -202,5 +202,5 @@ tr.line .msg {
     overflow: auto;
     padding: 10px;
     word-wrap: break-word;
-    border: 7px solid #9678D3;
+    border: 7px solid rgb(15, 172, 224);
 }

@@ -13,8 +13,8 @@
 <div class="header">
     <div class="headerWrapper">
         <span class="logo"><a href="${pageContext.request.contextPath}">
-            <img class="logo" src="${pageContext.request.contextPath}/css/images/logo-cbs.png" alt="OpenHub"/></a></span>
-        <span class="headline">Integration framework</span>
+            <img class="logo" src="${pageContext.request.contextPath}/css/images/logo-openhub.png" alt="OpenHub"/></a></span>
+        <span class="headline">OpenHub Integration Framework</span>
     </div>
 </div>
 
@@ -41,7 +41,7 @@
 </div>
 <div class="footer">
     <div class="footerWrapper">
-        <span class="companyLogo"><a href="http://www.openhubframework.org" target="_blank">OpenHub</a></span>
+        <span class="companyLogo"><a href="http://www.openhubframework.org" target="_blank">OpenHub Integration Framework</a></span>
     </div>
 </div>
 </body>

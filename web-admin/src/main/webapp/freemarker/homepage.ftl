@@ -11,7 +11,7 @@
 <body>
 <div class="header">
     <div class="headerWrapper">
-        <span class="logo"><a href="web/admin/homepage"><img class="logo" src="${springMacroRequestContext.contextPath}/css/images/logo-cbs.png" alt="OpenHub"/></a></span>
+        <span class="logo"><a href="web/admin/homepage"><img class="logo" src="${springMacroRequestContext.contextPath}/css/images/logo-openhub.png" alt="OpenHub"/></a></span>
         <span class="headline"><@spring.message "index.integrationFramework"/></span>
     </div>
 </div>
@@ -31,7 +31,7 @@
 
 <div class="footer">
     <div class="footerWrapper">
-        <span class="companyLogo"><a href="http://www.openhubframework.org" target="_blank">OpenHub</a></span>
+        <span class="companyLogo"><a href="http://www.openhubframework.org" target="_blank">OpenHub Integration Framework</a></span>
     </div>
 </div>
 </body>

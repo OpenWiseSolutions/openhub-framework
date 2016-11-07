@@ -1,6 +1,6 @@
 #login .button{
     width:100px;
-    background:#9678D3;
+    background:rgb(15, 172, 224);
     display:block;
     margin:0 auto;
     margin-top:15%;
@@ -14,7 +14,7 @@
 }
 
 #login .button:hover{
-    background:#8066DA;
+    background:rgb(11, 138, 179);
 }
 
 #login{
@@ -27,7 +27,7 @@
 }
 
 #login h1{
-    background:#9678D3;
+    background:rgb(15, 172, 224);
     margin:0;
     padding:13px 0;
     font-size:110%;
@@ -54,7 +54,7 @@
 
 #login input[type="submit"]{
     width:100%;
-    background:#9678D3;
+    background:rgb(15, 172, 224);
     border:0;
     padding:3%;
     font-family:'Open Sans',sans-serif;
@@ -66,5 +66,5 @@
 }
 
 #login input[type="submit"]:hover{
-    background:#8066DA;
+    background:rgb(11, 138, 179);
 }

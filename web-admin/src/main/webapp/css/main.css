@@ -96,17 +96,18 @@ span.logo {
 
 span.logo a img {
     border: 0;
+    height: 50px;
 }
 
 span.headline {
     display: block;
     float: left;
     height: 40px;
-    color: #7D3CBE;
+    color: rgb(11, 138, 179);
     font-size: 1.5em;
     font-weight: lighter;
     line-height: 40px;
-    border-left: 1px #7D3CBE solid;
+    border-left: 1px rgb(11, 138, 179) solid;
     margin-top: 10px;
     padding-left: 20px;
 }
@@ -120,7 +121,7 @@ span.logout {
 
 span.logout a {
     text-decoration: none;
-    color: #333;
+    color: #0b8ab3;
 }
 
 span.logout a:hover {
@@ -142,7 +143,7 @@ div.links ul li {
     list-style: none;
     padding: 5px 0 5px 10px;
     color: #fff;
-    background: #9678D3;
+    background: rgb(15, 172, 224);
     border-top: 10px #fff solid;
 }
 
@@ -187,7 +188,7 @@ div.wsdl ul {
 }
 
 div.wsdl ul li {
-    color: #9678D3;
+    color: rgb(15, 172, 224);
     list-style-type: square;
     padding: 0px 0 2px 0px;
 }
@@ -223,20 +224,27 @@ div.footer {
 span.companyLogo {
     float: right;
     margin: 10px 30px 0 0;
-    color: #7D3CBE;
+    color: rgb(197, 197, 197);
 }
 
 span.companyLogo a {
+    color: rgb(197, 197, 197);
     text-decoration: none;
-}
-
-span.companyLogo a:hover {
-    text-decoration: underline;
 }
 
 div.companyLogo {
     float: right;
     margin: 10px 30px 0 0;
+}
+
+span.companyLogo a:hover {
+    color: rgb(197, 197, 197);
+    text-decoration: underline;
+}
+
+span.companyLogo a:visited, a:active {
+    color: rgb(197, 197, 197);
+    text-decoration: none;
 }
 
 div.companyLogo a img {
