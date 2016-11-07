@@ -1,4 +1,4 @@
-CleverBus integration framework - core
+OpenHub integration framework - core
 ====================================================================
 
 

@@ -1,1 +1,1 @@
-class=org.cleverbus.component.throttling.ThrottlingComponent
+class=org.openhubframework.openhub.component.throttling.ThrottlingComponent

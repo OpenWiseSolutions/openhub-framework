@@ -7,48 +7,48 @@
         Spring configuration for asynchronous message processing.
     </description>
 
-    <bean id="externalCallService" class="org.cleverbus.core.common.asynch.ExternalCallServiceImpl"/>
+    <bean id="externalCallService" class="org.openhubframework.openhub.core.common.asynch.ExternalCallServiceImpl"/>
 
-    <bean id="asyncEventNotifier" class="org.cleverbus.core.common.event.AsyncEventNotifierImpl"/>
+    <bean id="asyncEventNotifier" class="org.openhubframework.openhub.core.common.event.AsyncEventNotifierImpl"/>
 
 
     <!-- message repairing -->
-    <bean id="repairMessageService" class="org.cleverbus.core.common.asynch.repair.RepairMessageServiceDbImpl">
+    <bean id="repairMessageService" class="org.openhubframework.openhub.core.common.asynch.repair.RepairMessageServiceDbImpl">
         <property name="transactionManager" ref="jpaTxManager"/>
     </bean>
 
-    <bean id="repairExternalCallService" class="org.cleverbus.core.common.asynch.repair.RepairExternalCallDbImpl">
+    <bean id="repairExternalCallService" class="org.openhubframework.openhub.core.common.asynch.repair.RepairExternalCallDbImpl">
         <property name="transactionManager" ref="jpaTxManager"/>
     </bean>
 
 
     <!-- message poling -->
     <bean id="partlyFailedMessagesPool"
-          class="org.cleverbus.core.common.asynch.queue.MessagesPoolDbImpl">
+          class="org.openhubframework.openhub.core.common.asynch.queue.MessagesPoolDbImpl">
         <property name="transactionManager" ref="jpaTxManager"/>
     </bean>
 
     <bean id="jobStarterForMessagePooling"
-          class="org.cleverbus.core.common.asynch.queue.JobStarterForMessagePooling"/>
+          class="org.openhubframework.openhub.core.common.asynch.queue.JobStarterForMessagePooling"/>
 
-    <bean class="org.cleverbus.core.common.asynch.queue.MessagePollExecutor"/>
+    <bean class="org.openhubframework.openhub.core.common.asynch.queue.MessagePollExecutor"/>
 
 
     <!-- confirmation -->
-    <bean id="confirmationService" class="org.cleverbus.core.common.asynch.confirm.ConfirmationServiceImpl"/>
+    <bean id="confirmationService" class="org.openhubframework.openhub.core.common.asynch.confirm.ConfirmationServiceImpl"/>
 
     <bean id="jobStarterForConfirmationPooling"
-          class="org.cleverbus.core.common.asynch.confirm.JobStarterForConfirmationPooling"/>
+          class="org.openhubframework.openhub.core.common.asynch.confirm.JobStarterForConfirmationPooling"/>
 
-    <bean class="org.cleverbus.core.common.asynch.confirm.ConfirmationPollExecutor"/>
+    <bean class="org.openhubframework.openhub.core.common.asynch.confirm.ConfirmationPollExecutor"/>
 
     <bean id="confirmationPool"
-          class="org.cleverbus.core.common.asynch.confirm.ConfirmationPoolDbImpl"/>
+          class="org.openhubframework.openhub.core.common.asynch.confirm.ConfirmationPoolDbImpl"/>
 
-    <bean id="confirmationCallback" class="org.cleverbus.core.common.asynch.confirm.DefaultConfirmationCallback"/>
+    <bean id="confirmationCallback" class="org.openhubframework.openhub.core.common.asynch.confirm.DefaultConfirmationCallback"/>
 
 
     <!-- email service (depends on Camel SMTP component) -->
-    <bean id="emailService" class="org.cleverbus.core.common.asynch.notification.EmailServiceCamelSmtpImpl"/>
+    <bean id="emailService" class="org.openhubframework.openhub.core.common.asynch.notification.EmailServiceCamelSmtpImpl"/>
 
 </beans>

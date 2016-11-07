@@ -1,5 +1,5 @@
-CleverBus integration framework - core SPI
+OpenHub integration framework - core SPI
 ====================================================================
 
-Service API for internal CleverBus development, e.g. components.
+Service API for internal OpenHub development, e.g. components.
 

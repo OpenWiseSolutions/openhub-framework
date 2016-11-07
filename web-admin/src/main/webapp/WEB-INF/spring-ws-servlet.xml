@@ -19,10 +19,10 @@
     <tx:annotation-driven transaction-manager="jpaTxManager"/>
 
     <!-- init all routes from modules -->
-    <context:component-scan base-package="org.cleverbus.core, org.cleverbus.modules" use-default-filters="false"
-            name-generator="org.cleverbus.core.common.route.RouteBeanNameGenerator">
-        <context:include-filter type="custom" expression="org.cleverbus.core.common.spring.SystemIncludeRegexPatternTypeFilter"/>
-        <context:exclude-filter type="custom" expression="org.cleverbus.core.common.spring.SystemExcludeRegexPatternTypeFilter"/>
+    <context:component-scan base-package="org.openhubframework.openhub.core, org.openhubframework.openhub.modules" use-default-filters="false"
+            name-generator="org.openhubframework.openhub.core.common.route.RouteBeanNameGenerator">
+        <context:include-filter type="custom" expression="org.openhubframework.openhub.core.common.spring.SystemIncludeRegexPatternTypeFilter"/>
+        <context:exclude-filter type="custom" expression="org.openhubframework.openhub.core.common.spring.SystemExcludeRegexPatternTypeFilter"/>
     </context:component-scan>
 
     <!-- property configuration files -->
@@ -47,6 +47,6 @@
         </property>
     </bean>
 
-    <bean class="org.cleverbus.core.conf.ConfigurationChecker"/>
+    <bean class="org.openhubframework.openhub.core.conf.ConfigurationChecker"/>
 
 </beans>

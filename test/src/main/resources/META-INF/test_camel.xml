@@ -18,6 +18,6 @@
                                  maxPoolSize="5" poolSize="2" />
     </camel:camelContext>
 
-    <bean class="org.cleverbus.test.route.TestWsUriBuilder"/>
+    <bean class="org.openhubframework.openhub.test.route.TestWsUriBuilder"/>
 
 </beans>

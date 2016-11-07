@@ -13,11 +13,11 @@
 
     <bean id="entityManagerFactoryTemplate" abstract="true" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="persistenceUnitName" value="CleverBus"/>
+        <property name="persistenceUnitName" value="OpenHub"/>
         <property name="jpaVendorAdapter" ref="jpaVendorAdapter"/>
         <property name="packagesToScan">
             <list>
-                <value>org.cleverbus.api.entity</value>
+                <value>org.openhubframework.openhub.api.entity</value>
             </list>
         </property>
         <property name="jpaProperties" ref="jpaProperties"/>
@@ -36,7 +36,7 @@
     <tx:annotation-driven transaction-manager="jpaTxManager"/>
 
     <!-- DAOs -->
-    <context:component-scan base-package="org.cleverbus.core.common.dao"/>
+    <context:component-scan base-package="org.openhubframework.openhub.core.common.dao"/>
 
     <bean id="jpaPropertiesTemplate" abstract="true" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
         <property name="properties">

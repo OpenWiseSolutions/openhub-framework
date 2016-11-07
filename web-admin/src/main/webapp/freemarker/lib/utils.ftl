@@ -28,7 +28,7 @@
     <div class="headerWrapper">
         <span class="logo"><a href="${rootContext}/web/admin/console"><img class="logo"
                                                                            src="${rootContext}/css/images/logo-cbs.png"
-                                                                           alt="CleverBus"/></a></span>
+                                                                           alt="OpenHub"/></a></span>
         <span class="headline"><@spring.message "index.integrationFramework"/></span>
         <@sec.authorize access="isAuthenticated()">
             <span class="logout"><a href="${rootContext}/j_spring_security_logout"
@@ -45,7 +45,7 @@
 </div>
 <div class="footer">
     <div class="footerWrapper">
-        <span class="companyLogo"><a href="http://www.cleverbus.org" target="_blank"><@spring.message "index.name"/></a></span>
+        <span class="companyLogo"><a href="http://www.openhubframework.org" target="_blank"><@spring.message "index.name"/></a></span>
     </div>
 </div>
 </body>

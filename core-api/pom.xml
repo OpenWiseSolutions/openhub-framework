@@ -3,19 +3,19 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.cleverbus</groupId>
-        <artifactId>cleverbus-integration</artifactId>
-        <version>1.1</version>
+        <groupId>org.openhubframework</groupId>
+        <artifactId>openhub</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>cleverbus-core-api</artifactId>
+    <artifactId>openhub-core-api</artifactId>
     <packaging>jar</packaging>
 
-    <name>CleverBus Core API</name>
-    <description>CleverBus integration core API</description>
+    <name>OpenHub Core API</name>
+    <description>OpenHub integration core API</description>
 
     <properties>
-        <modules.root.directory>src/main/resources/org/cleverbus/api/modules</modules.root.directory>
+        <modules.root.directory>src/main/resources/org/openhubframework/openhub/api/modules</modules.root.directory>
         <modules.import.directory>${project.build.directory}/modules-import</modules.import.directory>
         <modules.output.directory>${project.build.directory}/generated-sources</modules.output.directory>
     </properties>
@@ -25,7 +25,7 @@
         <!-- inner modules -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>cleverbus-common</artifactId>
+            <artifactId>openhub-common</artifactId>
         </dependency>
 
 
@@ -154,7 +154,7 @@
                         </goals>
                         <configuration>
                             <staleFile>${project.build.directory}/jaxb2/.in.common.model</staleFile>
-                            <packageName>org.cleverbus.api.asynch.model</packageName>
+                            <packageName>org.openhubframework.openhub.api.asynch.model</packageName>
                             <schemaFiles>commonTypes-v1.0.xsd</schemaFiles>
                         </configuration>
                     </execution>

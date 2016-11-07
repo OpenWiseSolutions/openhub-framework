@@ -13,9 +13,9 @@
             <pattern>%d{ISO8601} [${MACHINE}, %thread, %X{REQUEST_URI}, %X{REQUEST_ID}, %X{SESSION_ID}, %X{CORRELATION_ID}] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
-
-    <!-- CleverBSS integration namespaces -->
-    <logger name="org.cleverbus" level="debug"/>
+    
+    <!-- OpenHub integration namespaces -->
+    <logger name="org.openhubframework.openhub" level="debug"/>
     <logger name="org.apache.camel" level="info"/>
     <root level="error">
         <appender-ref ref="CONSOLE"/>

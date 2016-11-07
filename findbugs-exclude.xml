@@ -4,8 +4,8 @@
     <Match>
         <!-- exclude generated classes -->
         <Or>
-            <Package name="org.cleverbus.modules.in.*.ws.*"/>
-            <Package name="org.cleverbus.modules.out.*.ws.*"/>
+            <Package name="org.openhubframework.openhub.modules.in.*.ws.*"/>
+            <Package name="org.openhubframework.openhub.modules.out.*.ws.*"/>
         </Or>
     </Match>
 </FindBugsFilter>

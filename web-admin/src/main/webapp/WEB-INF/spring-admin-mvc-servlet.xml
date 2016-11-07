@@ -17,13 +17,13 @@
     <tx:annotation-driven transaction-manager="jpaTxManager"/>
 
     <!-- init web admin part only -->
-    <context:component-scan base-package="org.cleverbus.admin"/>
+    <context:component-scan base-package="org.openhubframework.openhub.admin"/>
 
     <!-- property configuration files -->
     <context:property-placeholder ignore-resource-not-found="true"
                                   location="classpath:applicationCore.cfg,classpath:application.cfg,classpath:application0.cfg"/>
 
-    <bean id="logFileFilter" class="org.cleverbus.admin.services.log.LogFileFilter">
+    <bean id="logFileFilter" class="org.openhubframework.openhub.admin.services.log.LogFileFilter">
         <property name="formatPattern" value="${log.file.pattern}"/>
     </bean>
 
@@ -65,7 +65,7 @@
     <!-- error codes catalog -->
     <util:map id="errorCodesCatalog" value-type="java.util.List">
         <entry key="Core" >
-            <bean id="errorCoreCodes" class="org.cleverbus.modules.ErrorEnum" factory-method="values" />
+            <bean id="errorCoreCodes" class="org.openhubframework.openhub.modules.ErrorEnum" factory-method="values" />
         </entry>
     </util:map>
 

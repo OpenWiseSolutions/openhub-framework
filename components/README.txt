@@ -1,4 +1,4 @@
-CleverBus integration framework - components
+OpenHub integration framework - components
 ====================================================================
 
-Modules with CleverBus components.
+Modules with OpenHub components.

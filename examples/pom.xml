@@ -3,46 +3,46 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.cleverbus</groupId>
-        <artifactId>cleverbus-integration</artifactId>
-        <version>1.1</version>
+        <groupId>org.openhubframework</groupId>
+        <artifactId>openhub</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>cleverbus-examples</artifactId>
+    <artifactId>openhub-examples</artifactId>
     <packaging>jar</packaging>
 
-    <name>CleverBus Examples</name>
-    <description>CleverBus examples</description>
+    <name>OpenHub Examples</name>
+    <description>OpenHub examples</description>
 
     <properties>
-        <modules.root.directory>src/main/resources/org/cleverbus/modules</modules.root.directory>
+        <modules.root.directory>src/main/resources/org/openhubframework/openhub/modules</modules.root.directory>
         <modules.import.directory>${project.build.directory}/modules-import</modules.import.directory>
         <modules.output.directory>${project.build.directory}/generated-sources</modules.output.directory>
         <modules.other.resources.directory>${project.build.directory}/other-modules-resources</modules.other.resources.directory>
-        <modules.common.xsd.directory>${modules.other.resources.directory}/org/cleverbus/api/modules/in/common</modules.common.xsd.directory>
+        <modules.common.xsd.directory>${modules.other.resources.directory}/org/openhubframework/openhub/api/modules/in/common</modules.common.xsd.directory>
     </properties>
 
     <dependencies>
         <!-- inner modules -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>cleverbus-core-api</artifactId>
+            <artifactId>openhub-core-api</artifactId>
         </dependency>
 
         <!-- test dependencies -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>cleverbus-test</artifactId>
+            <artifactId>openhub-test</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>cleverbus-components</artifactId>
+            <artifactId>openhub-components</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>cleverbus-core</artifactId>
+            <artifactId>openhub-core</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -100,7 +100,7 @@
                                     <directory>${modules.other.resources.directory}/jaxb</directory>
                                 </resource>
                                 <resource>
-                                    <directory>${modules.other.resources.directory}/org/cleverbus/api/modules/in/common</directory>
+                                    <directory>${modules.other.resources.directory}/org/openhubframework/openhub/api/modules/in/common</directory>
                                 </resource>
                                 <resource>
                                     <directory>${modules.root.directory}/in/hello/ws/v1_0</directory>
@@ -130,7 +130,7 @@
                         </goals>
                         <configuration>
                             <staleFile>${project.build.directory}/jaxws/.in.hello.model</staleFile>
-                            <packageName>org.cleverbus.modules.in.hello.model</packageName>
+                            <packageName>org.openhubframework.openhub.modules.in.hello.model</packageName>
                             <wsdlFiles>
                                 <wsdlFile>hello-v1.0.wsdl</wsdlFile>
                             </wsdlFiles>

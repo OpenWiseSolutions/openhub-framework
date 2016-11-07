@@ -3,33 +3,33 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.cleverbus</groupId>
-        <artifactId>cleverbus-integration</artifactId>
-        <version>1.1</version>
+        <groupId>org.openhubframework</groupId>
+        <artifactId>openhub</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>cleverbus-components</artifactId>
+    <artifactId>openhub-components</artifactId>
     <packaging>jar</packaging>
 
-    <name>CleverBus Components</name>
-    <description>CleverBus integration components</description>
+    <name>OpenHub Components</name>
+    <description>OpenHub integration components</description>
 
     <dependencies>
         <!-- inner modules -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>cleverbus-core-spi</artifactId>
+            <artifactId>openhub-core-spi</artifactId>
         </dependency>
 
         <!-- test dependencies -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>cleverbus-test</artifactId>
+            <artifactId>openhub-test</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>cleverbus-core</artifactId>
+            <artifactId>openhub-core</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

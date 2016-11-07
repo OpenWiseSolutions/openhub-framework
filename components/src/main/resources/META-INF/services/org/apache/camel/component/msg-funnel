@@ -1,1 +1,1 @@
-class=org.cleverbus.component.funnel.MsgFunnelComponent
+class=org.openhubframework.openhub.component.funnel.MsgFunnelComponent

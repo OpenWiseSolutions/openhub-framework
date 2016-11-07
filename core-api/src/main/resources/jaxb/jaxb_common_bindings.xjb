@@ -3,13 +3,13 @@
     <jxb:bindings schemaLocation="commonTypes-v1.0.xsd">
     	
         <jxb:bindings node="//xs:element[@name='traceHeader']">
-            <jxb:class ref="org.cleverbus.api.asynch.model.TraceHeader"/>
+            <jxb:class ref="org.openhubframework.openhub.api.asynch.model.TraceHeader"/>
         </jxb:bindings>
         <jxb:bindings node="//xs:complexType[@name='callbackResponse']">
-            <jxb:class ref="org.cleverbus.api.asynch.model.CallbackResponse"/>
+            <jxb:class ref="org.openhubframework.openhub.api.asynch.model.CallbackResponse"/>
         </jxb:bindings>
         <jxb:bindings node="//xs:complexType[@name='traceIdentifier']">
-            <jxb:class ref="org.cleverbus.api.asynch.model.TraceIdentifier"/>
+            <jxb:class ref="org.openhubframework.openhub.api.asynch.model.TraceIdentifier"/>
         </jxb:bindings>
 
     </jxb:bindings>

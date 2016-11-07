@@ -11,16 +11,16 @@
 
     <import resource="test_components_conf.xml"/>
 
-    <context:component-scan base-package="org.cleverbus.core.common.dao"/>
+    <context:component-scan base-package="org.openhubframework.openhub.core.common.dao"/>
 
     <!-- SPI implementations -->
-    <bean id="messageService" class="org.cleverbus.core.common.asynch.msg.MessageServiceImpl"/>
-    <bean id="externalCallService" class="org.cleverbus.core.common.asynch.ExternalCallServiceImpl"/>
+    <bean id="messageService" class="org.openhubframework.openhub.core.common.asynch.msg.MessageServiceImpl"/>
+    <bean id="externalCallService" class="org.openhubframework.openhub.core.common.asynch.ExternalCallServiceImpl"/>
 
     <!-- priority queue for AsynchMessageRoute -->
     <bean id="priorityQueueFactory" class="org.apache.camel.component.seda.PriorityBlockingQueueFactory">
         <property name="comparator">
-            <bean class="org.cleverbus.core.common.asynch.msg.MsgPriorityComparator"/>
+            <bean class="org.openhubframework.openhub.core.common.asynch.msg.MsgPriorityComparator"/>
         </property>
     </bean>
 
