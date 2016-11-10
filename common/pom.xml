@@ -3,15 +3,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.cleverbus</groupId>
-        <artifactId>cleverbus-integration</artifactId>
-        <version>1.1</version>
+        <groupId>org.openhubframework</groupId>
+        <artifactId>openhub</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>cleverbus-common</artifactId>
-    <name>CleverBus Common</name>
-    <description>CleverBus integration framework - common library</description>
+    <artifactId>openhub-common</artifactId>
     <packaging>jar</packaging>
+    
+    <name>OpenHub Common</name>
+    <description>OpenHub integration framework - common library</description>
 
     <dependencies>
         <!-- Spring framework -->

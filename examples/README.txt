@@ -1,4 +1,4 @@
-CleverBus integration framework - examples
+OpenHub integration framework - examples
 ====================================================================
 
 

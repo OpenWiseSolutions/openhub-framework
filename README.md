@@ -1,4 +1,4 @@
-# Welcome to CleverBus
+# Welcome to OpenHub Framework [![Build Status](https://travis-ci.org/OpenWiseSolutions/openhub-framework.svg?branch=develop)](https://travis-ci.org/OpenWiseSolutions/openhub-framework)
 
 **ESB made by developers for developers**
 
@@ -14,32 +14,30 @@
 
 Have you already noticed that most of integration projects consist of 80% from routine and only 20% are really new topics? Do you really want to spend so much effort on things which have already been solved before ? We don't.
 
-In CleverBus world most of the operational infrastructure is ready out of the box. Also typical coding scenarios can be generated and only adjusted if you need to. And when you code something, there is a big chance that somebody already did the same before.  We offer you to profit from the wide community, not to code, just install.
+In OpenHub world most of the operational infrastructure is ready out of the box. Also typical coding scenarios can be generated and only adjusted if you need to. And when you code something, there is a big chance that somebody already did the same before.  We offer you to profit from the wide community, not to code, just install.
 Also repeating business scenarios can be downloaded from the catalogue and just plugged in into  your project.
 
-And if you really face to something special and new, CleverBus does not limit you in any direction. There are no dark corners in your project. Who has ever had to deal with black box, sure understands ....
+And if you really face to something special and new, OpenHub does not limit you in any direction. There are no dark corners in your project. Who has ever had to deal with black box, sure understands ....
 
-With CleverBus you have the whole source code in your hands and the community around, with many people ready to help.
+With OpenHub you have the whole source code in your hands and the community around, with many people ready to help.
 
+## License
+
+[Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ## Getting Started
 To help you get started, try the following links:
 
-Getting Started: [https://cleverbus.atlassian.net/wiki/display/CLVBUS/Getting+started](https://cleverbus.atlassian.net/wiki/display/CLVBUS/Getting+started)
+* [how to start](https://openhubframework.atlassian.net/wiki/display/OHF/Getting+started)
 
-Building: [https://cleverbus.atlassian.net/wiki/x/HIAR](https://cleverbus.atlassian.net/wiki/x/HIAR)
+* [building](https://openhubframework.atlassian.net/wiki/x/foM)
 
-We welcome contributions of all kinds, for details of how you can help: [https://github.com/integram/cleverbus/blob/master/CONTRIBUTING.md](https://github.com/integram/cleverbus/blob/master/CONTRIBUTING.md)
-  
-Please refer to the website for details of finding the issue tracker or wiki: 
-[https://github.com/integram/cleverbus/issues](https://github.com/integram/cleverbus/issues), [https://cleverbus.atlassian.net/wiki/display/CLVBUS/CleverBus](https://cleverbus.atlassian.net/wiki/display/CLVBUS/CleverBus)
-
-If you hit any problems please talk to us on the Camel Forums: [https://groups.google.com/d/forum/cleverbus](https://groups.google.com/d/forum/cleverbus)
+We welcome [contributions](https://github.com/OpenWiseSolutions/openhub-framework/blob/master/CONTRIBUTING.md) of all kinds. Please refer to the website for details of finding the [issue tracker](https://openhubframework.atlassian.net/wiki/display/OHF) or [wiki](https://openwise.atlassian.net/projects/OHFJIRA). If you hit any problems please talk to us on the [OpenHub Framework StackOverflow](http://stackoverflow.com/questions/tagged/openhubframework).
 
 
-We appreciate any feedback on how Cleverbus fits your requirements. It helps us keep the right direction.
+We appreciate any feedback on how OpenHub fits your requirements. It helps us keep the right direction.
 
 Enjoy!
 
 --------------------
-The CleverBus team!
+The OpenHub team!

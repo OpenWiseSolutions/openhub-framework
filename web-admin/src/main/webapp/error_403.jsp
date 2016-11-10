@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <title>Doh! - CleverBus - integration framework</title>
+    <title>Doh! - OpenHub - integration framework</title>
     <meta http-equiv="X-UA-Compatible" content="IE=9">
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <link rel="stylesheet" type="text/css" media="screen" href="${pageContext.request.contextPath}/css/main.css">
@@ -13,8 +13,8 @@
 <div class="header">
     <div class="headerWrapper">
         <span class="logo"><a href="${pageContext.request.contextPath}">
-            <img class="logo" src="${pageContext.request.contextPath}/css/images/logo-cbs.png" alt="CleverBus"/></a></span>
-        <span class="headline">Integration framework</span>
+                    <img class="logo" src="${pageContext.request.contextPath}/css/images/logo-openhub.png" alt="OpenHub"/></a></span>
+        <span class="headline">OpenHub Integration framework</span>
     </div>
 </div>
 
@@ -40,7 +40,7 @@
 </div>
 <div class="footer">
     <div class="footerWrapper">
-        <span class="companyLogo"><a href="http://www.cleverbus.org" target="_blank">CleverBus</a></span>
+        <span class="companyLogo"><a href="http://www.openhubframework.org" target="_blank">OpenHub Integration Framework</a></span>
     </div>
 </div>
 </body>

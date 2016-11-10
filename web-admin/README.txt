@@ -1,4 +1,4 @@
-CleverBus integration framework - admin web GUI
+OpenHub integration framework - admin web GUI
 ====================================================================
 
 Goal: web frontend GUI offers main functionality for monitoring and administration of integration solution

@@ -12,10 +12,10 @@
     <import resource="test_modules_conf.xml"/>
 
     <!-- init addons camel routes -->
-    <context:component-scan base-package="org.cleverbus.core.common.dao"/>
+    <context:component-scan base-package="org.openhubframework.openhub.core.common.dao"/>
 
     <!-- SPI implementations -->
-    <bean id="messageService" class="org.cleverbus.core.common.asynch.msg.MessageServiceImpl"/>
-    <bean id="externalCallService" class="org.cleverbus.core.common.asynch.ExternalCallServiceImpl"/>
+    <bean id="messageService" class="org.openhubframework.openhub.core.common.asynch.msg.MessageServiceImpl"/>
+    <bean id="externalCallService" class="org.openhubframework.openhub.core.common.asynch.ExternalCallServiceImpl"/>
 
 </beans>

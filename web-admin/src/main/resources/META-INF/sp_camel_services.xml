@@ -7,36 +7,36 @@
         Configuration of services which use/are for Apache Camel.
     </description>
 
-    <bean class="org.cleverbus.core.common.route.EndpointRegistryImpl"/>
-    <bean class="org.cleverbus.core.common.ws.WsdlRegistrySpringImpl"/>
+    <bean class="org.openhubframework.openhub.core.common.route.EndpointRegistryImpl"/>
+    <bean class="org.openhubframework.openhub.core.common.ws.WsdlRegistrySpringImpl"/>
 
     <!-- picked up by SpringWebserviceComponent to skip setting camel headers/attachments to outbound SOAP message -->
-    <bean id="messageFilter" class="org.cleverbus.core.common.ws.component.NoopMessageFilter"/>
+    <bean id="messageFilter" class="org.openhubframework.openhub.core.common.ws.component.NoopMessageFilter"/>
 
     <!-- throttling -->
-    <bean id="throttlingConfiguration" class="org.cleverbus.core.throttling.ThrottlingPropertiesConfiguration">
+    <bean id="throttlingConfiguration" class="org.openhubframework.openhub.core.throttling.ThrottlingPropertiesConfiguration">
         <constructor-arg ref="confProperties"/>
         <property name="throttlingDisabled" value="${disable.throttling}"/>
     </bean>
-    <bean class="org.cleverbus.core.throttling.ThrottleCounterMemoryImpl" />
-    <bean class="org.cleverbus.core.throttling.ThrottleProcessorImpl" />
+    <bean class="org.openhubframework.openhub.core.throttling.ThrottleCounterMemoryImpl" />
+    <bean class="org.openhubframework.openhub.core.throttling.ThrottleProcessorImpl" />
 
     <!-- alerts -->
-    <bean id="alertsConfiguration" class="org.cleverbus.core.alerts.AlertsPropertiesConfiguration">
+    <bean id="alertsConfiguration" class="org.openhubframework.openhub.core.alerts.AlertsPropertiesConfiguration">
         <constructor-arg ref="confProperties"/>
     </bean>
-    <bean id="alertsCheckingService" class="org.cleverbus.core.alerts.AlertsCheckingServiceDbImpl"/>
-    <bean class="org.cleverbus.core.alerts.EmailAlertListenerSupport"/>
+    <bean id="alertsCheckingService" class="org.openhubframework.openhub.core.alerts.AlertsCheckingServiceDbImpl"/>
+    <bean class="org.openhubframework.openhub.core.alerts.EmailAlertListenerSupport"/>
 
     <!-- extensions -->
-    <bean class="org.cleverbus.core.common.extension.PropertiesExtensionConfigurationLoader" depends-on="camelContext">
+    <bean class="org.openhubframework.openhub.core.common.extension.PropertiesExtensionConfigurationLoader" depends-on="camelContext">
         <constructor-arg ref="confProperties"/>
     </bean>
 
-    <bean class="org.cleverbus.core.common.route.SpringWsUriBuilder" />
+    <bean class="org.openhubframework.openhub.core.common.route.SpringWsUriBuilder" />
 
     <beans profile="prod">
-        <bean id="confirmationCallback" class="org.cleverbus.core.common.asynch.confirm.DelegateConfirmationCallback"/>
+        <bean id="confirmationCallback" class="org.openhubframework.openhub.core.common.asynch.confirm.DelegateConfirmationCallback"/>
 
         <bean id="quartz" class="org.apache.camel.component.quartz2.QuartzComponent">
             <property name="startDelayedSeconds" value="30"/>

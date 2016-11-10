@@ -22,9 +22,9 @@
         </property>
     </bean>
 
-    <bean class="org.cleverbus.core.common.asynch.ExceptionTranslationRoute"/>
+    <bean class="org.openhubframework.openhub.core.common.asynch.ExceptionTranslationRoute"/>
 
     <!-- SPI implementations -->
-    <bean class="org.cleverbus.core.common.event.AsyncEventNotifierImpl"/>
+    <bean class="org.openhubframework.openhub.core.common.event.AsyncEventNotifierImpl"/>
 
 </beans>

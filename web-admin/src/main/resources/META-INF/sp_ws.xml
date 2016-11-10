@@ -8,7 +8,7 @@
     </description>
 
 
-    <bean class="org.cleverbus.core.common.ws.ErrorCodeAwareSoapExceptionResolver"/>
+    <bean class="org.openhubframework.openhub.core.common.ws.ErrorCodeAwareSoapExceptionResolver"/>
 
     <bean id="endpointMapping" class="org.apache.camel.component.spring.ws.bean.CamelEndpointMapping">
         <property name="interceptors">
@@ -28,27 +28,27 @@
     <bean id="loggingInterceptor" class="org.springframework.ws.soap.server.endpoint.interceptor.SoapEnvelopeLoggingInterceptor"/>
 
     <bean id="validatingInterceptor"
-          class="org.cleverbus.core.common.ws.HeaderAndPayloadValidatingInterceptor">
+          class="org.openhubframework.openhub.core.common.ws.HeaderAndPayloadValidatingInterceptor">
         <property name="faultStringOrReason" value="E101: the request message is not valid against XSD schema"/>
         <property name="schemas">
             <array>
                 <!-- the order of XSDs is important: commons -> entity XSD -> service XSD -->
-                <value>classpath:org/cleverbus/api/modules/in/common/commonTypes-v1.0.xsd</value>
-                <value>classpath:org/cleverbus/modules/in/hello/ws/v1_0/helloOperations-v1.0.xsd</value>
+                <value>classpath:org/openhubframework/openhub/api/modules/in/common/commonTypes-v1.0.xsd</value>
+                <value>classpath:org/openhubframework/openhub/modules/in/hello/ws/v1_0/helloOperations-v1.0.xsd</value>
             </array>
         </property>
         <property name="validateRequest" value="true"/>
         <property name="validateResponse" value="true"/>
         <property name="ignoreRequests">
             <set>
-                <value>{http://cleverbus.org/ws/HelloService-v1}syncHelloRequest</value>
+                <value>{http://openhubframework.org/ws/HelloService-v1}syncHelloRequest</value>
             </set>
         </property>
     </bean>
 
     <!-- must be exact the following bean ID -->
     <bean id="messageReceiverHandlerAdapter"
-          class="org.cleverbus.core.common.ws.ErrorCodeAwareWebServiceMessageReceiverHandlerAdapter"/>
+          class="org.openhubframework.openhub.core.common.ws.ErrorCodeAwareWebServiceMessageReceiverHandlerAdapter"/>
 
     <bean id="messageFactorySOAP11" class="org.springframework.ws.soap.saaj.SaajSoapMessageFactory">
         <property name="soapVersion">

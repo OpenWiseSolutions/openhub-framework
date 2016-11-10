@@ -5,4 +5,5 @@ install: mvn install -DskipTests=true
 script: mvn test
 notifications:
   email:
-    - petr.juza@cleverlance.com
+    - openhub@openwise.cz
+sudo: false

@@ -3,13 +3,13 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.cleverbus</groupId>
-    <artifactId>cleverbus-integration</artifactId>
+    <groupId>org.openhubframework</groupId>
+    <artifactId>openhub</artifactId>
     <packaging>pom</packaging>
-    <version>1.1</version>
+    <version>1.0.0-SNAPSHOT</version>
 
-    <name>CleverBus Root</name>
-    <description>CleverBus integration framework</description>
+    <name>OpenHub Framework</name>
+    <description>OpenHub integration framework</description>
 
     <licenses>
         <license>
@@ -22,24 +22,24 @@
     <developers>
         <developer>
             <name>Petr Juza</name>
-            <email>petr.juza@cleverlance.com</email>
-            <organization>Cleverlance</organization>
-            <organizationUrl>http://www.cleverlance.com</organizationUrl>
+            <email>petr.juza@openwise.cz</email>
+            <organization>OpenWise Solutions s.r.o.</organization>
+            <organizationUrl>http://www.openwise.cz/</organizationUrl>
         </developer>
         <developer>
             <name>Tomas Hanus</name>
-            <email>tomas.hanus@cleverlance.com</email>
-            <organization>Cleverlance</organization>
-            <organizationUrl>http://www.cleverlance.com</organizationUrl>
+            <email>tomas.hanus@openwise.cz</email>
+            <organization>OpenWise Solutions s.r.o.</organization>
+            <organizationUrl>http://www.openwise.cz/</organizationUrl>
         </developer>
     </developers>
 
     <scm>
-        <connection>scm:git:https://github.com/integram/cleverbus.git</connection>
-        <developerConnection>scm:git:https://github.com/integram/cleverbus.git</developerConnection>
-        <url>https://github.com/integram/cleverbus.git</url>
-      <tag>cleverbus-integration-1.1</tag>
-  </scm>
+        <connection>scm:git:https://github.com/OpenWiseSolutions/openhub-framework.git</connection>
+        <developerConnection>scm:git:https://github.com/OpenWiseSolutions/openhub-framework.git</developerConnection>
+        <url>https://github.com/OpenWiseSolutions/openhub-framework.git</url>
+        <tag>HEAD</tag>
+    </scm>
 
     <modules>
         <module>common</module>
@@ -50,7 +50,6 @@
         <module>examples</module>
         <module>test</module>
         <module>web-admin</module>
-        <module>web-admin-archetype</module>
     </modules>
 
     <properties>
@@ -72,37 +71,37 @@
             <!-- inner modules -->
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>cleverbus-common</artifactId>
+                <artifactId>openhub-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>cleverbus-core-api</artifactId>
+                <artifactId>openhub-core-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>cleverbus-core-spi</artifactId>
+                <artifactId>openhub-core-spi</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>cleverbus-core</artifactId>
+                <artifactId>openhub-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>cleverbus-components</artifactId>
+                <artifactId>openhub-components</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>cleverbus-test</artifactId>
+                <artifactId>openhub-test</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>cleverbus-examples</artifactId>
+                <artifactId>openhub-examples</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -717,9 +716,9 @@
                     <version>2.9.1</version>
                     <configuration>
                         <links>
-                            <link>http://camel.apache.org/maven/camel-2.13.2/camel-core/apidocs/</link>
-                            <link>http://camel.apache.org/maven/camel-2.13.2/camel-spring/apidocs/</link>
-                            <link>http://camel.apache.org/maven/camel-2.13.2/camel-spring-ws/apidocs/</link>
+                            <link>http://camel.apache.org/maven/camel-2.13.0/camel-core/apidocs/</link>
+                            <link>http://camel.apache.org/maven/camel-2.13.0/camel-spring/apidocs/</link>
+                            <link>http://camel.apache.org/maven/camel-2.13.0/camel-spring-ws/apidocs/</link>
                             <link>http://docs.spring.io/spring-ws/sites/2.0/apidocs/</link>
                             <link>http://docs.spring.io/spring/docs/3.2.4.RELEASE/javadoc-api/</link>
                         </links>
@@ -732,6 +731,20 @@
                             </additionalDependency>
                         </additionalDependencies>
                     </configuration>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <goals>
+                                <goal>aggregate</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>jar-javadocs</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>                    
                 </plugin>
 
                 <plugin>

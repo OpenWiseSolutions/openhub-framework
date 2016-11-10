@@ -34,7 +34,7 @@
 
     <beans:bean id="authenticationEntryPoint"
                 class="org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint">
-        <beans:property name="realmName" value="CleverBus - integration platform"/>
+        <beans:property name="realmName" value="OpenHub - integration platform"/>
     </beans:bean>
 
     <beans:bean id="loginUrlAuthenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">

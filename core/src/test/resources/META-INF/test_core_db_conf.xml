@@ -11,16 +11,16 @@
 
     <import resource="test_core_conf.xml"/>
 
-    <context:component-scan base-package="org.cleverbus.core"/>
+    <context:component-scan base-package="org.openhubframework.openhub.core"/>
 
-    <bean id="messageService" class="org.cleverbus.core.common.asynch.msg.MessageServiceImpl"/>
+    <bean id="messageService" class="org.openhubframework.openhub.core.common.asynch.msg.MessageServiceImpl"/>
 
-    <bean id="reqResService" class="org.cleverbus.core.reqres.RequestResponseServiceDefaultImpl"/>
+    <bean id="reqResService" class="org.openhubframework.openhub.core.reqres.RequestResponseServiceDefaultImpl"/>
 
     <!-- priority queue for AsynchMessageRoute -->
     <bean id="priorityQueueFactory" class="org.apache.camel.component.seda.PriorityBlockingQueueFactory">
         <property name="comparator">
-            <bean class="org.cleverbus.core.common.asynch.msg.MsgPriorityComparator"/>
+            <bean class="org.openhubframework.openhub.core.common.asynch.msg.MsgPriorityComparator"/>
         </property>
     </bean>
 

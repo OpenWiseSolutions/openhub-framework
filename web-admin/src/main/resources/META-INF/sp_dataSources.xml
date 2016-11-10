@@ -35,7 +35,7 @@
 
     <!-- production => data source via JNDI -->
     <beans profile="prod">
-        <jee:jndi-lookup id="dataSource" jndi-name="jdbc/cleverBusDB" expected-type="javax.sql.DataSource"/>
+        <jee:jndi-lookup id="dataSource" jndi-name="jdbc/openHubDB" expected-type="javax.sql.DataSource"/>
     </beans>
 
 

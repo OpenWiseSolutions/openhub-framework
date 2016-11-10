@@ -3,8 +3,8 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/javaee/web-app_2_4.xsd"
          version="2.4">
 
-    <display-name>CleverBus integration server</display-name>
-    <description>CleverBus integration server</description>
+    <display-name>OpenHub integration server</display-name>
+    <description>OpenHub integration server</description>
 
     <!--
         Location of the XML file that defines the root application context.
@@ -46,7 +46,7 @@
     -->
     <filter>
         <filter-name>logContextFilter</filter-name>
-        <filter-class>org.cleverbus.common.log.LogContextFilter</filter-class>
+        <filter-class>org.openhubframework.openhub.common.log.LogContextFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>logContextFilter</filter-name>

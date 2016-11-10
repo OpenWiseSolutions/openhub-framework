@@ -3,22 +3,22 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.cleverbus</groupId>
-        <artifactId>cleverbus-integration</artifactId>
-        <version>1.1</version>
+        <groupId>org.openhubframework</groupId>
+        <artifactId>openhub</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>cleverbus-core-spi</artifactId>
+    <artifactId>openhub-core-spi</artifactId>
     <packaging>jar</packaging>
 
-    <name>CleverBus Core SPI</name>
-    <description>CleverBus integration core service API</description>
+    <name>OpenHub Core SPI</name>
+    <description>OpenHub integration core service API</description>
 
     <dependencies>
         <!-- inner modules -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>cleverbus-core-api</artifactId>
+            <artifactId>openhub-core-api</artifactId>
         </dependency>
     </dependencies>
 

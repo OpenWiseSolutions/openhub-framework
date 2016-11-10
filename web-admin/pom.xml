@@ -3,30 +3,30 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.cleverbus</groupId>
-        <artifactId>cleverbus-integration</artifactId>
-        <version>1.1</version>
+        <groupId>org.openhubframework</groupId>
+        <artifactId>openhub</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>cleverbus-web-admin</artifactId>
+    <artifactId>openhub-web-admin</artifactId>
     <packaging>war</packaging>
 
-    <name>CleverBus Web Admin</name>
-    <description>CleverBus web administration</description>
+    <name>OpenHub Web Admin</name>
+    <description>OpenHub web administration</description>
 
     <dependencies>
         <!-- inner modules -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>cleverbus-core</artifactId>
+            <artifactId>openhub-core</artifactId>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>cleverbus-components</artifactId>
+            <artifactId>openhub-components</artifactId>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>cleverbus-examples</artifactId>
+            <artifactId>openhub-examples</artifactId>
         </dependency>
 
         <!-- Monitoring -->
@@ -117,8 +117,8 @@
     </profiles>
 
     <build>
-        <!-- default name of CleverBus integration platform -->
-        <finalName>cleverbus</finalName>
+        <!-- default name of OpenHub integration platform -->
+        <finalName>openhub</finalName>
 
         <resources>
             <resource>

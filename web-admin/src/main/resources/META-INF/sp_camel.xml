@@ -21,7 +21,7 @@
         <camel:contextScan/>
 
         <camel:errorHandler id="logErrorHandler" type="LoggingErrorHandler"
-                            logName="org.cleverbus.core"/>
+                            logName="org.openhubframework.openhub.core"/>
 
         <camel:template id="producerTemplate"/>
 
@@ -32,7 +32,7 @@
 
     <bean id="priorityQueueFactory" class="org.apache.camel.component.seda.PriorityBlockingQueueFactory">
         <property name="comparator">
-            <bean class="org.cleverbus.core.common.asynch.msg.MsgPriorityComparator"/>
+            <bean class="org.openhubframework.openhub.core.common.asynch.msg.MsgPriorityComparator"/>
         </property>
     </bean>
 

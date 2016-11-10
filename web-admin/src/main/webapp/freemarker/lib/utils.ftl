@@ -10,7 +10,6 @@
     <title><#if title?has_content>${title} | </#if><@spring.message "index.title"/></title>
     <meta http-equiv="X-UA-Compatible" content="IE=9">
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <link rel="shortcut icon" href="${rootContext}/css/images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" media="screen" href="${rootContext}/css/main.css"/>
     <link rel="stylesheet" type="text/css" media="screen" href="${rootContext}/css/login.css"/>
     <link rel="stylesheet" type="text/css" media="screen" href="${rootContext}/css/log.css"/>
@@ -27,8 +26,8 @@
 <div class="header">
     <div class="headerWrapper">
         <span class="logo"><a href="${rootContext}/web/admin/console"><img class="logo"
-                                                                           src="${rootContext}/css/images/logo-cbs.png"
-                                                                           alt="CleverBus"/></a></span>
+                                                                           src="${rootContext}/css/images/logo-openhub.png"
+                                                                           alt="OpenHub"/></a></span>
         <span class="headline"><@spring.message "index.integrationFramework"/></span>
         <@sec.authorize access="isAuthenticated()">
             <span class="logout"><a href="${rootContext}/j_spring_security_logout"
@@ -45,7 +44,7 @@
 </div>
 <div class="footer">
     <div class="footerWrapper">
-        <span class="companyLogo"><a href="http://www.cleverbus.org" target="_blank"><@spring.message "index.name"/></a></span>
+        <span class="companyLogo"><a href="http://www.openhubframework.org" target="_blank"><@spring.message "index.name"/></a></span>
     </div>
 </div>
 </body>
