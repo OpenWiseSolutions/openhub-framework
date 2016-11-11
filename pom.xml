@@ -54,16 +54,17 @@
 
     <properties>
         <!-- java language version -->
-        <java.version>1.6</java.version>
+        <java.version>1.7</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <camel-version>2.13.2</camel-version>
-        <junit-version>4.11</junit-version>
-        <spring-version>3.2.4.RELEASE</spring-version>
-        <spring-ws-version>2.1.2.RELEASE</spring-ws-version>
-        <spring-security-version>3.1.3.RELEASE</spring-security-version>
-        <hibernate-version>4.2.0.Final</hibernate-version>
-        <slf4j-version>1.7.3</slf4j-version>
+        <camel-version>2.17.3</camel-version>
+        <junit-version>4.12</junit-version>
+        <spring-version>4.3.4.RELEASE</spring-version>
+        <spring-ws-version>2.2.2.RELEASE</spring-ws-version>
+        <spring-security-version>4.1.3.RELEASE</spring-security-version>
+        <!-- Hibernate 5.1 and older versions require at least Java 1.6 -->
+        <hibernate-version>5.1.2.Final</hibernate-version>
+        <slf4j-version>1.7.21</slf4j-version>
     </properties>
 
     <dependencyManagement>
@@ -353,6 +354,12 @@
                 <groupId>org.apache.camel</groupId>
                 <artifactId>camel-quartz2</artifactId>
                 <version>${camel-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>c3p0</groupId>
+                        <artifactId>c3p0</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.camel</groupId>
@@ -374,8 +381,8 @@
             </dependency>
             <dependency>
                 <groupId>org.hibernate.javax.persistence</groupId>
-                <artifactId>hibernate-jpa-2.0-api</artifactId>
-                <version>1.0.1.Final</version>
+                <artifactId>hibernate-jpa-2.1-api</artifactId>
+                <version>1.0.0.Final</version>
                 <scope>compile</scope>
                 <exclusions>
                     <exclusion>
@@ -387,12 +394,12 @@
             <dependency>
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
-                <version>9.2-1003-jdbc4</version>
+                <version>9.4.1211.jre7</version>
             </dependency>
             <dependency>
-                <groupId>c3p0</groupId>
+                <groupId>com.mchange</groupId>
                 <artifactId>c3p0</artifactId>
-                <version>0.9.1.2</version>
+                <version>0.9.5.2</version>
             </dependency>
             <dependency>
                 <groupId>com.h2database</groupId>
@@ -503,7 +510,7 @@
             <dependency>
                 <groupId>org.freemarker</groupId>
                 <artifactId>freemarker</artifactId>
-                <version>2.3.20</version>
+                <version>2.3.23</version>
             </dependency>
             <dependency>
                 <groupId>jcifs</groupId>
@@ -581,6 +588,7 @@
 
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
+                    <!-- be careful if upgrade, Travis has problem with higher version -->
                     <version>2.18</version>
                 </plugin>
 
@@ -661,7 +669,7 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>findbugs-maven-plugin</artifactId>
-                    <version>2.5.2</version>
+                    <version>3.0.4</version>
                     <configuration>
                         <findbugsXmlOutput>true</findbugsXmlOutput>
                         <xmlOutput>true</xmlOutput>
@@ -672,7 +680,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-pmd-plugin</artifactId>
-                    <version>3.0.1</version>
+                    <version>3.7</version>
                     <configuration>
                         <sourceEncoding>utf-8</sourceEncoding>
                         <targetJdk>${java.version}</targetJdk>
@@ -716,11 +724,11 @@
                     <version>2.9.1</version>
                     <configuration>
                         <links>
-                            <link>http://camel.apache.org/maven/camel-2.13.0/camel-core/apidocs/</link>
-                            <link>http://camel.apache.org/maven/camel-2.13.0/camel-spring/apidocs/</link>
-                            <link>http://camel.apache.org/maven/camel-2.13.0/camel-spring-ws/apidocs/</link>
-                            <link>http://docs.spring.io/spring-ws/sites/2.0/apidocs/</link>
-                            <link>http://docs.spring.io/spring/docs/3.2.4.RELEASE/javadoc-api/</link>
+                            <!-- actually javadoc.io service does not provide package list under standard /package-list URL -->
+                            <link>http://www.javadoc.io/doc/org.apache.camel/camel-core/2.17.3/</link>
+                            <link>http://www.javadoc.io/doc/org.apache.camel/camel-spring/2.17.3/</link>
+                            <link>http://www.javadoc.io/doc/org.springframework.ws/spring-ws-core/2.2.2.RELEASE/</link>
+                            <link>http://www.javadoc.io/doc/org.springframework/spring-core/4.3.4.RELEASE/</link>
                         </links>
                         <aggregate>true</aggregate>
                         <additionalDependencies>

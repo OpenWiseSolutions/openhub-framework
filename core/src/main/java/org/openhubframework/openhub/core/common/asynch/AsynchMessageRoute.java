@@ -243,7 +243,7 @@ public class AsynchMessageRoute extends AbstractBasicRoute {
                 .log(LoggingLevel.ERROR, "Error while handling error: ${exception.stacktrace}")
             .end()
 
-            .validate(property(Exchange.EXCEPTION_CAUGHT).isNotNull())
+            .validate(exchangeProperty(Exchange.EXCEPTION_CAUGHT).isNotNull())
 
             .log(LoggingLevel.WARN,
                     "Error occurred during route processing: ${property." + Exchange.EXCEPTION_CAUGHT + "}")

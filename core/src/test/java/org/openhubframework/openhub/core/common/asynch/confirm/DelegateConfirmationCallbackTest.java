@@ -16,7 +16,8 @@
 
 package org.openhubframework.openhub.core.common.asynch.confirm;
 
-import static junit.framework.Assert.assertNotNull;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 import java.util.Collections;
 import java.util.Set;
@@ -47,7 +48,7 @@ public class DelegateConfirmationCallbackTest extends AbstractCoreTest {
 
     @Test
     public void testGetImplementation() throws Exception {
-        assertNotNull(confirmation.getImplementation(getSourceSystem("CRM")));
+        assertThat(confirmation.getImplementation(getSourceSystem("CRM")), notNullValue());
     }
 
     private static ExternalSystemConfirmation getDefaultImplementation(final String sourceSystem) {

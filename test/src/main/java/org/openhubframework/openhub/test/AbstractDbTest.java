@@ -40,7 +40,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -52,7 +51,6 @@ import org.springframework.transaction.support.TransactionTemplate;
  * @author Petr Juza
  */
 @ContextConfiguration(locations = {"classpath:/META-INF/test_persistence.xml"})
-@TransactionConfiguration(transactionManager = "jpaTxManager")
 public abstract class AbstractDbTest extends AbstractTest {
 
     /**

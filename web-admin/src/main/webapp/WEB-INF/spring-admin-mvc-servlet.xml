@@ -27,7 +27,7 @@
         <property name="formatPattern" value="${log.file.pattern}"/>
     </bean>
 
-    <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+    <bean id="freemarkerConfig" class="org.openhubframework.openhub.admin.web.DefaultFreeMarkerConfigurer">
         <property name="templateLoaderPath" value="/freemarker/"/>
         <property name="freemarkerSettings">
             <props>
@@ -65,7 +65,7 @@
     <!-- error codes catalog -->
     <util:map id="errorCodesCatalog" value-type="java.util.List">
         <entry key="Core" >
-            <bean id="errorCoreCodes" class="org.openhubframework.openhub.modules.ErrorEnum" factory-method="values" />
+            <bean class="org.openhubframework.openhub.modules.ErrorEnum" factory-method="values" />
         </entry>
     </util:map>
 
