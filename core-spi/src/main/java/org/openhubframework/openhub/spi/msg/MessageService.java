@@ -43,8 +43,15 @@ import org.apache.camel.Properties;
  */
 public interface MessageService {
 
-    public static final String BEAN = "messageService";
+    String BEAN = "messageService";
 
+    /**
+     * Inserts new message.
+     *
+     * @param message message that will be saved
+     */
+    void insertMessage(Message message);
+    
     /**
      * Inserts new messages.
      *

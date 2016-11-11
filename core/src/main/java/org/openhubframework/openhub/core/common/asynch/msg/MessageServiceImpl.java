@@ -52,18 +52,25 @@ public class MessageServiceImpl implements MessageService {
 
     @Transactional
     @Override
+    public void insertMessage(Message message) {
+        Assert.notNull(message, "the message must not be null");
+        Assert.state(message.getState() == MsgStateEnum.NEW || message.getState() == MsgStateEnum.PROCESSING,
+                "new message can be in NEW or PROCESSING state only");
+
+        message.setLastUpdateTimestamp(new Date());
+
+        messageDao.insert(message);
+
+        Log.debug("Inserted new message " + message.toHumanString());        
+    }
+
+    @Transactional
+    @Override
     public void insertMessages(Collection<Message> messages) {
         Assert.notNull(messages, "the messages must not be null");
 
         for (Message msg : messages) {
-            Assert.state(msg.getState() == MsgStateEnum.NEW || msg.getState() == MsgStateEnum.PROCESSING,
-                    "new message can be in NEW or PROCESSING state only");
-
-            msg.setLastUpdateTimestamp(new Date());
-
-            messageDao.insert(msg);
-
-            Log.debug("Inserted new message " + msg.toHumanString());
+            insertMessage(msg);
         }
     }
 
