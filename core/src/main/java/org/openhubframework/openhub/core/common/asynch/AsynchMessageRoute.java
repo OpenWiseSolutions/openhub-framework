@@ -150,7 +150,7 @@ public class AsynchMessageRoute extends AbstractBasicRoute {
         // route for asynchronous processing
         from(AsynchConstants.URI_ASYNC_MSG)
                 .routeId(ROUTE_ID_ASYNC)
-                .beanRef(ROUTE_BEAN, "setLogContextParams")
+                .bean(ROUTE_BEAN, "setLogContextParams")
                 .to(URI_SYNC_MSG);
 
 
@@ -200,11 +200,11 @@ public class AsynchMessageRoute extends AbstractBasicRoute {
                 .choice()
                     .when(header(NO_EFFECT_PROCESS_HEADER).isEqualTo(Boolean.TRUE))
                          // mark message as PARTLY_FAILED but without increasing error count
-                        .beanRef(MessageService.BEAN, "setStatePartlyFailedWithoutError")
+                        .bean(MessageService.BEAN, "setStatePartlyFailedWithoutError")
 
                     .when().method(ROUTE_BEAN, "checkParentMessage")
                         // it's a parent message
-                        .beanRef(MessageService.BEAN, "setStateWaiting")
+                        .bean(MessageService.BEAN, "setStateWaiting")
 
                         .process(new Processor() {
                             @Override
@@ -220,7 +220,7 @@ public class AsynchMessageRoute extends AbstractBasicRoute {
 
                     .otherwise()
                         // everything OK => mark processing as successful
-                        .beanRef(MessageService.BEAN, "setStateOk")
+                        .bean(MessageService.BEAN, "setStateOk")
 
                         .process(new Processor() {
                             @Override
@@ -261,7 +261,7 @@ public class AsynchMessageRoute extends AbstractBasicRoute {
 
                 .otherwise()
                     // => mark as PARTLY FAILED
-                    .beanRef(MessageService.BEAN, "setStatePartlyFailed")
+                    .bean(MessageService.BEAN, "setStatePartlyFailed")
 
                     .process(new Processor() {
                         @Override
@@ -285,7 +285,7 @@ public class AsynchMessageRoute extends AbstractBasicRoute {
             .end()
 
             // => completely FAILED
-            .beanRef(MessageService.BEAN, "setStateFailed")
+            .bean(MessageService.BEAN, "setStateFailed")
 
             .process(new Processor() {
                 @Override
@@ -309,7 +309,7 @@ public class AsynchMessageRoute extends AbstractBasicRoute {
             .routeId(ROUTE_ID_POST_PROCESS_AFTER_FAILED)
             .validate(header(MSG_HEADER).isNotNull())
             .to(AsynchConstants.URI_CONFIRM_MESSAGE)
-            .beanRef(ROUTE_BEAN, "sendMailToAdmin").id("sendEmail");
+            .bean(ROUTE_BEAN, "sendMailToAdmin").id("sendEmail");
 
 
         // confirmation route
@@ -323,10 +323,10 @@ public class AsynchMessageRoute extends AbstractBasicRoute {
                 .choice()
                     .when(body().isInstanceOf(ExternalCall.class))
                         // existing confirmation external call - just update it to failed state
-                        .beanRef(ConfirmationService.BEAN, "confirmationFailed")
+                        .bean(ConfirmationService.BEAN, "confirmationFailed")
                     .otherwise()
                         // no existing confirmation external call - record a new one with failed state
-                        .beanRef(ConfirmationService.BEAN, "insertFailedConfirmation")
+                        .bean(ConfirmationService.BEAN, "insertFailedConfirmation")
                 .end()
             .end()
 
@@ -339,11 +339,11 @@ public class AsynchMessageRoute extends AbstractBasicRoute {
             .end()
 
             // note: if there it's child message then it's without confirmation (need to do it)
-            .beanRef(ConfirmationCallback.BEAN, "confirm")
+            .bean(ConfirmationCallback.BEAN, "confirm")
 
             .filter(body().isInstanceOf(ExternalCall.class))
                 // for successful confirmations only record if it's a repeating attempt
-                .beanRef(ConfirmationService.BEAN, "confirmationComplete")
+                .bean(ConfirmationService.BEAN, "confirmationComplete")
             .end();
     }
 

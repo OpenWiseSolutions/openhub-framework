@@ -125,7 +125,7 @@ public class AsynchInMessageRoute extends AbstractBasicRoute {
                 .validate(header(OPERATION_HEADER).isNotNull())
 
                 // check if ESB is not stopping?
-                .beanRef(ROUTE_BEAN, "checkStopping").id("stopChecking")
+                .bean(ROUTE_BEAN, "checkStopping").id("stopChecking")
 
                 // extract trace header, trace header is mandatory
                 .process(new TraceHeaderProcessor(true, validatorList))
@@ -160,7 +160,7 @@ public class AsynchInMessageRoute extends AbstractBasicRoute {
                 .to(URI_GUARANTEED_ORDER_ROUTE)
 
                 // create OK response
-                .beanRef(ROUTE_BEAN, "createOkResponse")
+                .bean(ROUTE_BEAN, "createOkResponse")
 
             .endDoTry()
 
@@ -225,11 +225,11 @@ public class AsynchInMessageRoute extends AbstractBasicRoute {
                     .when().method(ROUTE_BEAN, "isMsgInGuaranteedOrder")
                         // no guaranteed order or message in the right order => continue
 
-                        .beanRef(ROUTE_BEAN, "saveLogContextParams")
+                        .bean(ROUTE_BEAN, "saveLogContextParams")
 
-                        .beanRef(ROUTE_BEAN, "setInsertQueueTimestamp")
+                        .bean(ROUTE_BEAN, "setInsertQueueTimestamp")
 
-                        .beanRef(ROUTE_BEAN, "setMsgPriority")
+                        .bean(ROUTE_BEAN, "setMsgPriority")
 
                         // redirect message asynchronously for next processing
                         .to(ExchangePattern.RobustInOnly, AsynchConstants.URI_ASYNC_MSG).id("toAsyncRoute")
@@ -237,7 +237,7 @@ public class AsynchInMessageRoute extends AbstractBasicRoute {
                     .otherwise()
 
                         // message isn't in right guaranteed order => postpone
-                        .beanRef(ROUTE_BEAN, "postponeMessage")
+                        .bean(ROUTE_BEAN, "postponeMessage")
                 .end()
 
                 .process(new Processor() {

@@ -63,7 +63,7 @@ public class PartlyFailedMessagesPoolRoute extends SpringRouteBuilder {
 
                 // allow only if ESB not stopping
                 .choice().when().method(ROUTE_BEAN, "isNotInStoppingMode")
-                    .beanRef("jobStarterForMessagePooling", "start")
+                    .bean("jobStarterForMessagePooling", "start")
                 .end();
     }
 

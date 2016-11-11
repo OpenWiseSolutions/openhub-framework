@@ -55,6 +55,6 @@ public class ConfirmationsPoolRoute extends SpringRouteBuilder {
         from("quartz2://" + uri)
                 .routeId("confirmationsPool" + AbstractBasicRoute.ROUTE_SUFFIX)
 
-                .beanRef("jobStarterForConfirmationPooling", "start");
+                .bean("jobStarterForConfirmationPooling", "start");
     }
 }

@@ -57,6 +57,6 @@ public class RepairProcessingExtCallRoute extends SpringRouteBuilder {
         from("quartz2://" + uri)
                 .routeId("repairExternalCallProcess" + AbstractBasicRoute.ROUTE_SUFFIX)
 
-                .beanRef(RepairExternalCallService.BEAN, "repairProcessingExternalCalls");
+                .bean(RepairExternalCallService.BEAN, "repairProcessingExternalCalls");
     }
 }
