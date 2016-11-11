@@ -48,13 +48,14 @@ public class AlertsSchedulerRoute extends SpringRouteBuilder {
 
     @Override
     public final void configure() throws Exception {
-        String uri = RepairProcessingMsgRoute.JOB_GROUP_NAME + "/" + JOB_NAME
-                + "?trigger.repeatInterval=" + (repeatInterval * 1000)
-                + "&trigger.repeatCount=" + SimpleTrigger.REPEAT_INDEFINITELY;
+        if (repeatInterval != -1) {
+            String uri = RepairProcessingMsgRoute.JOB_GROUP_NAME + "/" + JOB_NAME
+                    + "?trigger.repeatInterval=" + (repeatInterval * 1000)
+                    + "&trigger.repeatCount=" + SimpleTrigger.REPEAT_INDEFINITELY;
+            from("quartz2://" + uri)
+                    .routeId("alerts" + AbstractBasicRoute.ROUTE_SUFFIX)
 
-        from("quartz2://" + uri)
-                .routeId("alerts" + AbstractBasicRoute.ROUTE_SUFFIX)
-
-                .beanRef(AlertsCheckingService.BEAN, "checkAlerts");
+                    .bean(AlertsCheckingService.BEAN, "checkAlerts");
+        }
     }
 }
