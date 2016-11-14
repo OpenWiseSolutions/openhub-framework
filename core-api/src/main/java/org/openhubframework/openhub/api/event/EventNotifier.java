@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 
 
 /**
- * Indicates that an annotated class is a Camel {@link org.apache.camel.spi.EventNotifier event notifier class.
+ * Indicates that an annotated class is a Camel {@link org.apache.camel.spi.EventNotifier} event notifier class.
  * This class is also marked as Spring bean and will be automatically registered into Camel context.
  *
  * @author Petr Juza
