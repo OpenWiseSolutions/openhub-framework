@@ -38,8 +38,8 @@
     <beans profile="prod">
         <bean id="confirmationCallback" class="org.openhubframework.openhub.core.common.asynch.confirm.DelegateConfirmationCallback"/>
 
-        <bean id="quartz" class="org.apache.camel.component.quartz2.QuartzComponent">
-            <property name="startDelayedSeconds" value="30"/>
+        <bean id="quartz2" class="org.apache.camel.component.quartz2.QuartzComponent">
+            <property name="startDelayedSeconds" value="90"/>
         </bean>
     </beans>
 

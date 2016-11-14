@@ -4,7 +4,7 @@
 
 <div id="login">
     <h1><@spring.message "login.title"/></h1>
-    <form id="loginForm" method="post" action="${rootContext}/j_spring_security_check">
+    <form id="loginForm" method="post" action="${rootContext}/login">
         <input id="user" name="username" type="text" placeholder="<@spring.message "login.input.username"/>" tabindex="1" />
         <input id="pass" name="password" type="password" placeholder="<@spring.message "login.input.password"/>" tabindex="2" />
         <input type="submit" name="submit" value="<@spring.message "login.btn.login"/>" />

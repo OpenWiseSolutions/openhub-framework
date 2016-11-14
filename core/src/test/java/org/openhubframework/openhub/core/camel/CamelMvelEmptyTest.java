@@ -29,26 +29,27 @@ public class CamelMvelEmptyTest extends CamelTestSupport {
     ProducerTemplate producer;
 
     /**
-     * Currently MVEL cannot handle numeric "== empty",
+     * MVEL distributed by Camel 2.13 cannot handle numeric "== empty",
      * despite the fact that it mentions 0 value for number in language guide:
-     * http://mvel.codehaus.org/Value+Emptiness
+     * http://mvel.codehaus.org/Value+Emptiness, and RuntimeException error occurred.
+     * Now this confusing behaviour is fixed.
      */
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testMvelEmptyLongObject() {
-        String result = producer.requestBody("direct:routeONE", new MyWrap<Long>(0L), String.class);
+        String result = producer.requestBody("direct:routeONE", new MyWrap<>(0L), String.class);
         assertEquals("FALSE", result);
 
-        result = producer.requestBody("direct:routeONE", new MyWrap<Long>(1L), String.class);
+        result = producer.requestBody("direct:routeONE", new MyWrap<>(1L), String.class);
         assertEquals("TRUE", result);
 
-        result = producer.requestBody("direct:routeONE", new MyWrap<Long>(-1L), String.class);
+        result = producer.requestBody("direct:routeONE", new MyWrap<>(-1L), String.class);
         assertEquals("TRUE", result);
 
         result = producer.requestBody("direct:routeONE", new MyWrap<Long>(null), String.class);
         assertEquals("FALSE", result);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testMvelEmptyLongPrimitive() {
         String result = producer.requestBody("direct:routeONE", new MyWrapPrimitive(1L), String.class);
         assertEquals("TRUE", result);

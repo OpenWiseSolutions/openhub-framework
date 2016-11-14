@@ -59,6 +59,6 @@ public class RepairProcessingMsgRoute extends SpringRouteBuilder {
         from("quartz2://" + uri)
                 .routeId("repairMessageProcess" + AbstractBasicRoute.ROUTE_SUFFIX)
 
-                .beanRef(RepairMessageService.BEAN, "repairProcessingMessages");
+                .bean(RepairMessageService.BEAN, "repairProcessingMessages");
     }
 }

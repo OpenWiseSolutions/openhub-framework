@@ -27,6 +27,7 @@ import static org.springframework.core.annotation.AnnotationUtils.findAnnotation
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -119,20 +120,26 @@ public abstract class AbstractTest {
         getCamelContext().getShutdownStrategy().setTimeUnit(TimeUnit.NANOSECONDS);
         getCamelContext().getShutdownStrategy().setShutdownNowOnTimeout(true);// no pending exchanges
 
-        Map<String, Object> beansMap = getApplicationContext().getBeansWithAnnotation(CamelConfiguration.class);
+        Map<String, Class<RoutesBuilder>> beans = new HashMap<>();
+
+        String[] beanNames = getApplicationContext().getBeanDefinitionNames();
+
+        for (String beanName : beanNames) {
+            Class beanClass = getApplicationContext().getType(beanName);
+
+            if (beanClass.isAnnotationPresent(CamelConfiguration.class)) {
+                beans.put(beanName, beanClass);
+            }
+        }
 
         Set<Class> activeRoutesClasses = getActiveRoutes();
 
-        for (Map.Entry<String, Object> entry : beansMap.entrySet()) {
-            RoutesBuilder routesBuilder = (RoutesBuilder) entry.getValue();
+        for (Map.Entry<String, Class<RoutesBuilder>> entry : beans.entrySet()) {
 
-            if (initAllRoutes) {
-                getCamelContext().addRoutes(routesBuilder);
-            } else {
-                for (Class routesClass : activeRoutesClasses) {
-                    if (routesBuilder.getClass().isAssignableFrom(routesClass)) {
-                        getCamelContext().addRoutes(routesBuilder);
-                    }
+            for (Class routesClass : activeRoutesClasses) {
+
+                if (entry.getValue().isAssignableFrom(routesClass)) {
+                    getCamelContext().addRoutes((RoutesBuilder)getApplicationContext().getBean(entry.getKey()));
                 }
             }
         }
@@ -144,7 +151,7 @@ public abstract class AbstractTest {
      * @return set of classes
      */
     private Set<Class> getActiveRoutes() {
-        Set<Class> routeClasses = new HashSet<Class>();
+        Set<Class> routeClasses = new HashSet<>();
 
         Class<ActiveRoutes> annotationType = ActiveRoutes.class;
 
@@ -208,7 +215,8 @@ public abstract class AbstractTest {
      * @throws org.xml.sax.SAXException can be thrown when creating {@link Diff} (e.g., if the provided XML is invalid)
      * @throws java.io.IOException      can be thrown when creating {@link Diff}
      */
-    public static void assertXMLEqualWithInnerXML(String control, String test, final String innerXmlXpathLocation) throws SAXException, IOException {
+    public static void assertXMLEqualWithInnerXML(String control, String test, final String innerXmlXpathLocation) 
+            throws SAXException, IOException {
         Diff myDiff = new Diff(control, test);
         myDiff.overrideDifferenceListener(new DifferenceListener() {
             @Override

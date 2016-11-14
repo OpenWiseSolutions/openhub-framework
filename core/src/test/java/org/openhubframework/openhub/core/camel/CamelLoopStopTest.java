@@ -16,8 +16,6 @@
 
 package org.openhubframework.openhub.core.camel;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.Processor;
@@ -51,12 +49,8 @@ public class CamelLoopStopTest extends CamelTestSupport {
     public void testStoppingLoopWithCopy() throws Exception {
         reachedRouteTWO = false;
 
-        try {
-            producer.requestBody("direct:routeLoopCopy", "any body");
-            fail();
-        } catch (Exception ex) {
-            assertThat(ex.getCause(), instanceOf(IllegalStateException.class));
-        }
+        producer.requestBody("direct:routeLoopCopy", "any body");
+        // in previous version of camel 2.13.x this call throws IllegalStateException, current version fixes this confusing behaviour 
     }
 
     @Test

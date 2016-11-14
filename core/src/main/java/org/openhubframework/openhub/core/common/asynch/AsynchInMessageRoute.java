@@ -40,7 +40,6 @@ import org.openhubframework.openhub.common.log.Log;
 import org.openhubframework.openhub.common.log.LogContextFilter;
 import org.openhubframework.openhub.core.common.asynch.msg.MessageTransformer;
 import org.openhubframework.openhub.core.common.asynch.stop.StopService;
-import org.openhubframework.openhub.core.common.dao.DbConst;
 import org.openhubframework.openhub.core.common.event.AsynchEventHelper;
 import org.openhubframework.openhub.core.common.exception.ExceptionTranslator;
 import org.openhubframework.openhub.core.common.validator.TraceIdentifierValidator;
@@ -96,6 +95,9 @@ public class AsynchInMessageRoute extends AbstractBasicRoute {
     @Autowired
     private ThrottlingProcessor throttlingProcessor;
 
+    @Autowired
+    private MessageService messageService;
+
     // list of validator for trace identifier is not mandatory
     @Autowired(required = false)
     private List<TraceIdentifierValidator> validatorList;
@@ -123,7 +125,7 @@ public class AsynchInMessageRoute extends AbstractBasicRoute {
                 .validate(header(OPERATION_HEADER).isNotNull())
 
                 // check if ESB is not stopping?
-                .beanRef(ROUTE_BEAN, "checkStopping").id("stopChecking")
+                .bean(ROUTE_BEAN, "checkStopping").id("stopChecking")
 
                 // extract trace header, trace header is mandatory
                 .process(new TraceHeaderProcessor(true, validatorList))
@@ -149,7 +151,8 @@ public class AsynchInMessageRoute extends AbstractBasicRoute {
                 }).id("throttleProcess")
 
                 // save it to DB
-                .to("jpa:" + Message.class.getName() + "?usePersist=true&persistenceUnit=" + DbConst.UNIT_NAME)
+                // in big load a persisting via JPA camel component causes a blocking of processing asynchronous messages
+                .bean(ROUTE_BEAN, "insertMessage")
 
                 // check guaranteed order
 //                .to(ExchangePattern.InOnly, URI_GUARANTEED_ORDER_ROUTE)
@@ -157,7 +160,7 @@ public class AsynchInMessageRoute extends AbstractBasicRoute {
                 .to(URI_GUARANTEED_ORDER_ROUTE)
 
                 // create OK response
-                .beanRef(ROUTE_BEAN, "createOkResponse")
+                .bean(ROUTE_BEAN, "createOkResponse")
 
             .endDoTry()
 
@@ -222,11 +225,11 @@ public class AsynchInMessageRoute extends AbstractBasicRoute {
                     .when().method(ROUTE_BEAN, "isMsgInGuaranteedOrder")
                         // no guaranteed order or message in the right order => continue
 
-                        .beanRef(ROUTE_BEAN, "saveLogContextParams")
+                        .bean(ROUTE_BEAN, "saveLogContextParams")
 
-                        .beanRef(ROUTE_BEAN, "setInsertQueueTimestamp")
+                        .bean(ROUTE_BEAN, "setInsertQueueTimestamp")
 
-                        .beanRef(ROUTE_BEAN, "setMsgPriority")
+                        .bean(ROUTE_BEAN, "setMsgPriority")
 
                         // redirect message asynchronously for next processing
                         .to(ExchangePattern.RobustInOnly, AsynchConstants.URI_ASYNC_MSG).id("toAsyncRoute")
@@ -234,7 +237,7 @@ public class AsynchInMessageRoute extends AbstractBasicRoute {
                     .otherwise()
 
                         // message isn't in right guaranteed order => postpone
-                        .beanRef(ROUTE_BEAN, "postponeMessage")
+                        .bean(ROUTE_BEAN, "postponeMessage")
                 .end()
 
                 .process(new Processor() {
@@ -244,7 +247,23 @@ public class AsynchInMessageRoute extends AbstractBasicRoute {
                     }
                 });
     }
+    
+    /**
+     * Insert new message into database.
+     *
+     * @param msg message that will be saved
+     * @return saved message
+     */
+    @Handler
+    public Message insertMessage(@Body final Message msg) {
+        Assert.notNull(msg, "msg can not be null");
 
+        Log.debug("Insert new asynch message '" + msg.toHumanString() + "'.");
+
+        messageService.insertMessage(msg);
+        return msg;
+    }
+    
     /**
      * Checks if specified message should be processed in guaranteed order and if yes
      * then checks if the message is in the right order.

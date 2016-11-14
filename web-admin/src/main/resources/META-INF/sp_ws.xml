@@ -13,8 +13,8 @@
     <bean id="endpointMapping" class="org.apache.camel.component.spring.ws.bean.CamelEndpointMapping">
         <property name="interceptors">
             <list>
-                <ref local="loggingInterceptor"/>
-                <ref local="validatingInterceptor"/>
+                <ref bean="loggingInterceptor"/>
+                <ref bean="validatingInterceptor"/>
             </list>
         </property>
     </bean>

@@ -26,6 +26,7 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+import org.apache.camel.ExchangeProperty;
 import org.openhubframework.openhub.api.entity.ExternalSystemExtEnum;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
@@ -33,7 +34,6 @@ import org.openhubframework.openhub.api.exception.ErrorExtEnum;
 
 import org.apache.camel.Header;
 import org.apache.camel.Properties;
-import org.apache.camel.Property;
 
 
 /**
@@ -43,8 +43,15 @@ import org.apache.camel.Property;
  */
 public interface MessageService {
 
-    public static final String BEAN = "messageService";
+    String BEAN = "messageService";
 
+    /**
+     * Inserts new message.
+     *
+     * @param message message that will be saved
+     */
+    void insertMessage(Message message);
+    
     /**
      * Inserts new messages.
      *
@@ -101,8 +108,8 @@ public interface MessageService {
      */
     void setStatePartlyFailed(@Header(MSG_HEADER) Message msg,
                               Exception ex,
-                              @Property(EXCEPTION_ERROR_CODE) @Nullable ErrorExtEnum errCode,
-                              @Property(CUSTOM_DATA_PROP) @Nullable String customData,
+                              @ExchangeProperty(EXCEPTION_ERROR_CODE) @Nullable ErrorExtEnum errCode,
+                              @ExchangeProperty(CUSTOM_DATA_PROP) @Nullable String customData,
                               @Properties Map<String, Object> props);
 
     /**
@@ -118,8 +125,8 @@ public interface MessageService {
      */
     void setStateFailed(@Header(MSG_HEADER) Message msg,
                         Exception ex,
-                        @Property(EXCEPTION_ERROR_CODE) @Nullable ErrorExtEnum errCode,
-                        @Property(CUSTOM_DATA_PROP) @Nullable String customData,
+                        @ExchangeProperty(EXCEPTION_ERROR_CODE) @Nullable ErrorExtEnum errCode,
+                        @ExchangeProperty(CUSTOM_DATA_PROP) @Nullable String customData,
                         @Properties Map<String, Object> props);
 
     /**

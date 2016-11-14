@@ -44,7 +44,8 @@ public class CamelStopOnCompletionTest extends CamelTestSupport {
     @Test
     public void testStopOnCompletion() throws InterruptedException {
         MockEndpoint mock = getMockEndpoint("mock:test");
-        mock.expectedMessageCount(0);
+        // changed behavior of onCompletion since 2.13.x camel version - earlier asynchronous by default, now synchronously
+        mock.expectedMessageCount(2);
 
         String result = producer.requestBody("direct:routeONE", "any body", String.class);
         assertEquals("any body-routeONE-routeTWO", result);
