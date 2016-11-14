@@ -590,6 +590,9 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <!-- be careful if upgrade, Travis has problem with higher version -->
                     <version>2.18</version>
+                    <configuration>
+                        <argLine>-Xmx1024m -XX:MaxPermSize=256m</argLine>
+                    </configuration>
                 </plugin>
 
                 <plugin>
