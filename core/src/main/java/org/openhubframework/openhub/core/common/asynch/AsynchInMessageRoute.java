@@ -108,7 +108,7 @@ public class AsynchInMessageRoute extends AbstractBasicRoute {
      * Prerequisite: defined message headers {@link AsynchConstants#SERVICE_HEADER}, {@link AsynchConstants#OPERATION_HEADER}
      *      and optional {@link AsynchConstants#OBJECT_ID_HEADER}
      * <p/>
-     * Output: {@link CallbackResponse} for OK message or fill "{@value AsynchConstants#ERR_CALLBACK_RES_PROP}" exchange property
+     * Output: {@link CallbackResponse} for OK message or fill {@link AsynchConstants#ERR_CALLBACK_RES_PROP} exchange property
      *      if error occurred
      */
     @Override
@@ -376,7 +376,7 @@ public class AsynchInMessageRoute extends AbstractBasicRoute {
 
     /**
      * Creates FAIL response {@link CallbackResponse}
-     * and saves it into "{@value AsynchConstants#ERR_CALLBACK_RES_PROP}" exchange property.
+     * and saves it into {@link AsynchConstants#ERR_CALLBACK_RES_PROP} exchange property.
      *
      * @param exchange the exchange
      */

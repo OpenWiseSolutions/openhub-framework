@@ -142,8 +142,8 @@ public class CloseableHttpComponentsMessageSender extends HttpComponentsMessageS
      * Sets the timeout until a connection is established. A value of 0 means <em>never</em> timeout.
      *
      * @param timeout the timeout value in milliseconds
-     * @see RequestConfig.Builder#setConnectTimeout(int)
-     * @see RequestConfig.Builder#setConnectionRequestTimeout(int)
+     * @see org.apache.http.client.config.RequestConfig.Builder#setConnectTimeout(int)
+     * @see org.apache.http.client.config.RequestConfig.Builder#setConnectionRequestTimeout(int)
      */
     @Override
     public void setConnectionTimeout(int timeout) {
@@ -156,8 +156,8 @@ public class CloseableHttpComponentsMessageSender extends HttpComponentsMessageS
     /**
      * Set the socket read timeout for the underlying HttpClient. A value of 0 means <em>never</em> timeout.
      *
-     * @param timeout the timeout value in milliseconds
-     * @see RequestConfig.Builder#setSocketTimeout(int)
+     * @param timeout the timeout value in milliseconds     
+     * @see org.apache.http.client.config.RequestConfig.Builder#setSocketTimeout(int)
      */
     @Override
     public void setReadTimeout(int timeout) {

@@ -19,7 +19,6 @@ package org.openhubframework.openhub.test;
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.startsWith;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.springframework.core.annotation.AnnotationUtils.findAnnotationDeclaringClass;
@@ -325,7 +324,11 @@ public abstract class AbstractTest {
     protected MockEndpoint mockDirect(final String uri, final String routeId) throws Exception {
         // precaution: check that URI can be mocked by just providing the other side:
         org.junit.Assert.assertThat(uri,
-                anyOf(startsWith("direct:"), startsWith("direct-vm:"), startsWith("seda:"), startsWith("vm:")));
+                anyOf(
+                        CoreMatchers.startsWith("direct:"), 
+                        CoreMatchers.startsWith("direct-vm:"), 
+                        CoreMatchers.startsWith("seda:"), 
+                        CoreMatchers.startsWith("vm:")));
 
         // create the mock:
         final MockEndpoint createCtidMock = getCamelContext().getEndpoint("mock:" + uri, MockEndpoint.class);
