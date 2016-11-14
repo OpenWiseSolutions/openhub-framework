@@ -1,8 +1,15 @@
 language: java
 jdk:
   - oraclejdk7
+env:
+  global:
+  - secure: Ba4t6j5JmDamuCPj8ed4900/X8Nqw8Iyh5bQmp+JBRvf5jcWmurSuddhuXp09puUgRFiOgMGMqE/LyvnnjYNMQFuagZNHMNO9gBdbLPsUs1SbiR399XIaIEnkur4VEjHZp6Jr9WseaOh8mZlNKNZmYKyb5nQLCbTgzdgWY/bFsDVVTvQq/SkBBUoPN/MHWsCOtDoixjkeAfkdHm1gOBrA5+UP4Yg/tJgJWpPecalbRp42o29S93Dh6h+0teeCib+t0Jy3qGIFCRA6NbRyXF44xj31WnD75Vj6iBr6JHz7p+Viu2CRL2LcCbdlMFV2et4Evk/KosmEih0yLgeHrFYvLXobPVike9SgsvDOsXiKoLK4huK6QJflyhXQlglA3Qak3ycLD1/SY2PmJ+ZxgFPcT4oubgpL/0L5G5lCtHb86s8P/Q29Tq0l/4WO8JtNVoxzdsqSu9glMeupumzP5rPZ479ZQ0Ice3rCcPuihqz4GAwhGC48lbhGgY2F+AFngGkvVELa4R0njgrZxFLxN792ykHFjBcwc1AlHWgCfe8/rzan3wK6TKpUeQ+PYMGWsaLYB9HaN4XPKn19xupHUw5xQ0sZKWZuknbLsabGmItiqlqfGY/nQbCoobfRhrYm24Zm6HJV90Nz04K3okiRMUPUs/EEb3gb+M6cBUhi6rZzUc=
+before_install:
+  - chmod +x .utility/push-javadoc-to-gh-pages.sh 
 install: mvn install -DskipTests=true
-script: mvn test
+script: mvn test javadoc:aggregate
+after_success:
+  - .utility/push-javadoc-to-gh-pages.sh
 notifications:
   email:
     - openhub@openwise.cz
