@@ -16,8 +16,8 @@
 
 package org.openhubframework.openhub.component.asynchchild;
 
+import java.time.Instant;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
@@ -27,7 +27,6 @@ import org.apache.camel.ExchangePattern;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.impl.DefaultProducer;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
@@ -138,7 +137,7 @@ public class AsynchChildProducer extends DefaultProducer {
     private Message createNewMessage(ServiceExtEnum service, ExternalSystemExtEnum externalSystem,
                                      String operationName, String payload, String objectId) {
 
-        Date currDate = DateTime.now().toDate();
+        Instant currDate = Instant.now();
 
         Message msg = new Message();
         msg.setState(MsgStateEnum.NEW);

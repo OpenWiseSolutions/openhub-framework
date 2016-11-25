@@ -16,16 +16,16 @@
 
 package org.openhubframework.openhub.admin.services.log;
 
+import java.time.Instant;
 import java.util.List;
 
-import org.joda.time.DateTime;
 import org.springframework.util.Assert;
 
 public class LogEvent {
 
     private final LogParserConfig config;
 
-    private DateTime date;
+    private Instant date;
     private String message;
     private final Object[] properties;
 
@@ -51,11 +51,11 @@ public class LogEvent {
         return properties;
     }
 
-    public DateTime getDate() {
+    public Instant getDate() {
         return date;
     }
 
-    public void setDate(DateTime date) {
+    public void setDate(Instant date) {
         this.date = date;
     }
 

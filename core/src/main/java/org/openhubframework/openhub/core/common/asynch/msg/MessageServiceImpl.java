@@ -16,12 +16,16 @@
 
 package org.openhubframework.openhub.core.common.asynch.msg;
 
-import java.util.*;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.joda.time.Seconds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,7 +75,7 @@ public class MessageServiceImpl implements MessageService {
         Assert.notNull(message, "the message must not be null");
         Assert.state(message.getState() == MsgStateEnum.NEW, "new message can be in NEW state only");
 
-        message.setLastUpdateTimestamp(new Date());
+        message.setLastUpdateTimestamp(Instant.now());
 
         messageDao.insert(message);
 
@@ -95,7 +99,7 @@ public class MessageServiceImpl implements MessageService {
         Assert.isTrue(!msg.isParentMessage(), "the message must not be parent");
 
         msg.setState(MsgStateEnum.OK);
-        msg.setLastUpdateTimestamp(new Date());
+        msg.setLastUpdateTimestamp(Instant.now());
 
         // move new business errors to message:
         MessageHelper.updateBusinessErrors(msg, props);
@@ -123,7 +127,7 @@ public class MessageServiceImpl implements MessageService {
                 Message parentMsg = messageDao.getMessage(msg.getParentMsgId());
 
                 parentMsg.setState(MsgStateEnum.OK);
-                parentMsg.setLastUpdateTimestamp(new Date());
+                parentMsg.setLastUpdateTimestamp(Instant.now());
 
                 // extract business errors from all child messages
                 parentMsg.setBusinessError(getBusinessErrorsFromChildMessages(childMessages));
@@ -144,7 +148,7 @@ public class MessageServiceImpl implements MessageService {
                 "the message must be in WAITING_FOR_RES state, but state is " + msg.getState());
 
         msg.setState(MsgStateEnum.PROCESSING);
-        Date currDate = new Date();
+        Instant currDate = Instant.now();
         msg.setStartProcessTimestamp(currDate);
         msg.setLastUpdateTimestamp(currDate);
 
@@ -174,7 +178,7 @@ public class MessageServiceImpl implements MessageService {
 
         if (currMsg.getState() == MsgStateEnum.PROCESSING) {
             msg.setState(MsgStateEnum.WAITING);
-            msg.setLastUpdateTimestamp(new Date());
+            msg.setLastUpdateTimestamp(Instant.now());
 
             messageDao.update(msg);
 
@@ -193,7 +197,7 @@ public class MessageServiceImpl implements MessageService {
 
         if (msg.getState() != MsgStateEnum.WAITING_FOR_RES) {
             msg.setState(MsgStateEnum.WAITING_FOR_RES);
-            msg.setLastUpdateTimestamp(new Date());
+            msg.setLastUpdateTimestamp(Instant.now());
 
             messageDao.update(msg);
 
@@ -210,7 +214,7 @@ public class MessageServiceImpl implements MessageService {
         Assert.isTrue(!msg.isParentMessage(), "the message must not be parent");
 
         msg.setState(MsgStateEnum.PARTLY_FAILED);
-        msg.setLastUpdateTimestamp(new Date());
+        msg.setLastUpdateTimestamp(Instant.now());
 
         messageDao.update(msg);
 
@@ -259,7 +263,7 @@ public class MessageServiceImpl implements MessageService {
         Message parentMsg = messageDao.getMessage(msg.getParentMsgId());
 
         parentMsg.setState(MsgStateEnum.FAILED);
-        parentMsg.setLastUpdateTimestamp(new Date());
+        parentMsg.setLastUpdateTimestamp(Instant.now());
 
         // set information about error from child message
         parentMsg.setFailedErrorCode(msg.getFailedErrorCode());
@@ -279,7 +283,7 @@ public class MessageServiceImpl implements MessageService {
         Assert.hasText(errDesc, "the errDesc must not be empty");
 
         msg.setState(MsgStateEnum.FAILED);
-        msg.setLastUpdateTimestamp(new Date());
+        msg.setLastUpdateTimestamp(Instant.now());
         msg.setFailedErrorCode(errCode);
         msg.setFailedCount(msg.getFailedCount() + 1);
         msg.setFailedDesc(errDesc);
@@ -383,7 +387,7 @@ public class MessageServiceImpl implements MessageService {
             tmpErrCode = ExceptionTranslator.getError(ex);
         }
 
-        msg.setLastUpdateTimestamp(new Date());
+        msg.setLastUpdateTimestamp(Instant.now());
         msg.setFailedCount(msg.getFailedCount() + 1);
         msg.setFailedErrorCode(tmpErrCode);
 
@@ -412,14 +416,14 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public int getCountMessages(MsgStateEnum state, Seconds interval) {
+    public int getCountMessages(MsgStateEnum state, Duration interval) {
         Assert.notNull(state, "the state must not be null");
 
         return messageDao.getCountMessages(state, interval);
     }
 
     @Override
-    public int getCountProcessingMessagesForFunnel(String funnelValue, Seconds idleInterval, String funnelCompId) {
+    public int getCountProcessingMessagesForFunnel(String funnelValue, Duration idleInterval, String funnelCompId) {
         Assert.hasText(funnelValue, "the funnelValue must not be empty");
         Assert.notNull(idleInterval, "the idleInterval must not be null");
         Assert.hasText(funnelCompId, "the funnelCompId must not be empty");
@@ -433,7 +437,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<Message> getMessagesForGuaranteedOrderForFunnel(String funnelValue, Seconds idleInterval,
+    public List<Message> getMessagesForGuaranteedOrderForFunnel(String funnelValue, Duration idleInterval,
             boolean excludeFailedState, String funnelCompId) {
         return messageDao.getMessagesForGuaranteedOrderForFunnel(funnelValue, idleInterval, excludeFailedState,
                 funnelCompId);
@@ -449,7 +453,7 @@ public class MessageServiceImpl implements MessageService {
                 "the message must be in PROCESSING, NEW or IN_QUEUE state, but state is " + msg.getState());
 
         msg.setState(MsgStateEnum.POSTPONED);
-        msg.setLastUpdateTimestamp(new Date());
+        msg.setLastUpdateTimestamp(Instant.now());
 
         messageDao.update(msg);
 
@@ -467,7 +471,7 @@ public class MessageServiceImpl implements MessageService {
                 "the message must be in PROCESSING or IN_QUEUE state, but state is " + msg.getState());
 
         msg.setFunnelComponentId(funnelCompId);
-        msg.setLastUpdateTimestamp(new Date());
+        msg.setLastUpdateTimestamp(Instant.now());
 
         messageDao.update(msg);
 
@@ -477,7 +481,7 @@ public class MessageServiceImpl implements MessageService {
     @Nullable
     @Override
     @Transactional
-    public Message findPostponedMessage(Seconds interval) {
+    public Message findPostponedMessage(Duration interval) {
         Assert.notNull(interval, "interval must not be null");
 
         return messageDao.findPostponedMessage(interval);
@@ -486,7 +490,7 @@ public class MessageServiceImpl implements MessageService {
     @Nullable
     @Override
     @Transactional
-    public Message findPartlyFailedMessage(Seconds interval) {
+    public Message findPartlyFailedMessage(Duration interval) {
         Assert.notNull(interval, "interval must not be null");
 
         return messageDao.findPartlyFailedMessage(interval);

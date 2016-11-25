@@ -30,7 +30,7 @@ import org.springframework.core.type.filter.TypeFilter;
  * This filter checks system and environment property "{@value #PATTERN_PROP_NAME}" and if defined then property value
  * is used for {@link Pattern} compilation.
  * System property has higher priority.
- * <p/>
+ * <p>
  * Example:
  * {@code &lt;context:exclude-filter type="custom" expression="org.openhubframework.openhub.core.common.spring.SystemExcludeRegexPatternTypeFilter"/>}
  *

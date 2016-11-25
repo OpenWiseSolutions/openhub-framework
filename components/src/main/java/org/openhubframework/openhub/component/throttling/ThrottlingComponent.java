@@ -29,7 +29,7 @@ import org.springframework.util.Assert;
 
 /**
  * Apache Camel component "throttling" for throttling processing messages.
- * <p/>
+ * <p>
  * Syntax: {@code throttling:requestType[:operationName]}, where
  * <ul>
  *     <li>requestType specifies request type, e.g. SYNC or ASYNC

@@ -31,7 +31,7 @@ public interface ExternalCallService {
      * Prepares a new external call for the specified unique operation invocation.
      * Operation URI and operation key (such as object ID) together
      * uniquely identify such an operation invocation.
-     * <p/>
+     * <p>
      * The attempted external call might not be allowed.
      * This could happen if the external call is either duplicate or outdated.
      * To verify it's a new call, the provided {@link Message#getMsgTimestamp()}

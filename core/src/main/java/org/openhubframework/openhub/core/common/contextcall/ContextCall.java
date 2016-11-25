@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 
 /**
  * Contract for calling method of service in sibling (Spring) context.
- * <p/>
+ * <p>
  * Example: {@code makeCall(EndpointRegistry.class, "getEndpointURIs", Collection.class)}
  * calls method getEndpointURIs (without parameters) in service EndpointRegistry and expects result as Collection.
  *
@@ -34,7 +34,9 @@ public interface ContextCall {
      *
      * @param targetType the class of target service; there must be exactly one Spring bean of this type
      * @param methodName the name of calling method on target service
+     * @param responseType as expected type of response
      * @param methodArgs the method arguments (if any)
+     * @param <T> data type of response                  
      * @return response from calling (can be null if no response)
      * @throws IllegalStateException when error occurs during calling target method
      */

@@ -19,10 +19,10 @@ package org.openhubframework.openhub.admin.web.log;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
-import org.joda.time.DateMidnight;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ import org.openhubframework.openhub.admin.services.log.LogEvent;
 import org.openhubframework.openhub.admin.services.log.LogParser;
 import org.openhubframework.openhub.admin.services.log.LogParserConfig;
 import org.openhubframework.openhub.admin.services.log.LogParserConstants;
-import org.openhubframework.openhub.admin.web.common.editor.DateTimeEditor;
+import org.openhubframework.openhub.admin.web.common.editor.LogbackIso8601DateTimeEditor;
 
 
 /**
@@ -57,9 +57,10 @@ public class LogController {
     private LogParser logParser;
 
     @RequestMapping("/")
-    public String getLogSearch(@RequestParam(value = "fromDate", required = false) DateTime fromDate,
+    public String getLogSearch(@RequestParam(value = "fromDate", required = false) OffsetDateTime fromDate,
                                @RequestParam MultiValueMap<String, String> params,
                                Model model) throws UnsupportedEncodingException {
+
         if (fromDate != null) {
             params.remove("fromDate");
             // remove empty values:
@@ -72,17 +73,11 @@ public class LogController {
                 }
             }
             model.mergeAttributes(params);
-            return "redirect:" + UriUtils.encodePath(
-                    LogParserConstants.LOGBACK_ISO8601_FORMAT.print(fromDate), "UTF-8");
+            return "redirect:" + UriUtils.encodePath(fromDate.format(LogParserConstants.LOGBACK_ISO8601_FORMATTER), "UTF-8");
         }
 
-        model.addAttribute("fromDate",
-                LogParserConstants.LOGBACK_ISO8601_FORMAT.print(
-                        DateTime.now()
-                                .minusHours(2)
-                                .withMinuteOfHour(0)
-                                .withSecondOfMinute(0)
-                                .withMillisOfSecond(0)));
+        OffsetDateTime from = OffsetDateTime.now().minusHours(2).truncatedTo(ChronoUnit.HOURS);
+        model.addAttribute("fromDate", from.format(LogParserConstants.LOGBACK_ISO8601_FORMATTER));
 
         LogParserConfig logParserConfig = new LogParserConfig();
         logParserConfig.setGroupBy(LogParserConstants.DEFAULT_GROUP_BY_PROPERTY);
@@ -94,12 +89,13 @@ public class LogController {
 
     @RequestMapping("/{fromDate}")
     public String getLogOverview(
-            @PathVariable("fromDate") DateTime fromDate,
+            @PathVariable("fromDate") OffsetDateTime fromDate,
             @RequestParam(value = LogParserConstants.VIEW_REQUEST_PARAMETER, required = false) String view,
             @RequestParam(value = LogParserConstants.GROUP_BY_REQUEST_PARAMETER, required = false) Set<String> groupBy,
             @RequestParam(value = LogParserConstants.GROUP_SIZE_REQUEST_PARAMETER, required = false) Integer groupSize,
             @RequestParam Map<String, String> params,
             Model model) {
+
         try {
             LogParserConfig logParserConfig = new LogParserConfig();
             logParserConfig.setFromDate(fromDate);
@@ -137,7 +133,6 @@ public class LogController {
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(DateTime.class, new DateTimeEditor());
-        binder.registerCustomEditor(DateMidnight.class, new DateTimeEditor());
+        binder.registerCustomEditor(OffsetDateTime.class, new LogbackIso8601DateTimeEditor());
     }
 }

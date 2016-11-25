@@ -16,25 +16,20 @@
 
 package org.openhubframework.openhub.admin.services.log;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormatter;
 
 /**
  * Configuration holder for {@link LogParser}
  */
 public class LogParserConfig {
 
-    private DateTime fromDate;
+    private OffsetDateTime fromDate;
     private Integer limit;
     private Map<String, String> filter;
     private List<String> groupBy;
@@ -42,7 +37,7 @@ public class LogParserConfig {
     private String msg;
 
     public LogParserConfig() {
-        setFromDate(DateTime.now());
+        setFromDate(OffsetDateTime.now());
         setLimit(LogParserConstants.MAX_RESULT_LIMIT);
         setFilter(Collections.<String, String>emptyMap());
         setGroupBy(Collections.<String>emptySet());
@@ -54,16 +49,24 @@ public class LogParserConfig {
         return new LogEvent(this);
     }
 
-    /** the date to find log lines after */
-    public DateTime getFromDate() {
+    /** 
+     * The date to find log lines after
+     * 
+     * @return filter from date
+     */
+    public OffsetDateTime getFromDate() {
         return fromDate;
     }
 
-    public void setFromDate(DateTime fromDate) {
+    public void setFromDate(OffsetDateTime fromDate) {
         this.fromDate = fromDate;
     }
 
-    /** the limit of how many lines should be returned */
+    /** 
+     * The limit of how many lines should be returned
+     * 
+     * @return limit
+     */
     public Integer getLimit() {
         return limit;
     }
@@ -74,6 +77,8 @@ public class LogParserConfig {
 
     /**
      * The Property=Value sets that the specified log event should have in order to not be ignored.
+     * 
+     * @return  map that represent filter
      */
     public Map<String, String> getFilter() {
         return filter;
@@ -90,6 +95,8 @@ public class LogParserConfig {
 
     /**
      * The property names that results will be grouped by.
+     * 
+     * @return list of group names
      */
     public List<String> getGroupBy() {
         return groupBy;
@@ -104,7 +111,11 @@ public class LogParserConfig {
         }
     }
 
-    /** max number of lines to return for each group */
+    /**
+     * Max number of lines to return for each group
+     *
+     * @return limit for group
+     */
     public Integer getGroupLimit() {
         return groupLimit;
     }
@@ -134,7 +145,7 @@ public class LogParserConfig {
     }
 
     public DateTimeFormatter getDateFormat() {
-        return LogParserConstants.LOGBACK_ISO8601_OPTIONAL_TIME_FORMAT;
+        return LogParserConstants.LOGBACK_ISO8601_OPTIONAL_TIME_FORMATTER;
     }
 
     public Pattern getPropertiesPattern() {

@@ -22,7 +22,7 @@ import java.lang.annotation.*;
 /**
  * {@code ActiveRoutes} is a class-level annotation that is used to declare which Camel route definitions
  * should be active for specific test.
- * <p/>
+ * <p>
  * Annotation respects class inheritance - annotation can be used on each test class in the class hierarchy.
  *
  * @author Petr Juza

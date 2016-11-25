@@ -18,7 +18,7 @@ package org.openhubframework.openhub.core.common.asynch.stop;
 
 /**
  * Contract for managing ESB stopping.
- * <p/>
+ * <p>
  * It depends on service implementation if stopping is valid for one node or whole cluster.
  *
  * @author Petr Juza
@@ -36,7 +36,7 @@ public interface StopService {
 
     /**
      * Stop ESB, switches to stopping mode. Can be called repeatedly.
-     * <p/>
+     * <p>
      * ESB won't to process next asynchronous messages.
      */
     void stop();

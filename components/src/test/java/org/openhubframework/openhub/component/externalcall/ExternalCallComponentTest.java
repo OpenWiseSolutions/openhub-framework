@@ -597,7 +597,7 @@ public class ExternalCallComponentTest extends AbstractComponentsDbTest {
                 String.format(
                         "ExternalCall msgTimestamp [%s] doesn't match expected msgTimestamp [%s] of message [%s]",
                         extCall.getMsgTimestamp(), message.getMsgTimestamp(), message),
-                message.getMsgTimestamp().getTime(), extCall.getMsgTimestamp().getTime());
+                message.getMsgTimestamp(), extCall.getMsgTimestamp());
     }
 
     private Message[] messages(final int messageCount) throws Exception {

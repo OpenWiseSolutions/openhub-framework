@@ -16,12 +16,13 @@
 
 package org.openhubframework.openhub.core.common.asynch.db;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import java.util.Date;
+import java.time.Instant;
 
-import org.joda.time.Seconds;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
+import org.openhubframework.openhub.common.time.Seconds;
 import org.openhubframework.openhub.core.AbstractCoreDbTest;
 import org.openhubframework.openhub.core.common.asynch.queue.MessagesPool;
 import org.openhubframework.openhub.core.common.asynch.queue.MessagesPoolImpl;
@@ -78,7 +80,7 @@ public class PartlyFailedMessagesPoolDbTest extends AbstractCoreDbTest {
     }
 
     private void insertNewMessage(String correlationId, MsgStateEnum state) {
-        Date currDate = new Date();
+        Instant currDate = Instant.now();
 
         Message msg = new Message();
         msg.setState(state);

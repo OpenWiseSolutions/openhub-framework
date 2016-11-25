@@ -21,7 +21,7 @@ import java.util.List;
 
 /**
  * Contract for storing files in the repository and manipulating with them.
- * <p/>
+ * <p>
  * Supposed workflow:
  * <ol>
  *     <li>save file into temporary store (file will be in this store for limited time only)

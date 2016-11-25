@@ -25,7 +25,8 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.springframework.util.StringUtils.hasText;
 
-import java.util.Date;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import javax.annotation.Nullable;
 import javax.persistence.TypedQuery;
@@ -36,11 +37,9 @@ import org.apache.camel.*;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.custommonkey.xmlunit.Diff;
-import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.ws.soap.SoapMessage;
@@ -63,10 +62,6 @@ import org.openhubframework.openhub.test.data.ServiceTestEnum;
  *
  * @author Petr Juza
  */
-//TODO PJUZA correct it when Camel is in version 2.18.0
-//note: we have to use Spring XML configuration of CamelContext because of this error:
-//  https://issues.apache.org/jira/browse/CAMEL-10109
-@ContextConfiguration(locations = "classpath:/org/openhubframework/openhub/core/reqres/test-context.xml")
 public class RequestResponseTest extends AbstractCoreDbTest {
 
     private static final String REQUEST = "request";
@@ -173,9 +168,11 @@ public class RequestResponseTest extends AbstractCoreDbTest {
         assertThat(lastRequest, notNullValue());
         assertThat(lastRequest, is(req));
 
-        DateTime from = DateTime.now().minusHours(1);
-        DateTime to = DateTime.now().plusDays(1);
-        List<Request> requestList = reqResService.findByCriteria(from.toDate(), to.toDate(), null, null);
+        Instant.now().minus(1, ChronoUnit.HOURS);
+
+        Instant from = Instant.now().minus(1, ChronoUnit.HOURS);
+        Instant to = Instant.now().plus(1, ChronoUnit.DAYS);
+        List<Request> requestList = reqResService.findByCriteria(from, to, null, null);
         assertThat(requestList.size(), is(1));
         assertThat(requestList.get(0), is(req));
     }
@@ -248,16 +245,18 @@ public class RequestResponseTest extends AbstractCoreDbTest {
     }
 
     private Message insertMessage() {
+        Instant now = Instant.now();
+
         Message msg = new Message();
         msg.setState(MsgStateEnum.PROCESSING);
-        msg.setMsgTimestamp(new Date());
-        msg.setReceiveTimestamp(new Date());
+        msg.setMsgTimestamp(now);
+        msg.setReceiveTimestamp(now);
         msg.setSourceSystem(ExternalSystemTestEnum.CRM);
         msg.setCorrelationId("123-456");
         msg.setService(ServiceTestEnum.CUSTOMER);
         msg.setOperationName("setCustomer");
         msg.setPayload("request");
-        msg.setLastUpdateTimestamp(new Date());
+        msg.setLastUpdateTimestamp(now);
         em.persist(msg);
         em.flush();
         return msg;

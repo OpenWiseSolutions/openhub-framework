@@ -16,10 +16,10 @@
 
 package org.openhubframework.openhub.common.converter;
 
-import org.joda.time.Seconds;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.ConverterRegistry;
-import org.springframework.util.NumberUtils;
+
+import org.openhubframework.openhub.common.time.Seconds;
 
 
 /**
@@ -48,31 +48,28 @@ public final class SecondsConverters {
 
     /**
      * Convert {@link String} to {@link Seconds}.
-     *
-     * First try if string argument is not a number, then {@link Seconds#seconds(int)} is used. If the string argument is not a number, it is
-     * expect to be ISO format and {@link Seconds#parseSeconds(String)} is used.
      */
     static class StringToSecondsConverter implements Converter<String, Seconds> {
 
         @Override
         public Seconds convert(String source) {
             try {
-                return Seconds.seconds(NumberUtils.parseNumber(source, Integer.class));
-            } catch (NumberFormatException e) {
-                return Seconds.parseSeconds(source);
+                return Seconds.of(source);
+            } catch (NumberFormatException ex) {
+                throw new IllegalArgumentException(ex);
             }
         }
 
     }
 
     /**
-     * Convert {@link Integer} to {@link Seconds} using {@link Seconds#seconds(int)} method.
+     * Convert {@link Integer} to {@link Seconds}.
      */
     static class IntegerToSecondsConverter implements Converter<Integer, Seconds> {
 
         @Override
         public Seconds convert(Integer source) {
-            return Seconds.seconds(source);
+            return Seconds.of(source);
         }
     }
 
@@ -96,6 +93,5 @@ public final class SecondsConverters {
         public Integer convert(Seconds source) {
             return source.getSeconds();
         }
-
     }
 }

@@ -46,7 +46,7 @@ public class JaxbDataFormatHelper {
     /**
      * Creates a JAXB data format for marshalling and unmarshalling the specified class
      * to/from its native XML representation.
-     * <p/>
+     * <p>
      * If rootQName is provided, this data format will work with classes that are not root elements
      * (not annotated with {@link XmlRootElement}).
      *

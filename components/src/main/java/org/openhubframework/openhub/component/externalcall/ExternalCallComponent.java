@@ -36,7 +36,7 @@ import org.springframework.util.Assert;
 
 /**
  * Apache Camel Component for wrapping external calls with checks for duplicate and outdated calls.
- * <p/>
+ * <p>
  * The URI format is the following:
  * {@code extcall:[keyType]:[targetURI]} where keyType can be one of:
  * <ol><li>{@code message} - to generate a key based on message source system and correlation ID,
@@ -48,7 +48,7 @@ import org.springframework.util.Assert;
  * In the first two cases (message and entity),
  * if the {@link ExtCallComponentParams#EXTERNAL_CALL_KEY} exchange property is provided,
  * it will be appended to the generated key.
- * <p/>
+ * <p>
  * By default, the {@code targetURI} is used as the operation.
  * This can be changed by providing an optional {@link ExtCallComponentParams#EXTERNAL_CALL_OPERATION} exchange property.
  * The targetURI will still be the URI that is called, if the external call is not skipped,

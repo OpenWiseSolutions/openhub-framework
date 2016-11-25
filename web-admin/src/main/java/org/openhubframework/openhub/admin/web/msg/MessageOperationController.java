@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * Controller that maps request from the Admin GUI to the message operations:
  * <ul>
  *   <li>message restart based on the msgID and type.
- *   Restart of the message = update the state from FAILED/CANCEL -> PARTLY FAILED in table [message] and [external_call]</li>
+ *   Restart of the message = update the state from FAILED/CANCEL -&gt; PARTLY FAILED in table [message] and [external_call]</li>
  *   <li>message cancel - only NEW and PARTLY_FAILED messages can be canceled</li>
  * </ul>
  *
@@ -71,7 +71,7 @@ public class MessageOperationController {
     /**
      * The restart method - gets input from web-user and calls a service method
      * for updating the DB record based on the MSG ID.
-     * <p/>
+     * <p>
      * By default, when the checkbox is on web send as empty = the default value is not annotation driven, but manually
      * setup to false.
      *

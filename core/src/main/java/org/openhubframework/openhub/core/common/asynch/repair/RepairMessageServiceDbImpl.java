@@ -20,14 +20,13 @@ import static java.lang.Math.min;
 import static org.openhubframework.openhub.api.configuration.CoreProps.ASYNCH_COUNT_PARTLY_FAILS_BEFORE_FAILED;
 import static org.openhubframework.openhub.api.configuration.CoreProps.ASYNCH_REPAIR_REPEAT_TIME_SEC;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Processor;
 import org.apache.camel.ProducerTemplate;
-import org.joda.time.Seconds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +45,7 @@ import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
 import org.openhubframework.openhub.api.exception.IntegrationException;
 import org.openhubframework.openhub.api.exception.InternalErrorEnum;
+import org.openhubframework.openhub.common.time.Seconds;
 import org.openhubframework.openhub.core.common.dao.MessageDao;
 
 /**
@@ -109,7 +109,7 @@ public class RepairMessageServiceDbImpl implements RepairMessageService {
             @Override
             @SuppressWarnings("unchecked")
             public List<Message> doInTransaction(TransactionStatus status) {
-                return messageDao.findProcessingMessages(repeatInterval.getValue());
+                return messageDao.findProcessingMessages(repeatInterval.getValue().toDuration());
             }
         });
     }
@@ -120,7 +120,7 @@ public class RepairMessageServiceDbImpl implements RepairMessageService {
      * @param messages the messages for update
      */
     private void updateMessagesInDB(final List<Message> messages) {
-        final Date currDate = new Date();
+        final Instant currDate = Instant.now();
 
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override

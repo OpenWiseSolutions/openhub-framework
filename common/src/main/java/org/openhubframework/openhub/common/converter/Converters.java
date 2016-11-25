@@ -34,8 +34,7 @@ public final class Converters {
     /**
      * Register various default converters:
      * <ul>
-     * <li>{@link SecondsConverters}</li>
-     * <li>{@link DurationConverters}
+     * <li>{@link SecondsConverters}
      * </ul>
      *
      * @param registry the converter registry.

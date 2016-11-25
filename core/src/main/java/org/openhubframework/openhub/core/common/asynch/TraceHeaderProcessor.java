@@ -41,10 +41,10 @@ import org.openhubframework.openhub.core.common.validator.TraceIdentifierValidat
 
 /**
  * Processor that gain trace header information and save it as message header {@link #TRACE_HEADER} in exchange.
- * <p/>
+ * <p>
  * Processor works with our input asynchronous messages (trace header is in SOAP header)
  * and also with input messages (trace header is in SOAP body).
- * <p/>
+ * <p>
  * Trace header is mandatory by default but you can change it.
  *
  * @author Petr Juza
@@ -78,7 +78,7 @@ public class TraceHeaderProcessor implements Processor {
      *
      * @param mandatoryHeader if trace header is mandatory
      * @param validatorList   the collection of trace identifier validators
-     * @throws JAXBException
+     * @throws JAXBException if an error was encountered while creating the <tt>JAXBContext</tt>
      */
     public TraceHeaderProcessor(boolean mandatoryHeader, @Nullable List<TraceIdentifierValidator> validatorList) throws
             JAXBException {

@@ -16,13 +16,12 @@
 
 package org.openhubframework.openhub.core.throttling;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nullable;
-
-import org.joda.time.DateTime;
 
 import org.openhubframework.openhub.common.synchronization.SynchronizationBlock;
 import org.openhubframework.openhub.common.synchronization.SynchronizationExecutor;
@@ -32,7 +31,7 @@ import org.openhubframework.openhub.spi.throttling.ThrottleScope;
 
 /**
  * In-memory implementation of {@link ThrottleCounter} interface.
- * <p/>
+ * <p>
  * Fast and enough-solution for one server solution but it's not sufficient for cluster environment.
  *
  * @author Petr Juza
@@ -55,11 +54,9 @@ public class ThrottleCounterMemoryImpl extends AbstractThrottleCounter {
             public <T> T syncBlock() {
                 Integer counter = 0;
 
-                if (requests.get(throttleScope) == null) {
-                    requests.put(throttleScope, new Stack<Long>());
-                }
+                requests.computeIfAbsent(throttleScope, k -> new Stack<Long>());
 
-                long now = DateTime.now().getMillis();
+                long now = Instant.now().toEpochMilli();
                 long from = now - (intervalSec * 1000);
 
                 // get timestamps for specified throttling scope

@@ -16,7 +16,7 @@
 
 package org.openhubframework.openhub.api.entity;
 
-import java.util.Date;
+import java.time.Instant;
 import javax.persistence.*;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -30,10 +30,10 @@ import org.openhubframework.openhub.api.common.HumanReadable;
 /**
  * Evidence of calls to external systems (billing, VF, ...).
  * This table serves for checking of duplication calls to external systems and checks obsolete calls.
- * <p/>
+ * <p>
  * Entity ID contains real entity ID for operations which change existing data
  * or correlationID for operations which creates new data.
- * <p/>
+ * <p>
  * Special case are confirmations which have operation with the name "{@value #CONFIRM_OPERATION}"
  * and entity ID will be set to {@link Message#getMsgId() message ID}.
  * There are only confirmations which failed previously.
@@ -72,14 +72,14 @@ public class ExternalCall implements HumanReadable {
     private String entityId;
 
     @Column(name = "msg_timestamp", nullable = false)
-    private Date msgTimestamp;
+    private Instant msgTimestamp;
 
     @Column(name = "creation_timestamp", nullable = false)
-    private Date creationTimestamp;
+    private Instant creationTimestamp;
 
     @Version
     @Column(name = "last_update_timestamp", nullable = false)
-    private Date lastUpdateTimestamp;
+    private Instant lastUpdateTimestamp;
 
     @Column(name = "failed_count", nullable = false)
     private int failedCount = 0;
@@ -97,7 +97,7 @@ public class ExternalCall implements HumanReadable {
     public static ExternalCall createFailedConfirmation(Message msg) {
         Assert.notNull(msg, "the msg must not be null");
 
-        Date currDate = new Date();
+        Instant currDate = Instant.now();
 
         ExternalCall extCall = new ExternalCall();
         extCall.setMessage(msg);
@@ -115,6 +115,8 @@ public class ExternalCall implements HumanReadable {
     /**
      * Creates a new external call with {@link ExternalCallStateEnum#PROCESSING processing} state.
      *
+     * @param operationName the name of operation 
+     * @param entityId  the ID of entity (external ID as constraint of processing)
      * @param msg the message
      * @return external call entity
      */
@@ -123,7 +125,7 @@ public class ExternalCall implements HumanReadable {
         Assert.notNull(entityId, "entityId (operation key) must not be null");
         Assert.notNull(msg, "msg must not be null");
 
-        Date currDate = new Date();
+        Instant currDate = Instant.now();
 
         ExternalCall extCall = new ExternalCall();
         extCall.setCreationTimestamp(currDate);
@@ -225,11 +227,11 @@ public class ExternalCall implements HumanReadable {
      *
      * @return creation date
      */
-    public Date getCreationTimestamp() {
+    public Instant getCreationTimestamp() {
         return creationTimestamp;
     }
 
-    public void setCreationTimestamp(Date creationTimestamp) {
+    public void setCreationTimestamp(Instant creationTimestamp) {
         this.creationTimestamp = creationTimestamp;
     }
 
@@ -238,11 +240,11 @@ public class ExternalCall implements HumanReadable {
      *
      * @return timestamp
      */
-    public Date getLastUpdateTimestamp() {
+    public Instant getLastUpdateTimestamp() {
         return lastUpdateTimestamp;
     }
 
-    public void setLastUpdateTimestamp(Date lastUpdateTimestamp) {
+    public void setLastUpdateTimestamp(Instant lastUpdateTimestamp) {
         this.lastUpdateTimestamp = lastUpdateTimestamp;
     }
 
@@ -252,11 +254,11 @@ public class ExternalCall implements HumanReadable {
      * @return message timestamp
      * @see Message#getMsgTimestamp()
      */
-    public Date getMsgTimestamp() {
+    public Instant getMsgTimestamp() {
         return msgTimestamp;
     }
 
-    public void setMsgTimestamp(Date msgTimestamp) {
+    public void setMsgTimestamp(Instant msgTimestamp) {
         this.msgTimestamp = msgTimestamp;
     }
 

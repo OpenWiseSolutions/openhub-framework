@@ -18,7 +18,7 @@ package org.openhubframework.openhub.api.exception;
 
 /**
  * Contract for error enums which should be extensible.
- * <p/>
+ * <p>
  * Use {@link #getErrorCode()} for equal comparison.
  *
  * @author Petr Juza

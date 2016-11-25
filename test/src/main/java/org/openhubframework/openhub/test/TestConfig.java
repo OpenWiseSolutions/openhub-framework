@@ -59,8 +59,7 @@ import org.openhubframework.openhub.test.route.ActiveRoutesCollector;
 @Configuration
 @EnableAutoConfiguration(exclude = {WebSocketAutoConfiguration.class, MultipartAutoConfiguration.class,
         JacksonAutoConfiguration.class, HttpEncodingAutoConfiguration.class},
-        excludeName = {"org.springframework.boot.autoconfigure.cache.RedisCacheConfiguration",
-                "org.springframework.boot.autoconfigure.jms.JmsAnnotationDrivenConfiguration"})
+        excludeName = {"org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration"})
 @ComponentScan(basePackages = {"org.openhubframework.openhub.common",
         "org.openhubframework.openhub.core", "org.openhubframework.openhub.test"},
         excludeFilters = @ComponentScan.Filter(

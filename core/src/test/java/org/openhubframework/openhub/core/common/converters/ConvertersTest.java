@@ -18,11 +18,10 @@ package org.openhubframework.openhub.core.common.converters;
 
 import static org.junit.Assert.assertEquals;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.joda.time.Duration;
-import org.joda.time.Seconds;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -40,6 +39,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.rules.SpringClassRule;
 import org.springframework.test.context.junit4.rules.SpringMethodRule;
 
+import org.openhubframework.openhub.common.time.Seconds;
 import org.openhubframework.openhub.core.config.ConverterAutoConfiguration;
 
 
@@ -87,17 +87,16 @@ public class ConvertersTest {
     @Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                { "105", Seconds.class, Seconds.seconds(105) },
-                { "PT107S", Seconds.class, Seconds.seconds(107) },
-                { 108, Seconds.class, Seconds.seconds(108) },
-                { "1090", Duration.class, Duration.millis(1090) },
-                { 1099L, Duration.class, Duration.millis(1099) },
-                { "PT72.345S", Duration.class, Duration.millis(72345) },
+                { "105", Seconds.class, Seconds.of(105) },
+                { "PT107S", Duration.class, Duration.ofSeconds(107) },
+                { 108, Seconds.class, Seconds.of(108) },
+                { 1099L, Duration.class, Duration.ofMillis(1099) },
+                { "PT72.345S", Duration.class, Duration.ofMillis(72345) },
 
-                { Seconds.seconds(123), Integer.class, 123 },
-                { Seconds.seconds(177), String.class, "177" },
-                { Duration.millis(1099), Long.class, 1099L },
-                { Duration.millis(45230), String.class, "45230" }
+                { Seconds.of(123), Integer.class, 123 },
+                { Seconds.of(177), String.class, "177" },
+                { Duration.ofMillis(1099), Long.class, 1099L },
+                { Duration.ofMillis(45230), String.class, "PT45.23S" }
         });
     }
 

@@ -19,7 +19,6 @@ package org.openhubframework.openhub.core.common.asynch.repair;
 import static org.openhubframework.openhub.api.configuration.CoreProps.ASYNCH_REPAIR_REPEAT_TIME_SEC;
 
 import org.apache.camel.spring.SpringRouteBuilder;
-import org.joda.time.Seconds;
 import org.quartz.SimpleTrigger;
 import org.springframework.context.annotation.Profile;
 
@@ -29,6 +28,7 @@ import org.openhubframework.openhub.api.entity.ExternalCallStateEnum;
 import org.openhubframework.openhub.api.route.AbstractBasicRoute;
 import org.openhubframework.openhub.api.route.CamelConfiguration;
 import org.openhubframework.openhub.common.Profiles;
+import org.openhubframework.openhub.common.time.Seconds;
 
 
 /**

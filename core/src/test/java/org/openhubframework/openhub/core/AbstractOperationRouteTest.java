@@ -23,6 +23,9 @@ import static org.hamcrest.CoreMatchers.startsWith;
 import static org.junit.Assert.assertThat;
 
 import java.io.StringWriter;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -36,7 +39,6 @@ import org.apache.camel.builder.AdviceWithRouteBuilder;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.model.RouteDefinition;
-import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -226,7 +228,7 @@ public abstract class AbstractOperationRouteTest extends AbstractCoreDbTest {
      */
     protected <T> T sendAsyncInMessage(String requestXML, MsgStateEnum finalState, Class<T> responseClass) throws Exception {
         String correlationID = UUID.randomUUID().toString();
-        return sendAsyncInMessage(correlationID, DateTime.now(), requestXML, getMessageStateVerifier(finalState), responseClass);
+        return sendAsyncInMessage(correlationID, Instant.now(), requestXML, getMessageStateVerifier(finalState), responseClass);
     }
 
     /**
@@ -240,7 +242,7 @@ public abstract class AbstractOperationRouteTest extends AbstractCoreDbTest {
      */
     protected <T> T sendAsyncInMessage(String requestXML, MessageCallback messageVerifier, Class<T> responseClass) throws Exception {
         String correlationID = UUID.randomUUID().toString();
-        return sendAsyncInMessage(correlationID, DateTime.now(), requestXML, messageVerifier, responseClass);
+        return sendAsyncInMessage(correlationID, Instant.now(), requestXML, messageVerifier, responseClass);
     }
 
     /**
@@ -254,7 +256,7 @@ public abstract class AbstractOperationRouteTest extends AbstractCoreDbTest {
      * @return the response parsed from XML as the specified responseClass
      * @throws AssertionError if the message state doesn't match the specified state
      */
-    protected <T> T sendAsyncInMessage(String correlationID, DateTime msgTimestamp, String requestXML,
+    protected <T> T sendAsyncInMessage(String correlationID, Instant msgTimestamp, String requestXML,
                                        MessageCallback messageVerifier, Class<T> responseClass) throws Exception {
         Exchange result = sendAsyncInMessage(correlationID, msgTimestamp, requestXML);
         Exception exception = result.getException();
@@ -290,7 +292,7 @@ public abstract class AbstractOperationRouteTest extends AbstractCoreDbTest {
      * @param responseClass the response class to parse response XML as
      * @return the response parsed from XML as the specified responseClass
      */
-    protected <T> T sendAsyncInMessage(String correlationID, DateTime msgTimestamp, String requestXML, Class<T> responseClass) throws Exception {
+    protected <T> T sendAsyncInMessage(String correlationID, Instant msgTimestamp, String requestXML, Class<T> responseClass) throws Exception {
         return sendAsyncInMessage(correlationID, msgTimestamp, requestXML, getMessageStateVerifier(null), responseClass);
     }
 
@@ -299,7 +301,7 @@ public abstract class AbstractOperationRouteTest extends AbstractCoreDbTest {
      *
      * @return the result as an exchange with getOut() containing the output message
      */
-    protected Exchange sendAsyncInMessage(final String correlationID, final DateTime timestamp, final String payload) {
+    protected Exchange sendAsyncInMessage(final String correlationID, final Instant timestamp, final String payload) {
         Exchange result = producer.request(URI_ASYNC_IN_ROUTE, new Processor() {
             @Override
             public void process(Exchange exchange) throws Exception {
@@ -338,12 +340,12 @@ public abstract class AbstractOperationRouteTest extends AbstractCoreDbTest {
      * @return the {@link Message} that was sent and processed
      * @throws AssertionError if the message state doesn't match the specified state
      */
-    protected Message sendAsyncOutMessage(final String correlationID, final DateTime msgTimestamp,
+    protected Message sendAsyncOutMessage(final String correlationID, final Instant msgTimestamp,
             final String requestXML, MsgStateEnum finalState) throws Exception {
         return sendAsyncOutMessage(new MessageCallback() {
             @Override
             public void beforeInsert(Message message, int order) {
-                message.setMsgTimestamp(msgTimestamp.toDate());
+                message.setMsgTimestamp(msgTimestamp);
                 message.setCorrelationId(correlationID);
                 message.setPayload(requestXML);
             }
@@ -379,8 +381,8 @@ public abstract class AbstractOperationRouteTest extends AbstractCoreDbTest {
                 message.setSourceSystem(getSourceSystem());
                 message.setService(getService());
                 message.setOperationName(getOperationName());
-                message.setMsgTimestamp(DateTime.now().toDate());
-                message.setReceiveTimestamp(DateTime.now().toDate());
+                message.setMsgTimestamp(Instant.now());
+                message.setReceiveTimestamp(Instant.now());
                 message.setCorrelationId(UUID.randomUUID().toString());
 
                 initializer.beforeInsert(message, 0); // let the provided initializer init the other fields
@@ -411,7 +413,7 @@ public abstract class AbstractOperationRouteTest extends AbstractCoreDbTest {
      * @param requestXML    the request payload (XML) to send
      * @return the {@link Message} that was sent and processed
      */
-    protected Message sendAsyncOutMessage(String correlationID, DateTime msgTimestamp, String requestXML) throws Exception {
+    protected Message sendAsyncOutMessage(String correlationID, Instant msgTimestamp, String requestXML) throws Exception {
         return sendAsyncOutMessage(correlationID, msgTimestamp, requestXML, null);
     }
 
@@ -479,11 +481,11 @@ public abstract class AbstractOperationRouteTest extends AbstractCoreDbTest {
         }
     }
 
-    private Map<String, Object> createTraceHeader(String correlationID, DateTime timestamp) {
+    private Map<String, Object> createTraceHeader(String correlationID, Instant timestamp) {
         TraceIdentifier traceId = new TraceIdentifier();
         traceId.setCorrelationID(correlationID);
         traceId.setApplicationID(getApplicationID());
-        traceId.setTimestamp(timestamp);
+        traceId.setTimestamp(OffsetDateTime.ofInstant(timestamp, ZoneId.systemDefault()));
 
         TraceHeader traceHeader = new TraceHeader();
         traceHeader.setTraceIdentifier(traceId);
@@ -505,11 +507,11 @@ public abstract class AbstractOperationRouteTest extends AbstractCoreDbTest {
         return createMessage(getSourceSystem(), getService(), getOperationName(), requestXML);
     }
 
-    public Map<String, Object> createHeaders(String correlationID, String applicationID, DateTime timestamp) {
+    public Map<String, Object> createHeaders(String correlationID, String applicationID, Instant timestamp) {
         TraceIdentifier traceId = new TraceIdentifier();
         traceId.setCorrelationID(correlationID);
         traceId.setApplicationID(applicationID);
-        traceId.setTimestamp(timestamp);
+        traceId.setTimestamp(OffsetDateTime.ofInstant(timestamp, ZoneId.systemDefault()));
 
         TraceHeader traceHeader = new TraceHeader();
         traceHeader.setTraceIdentifier(traceId);

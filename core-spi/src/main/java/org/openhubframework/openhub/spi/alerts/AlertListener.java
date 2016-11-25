@@ -27,6 +27,7 @@ public interface AlertListener {
     /**
      * Does this listener support the specified alert?
      *
+     * @param alert that is activated
      * @return {@code true} if specified alert is supported by this listener otherwise {@code false}
      * @see CoreAlertsEnum
      */

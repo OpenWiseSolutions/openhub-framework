@@ -21,15 +21,15 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 
-import org.joda.time.Seconds;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
+import org.openhubframework.openhub.common.time.Seconds;
 import org.openhubframework.openhub.core.AbstractCoreDbTest;
 import org.openhubframework.openhub.spi.msg.MessageService;
 import org.openhubframework.openhub.test.data.ErrorTestEnum;
@@ -165,7 +165,7 @@ public class MessageServiceTest extends AbstractCoreDbTest {
 
         assertThat(messageService.getCountMessages(MsgStateEnum.CANCEL, null), is(2));
         assertThat(messageService.getCountMessages(MsgStateEnum.PROCESSING, null), is(0));
-        assertThat(messageService.getCountMessages(MsgStateEnum.CANCEL, Seconds.seconds(60)), is(2));
+        assertThat(messageService.getCountMessages(MsgStateEnum.CANCEL, Seconds.of(60).toDuration()), is(2));
     }
 
     @Test
@@ -203,12 +203,12 @@ public class MessageServiceTest extends AbstractCoreDbTest {
                 message.setFunnelValue("funnel");
                 message.setFunnelComponentId("funnelComp");
                 message.setState(MsgStateEnum.WAITING);
-                message.setStartProcessTimestamp(new Date());
+                message.setStartProcessTimestamp(Instant.now());
             }
         });
 
         // verify
-        int count = messageService.getCountProcessingMessagesForFunnel("funnel", Seconds.seconds(60), "funnelComp");
+        int count = messageService.getCountProcessingMessagesForFunnel("funnel", Seconds.of(60).toDuration(), "funnelComp");
         assertThat(count, is(1));
     }
 

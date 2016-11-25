@@ -16,10 +16,13 @@
 
 package org.openhubframework.openhub.component.asynchchild;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.endsWith;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import java.util.Date;
+import java.time.Instant;
 
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Produce;
@@ -62,7 +65,7 @@ public class AsynchChildComponentTest extends AbstractComponentsDbTest {
 
     @Before
     public void prepareMessage() throws Exception {
-        Date currDate = new Date();
+        Instant currDate = Instant.now();
 
         msg = new Message();
         msg.setState(MsgStateEnum.PROCESSING);

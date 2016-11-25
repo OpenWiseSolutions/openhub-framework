@@ -20,10 +20,15 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.junit.Assume.assumeThat;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
+import java.util.TimeZone;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -42,95 +47,110 @@ public class DateCompatibilityTest {
 
     @Before
     public void setDefaultTimeZone() {
-        DateTimeZone.setDefault(DateTimeZone.forID(TIMEZONE_PRAGUE));
+        TimeZone.setDefault(TimeZone.getTimeZone(TIMEZONE_PRAGUE));
     }
 
     @Test
     public void testXmlConversion() {
-        assumeThat(DateTimeZone.getDefault().getID(), is(TIMEZONE_PRAGUE));
+        assumeThat(TimeZone.getDefault().getID(), is(TIMEZONE_PRAGUE));
 
-        DateTime xmlDate = JaxbDateAdapter.parseDateTime("2013-10-05T00:00:00.000+02:00");
-        assertThat(JaxbDateAdapter.printDateTime(xmlDate), is("2013-10-05T00:00:00.000+02:00"));
+        // xs:datetime - http://books.xmlschemata.org/relaxng/ch19-77049.html
+        //Valid values for xsd:dateTime include: 2001-10-26T21:32:52, 2001-10-26T21:32:52+02:00, 2001-10-26T19:32:52Z,
+        //  2001-10-26T19:32:52+00:00, -2001-10-26T21:32:52, or 2001-10-26T21:32:52.12679.
 
-        xmlDate = JaxbDateAdapter.parseDateTime("2013-10-05T00:00:00.000"); // default time zone - CEST
-        assertThat(JaxbDateAdapter.printDateTime(xmlDate), is("2013-10-05T00:00:00.000+02:00"));
+        //The following values are invalid: 2001-10-26 (all the parts must be specified),
+        // 2001-10-26T21:32 (all the parts must be specified), 2001-10-26T25:32:52+02:00 (the hours part—25—is out of range),
+        // or 01-10-26T21:32 (all the parts must be specified).
 
-        xmlDate = JaxbDateAdapter.parseDateTime("2013-10-05T00:00:00Z");
-        assertThat(JaxbDateAdapter.printDateTime(xmlDate), is("2013-10-05T02:00:00.000+02:00"));
+        assertValidXmlDateTime("2013-10-05T00:00:00.000+02:00", "2013-10-05T00:00:00+02:00");
+        assertValidXmlDateTime("2013-10-05T00:00:00", "2013-10-05T00:00:00+01:00");
+        assertValidXmlDateTime("2013-10-05T00:00:00Z", "2013-10-05T00:00:00Z");
+        assertValidXmlDateTime("2001-10-26T21:32:52.12679", "2001-10-26T21:32:52.12679+01:00");
+        assertValidXmlDateTime("2001-10-26T21:32", "2001-10-26T21:32:00+01:00");
 
-        xmlDate = JaxbDateAdapter.parseDateTime("2013-10-05");
-        assertThat(JaxbDateAdapter.printDateTime(xmlDate), is("2013-10-05T00:00:00.000+02:00"));
+        assertWrongXmlDateTime("2013-10-05");
+        assertWrongXmlDateTime("2001-10-26T25:32:52+02:00");
 
-        xmlDate = JaxbDateAdapter.parseDate("2013-10-05");
-        assertThat(JaxbDateAdapter.printDate(xmlDate), startsWith("2013-10-05+02:00"));
+        OffsetDateTime xmlDate = JaxbDateAdapter.parseDate("2013-10-05");
+        assertThat(JaxbDateAdapter.printDate(xmlDate), startsWith("2013-10-05+01:00"));
+    }
+
+    private void assertValidXmlDateTime(String xml, String printedDate) {
+        OffsetDateTime xmlDate = JaxbDateAdapter.parseDateTime(xml);
+        assertThat(JaxbDateAdapter.printDateTime(xmlDate), is(printedDate));
+    }
+
+    private void assertWrongXmlDateTime(String xml) {
+        try {
+            JaxbDateAdapter.parseDateTime(xml);
+            fail("Date '" + xml + "' is not valid according to xs:datetime specification");
+        } catch (DateTimeParseException ex) {
+            // it's ok
+        }
     }
 
     @Test
     public void testConversionToUTC() {
-        assumeThat(DateTimeZone.getDefault().getID(), is(TIMEZONE_PRAGUE));
+        assumeThat(TimeZone.getDefault().getID(), is(TIMEZONE_PRAGUE));
 
-        DateTime xmlDate = JaxbDateAdapter.parseDateTime("2013-10-05T00:00:00.000+02:00");
+        OffsetDateTime xmlDate = JaxbDateAdapter.parseDateTime("2013-10-05T00:00:00.000+02:00");
 
         // change time zone to UTC (instant is still the same)
-        DateTime utcDate = xmlDate.withZone(DateTimeZone.UTC);
+        OffsetDateTime utcDate = xmlDate.withOffsetSameInstant(ZoneOffset.UTC);
 
-        assertThat(JaxbDateAdapter.printDateTime(xmlDate), is("2013-10-05T00:00:00.000+02:00"));
-        assertThat(JaxbDateAdapter.printDateTime(utcDate), is("2013-10-05T00:00:00.000+02:00"));
-        assertThat(utcDate.isEqual(xmlDate), is(true));
-        assertThat(utcDate.toDate().equals(xmlDate.toDate()), is(true));
+        assertThat(JaxbDateAdapter.printDateTime(xmlDate), is("2013-10-05T00:00:00+02:00"));
+        assertThat(JaxbDateAdapter.printDateTime(utcDate), is("2013-10-04T22:00:00Z"));
+        assertThat(utcDate.toInstant().equals(xmlDate.toInstant()), is(true));
+        assertThat(utcDate.equals(xmlDate), is(false));
 
         // converts to UTC
         utcDate = Tools.toUTC(xmlDate);
-        assertThat(JaxbDateAdapter.printDateTime(utcDate), is("2013-10-04T22:00:00.000+02:00"));
-        assertThat(utcDate.isEqual(xmlDate), is(false));
-        assertThat(utcDate.isBefore(xmlDate), is(true));
-        assertThat(utcDate.toDate().equals(xmlDate.toDate()), is(false));
+        assertThat(JaxbDateAdapter.printDateTime(utcDate), is("2013-10-04T22:00:00Z"));
+        assertThat(utcDate.toInstant().equals(xmlDate.toInstant()), is(true));
 
         // converts back to local time
-        DateTime localDt = Tools.fromUTC(utcDate);
+        OffsetDateTime localDt = Tools.fromUTC(utcDate);
         assertThat(localDt.isEqual(xmlDate), is(true));
 
-        localDt = Tools.fromUTC(utcDate.getMillis());
+        localDt = Tools.fromUTC(utcDate.toInstant().toEpochMilli());
         assertThat(localDt.isEqual(xmlDate), is(true));
     }
 
     @Test
     public void testDateConversionToUTC() {
-        assumeThat(DateTimeZone.getDefault().getID(), is("Europe/Prague"));
+        assumeThat(TimeZone.getDefault().getID(), is(TIMEZONE_PRAGUE));
 
         // with timezone
-        DateTime xmlDate = JaxbDateAdapter.parseDate("2013-10-05+02:00");
+        OffsetDateTime xmlDate = JaxbDateAdapter.parseDate("2013-10-05+02:00");
         assertNotNull(xmlDate);
 
         // change time zone to UTC (instant is still the same)
-        DateTime utcDate = xmlDate.withZone(DateTimeZone.UTC);
+        OffsetDateTime utcDate = xmlDate.withOffsetSameInstant(ZoneOffset.UTC);
 
         assertThat(JaxbDateAdapter.printDate(xmlDate), is("2013-10-05+02:00"));
-        assertThat(JaxbDateAdapter.printDate(utcDate), is("2013-10-04+00:00")); // ???
+        assertThat(JaxbDateAdapter.printDate(utcDate), is("2013-10-04Z"));
         assertThat(utcDate.isEqual(xmlDate), is(true));
-        assertThat(utcDate.toDate().equals(xmlDate.toDate()), is(true));
+        assertThat(utcDate.toInstant().equals(xmlDate.toInstant()), is(true));
 
         // without timezone
         xmlDate = JaxbDateAdapter.parseDate("2013-10-05");
 
-        assertThat(JaxbDateAdapter.printDate(xmlDate), startsWith("2013-10-05+02:00"));
+        assertThat(JaxbDateAdapter.printDate(xmlDate), startsWith("2013-10-05+01:00"));
 
         // converts to UTC
-        DateTime localDate = new DateTime(2013, 10, 5, 0, 0, DateTimeZone.forID(TIMEZONE_PRAGUE));
-        utcDate = Tools.toUTC(localDate); // 2012-10-05 22:00 (UTC time zone)
-        assertThat(JaxbDateAdapter.printDateTime(utcDate), is("2013-10-04T22:00:00.000+02:00")); // default timezone
-        assertThat(utcDate.isEqual(xmlDate), is(false));
-        assertThat(utcDate.isBefore(xmlDate), is(true));
-        assertThat(utcDate.isBefore(localDate), is(true));
-        assertThat(utcDate.toDate().equals(xmlDate.toDate()), is(false));
+        OffsetDateTime localDate = OffsetDateTime.of(2013, 10, 5, 0, 0, 0, 0, ZoneOffset.from(ZonedDateTime.now()));
+        utcDate = Tools.toUTC(localDate); // 2013-10-04 23:00 (UTC time zone)
+        assertThat(JaxbDateAdapter.printDateTime(utcDate), is("2013-10-04T23:00:00Z")); // default timezone
+        assertThat(utcDate.toInstant().equals(localDate.toInstant()), is(true));
+        assertThat(utcDate.toInstant().equals(xmlDate.toInstant()), is(true));
 
         // converts back to local time
-        DateTime localDt = Tools.fromUTC(utcDate);
+        OffsetDateTime localDt = Tools.fromUTC(utcDate);
         // utcDate: 2013-10-04T20:00:00.000Z, localDate: 2013-10-05T00:00:00.000+02:00, localDt: 2013-10-05T00:00:00.000+02:00
         assertThat(localDt.isEqual(localDate), is(true));
         assertThat(localDt.toInstant(), is(localDate.toInstant()));
 
-        localDt = Tools.fromUTC(utcDate.getMillis());
+        localDt = Tools.fromUTC(utcDate.toInstant().toEpochMilli());
         assertThat(localDt.isEqual(localDate), is(true));
     }
 }

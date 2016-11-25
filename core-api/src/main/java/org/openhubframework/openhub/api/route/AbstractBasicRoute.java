@@ -20,7 +20,11 @@ import java.util.Set;
 import javax.annotation.Nullable;
 import javax.xml.namespace.QName;
 
-import org.apache.camel.*;
+import org.apache.camel.Exchange;
+import org.apache.camel.Handler;
+import org.apache.camel.Header;
+import org.apache.camel.LoggingLevel;
+import org.apache.camel.ValidationException;
 import org.apache.camel.processor.DefaultExchangeFormatter;
 import org.apache.camel.spi.EventNotifier;
 import org.apache.camel.spring.SpringRouteBuilder;
@@ -29,13 +33,18 @@ import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
-
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
 import org.openhubframework.openhub.api.entity.ExternalSystemExtEnum;
 import org.openhubframework.openhub.api.entity.ServiceExtEnum;
-import org.openhubframework.openhub.api.exception.*;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.api.exception.BusinessException;
+import org.openhubframework.openhub.api.exception.LockFailureException;
+import org.openhubframework.openhub.api.exception.MultipleDataFoundException;
+import org.openhubframework.openhub.api.exception.NoDataFoundException;
+import org.openhubframework.openhub.api.exception.ValidationIntegrationException;
 
 
 /**
@@ -93,7 +102,7 @@ public abstract class AbstractBasicRoute extends SpringRouteBuilder {
     /**
      * Defines global (better to say semi-global because it's scoped for one route builder) exception policy
      * and common error handling.
-     * <p/>
+     * <p>
      * Default implementation catches common {@link Exception} and if it's synchronous message
      * (see {@link AsynchConstants#ASYNCH_MSG_HEADER}) then redirect to {@link AsynchConstants#URI_EX_TRANSLATION}.
      * If it's asynchronous message then determines according to exception's type if redirect to
@@ -203,6 +212,10 @@ public abstract class AbstractBasicRoute extends SpringRouteBuilder {
 
     /**
      * Shorthand for {@link #getOutWsUri(String, String, String)}.
+     *
+     * @param connectionUri the URI connection
+     * @param messageSenderRef the reference of message sender
+     * @return URI of WS compliant with SOAP 1.1 version
      */
     protected String getOutWsUri(String connectionUri, String messageSenderRef) {
         return getOutWsUri(connectionUri, messageSenderRef, null);
@@ -210,6 +223,10 @@ public abstract class AbstractBasicRoute extends SpringRouteBuilder {
 
     /**
      * Shorthand for {@link #getOutWsSoap12Uri(String, String, String)}.
+     * 
+     * @param connectionUri the URI connection
+     * @param messageSenderRef the reference of message sender
+     * @return URI of WS compliant with SOAP 1.2 version
      */
     protected String getOutWsSoap12Uri(String connectionUri, String messageSenderRef) {
         return wsUriBuilder.getOutWsSoap12Uri(connectionUri, messageSenderRef, null);
@@ -244,7 +261,7 @@ public abstract class AbstractBasicRoute extends SpringRouteBuilder {
      *
      * @return from URI
      * @param qName the operation QName (namespace + local part)
-     * @param params the endpoint URI parameters (without leading signs ? or &)
+     * @param params the endpoint URI parameters (without leading signs ? or &amp;)
      */
     protected String getInWsUri(QName qName, @Nullable String params) {
         return wsUriBuilder.getInWsUri(qName, RouteConstants.ENDPOINT_MAPPING_BEAN, params);
@@ -314,7 +331,7 @@ public abstract class AbstractBasicRoute extends SpringRouteBuilder {
 
     /**
      * Adds new event notifier.
-     * <p/>
+     * <p>
      * Use manual adding via this method or use {@link EventNotifier} annotation
      * for automatic registration. Don't use both.
      *
@@ -330,6 +347,7 @@ public abstract class AbstractBasicRoute extends SpringRouteBuilder {
      * Returns bean by its type from registry.
      *
      * @param type the type of the registered bean
+     * @param <T> as class of type
      * @return bean of specified type
      */
     protected final <T> T getBean(Class<T> type) {
@@ -342,7 +360,7 @@ public abstract class AbstractBasicRoute extends SpringRouteBuilder {
 
     /**
      * Returns class name of the route implementation class.
-     * <p/>
+     * <p>
      * This is because of using {@code bean(this, "createResponseForGetCounterData")} - if there is no toString()
      * method then {@link StackOverflowError} is thrown.
      *

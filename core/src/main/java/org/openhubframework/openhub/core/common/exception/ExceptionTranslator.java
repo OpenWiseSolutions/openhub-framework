@@ -37,20 +37,20 @@ import org.springframework.ws.client.WebServiceIOException;
  * Custom error codes from {@link IntegrationException}s are preferred to default error codes in exceptions.
  * But error codes defined via {@link AsynchConstants#EXCEPTION_ERROR_CODE} are preferred to exceptions at all.
  *
- * <p/>
+ * <p>
  * Example of the generated SOAP fault response:
  * <pre>
-    &lt;SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
-    &lt;SOAP-ENV:Header/>
-    &lt;SOAP-ENV:Body>
-       &lt;SOAP-ENV:Fault>
-          &lt;faultcode>SOAP-ENV:Server</faultcode>
-          &lt;faultstring xml:lang="en">E102: the validation error (PredicateValidationException: Validation failed
+    &lt;SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"&gt;
+    &lt;SOAP-ENV:Header/&gt;
+    &lt;SOAP-ENV:Body&gt;
+       &lt;SOAP-ENV:Fault&gt;
+          &lt;faultcode&gt;SOAP-ENV:Server&lt;/faultcode&gt;
+          &lt;faultstring xml:lang="en"&gt;E102: the validation error (PredicateValidationException: Validation failed
             for Predicate[header{header(chargingKey)} is not null]. Exchange[SpringWebserviceMessage[SaajSoapMessage
-            {http://openhubframework.org/ws/SubscriberService-v1}getCounterDataRequest]] )</faultstring>
-       &lt;/SOAP-ENV:Fault>
-    &lt;/SOAP-ENV:Body>
-    &lt;/SOAP-ENV:Envelope>
+            {http://openhubframework.org/ws/SubscriberService-v1}getCounterDataRequest]] )&lt;/faultstring&gt;
+       &lt;/SOAP-ENV:Fault&gt;
+    &lt;/SOAP-ENV:Body&gt;
+    &lt;/SOAP-ENV:Envelope&gt;
  * </pre>
  *
  * @author Petr Juza

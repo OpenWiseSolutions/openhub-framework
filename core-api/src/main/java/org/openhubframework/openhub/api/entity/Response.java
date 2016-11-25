@@ -16,7 +16,7 @@
 
 package org.openhubframework.openhub.api.entity;
 
-import java.util.Date;
+import java.time.Instant;
 import javax.annotation.Nullable;
 import javax.persistence.*;
 
@@ -63,7 +63,7 @@ public class Response implements HumanReadable {
     private String failedReason;
 
     @Column(name = "res_timestamp", nullable = true)
-    private Date resTimestamp;
+    private Instant resTimestamp;
 
     @Column(name = "failed", nullable = false)
     private boolean failed;
@@ -88,7 +88,7 @@ public class Response implements HumanReadable {
         Assert.isTrue(StringUtils.isNotEmpty(response) || StringUtils.isNotEmpty(failedReason),
                 "response or failedReason must not be empty");
 
-        Date currDate = new Date();
+        Instant currDate = Instant.now();
 
         Response res = new Response();
         res.setRequest(request);
@@ -161,11 +161,11 @@ public class Response implements HumanReadable {
      *
      * @return timestamp
      */
-    public Date getResTimestamp() {
+    public Instant getResTimestamp() {
         return resTimestamp;
     }
 
-    public void setResTimestamp(Date resTimestamp) {
+    public void setResTimestamp(Instant resTimestamp) {
         Assert.notNull(resTimestamp, "resTimestamp must not be null");
 
         this.resTimestamp = resTimestamp;

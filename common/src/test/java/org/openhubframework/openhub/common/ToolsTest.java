@@ -23,11 +23,11 @@ import static org.junit.Assert.assertNull;
 import static org.openhubframework.openhub.common.Tools.fm;
 import static org.openhubframework.openhub.common.Tools.joinNonEmpty;
 
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import javax.xml.namespace.QName;
 
 import org.hamcrest.CoreMatchers;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -93,17 +93,16 @@ public class ToolsTest{
 
     @Test
     public void testUtc() {
-        DateTime localDate = new DateTime(2013, 10, 5, 23, 0,
-                DateTimeZone.getDefault());
-        DateTime utcDate = Tools.toUTC(localDate); // 2012-10-05 21:00 (UTC time zone)
+        OffsetDateTime localDate = OffsetDateTime.of(2013, 10, 5, 23, 0, 0, 0, ZoneOffset.ofHours(1));
+        OffsetDateTime utcDate = Tools.toUTC(localDate); // 2012-10-05 21:00 (UTC time zone)
 
         // converts back to local time
-        DateTime localDt = Tools.fromUTC(utcDate);
+        OffsetDateTime localDt = Tools.fromUTC(utcDate);
         // utcDate: 2013-10-04T20:00:00.000Z, localDate: 2013-10-05T00:00:00.000+02:00, localDt: 2013-10-05T00:00:00.000+02:00
         assertThat(localDt.isEqual(localDate), is(true));
         assertThat(localDt.toInstant(), is(localDate.toInstant()));
 
-        localDt = Tools.fromUTC(utcDate.getMillis());
+        localDt = Tools.fromUTC(utcDate.toInstant().toEpochMilli());
         assertThat(localDt.isEqual(localDate), is(true));
     }
 

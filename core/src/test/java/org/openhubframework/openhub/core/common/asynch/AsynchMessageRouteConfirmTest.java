@@ -24,20 +24,17 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 import static org.openhubframework.openhub.api.configuration.CoreProps.ASYNCH_CONFIRMATION_INTERVAL_SEC;
 
-import java.util.Date;
+import java.time.Instant;
 
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.joda.time.Seconds;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
@@ -50,6 +47,7 @@ import org.openhubframework.openhub.api.exception.IntegrationException;
 import org.openhubframework.openhub.api.exception.InternalErrorEnum;
 import org.openhubframework.openhub.api.exception.ValidationIntegrationException;
 import org.openhubframework.openhub.api.route.AbstractBasicRoute;
+import org.openhubframework.openhub.common.time.Seconds;
 import org.openhubframework.openhub.core.AbstractCoreDbTest;
 import org.openhubframework.openhub.core.common.asynch.confirm.ConfirmationPollExecutor;
 import org.openhubframework.openhub.test.data.ExternalSystemTestEnum;
@@ -88,8 +86,8 @@ public class AsynchMessageRouteConfirmTest extends AbstractCoreDbTest {
 
     private String subRouteUri;
 
-    @Autowired
-    private ConfirmationCallback confirmationCallback;
+    @MockBean(name = ConfirmationCallback.BEAN)
+    private ConfirmationCallback confirmationCallbackMock;
 
     @Autowired
     private ConfirmationPollExecutor confirmationExecutor;
@@ -101,20 +99,10 @@ public class AsynchMessageRouteConfirmTest extends AbstractCoreDbTest {
     private ConfigurationItem<Seconds> interval;
 
 
-    @Configuration
-    public static class TestContextConfig {
-
-        @Bean(name = ConfirmationCallback.BEAN)
-        @Primary
-        public ConfirmationCallback mockConfirmationCallback() {
-            return mock(ConfirmationCallback.class);
-        }
-    }
-
     @Before
     public void prepareData() throws Exception {
         // message
-        Date currDate = new Date();
+        Instant currDate = Instant.now();
 
         msg = new Message();
         msg.setState(MsgStateEnum.IN_QUEUE);
@@ -159,8 +147,8 @@ public class AsynchMessageRouteConfirmTest extends AbstractCoreDbTest {
         assertThat(msgDB.getState(), is(MsgStateEnum.OK));
 
         // verify confirmation sent OK
-        verify(confirmationCallback).confirm(msg);
-        verifyNoMoreInteractions(confirmationCallback);
+        verify(confirmationCallbackMock).confirm(msg);
+        verifyNoMoreInteractions(confirmationCallbackMock);
     }
 
     @Test
@@ -181,8 +169,8 @@ public class AsynchMessageRouteConfirmTest extends AbstractCoreDbTest {
         assertThat(msgDB.getState(), is(MsgStateEnum.FAILED));
 
         // verify confirmation sent OK
-        verify(confirmationCallback).confirm(msg);
-        verifyNoMoreInteractions(confirmationCallback);
+        verify(confirmationCallbackMock).confirm(msg);
+        verifyNoMoreInteractions(confirmationCallbackMock);
     }
 
     @Test
@@ -195,7 +183,7 @@ public class AsynchMessageRouteConfirmTest extends AbstractCoreDbTest {
         doThrow(new IntegrationException(InternalErrorEnum.E100, "Simulated Failure ONE")) // fail once
                 .doThrow(new IntegrationException(InternalErrorEnum.E100, "Simulated Failure TWO")) // fail twice
                 .doNothing() // succeed on the 3rd time
-                .when(confirmationCallback).confirm(msg);
+                .when(confirmationCallbackMock).confirm(msg);
 
         // save message into DB
         em.persist(msg);
@@ -214,8 +202,8 @@ public class AsynchMessageRouteConfirmTest extends AbstractCoreDbTest {
         assertThat(msgDB.getState(), is(MsgStateEnum.OK)); // message should stay OK
 
         // verify 2 failures + 1 success and nothing else:
-        verify(confirmationCallback, never()).confirm(null);
-        verify(confirmationCallback, times(3)).confirm(eq(msg));
-        verifyNoMoreInteractions(confirmationCallback);
+        verify(confirmationCallbackMock, never()).confirm(null);
+        verify(confirmationCallbackMock, times(3)).confirm(eq(msg));
+        verifyNoMoreInteractions(confirmationCallbackMock);
     }
 }

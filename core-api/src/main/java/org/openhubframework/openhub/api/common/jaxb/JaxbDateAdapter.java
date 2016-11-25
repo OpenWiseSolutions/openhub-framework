@@ -16,63 +16,91 @@
 
 package org.openhubframework.openhub.api.common.jaxb;
 
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAccessor;
 import javax.annotation.Nullable;
-import javax.xml.bind.DatatypeConverter;
 import javax.xml.datatype.XMLGregorianCalendar;
-
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 
 
 /**
- * JAXB adapter for automatic conversion between {@link XMLGregorianCalendar} to {@link DateTime}.
+ * JAXB adapter for automatic conversion between {@link XMLGregorianCalendar} to {@link OffsetDateTime}.
  *
  * @author Petr Juza
  * @see <a href="http://en.wikipedia.org/wiki/ISO_8601">ISO_8601</a>
  */
 public class JaxbDateAdapter {
 
-    private static final DateTimeFormatter DATE_PRINT_FORMATTER = DateTimeFormat.forPattern("yyyy-MM-ddZZ");
+    // time is set midnight (00:00:00)
+    private static final DateTimeFormatter ISO_OFFSET_DATE_MIDNIGHT = new DateTimeFormatterBuilder()
+            .append(DateTimeFormatter.ISO_OFFSET_DATE)
+            .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
+            .toFormatter();
 
     private JaxbDateAdapter() {
     }
 
     @Nullable
-    public static DateTime parseDate(@Nullable String dateStr) {
+    public static OffsetDateTime parseDate(@Nullable String dateStr) {
         if (dateStr == null) {
             return null;
         }
 
-        return new DateTime(DatatypeConverter.parseDate(dateStr), DateTimeZone.getDefault());
+        // parsing has two steps:
+        //  1) parse date with offset "2013-10-05+02:00"
+        //  2) parse date without offset "2013-10-05"
+        try {
+            return OffsetDateTime.from(ISO_OFFSET_DATE_MIDNIGHT.parse(dateStr));
+        } catch (DateTimeParseException ex) {
+            TemporalAccessor dt = DateTimeFormatter.ISO_DATE.parseBest(dateStr, OffsetDateTime::from, LocalDate::from);
+            if (dt instanceof OffsetDateTime) {
+                return (OffsetDateTime) dt;
+            } else {
+                LocalDateTime ldt = LocalDateTime.of((LocalDate)dt, LocalTime.now());
+                return OffsetDateTime.of(ldt.truncatedTo(ChronoUnit.DAYS), ZoneOffset.from(ZonedDateTime.now()));
+            }
+        }
     }
 
     @Nullable
-    public static String printDate(@Nullable DateTime dt) {
+    public static String printDate(@Nullable OffsetDateTime dt) {
         if (dt == null) {
             return null;
         }
 
-        return DATE_PRINT_FORMATTER.print(dt);
+        return dt.format(DateTimeFormatter.ISO_DATE);
     }
 
     @Nullable
-    public static DateTime parseDateTime(@Nullable String dtStr) {
+    public static OffsetDateTime parseDateTime(@Nullable String dtStr) {
         if (dtStr == null) {
             return null;
         }
 
-        return DateTime.parse(dtStr).withZone(DateTimeZone.getDefault());
+        // An unspecified time zone is exactly that - unspecified. No more, no less. It's not saying it's in UTC,
+        // nor is it saying it's in the local time zone or any other time zone, it's just saying that the time
+        // read from some clock somewhere was that time
+        // see http://stackoverflow.com/questions/20670041/what-is-the-default-time-zone-for-an-xml-schema-datetime-if-not-specified
+        // => we use default time zone to the current time
+
+        TemporalAccessor dt = DateTimeFormatter.ISO_DATE_TIME.parseBest(dtStr, OffsetDateTime::from, LocalDateTime::from);
+        if (dt instanceof OffsetDateTime) {
+            return (OffsetDateTime) dt;
+        } else {
+            return OffsetDateTime.of((LocalDateTime)dt, ZoneOffset.from(ZonedDateTime.now()));
+        }
     }
 
     @Nullable
-    public static String printDateTime(@Nullable DateTime dt) {
+    public static String printDateTime(@Nullable OffsetDateTime dt) {
         if (dt == null) {
             return null;
         }
 
-        return dt.withZone(DateTimeZone.getDefault()).toString(ISODateTimeFormat.dateTime());
+        return dt.format(DateTimeFormatter.ISO_DATE_TIME);
     }
 }

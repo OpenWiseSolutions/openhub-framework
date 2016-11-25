@@ -18,7 +18,7 @@ package org.openhubframework.openhub.api.file;
 
 /**
  * Contract for file content type enums which should be extensible.
- * <p/>
+ * <p>
  * Use {@link #getContentType()}} for equal comparison.
  *
  * @author Petr Juza

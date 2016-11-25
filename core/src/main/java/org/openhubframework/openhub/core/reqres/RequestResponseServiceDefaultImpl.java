@@ -16,7 +16,7 @@
 
 package org.openhubframework.openhub.core.reqres;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 import javax.annotation.Nullable;
 
@@ -32,7 +32,7 @@ import org.openhubframework.openhub.core.common.dao.RequestResponseDao;
 
 /**
  * Default implementation of {@link RequestResponseService} interface.
- * <p/>
+ * <p>
  * Implementation saves directly requests/responses into database in synchronous manner.
  *
  * @author Petr Juza
@@ -66,7 +66,7 @@ public class RequestResponseServiceDefaultImpl implements RequestResponseService
     }
 
     @Override
-    public List<Request> findByCriteria(Date from, Date to, String subUri, String subRequest) {
+    public List<Request> findByCriteria(Instant from, Instant to, String subUri, String subRequest) {
         return requestResponseDao.findByCriteria(from, to, subUri, subRequest);
     }
 }

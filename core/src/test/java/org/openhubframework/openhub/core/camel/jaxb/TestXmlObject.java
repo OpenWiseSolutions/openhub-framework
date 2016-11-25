@@ -16,15 +16,9 @@
 
 package org.openhubframework.openhub.core.camel.jaxb;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.bind.annotation.XmlType;
+import java.time.OffsetDateTime;
+import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-import org.joda.time.DateTime;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {"testDate"})
@@ -33,13 +27,13 @@ public class TestXmlObject {
     @XmlElement(type = String.class)
     @XmlJavaTypeAdapter(ExceptionThrowingDateTimeAdapter.class)
     @XmlSchemaType(name = "date")
-    protected DateTime testDate;
+    protected OffsetDateTime testDate;
 
-    public DateTime getTestDate() {
+    public OffsetDateTime getTestDate() {
         return testDate;
     }
 
-    public void setTestDate(DateTime testDate) {
+    public void setTestDate(OffsetDateTime testDate) {
         this.testDate = testDate;
     }
 }

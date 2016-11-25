@@ -98,10 +98,10 @@ public class AsynchInMessageRoute extends AbstractBasicRoute {
 
     /**
      * Route for incoming asynchronous message input operation.
-     * <p/>
+     * <p>
      * Prerequisite: defined message headers {@link AsynchConstants#SERVICE_HEADER}, {@link AsynchConstants#OPERATION_HEADER}
      *      and optional {@link AsynchConstants#OBJECT_ID_HEADER}
-     * <p/>
+     * <p>
      * Output: {@link CallbackResponse} for OK message or fill {@link AsynchConstants#ERR_CALLBACK_RES_PROP} exchange property
      *      if error occurred
      */

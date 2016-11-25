@@ -39,7 +39,7 @@ import org.openhubframework.openhub.api.route.XPathValidator;
 
 /**
  * Helper class for creating input route for asynch. messages.
- * <p/>
+ * <p>
  * Create new instance with calling
  * {@link #newInstance(ServiceExtEnum, String, String, AsynchResponseProcessor, DataFormatDefinition)} method,
  * sets parameters and finally call {@link #build(RouteBuilder)} method for creating route definition.
@@ -97,6 +97,7 @@ public final class AsynchRouteBuilder {
      * calling {@link AbstractBasicRoute#getInRouteId(ServiceExtEnum, String)}.
      *
      * @param routeId the route ID
+     * @return builder instance
      */
     public AsynchRouteBuilder withRouteId(@Nullable String routeId) {
         this.routeId = routeId;
@@ -107,6 +108,7 @@ public final class AsynchRouteBuilder {
      * Sets array of validators, for example {@link XPathValidator}.
      *
      * @param validator the validator
+     * @return builder instance
      */
     public AsynchRouteBuilder withValidator(@Nullable Processor... validator) {
         this.validators = validator;
@@ -117,6 +119,7 @@ public final class AsynchRouteBuilder {
      * Sets expression for evaluating object ID.
      *
      * @param objectIdExpr expression for evaluating object ID
+     * @return builder instance
      * @see Message#getObjectId()
      */
     public AsynchRouteBuilder withObjectIdExpr(@Nullable Expression objectIdExpr) {
@@ -128,6 +131,7 @@ public final class AsynchRouteBuilder {
      * Sets funnel value.
      *
      * @param funnelValue the funnel value
+     * @return builder instance
      * @see Message#getFunnelValue()
      */
     public AsynchRouteBuilder withFunnelValue(@Nullable Expression funnelValue) {
@@ -137,6 +141,8 @@ public final class AsynchRouteBuilder {
 
     /**
      * Marks the route for processing in guaranteed order by message timestamp.
+     *
+     * @return builder instance
      */
     public AsynchRouteBuilder withGuaranteedOrder() {
         this.guaranteedOrder = true;
@@ -146,6 +152,8 @@ public final class AsynchRouteBuilder {
 
     /**
      * Marks the route for processing in guaranteed order by message timestamp.
+     *
+     * @return builder instance
      */
     public AsynchRouteBuilder withGuaranteedOrderWithoutFailed() {
         this.guaranteedOrder = true;
@@ -158,6 +166,7 @@ public final class AsynchRouteBuilder {
      *
      * @param responseProcessor   the response processor
      * @param responseMarshalling the response marshalling
+     * @return builder instance
      */
     public AsynchRouteBuilder withResponseProcessor(AsynchResponseProcessor responseProcessor,
             DataFormatDefinition responseMarshalling) {
@@ -173,6 +182,7 @@ public final class AsynchRouteBuilder {
      * Sets (Spring bean) reference to policy, e.g. authorization policy.
      *
      * @param policyRef the reference to policy
+     * @return builder instance
      */
     public AsynchRouteBuilder withPolicyRef(@Nullable String policyRef) {
         this.policyRef = policyRef;

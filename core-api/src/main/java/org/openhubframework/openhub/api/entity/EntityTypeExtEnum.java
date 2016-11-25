@@ -18,7 +18,7 @@ package org.openhubframework.openhub.api.entity;
 
 /**
  * Contract for entity type enums which should be extensible.
- * <p/>
+ * <p>
  * Use {@link #getEntityType()}} for equal comparison.
  *
  * @author Petr Juza

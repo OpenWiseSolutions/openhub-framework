@@ -129,7 +129,7 @@ public class MsgFunnelEndpoint extends DefaultEndpoint {
 
     /**
      * Sets flag whether you want to exclude FAILED state from searching messages for guaranteed order.
-     * <p/>
+     * <p>
      * This option has influence only if {@link #isGuaranteedOrder() guaranteed processing order} is enabled.
      *
      * @param excludeFailedState {@code true} if you want to exclude FAILED state

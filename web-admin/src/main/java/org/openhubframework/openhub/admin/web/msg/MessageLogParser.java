@@ -19,7 +19,11 @@ package org.openhubframework.openhub.admin.web.msg;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
 import javax.annotation.Nullable;
 
@@ -39,7 +43,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Parses log file and returns log lines which corresponds with specified correlation ID.
- * <p/>
+ * <p>
  * Prerequisites/known limitations:
  * <ul>
  *     <li>application logs in DEBUG level
@@ -77,7 +81,7 @@ public class MessageLogParser {
      * @return log lines
      * @throws IOException when error occurred during file reading
      */
-    List<String> getLogLines(String correlationId, Date logDate) throws IOException {
+    List<String> getLogLines(String correlationId, Instant logDate) throws IOException {
         File logFolder = new File(logFolderPath);
         if (!logFolder.exists() || !logFolder.canRead()) {
             throw new FileNotFoundException("there is no readable log folder - " + logFolderPath);

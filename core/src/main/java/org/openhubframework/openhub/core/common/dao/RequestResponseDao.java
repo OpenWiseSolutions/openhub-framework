@@ -16,7 +16,7 @@
 
 package org.openhubframework.openhub.core.common.dao;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 import javax.annotation.Nullable;
 
@@ -68,5 +68,5 @@ public interface RequestResponseDao {
      * @param subRequest the substring of request content
      * @return list of {@link Request}
      */
-    List<Request> findByCriteria(Date from, Date to, @Nullable String subUri, @Nullable String subRequest);
+    List<Request> findByCriteria(Instant from, Instant to, @Nullable String subUri, @Nullable String subRequest);
 }

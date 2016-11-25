@@ -23,7 +23,7 @@ import org.openhubframework.openhub.api.entity.MsgStateEnum;
 
 /**
  * Exception indicates error during validation.
- * <p/>
+ * <p>
  * If there is validation error than there is no next try, message gets to {@link MsgStateEnum#FAILED FAILED state}.
  *
  * @author Petr Juza

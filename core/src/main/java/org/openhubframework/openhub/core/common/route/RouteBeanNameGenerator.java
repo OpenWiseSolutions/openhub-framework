@@ -35,13 +35,13 @@ import org.openhubframework.openhub.api.route.CamelConfiguration;
  * {@link BeanNameGenerator} implementation for bean classes annotated with the
  * {@link CamelConfiguration @CamelConfiguration} annotation.
  *
- * <p/>
+ * <p>
  * Derives a default bean name from the given bean definition.
  * The default implementation simply builds a decapitalized version of the short class name
  * plus add constant for input/output module and finally adds suffix "{@value #BEAN_SUFFIX}":
- * e.g. <pre class="code">"com.example.modules.in.account.CreateCustomerAccountRoute" -> "createCustomerAccountRouteInBean".</pre>
+ * e.g. <pre class="code">"com.example.modules.in.account.CreateCustomerAccountRoute" -&gt; "createCustomerAccountRouteInBean".</pre>
  *
- * <p/>
+ * <p>
  * If final bean name (defined or generated) is not unique then exception is thrown.
  * See {@code context:component-scan} how to use it.
  *

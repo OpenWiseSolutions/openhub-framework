@@ -21,7 +21,6 @@ import static org.openhubframework.openhub.api.configuration.CoreProps.ASYNCH_PO
 
 import javax.annotation.Nullable;
 
-import org.joda.time.Seconds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +30,7 @@ import org.openhubframework.openhub.api.configuration.ConfigurableValue;
 import org.openhubframework.openhub.api.configuration.ConfigurationItem;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.exception.LockFailureException;
+import org.openhubframework.openhub.common.time.Seconds;
 import org.openhubframework.openhub.spi.msg.MessageService;
 
 
@@ -87,11 +87,11 @@ public class MessagesPoolImpl implements MessagesPool {
 
     @Nullable
     private Message findPostponedMessage() {
-        return messageService.findPostponedMessage(postponedInterval.getValue());
+        return messageService.findPostponedMessage(postponedInterval.getValue().toDuration());
     }
 
     @Nullable
     private Message findPartlyFailedMessage() {
-        return messageService.findPartlyFailedMessage(partlyFailedInterval.getValue());
+        return messageService.findPartlyFailedMessage(partlyFailedInterval.getValue().toDuration());
     }
 }

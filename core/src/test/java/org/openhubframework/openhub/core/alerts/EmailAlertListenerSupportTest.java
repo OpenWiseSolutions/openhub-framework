@@ -16,16 +16,12 @@
 
 package org.openhubframework.openhub.core.alerts;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import org.openhubframework.openhub.api.common.EmailService;
 import org.openhubframework.openhub.core.AbstractCoreTest;
@@ -38,24 +34,13 @@ import org.openhubframework.openhub.spi.alerts.AlertInfo;
  * @author Petr Juza
  * @since 2.0
  */
-@ContextConfiguration
 public class EmailAlertListenerSupportTest extends AbstractCoreTest {
 
     @Autowired
     private EmailAlertListenerSupport alertListener;
 
-    @Autowired
+    @MockBean
     private EmailService emailServiceMock;
-
-    @Configuration
-    public static class TestContextConfig {
-
-        @Bean
-        @Primary
-        public EmailService emailService() {
-            return mock(EmailService.class);
-        }
-    }
 
     @Test
     public void testOnAlert() {

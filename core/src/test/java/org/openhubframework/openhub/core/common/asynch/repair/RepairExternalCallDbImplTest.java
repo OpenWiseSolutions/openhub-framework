@@ -20,9 +20,10 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
-import org.joda.time.DateTime;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,7 +104,7 @@ public class RepairExternalCallDbImplTest extends AbstractCoreDbTest {
 
                     extCalls[i] = ExternalCall.createProcessingCall(
                             "direct:someOperation", UUID.randomUUID().toString(), message);
-                    extCalls[i].setLastUpdateTimestamp(DateTime.now().minusHours(1).toDate());
+                    extCalls[i].setLastUpdateTimestamp(Instant.now().minus(1, ChronoUnit.HOURS));
                     em.persist(message);
                     em.persist(extCalls[i]);
                 }

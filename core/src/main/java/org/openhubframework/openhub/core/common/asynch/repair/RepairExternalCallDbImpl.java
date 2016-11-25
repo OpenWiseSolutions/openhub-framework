@@ -21,7 +21,6 @@ import static org.openhubframework.openhub.api.configuration.CoreProps.ASYNCH_RE
 
 import java.util.List;
 
-import org.joda.time.Seconds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +36,7 @@ import org.openhubframework.openhub.api.configuration.ConfigurableValue;
 import org.openhubframework.openhub.api.configuration.ConfigurationItem;
 import org.openhubframework.openhub.api.entity.ExternalCall;
 import org.openhubframework.openhub.api.entity.ExternalCallStateEnum;
+import org.openhubframework.openhub.common.time.Seconds;
 import org.openhubframework.openhub.core.common.dao.ExternalCallDao;
 
 /**
@@ -91,7 +91,7 @@ public class RepairExternalCallDbImpl implements RepairExternalCallService {
             @Override
             @SuppressWarnings("unchecked")
             public List<ExternalCall> doInTransaction(TransactionStatus status) {
-                return externalCallDao.findProcessingExternalCalls(repeatInterval.getValue());
+                return externalCallDao.findProcessingExternalCalls(repeatInterval.getValue().toDuration());
             }
         });
     }

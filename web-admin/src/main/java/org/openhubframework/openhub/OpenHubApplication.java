@@ -18,14 +18,14 @@ package org.openhubframework.openhub;
 
 import javax.servlet.Filter;
 
-import org.springframework.boot.actuate.system.ApplicationPidFileWriter;
-import org.springframework.boot.actuate.system.EmbeddedServerPortFileWriter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.context.web.ErrorPageFilter;
-import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.boot.system.ApplicationPidFileWriter;
+import org.springframework.boot.system.EmbeddedServerPortFileWriter;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.support.ErrorPageFilter;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.*;
 import org.springframework.web.WebApplicationInitializer;
@@ -57,7 +57,7 @@ import org.openhubframework.openhub.core.config.WebServiceConfig;
  * @see JpaConfig
  * @since 2.0
  */
-@EnableAutoConfiguration
+@EnableAutoConfiguration(excludeName = {"org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration"})
 @EnableCaching
 @EnableConfigurationProperties
 // note: all routes with @CamelConfiguration are configured in CamelRoutesConfig
@@ -73,7 +73,6 @@ import org.openhubframework.openhub.core.config.WebServiceConfig;
                 @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = CamelConfiguration.class)
         })
 @Configuration
-@ImportResource("classpath:sp_camelContext.xml")
 @PropertySource(value = {"classpath:/extensions.cfg"})
 // WebApplicationInitializer must be implemented directly because of Weblogic support
 // see https://docs.spring.io/spring-boot/docs/current/reference/html/howto-traditional-deployment.html#howto-weblogic

@@ -20,7 +20,6 @@ import static org.openhubframework.openhub.api.configuration.CoreProps.ASYNCH_PA
 
 import org.apache.camel.Handler;
 import org.apache.camel.spring.SpringRouteBuilder;
-import org.joda.time.Seconds;
 import org.quartz.SimpleTrigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +31,7 @@ import org.openhubframework.openhub.api.entity.MsgStateEnum;
 import org.openhubframework.openhub.api.route.AbstractBasicRoute;
 import org.openhubframework.openhub.api.route.CamelConfiguration;
 import org.openhubframework.openhub.common.Profiles;
+import org.openhubframework.openhub.common.time.Seconds;
 import org.openhubframework.openhub.core.common.asynch.repair.RepairProcessingMsgRoute;
 import org.openhubframework.openhub.core.common.asynch.stop.StopService;
 

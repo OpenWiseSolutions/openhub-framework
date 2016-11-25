@@ -16,7 +16,7 @@
 
 package org.openhubframework.openhub.admin.dao;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 
 import org.openhubframework.openhub.admin.dao.dto.MessageReportDto;
@@ -37,6 +37,6 @@ public interface MessageReportDao {
      * @param endDate End date (ends at 23.59)
      * @return result list {@link MessageReportDto}
      */
-    List<MessageReportDto> getMessageStateSummary(Date startDate, Date endDate);
+    List<MessageReportDto> getMessageStateSummary(Instant startDate, Instant endDate);
 
 }

@@ -16,9 +16,14 @@
 
 package org.openhubframework.openhub.core.common.asynch.repair;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,7 +31,6 @@ import java.util.List;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.joda.time.DateTime;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,9 +100,9 @@ public class RepairMessageServiceDbImplTest extends AbstractCoreDbTest {
             public void beforeInsert(Message message, int order) {
                 message.setState(MsgStateEnum.PROCESSING);
                 message.setFailedCount(2);
-                message.setMsgTimestamp(DateTime.now().minusHours(1).toDate());
-                message.setStartProcessTimestamp(DateTime.now().minusHours(1).toDate());
-                message.setLastUpdateTimestamp(DateTime.now().minusHours(1).toDate());
+                message.setMsgTimestamp(Instant.now().minus(1, ChronoUnit.HOURS));
+                message.setStartProcessTimestamp(Instant.now().minus(1, ChronoUnit.HOURS));
+                message.setLastUpdateTimestamp(Instant.now().minus(1, ChronoUnit.HOURS));
             }
         })[0];
 
@@ -134,9 +138,9 @@ public class RepairMessageServiceDbImplTest extends AbstractCoreDbTest {
             @Override
             public void beforeInsert(Message message, int order) {
                 message.setState(state);
-                message.setMsgTimestamp(DateTime.now().minusHours(1).toDate());
-                message.setStartProcessTimestamp(DateTime.now().minusHours(1).toDate());
-                message.setLastUpdateTimestamp(DateTime.now().minusHours(1).toDate());
+                message.setMsgTimestamp(Instant.now().minus(1, ChronoUnit.HOURS));
+                message.setStartProcessTimestamp(Instant.now().minus(1, ChronoUnit.HOURS));
+                message.setLastUpdateTimestamp(Instant.now().minus(1, ChronoUnit.HOURS));
             }
         });
     }
