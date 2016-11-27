@@ -45,7 +45,7 @@ import org.openhubframework.openhub.core.common.asynch.msg.MsgPriorityComparator
 /**
  * Camel configuration.
  *
- * @author <a href="mailto:petr.juza@openwise.cz">Petr Juza</a>
+ * @author Petr Juza
  * @since 2.0
  */
 @Configuration
@@ -65,6 +65,7 @@ public class CamelConfig {
               LoggingErrorHandlerBuilder handlerBuilder = new LoggingErrorHandlerBuilder();
               handlerBuilder.logName("org.openhubframework.openhub.core");
               camelContext.setErrorHandlerBuilder(handlerBuilder);
+              camelContext.setHandleFault(true);
 
               // default thread profile (see DefaultExecutorServiceManager for defaults)
               ThreadPoolProfile threadPoolProfile = camelContext.getExecutorServiceManager()

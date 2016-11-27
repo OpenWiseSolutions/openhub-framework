@@ -1,3 +1,3 @@
 Initialization SQL scripts for specific databases.
 
-There is main database script and then increment scripts for each version.
+There is main database script and further increment scripts for each version.

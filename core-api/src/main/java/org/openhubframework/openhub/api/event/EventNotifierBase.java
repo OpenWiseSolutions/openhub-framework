@@ -73,6 +73,11 @@ public abstract class EventNotifierBase<T extends EventObject> extends EventNoti
 	}
 
     @Override
+    protected void doStart() throws Exception {
+        super.doStart();
+    }
+
+    @Override
     public final void setCamelContext(CamelContext camelContext) {
         Assert.notNull(camelContext, "camelContext must not be null");
 

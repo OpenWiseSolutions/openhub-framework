@@ -22,7 +22,7 @@ import org.openhubframework.openhub.api.asynch.AsynchConstants;
 /**
  * Common constants regarding to route implementation.
  *
- * @author <a href="mailto:petr.juza@openwise.cz">Petr Juza</a>
+ * @author Petr Juza
  * @see AsynchConstants
  * @since 2.0
  */

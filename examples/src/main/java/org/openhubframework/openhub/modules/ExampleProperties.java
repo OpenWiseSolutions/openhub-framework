@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 /**
  * Module "example" properties.
  *
- * @author <a href="mailto:petr.juza@openwise.cz">Petr Juza</a>
+ * @author Petr Juza
  * @since 2.0
  */
 @Component

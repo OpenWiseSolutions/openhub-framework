@@ -28,7 +28,7 @@ import org.springframework.xml.xsd.XsdSchema;
 /**
  * Web services configuration for module Examples.
  *
- * @author <a href="mailto:petr.juza@openwise.cz">Petr Juza</a>
+ * @author Petr Juza
  * @since 2.0
  */
 @Configuration

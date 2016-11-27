@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * Default users properties.
  *
- * @author <a href="mailto:petr.juza@openwise.cz">Petr Juza</a>
+ * @author Petr Juza
  * @since 2.0
  */
 @Configuration

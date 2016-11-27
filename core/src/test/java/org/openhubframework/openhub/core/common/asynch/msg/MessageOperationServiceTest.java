@@ -22,13 +22,12 @@ import static org.junit.Assert.assertThat;
 
 import java.util.concurrent.CountDownLatch;
 
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
 import org.openhubframework.openhub.core.AbstractCoreDbTest;
-
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 
 
 /**
@@ -36,7 +35,6 @@ import org.springframework.test.context.ContextConfiguration;
  *
  * @author Petr Juza
  */
-@ContextConfiguration(locations = {"classpath:/org/openhubframework/openhub/core/camel/common/asynch/msg/test-context.xml"})
 public class MessageOperationServiceTest extends AbstractCoreDbTest {
 
     @Autowired

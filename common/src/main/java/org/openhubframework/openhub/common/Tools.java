@@ -74,7 +74,7 @@ public final class Tools {
         StringBuilder sb = new StringBuilder();
 
         for (String str : array) {
-            if (StringUtils.isNotEmpty(str)) {
+            if (StringUtils.isNotBlank(str)) {
                 if (!somethingAdded) {
                     somethingAdded = true;
                 } else {

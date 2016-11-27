@@ -21,10 +21,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-import org.openhubframework.openhub.api.exception.NoDataFoundException;
-import org.openhubframework.openhub.core.AbstractCoreTest;
-import org.openhubframework.openhub.test.ActiveRoutes;
-
 import org.apache.camel.CamelExecutionException;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Produce;
@@ -34,7 +30,13 @@ import org.apache.camel.component.mock.MockEndpoint;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+
+import org.openhubframework.openhub.api.exception.NoDataFoundException;
+import org.openhubframework.openhub.core.AbstractCoreTest;
+import org.openhubframework.openhub.test.route.ActiveRoutes;
 
 
 /**
@@ -43,7 +45,6 @@ import org.springframework.test.context.ContextConfiguration;
  * @author Petr Juza
  */
 @ActiveRoutes(classes = ContextCallRoute.class)
-@ContextConfiguration(locations = {"classpath:/org/openhubframework/openhub/core/camel/common/contextcall/test-context.xml"})
 public class ContextCallRouteTest extends AbstractCoreTest {
 
     private static final String CALL_ID = "callId";
@@ -56,6 +57,16 @@ public class ContextCallRouteTest extends AbstractCoreTest {
 
     @Autowired
     private ContextCallRegistry callRegistry;
+
+    @Configuration
+    public static class TestContextConfig {
+
+        @Bean
+        @Primary
+        public TestService mockConfirmationCallback() {
+            return new TestService();
+        }
+    }
 
     @Before
     public void prepareRoutes() throws Exception {

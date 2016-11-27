@@ -1,4 +1,4 @@
-OpenHub integration framework - examples
+OpenHub integration framework - example module
 ====================================================================
 
 

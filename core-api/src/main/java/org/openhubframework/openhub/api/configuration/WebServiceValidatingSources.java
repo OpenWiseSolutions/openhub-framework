@@ -22,7 +22,7 @@ import org.springframework.core.io.Resource;
 /**
  * Contract for definition of XSD schemas for header and payload validation.
  *
- * @author <a href="mailto:petr.juza@openwise.cz">Petr Juza</a>
+ * @author Petr Juza
  * @since 2.0
  */
 public interface WebServiceValidatingSources {

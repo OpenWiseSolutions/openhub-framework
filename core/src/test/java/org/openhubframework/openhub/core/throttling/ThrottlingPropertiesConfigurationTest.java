@@ -20,6 +20,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
+import java.util.Properties;
+
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.PropertiesPropertySource;
+
+import org.openhubframework.openhub.core.AbstractCoreTest;
 import org.openhubframework.openhub.spi.throttling.ThrottleProps;
 import org.openhubframework.openhub.spi.throttling.ThrottleScope;
 
@@ -29,40 +37,46 @@ import org.openhubframework.openhub.spi.throttling.ThrottleScope;
  *
  * @author Petr Juza
  */
-public class ThrottlingPropertiesConfigurationTest {
+public class ThrottlingPropertiesConfigurationTest extends AbstractCoreTest {
 
-    //TODO PJUZA correct unit tests for properties
-//    @Test
-//    public void testConf() {
-//        // prepare properties
-//        String prefix = ThrottlingPropertiesConfiguration.PROPERTY_PREFIX;
-//        Properties props = new Properties();
-//        props.put(ThrottlingPropertiesConfiguration.DEFAULT_LIMIT_PROP, "5");
-//        props.put(ThrottlingPropertiesConfiguration.DEFAULT_INTERVAL_PROP, "15");
-//
-//        props.put(prefix + "crm.op1", "10");
-//        props.put(prefix + "crm.op2", "10/70");
-//        props.put(prefix + "billing.*", "50");
-//        props.put(prefix + "*.sendSms", "100");
-//        props.put(prefix + "*.sendSms", "100/6");
-//
-//        // create configuration
-//        ThrottlingPropertiesConfiguration conf = new ThrottlingPropertiesConfiguration(props);
-//
-//        // verify
-//        assertThrottleProp(conf, "crm", "op1", 10, 15);
-//        assertThrottleProp(conf, "crm", "op2", 10, 70);
-//        assertThrottleProp(conf, "crm", ThrottleScope.ANY_SERVICE, 10, 15);
-//        assertThrottleProp(conf, "crm", "sendSms", 100, 6);
-//
-//        assertThrottleProp(conf, "billing", ThrottleScope.ANY_SERVICE, 50, 15);
-//        assertThrottleProp(conf, "billing", "activateSubscriber", 50, 15);
-//
-//        assertThrottleProp(conf, "billing", "sendSmsWithParams", 50, 15);
-//        assertThrottleProp(conf, ThrottleScope.ANY_SOURCE_SYSTEM, "sendSms", 100, 6);
-//
-//        assertThrottleProp(conf, "erp", "createDeposit", 5, 15);
-//    }
+    @Autowired
+    private ConfigurableEnvironment env;
+
+    @Test
+    public void testConf() {
+        // prepare properties
+        String prefix = ThrottlingPropertiesConfiguration.PROPERTY_PREFIX;
+        Properties props = new Properties();
+        props.put(ThrottlingPropertiesConfiguration.DEFAULT_LIMIT_PROP, "5");
+        props.put(ThrottlingPropertiesConfiguration.DEFAULT_INTERVAL_PROP, "15");
+
+        props.put(prefix + "crm.op1", "10");
+        props.put(prefix + "crm.op2", "10/70");
+        props.put(prefix + "billing.*", "50");
+        props.put(prefix + "*.sendSms", "100");
+        props.put(prefix + "*.sendSms", "100/6");
+
+        env.getPropertySources().addFirst(new PropertiesPropertySource("throttling-test", props));
+
+        // create configuration
+        ThrottlingPropertiesConfiguration conf = new ThrottlingPropertiesConfiguration();
+        setPrivateField(conf, "env", env);
+        conf.initProps();
+
+        // verify
+        assertThrottleProp(conf, "crm", "op1", 10, 15);
+        assertThrottleProp(conf, "crm", "op2", 10, 70);
+        assertThrottleProp(conf, "crm", ThrottleScope.ANY_SERVICE, 10, 15);
+        assertThrottleProp(conf, "crm", "sendSms", 100, 6);
+
+        assertThrottleProp(conf, "billing", ThrottleScope.ANY_SERVICE, 50, 15);
+        assertThrottleProp(conf, "billing", "activateSubscriber", 50, 15);
+
+        assertThrottleProp(conf, "billing", "sendSmsWithParams", 50, 15);
+        assertThrottleProp(conf, ThrottleScope.ANY_SOURCE_SYSTEM, "sendSms", 100, 6);
+
+        assertThrottleProp(conf, "erp", "createDeposit", 5, 15);
+    }
 
     private void assertThrottleProp(ThrottlingPropertiesConfiguration conf, String sourceSystem, String serviceName,
                                     int expLimit, int expInterval) {

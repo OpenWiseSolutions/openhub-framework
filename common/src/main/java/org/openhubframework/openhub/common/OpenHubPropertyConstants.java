@@ -19,7 +19,7 @@ package org.openhubframework.openhub.common;
 /**
  * OpenHub constants used to uniform access to OpenHub properties.
  *
- * @author <a href="mailto:petr.juza@openwise.cz">Petr Juza</a>
+ * @author Petr Juza
  * @since 2.0
  */
 public class OpenHubPropertyConstants {

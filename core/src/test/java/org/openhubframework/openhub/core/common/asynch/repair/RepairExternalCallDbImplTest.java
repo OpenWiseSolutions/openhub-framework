@@ -24,12 +24,10 @@ import java.util.UUID;
 
 import org.joda.time.DateTime;
 import org.junit.Test;
-import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionCallback;
@@ -48,7 +46,6 @@ import org.openhubframework.openhub.test.ServiceTestEnum;
  * Tests {@link RepairExternalCallDbImpl}
  */
 @Transactional
-@ContextConfiguration(loader = SpringockitoContextLoader.class)
 public class RepairExternalCallDbImplTest extends AbstractCoreDbTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(RepairExternalCallDbImpl.class);
@@ -95,7 +92,7 @@ public class RepairExternalCallDbImplTest extends AbstractCoreDbTest {
     }
 
     private ExternalCall[] createAndSaveExternalCalls(final int quantity) {
-        TransactionTemplate tx = new TransactionTemplate(jpaTransactionManager);
+        TransactionTemplate tx = new TransactionTemplate(transactionManager);
         return tx.execute(new TransactionCallback<ExternalCall[]>() {
             @Override
             public ExternalCall[] doInTransaction(TransactionStatus status) {

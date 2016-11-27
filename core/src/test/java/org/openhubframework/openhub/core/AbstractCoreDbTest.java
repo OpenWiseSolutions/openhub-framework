@@ -28,7 +28,7 @@ import org.openhubframework.openhub.api.asynch.model.TraceIdentifier;
 import org.openhubframework.openhub.core.common.asynch.AsynchInMessageRoute;
 import org.openhubframework.openhub.core.common.asynch.TraceHeaderProcessor;
 import org.openhubframework.openhub.test.AbstractDbTest;
-import org.openhubframework.openhub.test.ActiveRoutes;
+import org.openhubframework.openhub.test.route.ActiveRoutes;
 
 
 /**
@@ -36,9 +36,8 @@ import org.openhubframework.openhub.test.ActiveRoutes;
  *
  * @author Petr Juza
  */
-@ContextConfiguration(locations = {"classpath:/META-INF/test_core_db_conf.xml", "classpath:/META-INF/sp_async.xml"})
-//sp_async.xml = externalCallService, confirmationService, partlyFailedMessagesPool, ...
-@ActiveRoutes(classes = {AsynchInMessageRoute.class})
+@ActiveRoutes(classes = AsynchInMessageRoute.class)
+@ContextConfiguration(classes = CoreTestConfig.class)
 public abstract class AbstractCoreDbTest extends AbstractDbTest {
 
     private TraceHeader traceHeader;

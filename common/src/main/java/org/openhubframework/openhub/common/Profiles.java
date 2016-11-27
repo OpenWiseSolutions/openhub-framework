@@ -19,7 +19,7 @@ package org.openhubframework.openhub.common;
 /**
  * Defines Spring profile constants.
  *
- * @author <a href="mailto:petr.juza@openwise.cz">Petr Juza</a>
+ * @author Petr Juza
  * @since 2.0
  */
 public final class Profiles {

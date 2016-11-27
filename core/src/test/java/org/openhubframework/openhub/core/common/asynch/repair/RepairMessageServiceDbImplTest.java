@@ -27,11 +27,9 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.joda.time.DateTime;
 import org.junit.Test;
-import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
@@ -45,7 +43,6 @@ import org.openhubframework.openhub.core.common.dao.MessageDao;
  * Tests {@link RepairMessageServiceDbImpl}
  */
 @Transactional
-@ContextConfiguration(loader = SpringockitoContextLoader.class)
 public class RepairMessageServiceDbImplTest extends AbstractCoreDbTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(RepairMessageServiceDbImplTest.class);

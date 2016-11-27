@@ -18,20 +18,30 @@ package org.openhubframework.openhub.test;
 
 import static org.openhubframework.openhub.api.route.RouteConstants.WS_AUTH_POLICY;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.concurrent.TimeUnit;
+
+import org.apache.camel.CamelContext;
+import org.apache.camel.spring.boot.CamelConfigurationProperties;
+import org.apache.camel.spring.boot.CamelContextConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.HttpEncodingAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.MultipartAutoConfiguration;
 import org.springframework.boot.autoconfigure.websocket.WebSocketAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RestController;
 
 import org.openhubframework.openhub.common.AutoConfiguration;
+import org.openhubframework.openhub.test.route.ActiveRoutesCollector;
 
 
 /**
@@ -42,12 +52,14 @@ import org.openhubframework.openhub.common.AutoConfiguration;
         &#064;SpringApplicationConfiguration(classes = {TestConfig.class, TestAopConfig.class})
  * </pre>
  *
- * @author <a href="mailto:petr.juza@openwise.cz">Petr Juza</a>
+ * @author Petr Juza
  * @since 2.0
  */
 @Configuration
 @EnableAutoConfiguration(exclude = {WebSocketAutoConfiguration.class, MultipartAutoConfiguration.class,
-        JacksonAutoConfiguration.class, HttpEncodingAutoConfiguration.class})
+        JacksonAutoConfiguration.class, HttpEncodingAutoConfiguration.class},
+        excludeName = {"org.springframework.boot.autoconfigure.cache.RedisCacheConfiguration",
+                "org.springframework.boot.autoconfigure.jms.JmsAnnotationDrivenConfiguration"})
 @ComponentScan(basePackages = {"org.openhubframework.openhub.common",
         "org.openhubframework.openhub.core", "org.openhubframework.openhub.test"},
         excludeFilters = @ComponentScan.Filter(
@@ -59,6 +71,33 @@ public class TestConfig {
     @Bean(name = WS_AUTH_POLICY)
     public DummyPolicy dummyPolicy() {
         return new DummyPolicy();
+    }
+
+    @Bean
+    public ActiveRoutesCollector activeRoutesCollector(ApplicationContext applicationContext, CamelConfigurationProperties config) {
+        Assert.notNull(config, "config must not be null");
+
+        Collection<CamelContextConfiguration> configurations
+                = applicationContext.getBeansOfType(CamelContextConfiguration.class).values();
+        return new ActiveRoutesCollector(applicationContext, new ArrayList<>(configurations), config);
+    }
+
+    @Bean
+    public CamelContextConfiguration testContextConfiguration() {
+      return new CamelContextConfiguration() {
+
+          @Override
+          public void beforeApplicationStart(CamelContext camelContext) {
+              camelContext.getShutdownStrategy().setTimeout(1); // no shutdown timeout:
+              camelContext.getShutdownStrategy().setTimeUnit(TimeUnit.NANOSECONDS);
+              camelContext.getShutdownStrategy().setShutdownNowOnTimeout(true); // no pending exchanges
+          }
+
+          @Override
+          public void afterApplicationStart(CamelContext camelContext) {
+              // nothing to set
+          }
+      };
     }
 }
 

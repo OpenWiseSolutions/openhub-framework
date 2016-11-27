@@ -21,19 +21,15 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-import org.openhubframework.openhub.core.AbstractCoreTest;
-import org.openhubframework.openhub.test.ActiveRoutes;
-
-import org.apache.camel.CamelExecutionException;
-import org.apache.camel.EndpointInject;
-import org.apache.camel.Exchange;
-import org.apache.camel.Produce;
-import org.apache.camel.ProducerTemplate;
+import org.apache.camel.*;
 import org.apache.camel.builder.AdviceWithRouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.openhubframework.openhub.core.AbstractCoreTest;
+import org.openhubframework.openhub.test.route.ActiveRoutes;
 
 
 /**

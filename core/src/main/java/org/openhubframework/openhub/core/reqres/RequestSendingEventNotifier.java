@@ -118,11 +118,7 @@ public class RequestSendingEventNotifier extends EventNotifierBase<ExchangeSendi
         Assert.hasText(endpointURI, "the endpointURI must be defined");
 
         Matcher matcher = pattern.matcher(endpointURI);
-        if (matcher.matches()) {
-            return true;
-        }
-
-        return false;
+        return matcher.matches();
     }
 
     /**

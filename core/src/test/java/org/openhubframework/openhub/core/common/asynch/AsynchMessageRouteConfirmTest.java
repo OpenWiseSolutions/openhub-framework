@@ -21,13 +21,23 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.*;
 
 import java.util.Date;
+
+import org.apache.camel.EndpointInject;
+import org.apache.camel.Produce;
+import org.apache.camel.ProducerTemplate;
+import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.mock.MockEndpoint;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.transaction.annotation.Transactional;
 
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
 import org.openhubframework.openhub.api.asynch.confirm.ConfirmationCallback;
@@ -39,23 +49,9 @@ import org.openhubframework.openhub.api.exception.ValidationIntegrationException
 import org.openhubframework.openhub.api.route.AbstractBasicRoute;
 import org.openhubframework.openhub.core.AbstractCoreDbTest;
 import org.openhubframework.openhub.core.common.asynch.confirm.ConfirmationPollExecutor;
-import org.openhubframework.openhub.test.ActiveRoutes;
 import org.openhubframework.openhub.test.ExternalSystemTestEnum;
 import org.openhubframework.openhub.test.ServiceTestEnum;
-
-import org.apache.camel.EndpointInject;
-import org.apache.camel.Produce;
-import org.apache.camel.ProducerTemplate;
-import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.mock.MockEndpoint;
-import org.junit.Before;
-import org.junit.Test;
-import org.kubek2k.springockito.annotations.ReplaceWithMock;
-import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.transaction.annotation.Transactional;
+import org.openhubframework.openhub.test.route.ActiveRoutes;
 
 
 /**
@@ -64,7 +60,6 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Petr Juza
  */
 @ActiveRoutes(classes = AsynchMessageRoute.class)
-@ContextConfiguration(loader = SpringockitoContextLoader.class)
 @Transactional
 public class AsynchMessageRouteConfirmTest extends AbstractCoreDbTest {
 
@@ -91,7 +86,6 @@ public class AsynchMessageRouteConfirmTest extends AbstractCoreDbTest {
     private String subRouteUri;
 
     @Autowired
-    @ReplaceWithMock
     private ConfirmationCallback confirmationCallback;
 
     @Autowired
@@ -102,6 +96,17 @@ public class AsynchMessageRouteConfirmTest extends AbstractCoreDbTest {
      */
     @Value("${asynch.confirmation.interval}")
     private int interval;
+
+
+    @Configuration
+    public static class TestContextConfig {
+
+        @Bean(name = ConfirmationCallback.BEAN)
+        @Primary
+        public ConfirmationCallback mockConfirmationCallback() {
+            return mock(ConfirmationCallback.class);
+        }
+    }
 
     @Before
     public void prepareData() throws Exception {

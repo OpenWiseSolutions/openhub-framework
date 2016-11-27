@@ -72,7 +72,7 @@ public class ThrottlingPropertiesConfiguration extends AbstractThrottlingConfigu
      * Initializes configuration from properties.
      */
     @PostConstruct
-    private void initProps() {
+    void initProps() {
         Assert.notNull(env, "env must not be null");
 
         // extracts relevant property values

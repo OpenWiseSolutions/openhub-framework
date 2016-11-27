@@ -27,6 +27,8 @@ import org.apache.camel.builder.RouteBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.PropertiesPropertySource;
 import org.springframework.util.Assert;
 
 import org.openhubframework.openhub.api.entity.Message;
@@ -45,12 +47,16 @@ import org.openhubframework.openhub.test.ExternalSystemTestEnum;
  */
 public class ThrottleMsgProcessorTest extends AbstractCoreTest {
 
+    private static final String THROTTLING_PROPS_NAME = "throttling-test";
+
     @Produce(uri = "direct:start")
     private ProducerTemplate producer;
 
     @Autowired
     private ThrottlingProcessor throttlingProcessor;
 
+    @Autowired
+    private ConfigurableEnvironment env;
 
     @Before
     public void prepareConfiguration() {
@@ -60,11 +66,19 @@ public class ThrottleMsgProcessorTest extends AbstractCoreTest {
         props.put(prefix + "*.sendSms", "2/10");
         props.put(prefix + "crm.createCustomer", "2/10");
 
-        // create configuration
-        //TODO PJUZA correct unit tests for properties
-        ThrottlingPropertiesConfiguration conf = new ThrottlingPropertiesConfiguration();
+        env.getPropertySources().addFirst(new PropertiesPropertySource(THROTTLING_PROPS_NAME, props));
+
+        // configure
+        ThrottlingPropertiesConfiguration conf = initThrottlingConf();
 
         setPrivateField(throttlingProcessor, "configuration", conf);
+    }
+
+    private ThrottlingPropertiesConfiguration initThrottlingConf() {
+        ThrottlingPropertiesConfiguration conf = new ThrottlingPropertiesConfiguration();
+        setPrivateField(conf, "env", env);
+        conf.initProps();
+        return conf;
     }
 
     @Test
@@ -100,7 +114,8 @@ public class ThrottleMsgProcessorTest extends AbstractCoreTest {
     @Test
     public void testSyncProcessorWithDefaults() throws Exception {
         // create configuration
-        ThrottlingPropertiesConfiguration confDefaults = new ThrottlingPropertiesConfiguration();
+        env.getPropertySources().remove(THROTTLING_PROPS_NAME);
+        ThrottlingPropertiesConfiguration confDefaults = initThrottlingConf();
 
         setPrivateField(throttlingProcessor, "configuration", confDefaults);
 

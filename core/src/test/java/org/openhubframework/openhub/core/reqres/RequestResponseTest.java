@@ -26,16 +26,24 @@ import static org.springframework.util.StringUtils.hasText;
 
 import java.util.Date;
 import java.util.List;
-
 import javax.annotation.Nullable;
 import javax.persistence.TypedQuery;
 import javax.xml.namespace.QName;
-import javax.xml.soap.MessageFactory;
-import javax.xml.soap.SOAPBody;
-import javax.xml.soap.SOAPEnvelope;
-import javax.xml.soap.SOAPFault;
-import javax.xml.soap.SOAPMessage;
-import javax.xml.soap.SOAPPart;
+import javax.xml.soap.*;
+
+import org.apache.camel.*;
+import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.mock.MockEndpoint;
+import org.custommonkey.xmlunit.Diff;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+import org.springframework.ws.soap.SoapMessage;
+import org.springframework.ws.soap.client.SoapFaultClientException;
+import org.springframework.ws.soap.saaj.SaajSoapMessage;
 
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
 import org.openhubframework.openhub.api.entity.Message;
@@ -46,30 +54,16 @@ import org.openhubframework.openhub.core.AbstractCoreDbTest;
 import org.openhubframework.openhub.test.ExternalSystemTestEnum;
 import org.openhubframework.openhub.test.ServiceTestEnum;
 
-import org.apache.camel.CamelExecutionException;
-import org.apache.camel.EndpointInject;
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
-import org.apache.camel.Produce;
-import org.apache.camel.ProducerTemplate;
-import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.mock.MockEndpoint;
-import org.custommonkey.xmlunit.Diff;
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-import org.springframework.ws.soap.SoapMessage;
-import org.springframework.ws.soap.client.SoapFaultClientException;
-import org.springframework.ws.soap.saaj.SaajSoapMessage;
-
 
 /**
  * Test suite for {@link RequestSendingEventNotifier} and {@link ResponseReceiveEventNotifier}.
  *
  * @author Petr Juza
  */
+//TODO PJUZA correct it when Camel is in version 2.18.0
+//note: we have to use Spring XML configuration of CamelContext because of this error:
+//  https://issues.apache.org/jira/browse/CAMEL-10109
+@ContextConfiguration(locations = "classpath:/org/openhubframework/openhub/core/reqres/test-context.xml")
 public class RequestResponseTest extends AbstractCoreDbTest {
 
     private static final String REQUEST = "request";
@@ -341,7 +335,6 @@ public class RequestResponseTest extends AbstractCoreDbTest {
      *
      * @param targetUri the target URI
      * @param processor the callback response processor
-     * @throws Exception
      */
     private void prepareTargetRoute(final String targetUri, final @Nullable Processor processor) throws Exception {
         Assert.hasText(targetUri, "the targetUri must not be empty");
@@ -349,7 +342,6 @@ public class RequestResponseTest extends AbstractCoreDbTest {
         RouteBuilder route = new RouteBuilder() {
             @Override
             public void configure() throws Exception {
-
                 Processor callbackProcessor = processor;
 
                 if (callbackProcessor == null) {

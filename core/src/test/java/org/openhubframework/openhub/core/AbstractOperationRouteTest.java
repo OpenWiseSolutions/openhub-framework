@@ -26,15 +26,21 @@ import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-
 import javax.annotation.Nullable;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.namespace.QName;
+
+import org.apache.camel.*;
+import org.apache.camel.builder.AdviceWithRouteBuilder;
+import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.mock.MockEndpoint;
+import org.apache.camel.model.RouteDefinition;
+import org.joda.time.DateTime;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
 import org.openhubframework.openhub.api.asynch.model.TraceHeader;
@@ -46,27 +52,9 @@ import org.openhubframework.openhub.api.entity.ServiceExtEnum;
 import org.openhubframework.openhub.api.route.AbstractBasicRoute;
 import org.openhubframework.openhub.core.common.asynch.AsynchMessageRoute;
 import org.openhubframework.openhub.core.common.asynch.TraceHeaderProcessor;
-import org.openhubframework.openhub.core.common.dao.MessageDao;
-import org.openhubframework.openhub.test.ActiveRoutes;
-
-import org.apache.camel.Exchange;
-import org.apache.camel.LoggingLevel;
-import org.apache.camel.Processor;
-import org.apache.camel.Produce;
-import org.apache.camel.ProducerTemplate;
-import org.apache.camel.StringSource;
-import org.apache.camel.builder.AdviceWithRouteBuilder;
-import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.camel.model.RouteDefinition;
-import org.joda.time.DateTime;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
 import org.openhubframework.openhub.core.common.asynch.queue.MessagePollExecutor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
+import org.openhubframework.openhub.core.common.dao.MessageDao;
+import org.openhubframework.openhub.test.route.ActiveRoutes;
 
 
 /**
@@ -80,7 +68,6 @@ import org.springframework.test.context.ContextConfiguration;
  * </ul>
  */
 @ActiveRoutes(classes = {AsynchMessageRoute.class})
-@ContextConfiguration(loader = SpringockitoContextLoader.class)
 public abstract class AbstractOperationRouteTest extends AbstractCoreDbTest {
 
     public static final String URI_ASYNC_IN_ROUTE = "direct:testAsyncInRoute";
@@ -197,7 +184,6 @@ public abstract class AbstractOperationRouteTest extends AbstractCoreDbTest {
      *
      * @param requestXML the request payload (XML) to send
      * @return the result as an exchange with getOut() containing the response message
-     * @throws Exception
      */
     protected Exchange sendSyncMessage(final String requestXML) throws Exception {
         return producer.request(URI_SYNC_ROUTE, new Processor() {
@@ -215,7 +201,6 @@ public abstract class AbstractOperationRouteTest extends AbstractCoreDbTest {
      * @param responseClass {@link String}.class to get the response body as String,
      *                      or the class to unmarshal the response body to using JAXB
      * @return the result as the specified class
-     * @throws Exception
      */
     protected <T> T sendSyncMessage(String requestXML, Class<T> responseClass) throws Exception {
         Exchange result = sendSyncMessage(requestXML);
@@ -237,7 +222,6 @@ public abstract class AbstractOperationRouteTest extends AbstractCoreDbTest {
      * @param finalState    the final state of the {@link Message} created in the DB - for automatic verification
      * @param responseClass the response class to parse response XML as
      * @return the response parsed from XML as the specified responseClass
-     * @throws Exception
      * @throws AssertionError if the message state doesn't match the specified state
      */
     protected <T> T sendAsyncInMessage(String requestXML, MsgStateEnum finalState, Class<T> responseClass) throws Exception {
@@ -252,7 +236,6 @@ public abstract class AbstractOperationRouteTest extends AbstractCoreDbTest {
      * @param messageVerifier the processor that can verify the {@link Message} created in the DB
      * @param responseClass   the response class to parse response XML as
      * @return the response parsed from XML as the specified responseClass
-     * @throws Exception
      * @throws AssertionError if the message state doesn't match the specified state
      */
     protected <T> T sendAsyncInMessage(String requestXML, MessageProcessor messageVerifier, Class<T> responseClass) throws Exception {
@@ -269,7 +252,6 @@ public abstract class AbstractOperationRouteTest extends AbstractCoreDbTest {
      * @param messageVerifier the processor that can verify the {@link Message} created in the DB
      * @param responseClass   the response class to parse response XML as
      * @return the response parsed from XML as the specified responseClass
-     * @throws Exception
      * @throws AssertionError if the message state doesn't match the specified state
      */
     protected <T> T sendAsyncInMessage(String correlationID, DateTime msgTimestamp, String requestXML,
@@ -317,9 +299,7 @@ public abstract class AbstractOperationRouteTest extends AbstractCoreDbTest {
      *
      * @return the result as an exchange with getOut() containing the output message
      */
-    protected Exchange sendAsyncInMessage(final String correlationID,
-                                          final DateTime timestamp,
-                                          final String payload) {
+    protected Exchange sendAsyncInMessage(final String correlationID, final DateTime timestamp, final String payload) {
         Exchange result = producer.request(URI_ASYNC_IN_ROUTE, new Processor() {
             @Override
             public void process(Exchange exchange) throws Exception {
@@ -358,10 +338,8 @@ public abstract class AbstractOperationRouteTest extends AbstractCoreDbTest {
      * @return the {@link Message} that was sent and processed
      * @throws AssertionError if the message state doesn't match the specified state
      */
-    protected Message sendAsyncOutMessage(final String correlationID,
-                                          final DateTime msgTimestamp,
-                                          final String requestXML,
-                                          MsgStateEnum finalState) throws Exception {
+    protected Message sendAsyncOutMessage(final String correlationID, final DateTime msgTimestamp,
+            final String requestXML, MsgStateEnum finalState) throws Exception {
         return sendAsyncOutMessage(new MessageProcessor() {
             @Override
             public void process(Message message) {

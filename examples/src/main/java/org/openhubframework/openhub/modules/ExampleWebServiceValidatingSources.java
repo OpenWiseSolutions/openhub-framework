@@ -26,7 +26,7 @@ import org.openhubframework.openhub.api.configuration.WebServiceValidatingSource
 /**
  * Implementation of {@link WebServiceValidatingSources} interface for example module.
  *
- * @author <a href="mailto:petr.juza@openwise.cz">Petr Juza</a>
+ * @author Petr Juza
  * @since 2.0
  */
 @Component

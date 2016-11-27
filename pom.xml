@@ -187,11 +187,6 @@
 
             <!-- testing -->
             <dependency>
-                <groupId>org.kubek2k</groupId>
-                <artifactId>springockito-annotations</artifactId>
-                <version>1.0.9</version>
-            </dependency>
-            <dependency>
                 <groupId>xmlunit</groupId>
                 <artifactId>xmlunit</artifactId>
                 <version>1.6</version>

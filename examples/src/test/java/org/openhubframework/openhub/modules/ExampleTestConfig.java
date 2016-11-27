@@ -20,9 +20,9 @@ import org.springframework.context.annotation.ComponentScan;
 
 
 /**
- * Configuration for test in "example" module.
+ * Configuration for tests in "example" module.
  *
- * @author <a href="mailto:petr.juza@openwise.cz">Petr Juza</a>
+ * @author Petr Juza
  * @since 2.0
  */
 @ComponentScan(basePackages = {"org.openhubframework.openhub.modules"})

@@ -29,7 +29,7 @@ import org.junit.Test;
 import org.openhubframework.openhub.common.Tools;
 import org.openhubframework.openhub.modules.AbstractExampleModuleTest;
 import org.openhubframework.openhub.modules.in.hello.model.SyncHelloResponse;
-import org.openhubframework.openhub.test.ActiveRoutes;
+import org.openhubframework.openhub.test.route.ActiveRoutes;
 import org.openhubframework.openhub.test.route.TestWsUriBuilder;
 
 

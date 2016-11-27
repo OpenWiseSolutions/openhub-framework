@@ -21,20 +21,18 @@ import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
-import static org.springframework.core.annotation.AnnotationUtils.findAnnotationDeclaringClass;
+import static org.springframework.test.context.TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.apache.camel.RoutesBuilder;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.model.ModelCamelContext;
 import org.apache.camel.model.RouteDefinition;
+import org.apache.camel.test.spring.CamelSpringTestContextLoaderTestExecutionListener;
 import org.custommonkey.xmlunit.*;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matcher;
@@ -42,22 +40,21 @@ import org.hamcrest.core.IsEqual;
 import org.joda.time.ReadableInstant;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.ApplicationContext;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 import org.openhubframework.openhub.api.exception.ErrorExtEnum;
-import org.openhubframework.openhub.api.route.CamelConfiguration;
 import org.openhubframework.openhub.common.Profiles;
 
 
@@ -70,9 +67,11 @@ import org.openhubframework.openhub.common.Profiles;
 @SpringApplicationConfiguration(TestConfig.class)
 @ActiveProfiles(profiles = Profiles.TEST)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@TestExecutionListeners(
+        listeners = CamelSpringTestContextLoaderTestExecutionListener.class,
+        mergeMode = MERGE_WITH_DEFAULTS
+)
 public abstract class AbstractTest {
-
-    private static boolean initAllRoutes = false;
 
     @Autowired
     private ModelCamelContext camelContext;
@@ -88,83 +87,6 @@ public abstract class AbstractTest {
     @After
     public void validateMockito() {
         Mockito.validateMockitoUsage();
-    }
-
-    /**
-     * Sets {@code true} if all routes should be initialized (=added into Camel context).
-     * By default the value is {@code false} - only routes defined in {@link ActiveRoutes} annotation are initialized.
-     * <p/>
-     * Use {@link BeforeClass} annotation for setting this parameter.
-     *
-     * @param initAllRoutes {@code true} for initialization of all routes, otherwise {@code false}
-     */
-    public static void setInitAllRoutes(boolean initAllRoutes) {
-        AbstractTest.initAllRoutes = initAllRoutes;
-    }
-
-    /**
-     * Initializes selected routes for specific test.
-     * Active route definitions are defined via {@link ActiveRoutes} annotation.
-     *
-     * @throws Exception when init fails
-     */
-    @Before
-    public void initRoutes() throws Exception {
-        getCamelContext().getShutdownStrategy().setTimeout(1);// no shutdown timeout:
-        getCamelContext().getShutdownStrategy().setTimeUnit(TimeUnit.NANOSECONDS);
-        getCamelContext().getShutdownStrategy().setShutdownNowOnTimeout(true);// no pending exchanges
-
-        Map<String, Class<RoutesBuilder>> beans = new HashMap<>();
-
-        String[] beanNames = getApplicationContext().getBeanDefinitionNames();
-
-        for (String beanName : beanNames) {
-            Class beanClass = getApplicationContext().getType(beanName);
-
-            if (beanClass.isAnnotationPresent(CamelConfiguration.class)) {
-                beans.put(beanName, beanClass);
-            }
-        }
-
-        Set<Class> activeRoutesClasses = getActiveRoutes();
-
-        for (Map.Entry<String, Class<RoutesBuilder>> entry : beans.entrySet()) {
-
-            for (Class routesClass : activeRoutesClasses) {
-
-                if (entry.getValue().isAssignableFrom(routesClass)) {
-                    getCamelContext().addRoutes((RoutesBuilder)getApplicationContext().getBean(entry.getKey()));
-                }
-            }
-        }
-    }
-
-    /**
-     * Gets set of active route definitions which should be added into Camel context.
-     *
-     * @return set of classes
-     */
-    private Set<Class> getActiveRoutes() {
-        Set<Class> routeClasses = new HashSet<>();
-
-        Class<ActiveRoutes> annotationType = ActiveRoutes.class;
-
-        Class<?> testClass = this.getClass();
-
-        Class<?> declaringClass = AnnotationUtils.findAnnotationDeclaringClass(annotationType, testClass);
-        if (declaringClass == null) {
-            return routeClasses;
-        }
-
-        while (declaringClass != null) {
-            ActiveRoutes activeRoutes = declaringClass.getAnnotation(annotationType);
-
-            routeClasses.addAll(Arrays.asList(activeRoutes.classes()));
-
-            declaringClass = findAnnotationDeclaringClass(annotationType, declaringClass.getSuperclass());
-        }
-
-        return routeClasses;
     }
 
     /**
@@ -209,8 +131,9 @@ public abstract class AbstractTest {
      * @throws org.xml.sax.SAXException can be thrown when creating {@link Diff} (e.g., if the provided XML is invalid)
      * @throws java.io.IOException      can be thrown when creating {@link Diff}
      */
-    public static void assertXMLEqualWithInnerXML(String control, String test, final String innerXmlXpathLocation) 
+    public static void assertXMLEqualWithInnerXML(String control, String test, final String innerXmlXpathLocation)
             throws SAXException, IOException {
+
         Diff myDiff = new Diff(control, test);
         myDiff.overrideDifferenceListener(new DifferenceListener() {
             @Override
@@ -287,7 +210,9 @@ public abstract class AbstractTest {
      * @return processor that throws specified exception
      */
     protected static Processor throwException(final Exception exc) {
-        return new Processor(){
+        Assert.notNull(exc, "exc must not be null");
+
+        return new Processor() {
             @Override
             public void process(Exchange exchange) throws Exception {
                 throw exc;
@@ -318,12 +243,11 @@ public abstract class AbstractTest {
      */
     protected MockEndpoint mockDirect(final String uri, final String routeId) throws Exception {
         // precaution: check that URI can be mocked by just providing the other side:
-        org.junit.Assert.assertThat(uri,
-                anyOf(
-                        CoreMatchers.startsWith("direct:"), 
-                        CoreMatchers.startsWith("direct-vm:"), 
-                        CoreMatchers.startsWith("seda:"), 
-                        CoreMatchers.startsWith("vm:")));
+        org.junit.Assert.assertThat(uri, anyOf(
+                CoreMatchers.startsWith("direct:"),
+                CoreMatchers.startsWith("direct-vm:"),
+                CoreMatchers.startsWith("seda:"),
+                CoreMatchers.startsWith("vm:")));
 
         // create the mock:
         final MockEndpoint createCtidMock = getCamelContext().getEndpoint("mock:" + uri, MockEndpoint.class);
@@ -347,7 +271,7 @@ public abstract class AbstractTest {
     /**
      * Asserts {@link ErrorExtEnum error codes}.
      *
-     * @param error the actual error code
+     * @param error    the actual error code
      * @param expError the expected error code
      */
     protected void assertErrorCode(ErrorExtEnum error, ErrorExtEnum expError) {

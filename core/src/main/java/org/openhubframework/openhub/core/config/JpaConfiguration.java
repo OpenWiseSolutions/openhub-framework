@@ -30,7 +30,7 @@ import org.openhubframework.openhub.core.common.dao.DbConst;
 /**
  * Custom JPA configuration that sets persistence unit for OpenHub.
  *
- * @author <a href="mailto:petr.juza@openwise.cz">Petr Juza</a>
+ * @author Petr Juza
  * @since 2.0
  */
 @Configuration

@@ -28,7 +28,7 @@ import org.openhubframework.openhub.core.common.spring.SystemIncludeRegexPattern
 /**
  * Camel routes configuration.
  *
- * @author <a href="mailto:petr.juza@openwise.cz">Petr Juza</a>
+ * @author Petr Juza
  * @since 2.0
  */
 @Configuration

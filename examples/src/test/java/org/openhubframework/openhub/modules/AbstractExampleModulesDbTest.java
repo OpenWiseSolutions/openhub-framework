@@ -16,20 +16,22 @@
 
 package org.openhubframework.openhub.modules;
 
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
 import org.openhubframework.openhub.core.common.asynch.ExceptionTranslationRoute;
 import org.openhubframework.openhub.test.AbstractDbTest;
-import org.openhubframework.openhub.test.ActiveRoutes;
+import org.openhubframework.openhub.test.route.ActiveRoutes;
 
 
 /**
- * Parent class for all tests with database.
+ * Parent class for all tests in this module based on DB.
  *
  * @author Petr Juza
  */
 @ActiveRoutes(classes = ExceptionTranslationRoute.class)
-@ContextConfiguration(locations = {"classpath:/META-INF/test_modules_db_conf.xml"})
+@ContextConfiguration(classes = ExampleTestConfig.class)
+@ActiveProfiles(profiles = ExampleProperties.EXAMPLE_PROFILE)
 public abstract class AbstractExampleModulesDbTest extends AbstractDbTest {
 
 }

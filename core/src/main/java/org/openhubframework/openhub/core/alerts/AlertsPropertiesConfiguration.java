@@ -69,7 +69,7 @@ public class AlertsPropertiesConfiguration extends AbstractAlertsConfiguration {
      * Initializes configuration from properties.
      */
     @PostConstruct
-    private void initProps() {
+    void initProps() {
         Assert.notNull(env, "env must not be null");
 
         // example of alert configuration

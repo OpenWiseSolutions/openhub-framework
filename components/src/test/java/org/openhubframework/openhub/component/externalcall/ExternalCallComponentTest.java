@@ -55,9 +55,9 @@ import org.openhubframework.openhub.api.extcall.ExtCallComponentParams;
 import org.openhubframework.openhub.component.AbstractComponentsDbTest;
 import org.openhubframework.openhub.core.common.asynch.AsynchMessageRoute;
 import org.openhubframework.openhub.core.common.dao.ExternalCallDao;
-import org.openhubframework.openhub.test.ActiveRoutes;
 import org.openhubframework.openhub.test.ExternalSystemTestEnum;
 import org.openhubframework.openhub.test.ServiceTestEnum;
+import org.openhubframework.openhub.test.route.ActiveRoutes;
 
 /**
  * Test suite for {@link ExternalCallComponent}.

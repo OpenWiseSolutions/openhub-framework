@@ -16,18 +16,24 @@
 
 package org.openhubframework.openhub.core;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
+
+import org.openhubframework.openhub.api.common.EmailService;
+import org.openhubframework.openhub.core.common.asynch.notification.DummyEmailServiceImpl;
 
 
 /**
- * Defines core (default) properties.
+ * Configuration for tests in core module.
  *
  * @author Petr Juza
  * @since 2.0
  */
-@Configuration
-@PropertySource(value = {"classpath:/applicationCore.cfg", "classpath:/alertsCore.cfg", "classpath:/throttlingCore.cfg"})
-public class CoreProperties {
+public class CoreTestConfig {
 
+    @Bean
+    @Primary
+    public EmailService emailService() {
+        return new DummyEmailServiceImpl();
+    }
 }

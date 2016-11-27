@@ -24,11 +24,11 @@ import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.junit.Test;
+
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.route.AbstractBasicRoute;
 import org.openhubframework.openhub.component.AbstractComponentsTest;
 import org.openhubframework.openhub.test.ExternalSystemTestEnum;
-import org.springframework.test.context.ContextConfiguration;
 
 
 /**
@@ -36,7 +36,6 @@ import org.springframework.test.context.ContextConfiguration;
  *
  * @author Petr Juza
  */
-@ContextConfiguration(locations = {"classpath:/org/openhubframework/openhub/component/throttling/test_throttling_conf.xml"})
 public class ThrottlingComponentTest extends AbstractComponentsTest {
 
     @Produce(uri = "direct:start")

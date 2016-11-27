@@ -61,7 +61,7 @@ import org.openhubframework.openhub.modules.ErrorEnum;
  * <p/>
  * This class configures root Spring context. One child context for Spring MVC is created.
  *
- * @author <a href="mailto:petr.juza@openwise.cz">Petr Juza</a>
+ * @author Petr Juza
  * @since 2.0
  * @see CamelRoutesConfig
  * @see MvcConfig

@@ -16,20 +16,20 @@
 
 package org.openhubframework.openhub.component;
 
+import org.springframework.test.context.ContextConfiguration;
+
 import org.openhubframework.openhub.core.common.asynch.ExceptionTranslationRoute;
 import org.openhubframework.openhub.test.AbstractTest;
-import org.openhubframework.openhub.test.ActiveRoutes;
-
-import org.springframework.test.context.ContextConfiguration;
+import org.openhubframework.openhub.test.route.ActiveRoutes;
 
 
 /**
- * Parent class for all tests without database in components module.
+ * Parent class for all tests in components module without database.
  *
  * @author Petr Juza
  */
 @ActiveRoutes(classes = ExceptionTranslationRoute.class)
-@ContextConfiguration(locations = {"classpath:/META-INF/test_components_conf.xml"})
+@ContextConfiguration(classes = ComponentTestConfig.class)
 public abstract class AbstractComponentsTest extends AbstractTest {
 
 }

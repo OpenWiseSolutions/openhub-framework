@@ -21,7 +21,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 import org.openhubframework.openhub.core.common.asynch.ExceptionTranslationRoute;
 import org.openhubframework.openhub.test.AbstractTest;
-import org.openhubframework.openhub.test.ActiveRoutes;
+import org.openhubframework.openhub.test.route.ActiveRoutes;
 
 
 /**
