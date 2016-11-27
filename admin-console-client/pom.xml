@@ -1,0 +1,172 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+<modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.openhubframework</groupId>
+        <artifactId>openhub</artifactId>
+        <version>1.1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>openhub-admin-client</artifactId>
+    <packaging>jar</packaging>
+    
+    <name>OpenHub Admin Console module</name>
+    <description>OpenHub integration framework - web admin console</description>
+    
+    <properties>
+        <!-- module configuration -->
+        <module-name>console</module-name>
+        <src-root-dir>src/main/resources/META-INF/resources</src-root-dir>
+        
+        <!-- dependency versions-->
+        <frontend-plugin-version>0.0.29</frontend-plugin-version>
+        <node-version>v4.2.2</node-version>
+        <npm-version>2.14.7</npm-version>
+    </properties>
+
+    <profiles>
+        <profile>
+            <!-- Profile which is used to clean all admin client libs -->
+            <id>clean-admin-client</id>
+            
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-clean-plugin</artifactId>
+                        <configuration>
+                            <filesets>
+                                <fileset>
+                                    <directory>${src-root-dir}/node</directory>
+                                </fileset>
+                                <fileset>
+                                    <directory>${src-root-dir}/node_modules</directory>
+                                </fileset>
+                                <fileset>
+                                    <directory>${src-root-dir}/bower_components</directory>
+                                </fileset>
+                                <fileset>
+                                    <directory>${src-root-dir}/.tmp</directory>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+                <excludes>
+                    <exclude>META-INF/**</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        
+        <plugins>
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>${frontend-plugin-version}</version>
+
+                <configuration>
+                    <workingDirectory>${src-root-dir}</workingDirectory>
+                </configuration>
+                
+                <executions>
+                    <execution>
+                        <id>install node and npm</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <nodeVersion>${node-version}</nodeVersion>
+                            <npmVersion>${npm-version}</npmVersion>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm install</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>install</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm install gulp</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>install gulp</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm install bower</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>install bower</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>bower install</id>
+                        <goals>
+                            <goal>bower</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>install</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>gulp build</id>
+                        <goals>
+                            <goal>gulp</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <!--
+                                move content of dist folder (application files) into web folder
+                                for specific module name via property module-name
+                            -->
+                            <outputDirectory>
+                                ${project.build.directory}/classes/META-INF/resources/web/module/${module-name}
+                            </outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/src/main/resources/META-INF/resources/dist</directory>
+                                    <filtering>false</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

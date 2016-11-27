@@ -1,0 +1,11 @@
+.core-sidebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  transition: all .3s ease;
+  width: 0;
+  &.extended{
+    width: $sidebarWidth;
+  }
+}
