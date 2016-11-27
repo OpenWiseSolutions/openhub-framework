@@ -19,9 +19,8 @@ package org.openhubframework.openhub.core.common.route;
 import java.beans.Introspector;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openhubframework.openhub.api.route.CamelConfiguration;
-
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;

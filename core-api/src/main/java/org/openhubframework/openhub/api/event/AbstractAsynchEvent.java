@@ -18,7 +18,7 @@ package org.openhubframework.openhub.api.event;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.management.event.AbstractExchangeEvent;
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.openhubframework.openhub.api.entity.Message;
 import org.springframework.util.Assert;
 

@@ -21,11 +21,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.common.log.Log;
-
-import org.apache.commons.lang.StringUtils;
 
 /**
  * Helper class for message manipulation.

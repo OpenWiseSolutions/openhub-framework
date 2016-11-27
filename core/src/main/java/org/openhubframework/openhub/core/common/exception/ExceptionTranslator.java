@@ -18,16 +18,15 @@ package org.openhubframework.openhub.core.common.exception;
 
 import java.io.IOException;
 
-import org.openhubframework.openhub.api.asynch.AsynchConstants;
-import org.openhubframework.openhub.api.exception.ErrorExtEnum;
-import org.openhubframework.openhub.api.exception.IntegrationException;
-import org.openhubframework.openhub.api.exception.InternalErrorEnum;
-
 import org.apache.camel.CamelAuthorizationException;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.ValidationException;
-import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.openhubframework.openhub.api.asynch.AsynchConstants;
+import org.openhubframework.openhub.api.exception.ErrorExtEnum;
+import org.openhubframework.openhub.api.exception.IntegrationException;
+import org.openhubframework.openhub.api.exception.InternalErrorEnum;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.util.Assert;
 import org.springframework.ws.client.WebServiceIOException;

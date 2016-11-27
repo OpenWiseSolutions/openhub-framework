@@ -29,10 +29,10 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.camel.converter.jaxp.XmlConverter;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
-import org.springframework.util.StringUtils;
 
 
 /**
@@ -68,7 +68,7 @@ public final class Tools {
         StringBuilder sb = new StringBuilder();
 
         for (String str : array) {
-            if (StringUtils.hasText(str)) {
+            if (StringUtils.isNotEmpty(str)) {
                 if (!somethingAdded) {
                     somethingAdded = true;
                 } else {

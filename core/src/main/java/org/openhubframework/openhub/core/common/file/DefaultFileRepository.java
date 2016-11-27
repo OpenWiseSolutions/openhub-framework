@@ -26,17 +26,16 @@ import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.openhubframework.openhub.api.exception.IntegrationException;
 import org.openhubframework.openhub.api.exception.InternalErrorEnum;
 import org.openhubframework.openhub.api.file.FileContentTypeExtEnum;
 import org.openhubframework.openhub.api.file.FileRepository;
 import org.openhubframework.openhub.api.file.OutputStreamWriterCallback;
 import org.openhubframework.openhub.common.log.Log;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.Assert;
 

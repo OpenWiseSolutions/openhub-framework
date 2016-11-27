@@ -33,15 +33,14 @@ import java.util.zip.GZIPInputStream;
 
 import javax.annotation.Nullable;
 
-import org.openhubframework.openhub.common.log.Log;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
 import org.apache.commons.io.comparator.LastModifiedFileComparator;
 import org.apache.commons.io.filefilter.IOFileFilter;
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.openhubframework.openhub.common.log.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -213,7 +212,7 @@ public class MessageLogParser {
     }
 
     private String formatLogLine(String line) {
-        String resLine = StringEscapeUtils.escapeHtml(line);
+        String resLine = StringEscapeUtils.escapeHtml4(line);
 
         // highlight ERROR log line
         if (StringUtils.contains(line, " ERROR ")

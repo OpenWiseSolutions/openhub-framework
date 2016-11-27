@@ -30,10 +30,9 @@ import javax.management.MBeanException;
 import javax.management.MBeanInfo;
 import javax.management.ReflectionException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openhubframework.openhub.spi.throttling.ThrottleProps;
 import org.openhubframework.openhub.spi.throttling.ThrottleScope;
-
-import org.apache.commons.lang.StringUtils;
 import org.springframework.util.Assert;
 
 

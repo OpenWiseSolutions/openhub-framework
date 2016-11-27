@@ -24,6 +24,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
+import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 import org.openhubframework.openhub.api.entity.ExternalCall;
 import org.openhubframework.openhub.api.entity.ExternalSystemExtEnum;
 import org.openhubframework.openhub.api.entity.Message;
@@ -32,9 +34,6 @@ import org.openhubframework.openhub.api.entity.Request;
 import org.openhubframework.openhub.api.entity.Response;
 import org.openhubframework.openhub.api.entity.ServiceExtEnum;
 import org.openhubframework.openhub.common.log.Log;
-
-import org.apache.commons.lang.StringUtils;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;

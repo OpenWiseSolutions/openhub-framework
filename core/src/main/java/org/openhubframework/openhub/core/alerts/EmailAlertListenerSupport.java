@@ -16,12 +16,11 @@
 
 package org.openhubframework.openhub.core.alerts;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openhubframework.openhub.api.common.EmailService;
 import org.openhubframework.openhub.common.log.Log;
 import org.openhubframework.openhub.spi.alerts.AlertInfo;
 import org.openhubframework.openhub.spi.alerts.AlertListener;
-
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 

@@ -21,8 +21,8 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.openhubframework.openhub.api.entity.BindingTypeEnum;
 import org.openhubframework.openhub.api.entity.EntityTypeExtEnum;
 import org.openhubframework.openhub.api.entity.Message;

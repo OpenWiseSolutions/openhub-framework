@@ -21,10 +21,9 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openhubframework.openhub.spi.throttling.ThrottleProps;
 import org.openhubframework.openhub.spi.throttling.ThrottleScope;
-
-import org.apache.commons.lang.StringUtils;
 import org.springframework.util.Assert;
 
 

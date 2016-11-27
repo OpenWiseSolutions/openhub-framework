@@ -39,6 +39,15 @@ import java.util.concurrent.TimeoutException;
 
 import javax.annotation.Nullable;
 
+import org.apache.camel.EndpointInject;
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
+import org.apache.camel.Produce;
+import org.apache.camel.ProducerTemplate;
+import org.apache.camel.component.mock.MockEndpoint;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.junit.Before;
+import org.junit.Test;
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
 import org.openhubframework.openhub.api.entity.ExternalCall;
 import org.openhubframework.openhub.api.entity.ExternalCallStateEnum;
@@ -54,16 +63,6 @@ import org.openhubframework.openhub.core.common.dao.ExternalCallDao;
 import org.openhubframework.openhub.test.ActiveRoutes;
 import org.openhubframework.openhub.test.ExternalSystemTestEnum;
 import org.openhubframework.openhub.test.ServiceTestEnum;
-
-import org.apache.camel.EndpointInject;
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
-import org.apache.camel.Produce;
-import org.apache.camel.ProducerTemplate;
-import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.commons.lang.exception.ExceptionUtils;
-import org.junit.Before;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 

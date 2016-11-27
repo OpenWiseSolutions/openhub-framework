@@ -28,19 +28,18 @@
             <artifactId>openhub-common</artifactId>
         </dependency>
 
-
-        <!-- Spring framework -->
+        <!-- JPA 2.1 -->
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
+            <version>1.0.0.Final</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-        </dependency>
-
 
         <!-- Apache Camel -->
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-spring-boot-starter</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
@@ -89,14 +88,6 @@
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring-security</artifactId>
         </dependency>
-
-
-        <!-- misc -->
-        <dependency>
-            <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.1-api</artifactId>
-        </dependency>
-
     </dependencies>
 
     <build>

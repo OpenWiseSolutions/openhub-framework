@@ -28,17 +28,16 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.openhubframework.openhub.api.entity.Message;
-import org.openhubframework.openhub.common.log.Log;
-import org.openhubframework.openhub.modules.ExternalSystemEnum;
-import org.openhubframework.openhub.spi.msg.MessageService;
-
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 import org.joda.time.LocalDate;
+import org.openhubframework.openhub.api.entity.Message;
+import org.openhubframework.openhub.common.log.Log;
+import org.openhubframework.openhub.modules.ExternalSystemEnum;
+import org.openhubframework.openhub.spi.msg.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

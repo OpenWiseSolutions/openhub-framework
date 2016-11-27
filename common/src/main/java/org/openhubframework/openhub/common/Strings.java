@@ -16,7 +16,7 @@
 
 package org.openhubframework.openhub.common;
 
-import static org.apache.commons.lang.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.springframework.util.StringUtils.tokenizeToStringArray;
 
 import java.nio.charset.Charset;
@@ -27,11 +27,10 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Nullable;
 
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.helpers.MessageFormatter;
-import org.springframework.util.CollectionUtils;
 
 
 /**
@@ -126,7 +125,7 @@ public final class Strings {
      */
     public static List<Integer> convertCommaSeparatedNumbersToList(@Nullable String str) {
         List<Integer> result = new ArrayList<Integer>();
-        str = org.apache.commons.lang.StringUtils.replace(str, " ", EMPTY);
+        str = StringUtils.replace(str, " ", EMPTY);
         if (isNotBlank(str)) {
             String[] rowsStr = str.split(",");
             for (String rowStr : rowsStr) {
@@ -149,7 +148,7 @@ public final class Strings {
      * @return the comma-separated string or ""
      */
     public static String convertListToCommaSeparatedString(@Nullable List<?> list) {
-        if (CollectionUtils.isEmpty(list)) {
+        if (list == null || list.isEmpty()) {
             return EMPTY;
         }
 
@@ -575,7 +574,7 @@ public final class Strings {
      */
     @Nullable
     public static String checkInput(@Nullable String str) {
-        return str == null ? str : escapeMarkup(StringEscapeUtils.escapeJavaScript(str)).toString();
+        return str == null ? str : escapeMarkup(StringEscapeUtils.escapeEcmaScript(str)).toString();
     }
 
     private Strings() {

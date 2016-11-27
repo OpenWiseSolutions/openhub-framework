@@ -11,6 +11,13 @@
     <name>OpenHub Framework</name>
     <description>OpenHub integration framework</description>
 
+    <!-- Inherit defaults from Spring Boot -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.3.4.RELEASE</version>
+    </parent>
+
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
@@ -57,14 +64,20 @@
         <java.version>1.7</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+        <!-- OpenHub application start class -->
+        <start-class>org.openhubframework.openhub.admin.OpenHubApplication</start-class>
+
         <camel-version>2.17.3</camel-version>
         <junit-version>4.12</junit-version>
-        <spring-version>4.3.4.RELEASE</spring-version>
-        <spring-ws-version>2.2.2.RELEASE</spring-ws-version>
-        <spring-security-version>4.1.3.RELEASE</spring-security-version>
-        <!-- Hibernate 5.1 and older versions require at least Java 1.6 -->
-        <hibernate-version>5.1.2.Final</hibernate-version>
-        <slf4j-version>1.7.21</slf4j-version>
+
+        <!-- persistence -->
+        <hikaricp-version>2.4.9</hikaricp-version>
+        <postgresql-version>9.4-1201-jdbc41</postgresql-version>
+        <oracle-version>12.1.0.2</oracle-version>
+
+        <javamelody-version>1.55.0</javamelody-version>
+        <metrics-version>3.1.0</metrics-version>
+        <jolokia-version>1.3.2</jolokia-version>
     </properties>
 
     <dependencyManagement>
@@ -107,429 +120,119 @@
             </dependency>
 
 
-            <!-- Spring framework -->
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-aop</artifactId>
-                <version>${spring-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-beans</artifactId>
-                <version>${spring-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-context</artifactId>
-                <version>${spring-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-context-support</artifactId>
-                <version>${spring-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-core</artifactId>
-                <version>${spring-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>commons-logging</groupId>
-                        <artifactId>commons-logging</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-expression</artifactId>
-                <version>${spring-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-jdbc</artifactId>
-                <version>${spring-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-test</artifactId>
-                <version>${spring-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-tx</artifactId>
-                <version>${spring-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-web</artifactId>
-                <version>${spring-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-webmvc</artifactId>
-                <version>${spring-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-oxm</artifactId>
-                <version>${spring-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-orm</artifactId>
-                <version>${spring-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-jms</artifactId>
-                <version>${spring-version}</version>
-            </dependency>
-
-
-            <!-- Spring web services -->
-            <dependency>
-                <groupId>org.springframework.ws</groupId>
-                <artifactId>spring-ws-core</artifactId>
-                <version>${spring-ws-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-oxm</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-web</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-webmvc</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.ws</groupId>
-                <artifactId>spring-ws-support</artifactId>
-                <version>${spring-ws-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-jms</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-tx</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.ws.xmlschema</groupId>
-                <artifactId>xmlschema-core</artifactId>
-                <version>2.0.2</version>
-            </dependency>
-
-
-            <!-- Spring security -->
-            <dependency>
-                <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-core</artifactId>
-                <version>${spring-security-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-web</artifactId>
-                <version>${spring-security-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-config</artifactId>
-                <version>${spring-security-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-taglibs</artifactId>
-                <version>${spring-security-version}</version>
-            </dependency>
-
-
             <!-- Apache Camel -->
             <dependency>
                 <groupId>org.apache.camel</groupId>
-                <artifactId>camel-parent</artifactId>
+                <artifactId>camel-spring-boot-starter</artifactId>
                 <version>${camel-version}</version>
-                <scope>import</scope>
                 <type>pom</type>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-core</artifactId>
-                <version>${camel-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-spring</artifactId>
-                <version>${camel-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-context</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-aop</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-tx</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-spring-ws</artifactId>
-                <version>${camel-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-webmvc</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.springframework.ws</groupId>
-                        <artifactId>spring-ws-core</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-servlet</artifactId>
-                <version>${camel-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-test</artifactId>
-                <version>${camel-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-jaxb</artifactId>
-                <version>${camel-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-mvel</artifactId>
-                <version>${camel-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-test-spring</artifactId>
-                <version>${camel-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-test</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-jpa</artifactId>
-                <version>${camel-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-orm</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-jdbc</artifactId>
-                <version>${camel-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-mail</artifactId>
-                <version>${camel-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-quartz2</artifactId>
-                <version>${camel-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>c3p0</groupId>
-                        <artifactId>c3p0</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-http4</artifactId>
-                <version>${camel-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-spring-security</artifactId>
-                <version>${camel-version}</version>
+                <scope>import</scope>
             </dependency>
 
 
             <!-- persistence -->
             <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-entitymanager</artifactId>
-                <version>${hibernate-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.hibernate.javax.persistence</groupId>
-                <artifactId>hibernate-jpa-2.1-api</artifactId>
-                <version>1.0.0.Final</version>
-                <scope>compile</scope>
-                <exclusions>
-                    <exclusion>
-                        <artifactId>xml-apis</artifactId>
-                        <groupId>xml-apis</groupId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
-                <version>9.4.1211.jre7</version>
+                <version>${postgresql-version}</version>
             </dependency>
             <dependency>
-                <groupId>com.mchange</groupId>
-                <artifactId>c3p0</artifactId>
-                <version>0.9.5.2</version>
+                <groupId>com.oracle.jdbc</groupId>
+                <artifactId>ojdbc7</artifactId>
+                <version>${oracle-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.zaxxer</groupId>
+                <artifactId>HikariCP-java7</artifactId>
+                <version>${hikaricp-version}</version>
             </dependency>
             <dependency>
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
-                <version>1.3.173</version>
-            </dependency>
-            <dependency>
-                <groupId>net.sourceforge.jtds</groupId>
-                <artifactId>jtds</artifactId>
-                <version>1.2.8</version>
+                <version>1.4.186</version>
             </dependency>
 
-
-            <!-- logging -->
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>${slf4j-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>log4j-over-slf4j</artifactId>
-                <version>${slf4j-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-classic</artifactId>
-                <version>1.0.13</version>
-            </dependency>
-            <dependency>
-                <groupId>org.codehaus.janino</groupId>
-                <artifactId>janino</artifactId>
-                <version>2.6.1</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-logging</groupId>
-                <artifactId>commons-logging</artifactId>
-                <version>1.1.1</version>
-            </dependency>
 
             <!-- Apache commons -->
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
-                <version>3.1</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-lang</groupId>
-                <artifactId>commons-lang</artifactId>
-                <version>2.5</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.httpcomponents</groupId>
-                <artifactId>httpclient</artifactId>
-                <version>4.3.1</version>
+                <version>3.2</version>
             </dependency>
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>2.4</version>
             </dependency>
-            <dependency>
-                <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-servlet_2.5_spec</artifactId>
-                <version>1.2</version>
-                <scope>provided</scope>
-            </dependency>
+
 
             <!-- monitoring-->
             <dependency>
                 <groupId>net.bull.javamelody</groupId>
                 <artifactId>javamelody-core</artifactId>
-                <version>1.49.0</version>
+                <version>${javamelody-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.dropwizard.metrics</groupId>
+                <artifactId>metrics-core</artifactId>
+                <version>${metrics-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jolokia</groupId>
                 <artifactId>jolokia-core</artifactId>
-                <version>1.2.0</version>
+                <version>${jolokia-version}</version>
             </dependency>
 
-            <!-- misc -->
-            <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>servlet-api</artifactId>
-                <scope>provided</scope>
-                <version>2.4</version>
-            </dependency>
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>${junit-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.kubek2k</groupId>
-                <artifactId>springockito-annotations</artifactId>
-                <version>1.0.8</version>
-            </dependency>
+
+            <!-- testing -->
             <dependency>
                 <groupId>xmlunit</groupId>
                 <artifactId>xmlunit</artifactId>
-                <version>1.4</version>
+                <version>1.6</version>
             </dependency>
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-all</artifactId>
-                <version>1.9.5</version>
-            </dependency>
-            <dependency>
-                <groupId>org.freemarker</groupId>
-                <artifactId>freemarker</artifactId>
-                <version>2.3.23</version>
-            </dependency>
+
+
+            <!-- misc -->
             <dependency>
                 <groupId>jcifs</groupId>
                 <artifactId>jcifs</artifactId>
                 <version>1.3.17</version>
             </dependency>
+            <!-- for conditional processing for LogBack -->
             <dependency>
-                <groupId>joda-time</groupId>
-                <artifactId>joda-time</artifactId>
-                <version>2.2</version>
+                <groupId>org.codehaus.janino</groupId>
+                <artifactId>janino</artifactId>
+                <version>2.6.1</version>
             </dependency>
             <!-- for @Nullable annotation -->
             <dependency>
-            	<groupId>net.sourceforge.findbugs</groupId>
-            	<artifactId>jsr305</artifactId>
-            	<version>1.3.7</version>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>jsr305</artifactId>
+                <version>3.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-aspects</artifactId>
+                <version>4.2.5.RELEASE</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <!-- support for AOP through whole framework -->
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+           	<artifactId>spring-aspects</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjtools</artifactId>
+        </dependency>
+    </dependencies>
 
     <build>
         <extensions>
@@ -631,7 +334,7 @@
 
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>2.4</version>
+                    <version>2.6</version>
                     <configuration>
                         <archive>
                             <addMavenDescriptor>false</addMavenDescriptor>
@@ -640,10 +343,8 @@
                                 <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             </manifest>
                             <manifestEntries>
-                                <!--suppress MavenModelInspection -->
                                 <Implementation-Build>${buildNumber}</Implementation-Build>
-                                <!--suppress MavenModelInspection -->
-                                <Implementation-Timestamp>${timestamp}</Implementation-Timestamp>
+                                <Implementation-Build-Time>${maven.build.timestamp}</Implementation-Build-Time>
                             </manifestEntries>
                         </archive>
                     </configuration>
@@ -660,10 +361,8 @@
                                 <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             </manifest>
                             <manifestEntries>
-                                <!--suppress MavenModelInspection -->
                                 <Implementation-Build>${buildNumber}</Implementation-Build>
-                                <!--suppress MavenModelInspection -->
-                                <Implementation-Timestamp>${timestamp}</Implementation-Timestamp>
+                                <Implementation-Build-Time>${maven.build.timestamp}</Implementation-Build-Time>
                             </manifestEntries>
                         </archive>
                     </configuration>
@@ -827,7 +526,12 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
             </plugin>
-
+            
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>

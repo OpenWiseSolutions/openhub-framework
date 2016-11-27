@@ -16,9 +16,11 @@
 
 package org.openhubframework.openhub.component.externalcall;
 
-import static org.apache.commons.lang.BooleanUtils.isNotTrue;
+import static org.apache.commons.lang3.BooleanUtils.isNotTrue;
 import static org.springframework.util.StringUtils.hasText;
 
+import org.apache.camel.Exchange;
+import org.apache.camel.impl.DefaultProducer;
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
 import org.openhubframework.openhub.api.entity.ExternalCall;
 import org.openhubframework.openhub.api.entity.Message;
@@ -26,9 +28,6 @@ import org.openhubframework.openhub.api.exception.LockFailureException;
 import org.openhubframework.openhub.api.extcall.ExtCallComponentParams;
 import org.openhubframework.openhub.common.log.Log;
 import org.openhubframework.openhub.spi.extcall.ExternalCallService;
-
-import org.apache.camel.Exchange;
-import org.apache.camel.impl.DefaultProducer;
 import org.springframework.util.Assert;
 
 

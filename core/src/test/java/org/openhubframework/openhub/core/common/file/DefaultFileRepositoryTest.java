@@ -26,17 +26,16 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openhubframework.openhub.api.file.FileContentTypeExtEnum;
-import org.openhubframework.openhub.api.file.OutputStreamWriterCallback;
-import org.openhubframework.openhub.core.AbstractCoreTest;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.openhubframework.openhub.api.file.FileContentTypeExtEnum;
+import org.openhubframework.openhub.api.file.OutputStreamWriterCallback;
+import org.openhubframework.openhub.core.AbstractCoreTest;
 
 
 /**

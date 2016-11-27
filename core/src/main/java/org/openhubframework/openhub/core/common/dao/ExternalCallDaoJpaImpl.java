@@ -27,11 +27,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 
+import org.apache.commons.lang3.time.DateUtils;
 import org.openhubframework.openhub.api.entity.ExternalCall;
 import org.openhubframework.openhub.api.entity.ExternalCallStateEnum;
 import org.openhubframework.openhub.api.exception.MultipleDataFoundException;
-
-import org.apache.commons.lang.time.DateUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;

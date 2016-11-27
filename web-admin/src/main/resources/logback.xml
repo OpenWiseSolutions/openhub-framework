@@ -18,7 +18,7 @@
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>${log.folder}logFile_%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+            <fileNamePattern>@log.folder@logFile_%d{yyyy-MM-dd}_%i.log</fileNamePattern>
 
             <!-- keep 30 days' worth of history -->
             <maxHistory>30</maxHistory>
@@ -57,10 +57,10 @@
     -->
 
     <root level="info">
-        <if condition='"${log.console.enabled}".equalsIgnoreCase("true")'>
+        <if condition='"@log.console.enabled@".equalsIgnoreCase("true")'>
             <then><appender-ref ref="CONSOLE"/></then>
         </if>
-        <if condition='"${log.file.enabled}".equalsIgnoreCase("true")'>
+        <if condition='"@log.file.enabled@".equalsIgnoreCase("true")'>
             <then><appender-ref ref="FILE"/></then>
         </if>
     </root>

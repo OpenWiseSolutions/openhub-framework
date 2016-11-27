@@ -22,11 +22,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.time.DateUtils;
 import org.openhubframework.openhub.admin.dao.dto.MessageReportDto;
 import org.openhubframework.openhub.admin.services.MessageReportService;
 import org.openhubframework.openhub.common.log.Log;
-
-import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

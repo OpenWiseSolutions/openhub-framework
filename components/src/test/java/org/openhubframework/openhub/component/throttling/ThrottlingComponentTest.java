@@ -19,16 +19,15 @@ package org.openhubframework.openhub.component.throttling;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import org.apache.camel.Produce;
+import org.apache.camel.ProducerTemplate;
+import org.apache.camel.builder.RouteBuilder;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.junit.Test;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.route.AbstractBasicRoute;
 import org.openhubframework.openhub.component.AbstractComponentsTest;
 import org.openhubframework.openhub.test.ExternalSystemTestEnum;
-
-import org.apache.camel.Produce;
-import org.apache.camel.ProducerTemplate;
-import org.apache.camel.builder.RouteBuilder;
-import org.apache.commons.lang.exception.ExceptionUtils;
-import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 
 

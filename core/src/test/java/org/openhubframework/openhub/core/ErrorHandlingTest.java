@@ -20,13 +20,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-import org.openhubframework.openhub.api.asynch.AsynchConstants;
-import org.openhubframework.openhub.api.exception.IntegrationException;
-import org.openhubframework.openhub.api.exception.LockFailureException;
-import org.openhubframework.openhub.api.exception.NoDataFoundException;
-import org.openhubframework.openhub.api.route.AbstractBasicRoute;
-import org.openhubframework.openhub.test.ErrorTestEnum;
-
 import org.apache.camel.CamelException;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Exchange;
@@ -34,10 +27,16 @@ import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.commons.lang.BooleanUtils;
-import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.openhubframework.openhub.api.asynch.AsynchConstants;
+import org.openhubframework.openhub.api.exception.IntegrationException;
+import org.openhubframework.openhub.api.exception.LockFailureException;
+import org.openhubframework.openhub.api.exception.NoDataFoundException;
+import org.openhubframework.openhub.api.route.AbstractBasicRoute;
+import org.openhubframework.openhub.test.ErrorTestEnum;
 
 
 /**

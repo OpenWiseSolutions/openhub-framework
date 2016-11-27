@@ -29,10 +29,9 @@ import javax.management.MBeanException;
 import javax.management.MBeanInfo;
 import javax.management.ReflectionException;
 
-import org.openhubframework.openhub.spi.alerts.AlertInfo;
-
-import org.apache.commons.lang.BooleanUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.openhubframework.openhub.spi.alerts.AlertInfo;
 import org.springframework.util.Assert;
 
 

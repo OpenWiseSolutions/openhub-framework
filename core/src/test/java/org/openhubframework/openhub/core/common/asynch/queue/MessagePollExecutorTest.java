@@ -27,6 +27,13 @@ import java.util.concurrent.CountDownLatch;
 import javax.annotation.Nullable;
 import javax.persistence.Query;
 
+import org.apache.camel.EndpointInject;
+import org.apache.camel.component.mock.MockEndpoint;
+import org.apache.commons.lang3.time.DateUtils;
+import org.hamcrest.CoreMatchers;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
 import org.openhubframework.openhub.core.AbstractCoreDbTest;
@@ -34,14 +41,6 @@ import org.openhubframework.openhub.core.common.asynch.AsynchMessageRoute;
 import org.openhubframework.openhub.test.ActiveRoutes;
 import org.openhubframework.openhub.test.ExternalSystemTestEnum;
 import org.openhubframework.openhub.test.ServiceTestEnum;
-
-import org.apache.camel.EndpointInject;
-import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.commons.lang.time.DateUtils;
-import org.hamcrest.CoreMatchers;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
