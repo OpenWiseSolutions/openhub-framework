@@ -7,29 +7,11 @@
     <display-name>OpenHub integration server</display-name>
     <description>OpenHub integration server</description>
 
-    <!--
-        Location of the XML file that defines the root application context.
-        Applied by ContextLoaderListener (or ContextLoaderServlet).
-    -->
-    <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:net/bull/javamelody/monitoring-spring.xml, WEB-INF/rootApplicationContext.xml, WEB-INF/rootSecurity.xml</param-value>
-    </context-param>
-
     <!-- default Spring profile - development environment -->
     <context-param>
         <param-name>spring.profiles.default</param-name>
         <param-value>dev,h2</param-value>
     </context-param>
-
-    <!--
-        Loads the root application context of this web app at startup.
-        The application context is then available via
-        WebApplicationContextUtils.getWebApplicationContext(servletContext).
-    -->
-    <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
 
     <!-- Spring security filter -->
     <filter>
@@ -39,18 +21,6 @@
 
     <filter-mapping>
         <filter-name>springSecurityFilterChain</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
-    <!--
-        A filter that provides web-application specific context information to the logging subsystem.
-    -->
-    <filter>
-        <filter-name>logContextFilter</filter-name>
-        <filter-class>org.openhubframework.openhub.common.log.LogContextFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>logContextFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
@@ -114,43 +84,6 @@
         <url-pattern>/web/admin/*</url-pattern>
     </servlet-mapping>
 
-    <!-- Monitoring -->
-    <filter>
-        <filter-name>monitoring</filter-name>
-        <filter-class>net.bull.javamelody.MonitoringFilter</filter-class>
-        <init-param>
-            <param-name>monitoring-path</param-name>
-            <param-value>/monitoring/javamelody</param-value>
-        </init-param>
-        <!--
-           javamelody monitoring is by default disabled,
-           for enable please use parameter -Djavamelody.disabled=false on start JVM
-        -->
-        <init-param>
-            <param-name>disabled</param-name>
-            <param-value>true</param-value>
-        </init-param>
-    </filter>
-
-    <filter-mapping>
-        <filter-name>monitoring</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
-    <listener>
-        <listener-class>net.bull.javamelody.SessionListener</listener-class>
-    </listener>
-
-    <servlet>
-        <servlet-name>jolokia-agent</servlet-name>
-        <servlet-class>org.jolokia.http.AgentServlet</servlet-class>
-        <load-on-startup>3</load-on-startup>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>jolokia-agent</servlet-name>
-        <url-pattern>/monitoring/jolokia/*</url-pattern>
-    </servlet-mapping>
 
     <!-- Error handling -->
     <error-page>

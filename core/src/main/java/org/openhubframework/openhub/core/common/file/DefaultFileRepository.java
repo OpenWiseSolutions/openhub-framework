@@ -16,28 +16,25 @@
 
 package org.openhubframework.openhub.core.common.file;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.List;
 import java.util.UUID;
-
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.Assert;
+
 import org.openhubframework.openhub.api.exception.IntegrationException;
 import org.openhubframework.openhub.api.exception.InternalErrorEnum;
 import org.openhubframework.openhub.api.file.FileContentTypeExtEnum;
 import org.openhubframework.openhub.api.file.FileRepository;
 import org.openhubframework.openhub.api.file.OutputStreamWriterCallback;
-import org.openhubframework.openhub.common.log.Log;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.util.Assert;
 
 
 /**
@@ -46,6 +43,8 @@ import org.springframework.util.Assert;
  * @author Petr Juza
  */
 public class DefaultFileRepository implements FileRepository {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultFileRepository.class);
 
     /**
      * Absolute path to temporary directory where new files are stored.
@@ -87,9 +86,9 @@ public class DefaultFileRepository implements FileRepository {
 
             writerCallback.writeTo(os);
 
-            Log.debug("new file was successfully saved: " + targetFile);
+            LOG.debug("new file was successfully saved: " + targetFile);
         } catch (IOException ex) {
-            Log.error("error occurred during saving file " + targetFile, ex);
+            LOG.error("error occurred during saving file " + targetFile, ex);
             throw new IntegrationException(InternalErrorEnum.E115);
         } finally {
             IOUtils.closeQuietly(os);
@@ -128,7 +127,7 @@ public class DefaultFileRepository implements FileRepository {
         // check file existence
         if (!tmpFile.exists() || !tmpFile.canRead()) {
             String msg = "temp file " + tmpFile + " doesn't exist or can't be read";
-            Log.error(msg);
+            LOG.error(msg);
             throw new IntegrationException(InternalErrorEnum.E115, msg);
         }
 
@@ -142,10 +141,10 @@ public class DefaultFileRepository implements FileRepository {
         try {
             FileUtils.moveFileToDirectory(tmpFile, targetDir, true);
 
-            Log.debug("File (" + tmpFile + ") was successfully moved to directory - " + targetDir);
+            LOG.debug("File (" + tmpFile + ") was successfully moved to directory - " + targetDir);
         } catch (IOException e) {
             String msg = "error occurred during moving temp file " + tmpFile + " to target directory - " + targetDirName;
-            Log.error(msg);
+            LOG.error(msg);
             throw new IntegrationException(InternalErrorEnum.E115, msg);
         }
 
@@ -158,10 +157,10 @@ public class DefaultFileRepository implements FileRepository {
         try {
             FileUtils.moveFile(targetTmpFile, new File(targetFileName));
 
-            Log.debug("File (" + tmpFile + ") was successfully committed. New path: " + targetFileName);
+            LOG.debug("File (" + tmpFile + ") was successfully committed. New path: " + targetFileName);
         } catch (IOException e) {
             String msg = "error occurred during renaming temp file " + tmpFile + " to target directory - " + targetDirName;
-            Log.error(msg);
+            LOG.error(msg);
             throw new IntegrationException(InternalErrorEnum.E115, msg);
         }
     }

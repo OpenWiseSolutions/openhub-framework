@@ -16,18 +16,19 @@
 
 package org.openhubframework.openhub.core.common.directcall;
 
-import org.openhubframework.openhub.api.route.AbstractBasicRoute;
-import org.openhubframework.openhub.api.route.CamelConfiguration;
-import org.openhubframework.openhub.common.log.Log;
-import org.openhubframework.openhub.core.common.route.RouteConstants;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Handler;
 import org.apache.camel.Header;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.component.spring.ws.SpringWebserviceConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.api.route.AbstractBasicRoute;
+import org.openhubframework.openhub.api.route.CamelConfiguration;
+import org.openhubframework.openhub.core.common.route.RouteConstants;
 
 
 /**
@@ -38,6 +39,8 @@ import org.springframework.util.Assert;
  */
 @CamelConfiguration
 public class DirectCallWsRoute extends AbstractBasicRoute {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DirectCallWsRoute.class);
 
     static final String SERVLET_URL = "directWS";
     static final String CALL_ID_HEADER = "callId";
@@ -81,7 +84,7 @@ public class DirectCallWsRoute extends AbstractBasicRoute {
         DirectCallParams params = callRegistry.getParams(callId);
 
         if (params.getHeader() != null) {
-            Log.debug("Direct WS call: header=" + params.getHeader());
+            LOG.debug("Direct WS call: header=" + params.getHeader());
 
             exchange.getIn().setHeader(SpringWebserviceConstants.SPRING_WS_SOAP_HEADER, params.getHeader());
         }
@@ -99,7 +102,7 @@ public class DirectCallWsRoute extends AbstractBasicRoute {
 
         DirectCallParams params = callRegistry.getParams(callId);
 
-        Log.debug("Direct WS call: uri= " + params.getUri() + ",\nsenderRef= " + params.getSenderRef()
+        LOG.debug("Direct WS call: uri= " + params.getUri() + ",\nsenderRef= " + params.getSenderRef()
                 + ",\nsoapAction= " + params.getSoapAction() + ",\nbody: " + params.getBody());
 
         return params.getBody();

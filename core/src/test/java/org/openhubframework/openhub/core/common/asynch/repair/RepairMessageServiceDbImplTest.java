@@ -22,23 +22,24 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import org.openhubframework.openhub.api.asynch.AsynchConstants;
-import org.openhubframework.openhub.api.entity.Message;
-import org.openhubframework.openhub.api.entity.MsgStateEnum;
-import org.openhubframework.openhub.api.exception.IntegrationException;
-import org.openhubframework.openhub.common.log.Log;
-import org.openhubframework.openhub.core.AbstractCoreDbTest;
-import org.openhubframework.openhub.core.common.dao.MessageDao;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+
+import org.openhubframework.openhub.api.asynch.AsynchConstants;
+import org.openhubframework.openhub.api.entity.Message;
+import org.openhubframework.openhub.api.entity.MsgStateEnum;
+import org.openhubframework.openhub.api.exception.IntegrationException;
+import org.openhubframework.openhub.core.AbstractCoreDbTest;
+import org.openhubframework.openhub.core.common.dao.MessageDao;
 
 /**
  * Tests {@link RepairMessageServiceDbImpl}
@@ -46,6 +47,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @ContextConfiguration(loader = SpringockitoContextLoader.class)
 public class RepairMessageServiceDbImplTest extends AbstractCoreDbTest {
+
+    private static final Logger LOG = LoggerFactory.getLogger(RepairMessageServiceDbImplTest.class);
 
     @Autowired
     private MessageDao messageDao;
@@ -63,7 +66,7 @@ public class RepairMessageServiceDbImplTest extends AbstractCoreDbTest {
         messageService.repairProcessingMessages();
 
         for (Message message : messages) {
-            Log.info("Verifying message {}", message);
+            LOG.info("Verifying message {}", message);
             Message found = messageDao.findMessage(message.getMsgId());
             assertThat(found, notNullValue());
             assertThat(found.getState(), is(MsgStateEnum.PARTLY_FAILED));

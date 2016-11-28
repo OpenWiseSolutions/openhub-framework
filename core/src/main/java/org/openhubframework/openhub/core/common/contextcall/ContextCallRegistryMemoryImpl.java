@@ -20,14 +20,14 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
 import javax.annotation.Nullable;
 
-import org.openhubframework.openhub.api.exception.NoDataFoundException;
-import org.openhubframework.openhub.common.log.Log;
-
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.api.exception.NoDataFoundException;
 
 
 /**
@@ -36,6 +36,8 @@ import org.springframework.util.Assert;
  * @author Petr Juza
  */
 public class ContextCallRegistryMemoryImpl implements ContextCallRegistry {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ContextCallRegistryMemoryImpl.class);
 
     private static final int OLD_PARAMS_INTERVAL = 60 * 1000;
 
@@ -54,7 +56,7 @@ public class ContextCallRegistryMemoryImpl implements ContextCallRegistry {
 
         paramsRegistry.put(callId, params);
 
-        Log.debug("Call params with callId=" + callId + " added to registry: " + params);
+        LOG.debug("Call params with callId=" + callId + " added to registry: " + params);
 
         removeOldParams();
     }
@@ -81,7 +83,7 @@ public class ContextCallRegistryMemoryImpl implements ContextCallRegistry {
 
         responseRegistry.put(callId, res);
 
-        Log.debug("Call response with callId=" + callId + " added to registry: " + res);
+        LOG.debug("Call response with callId=" + callId + " added to registry: " + res);
     }
 
     @Nullable
@@ -105,13 +107,13 @@ public class ContextCallRegistryMemoryImpl implements ContextCallRegistry {
 
     private void removeParams(String callId) {
         if (paramsRegistry.remove(callId) != null) {
-            Log.debug("Call params with callId=" + callId + " were removed from registry");
+            LOG.debug("Call params with callId=" + callId + " were removed from registry");
         }
     }
 
     private void removeResponse(String callId) {
         if (responseRegistry.remove(callId) != null) {
-            Log.debug("Call response with callId=" + callId + " were removed from registry");
+            LOG.debug("Call response with callId=" + callId + " were removed from registry");
         }
     }
 

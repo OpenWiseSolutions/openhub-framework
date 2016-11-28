@@ -16,16 +16,13 @@
 
 package org.openhubframework.openhub.core.throttling;
 
-import org.openhubframework.openhub.api.exception.ThrottlingExceededException;
-import org.openhubframework.openhub.common.log.Log;
-import org.openhubframework.openhub.spi.throttling.ThrottleCounter;
-import org.openhubframework.openhub.spi.throttling.ThrottleProps;
-import org.openhubframework.openhub.spi.throttling.ThrottleScope;
-import org.openhubframework.openhub.spi.throttling.ThrottlingConfiguration;
-import org.openhubframework.openhub.spi.throttling.ThrottlingProcessor;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.api.exception.ThrottlingExceededException;
+import org.openhubframework.openhub.spi.throttling.*;
 
 
 /**
@@ -34,6 +31,8 @@ import org.springframework.util.Assert;
  * @author Petr Juza
  */
 public class ThrottleProcessorImpl implements ThrottlingProcessor {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ThrottleProcessorImpl.class);
 
     @Autowired
     private ThrottlingConfiguration configuration;
@@ -53,7 +52,7 @@ public class ThrottleProcessorImpl implements ThrottlingProcessor {
 
             ThrottleProps throttleProps = configuration.getThrottleProps(throttleScope);
             if (throttleProps == null) {
-                Log.warn("no throttling for input request: " + throttleScope);
+                LOG.warn("no throttling for input request: " + throttleScope);
                 return;
             }
 
@@ -65,7 +64,7 @@ public class ThrottleProcessorImpl implements ThrottlingProcessor {
                         + "' exceeded limit (interval=" + throttleProps.getInterval()
                         + "sec, limit=" + throttleProps.getLimit() + ", actual count=" + reqCount + ")";
 
-                Log.warn(errMsg);
+                LOG.warn(errMsg);
 
                 throw new ThrottlingExceededException(errMsg);
             }

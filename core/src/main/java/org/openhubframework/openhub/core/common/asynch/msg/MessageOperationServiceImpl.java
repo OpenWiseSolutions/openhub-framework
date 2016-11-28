@@ -16,15 +16,16 @@
 
 package org.openhubframework.openhub.core.common.asynch.msg;
 
-import org.openhubframework.openhub.api.entity.Message;
-import org.openhubframework.openhub.api.entity.MsgStateEnum;
-import org.openhubframework.openhub.common.log.Log;
-import org.openhubframework.openhub.core.common.dao.MessageDao;
-import org.openhubframework.openhub.core.common.dao.MessageOperationDao;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.transaction.annotation.Transactional;
+
+import org.openhubframework.openhub.api.entity.Message;
+import org.openhubframework.openhub.api.entity.MsgStateEnum;
+import org.openhubframework.openhub.core.common.dao.MessageDao;
+import org.openhubframework.openhub.core.common.dao.MessageOperationDao;
 
 
 /**
@@ -34,6 +35,8 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Viliam Elischer
  */
 public class MessageOperationServiceImpl implements MessageOperationService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MessageOperationServiceImpl.class);
 
     @Autowired
     private MessageOperationDao msgOpDao;
@@ -72,7 +75,8 @@ public class MessageOperationServiceImpl implements MessageOperationService {
 
             msgOpDao.removeExtCalls(msg, totalRestart);
 
-            Log.debug("Message (id = " + messageId + ", totalRestart = " + totalRestart + ") was successfully restarted ...");
+            LOG.debug("Message (id = " + messageId + ", totalRestart = " + totalRestart
+                    + ") was successfully restarted ...");
         } catch (DataAccessException dx) {
             throw new RuntimeException("An error occurred during message restarting", dx);
         }
@@ -95,7 +99,7 @@ public class MessageOperationServiceImpl implements MessageOperationService {
                 throw new IllegalStateException("Message (id = " + messageId + ") hasn't been changed to CANCEL state.");
             }
 
-            Log.debug("Message " + msg.toHumanString() + " was successfully canceled ...");
+            LOG.debug("Message " + msg.toHumanString() + " was successfully canceled ...");
         } catch (DataAccessException dx) {
             throw new RuntimeException("An error occurred during message cancelling", dx);
         }

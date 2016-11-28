@@ -18,28 +18,25 @@ package org.openhubframework.openhub.core.common.asynch;
 
 import java.util.Collections;
 import java.util.List;
-
 import javax.annotation.Nullable;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.ValidationEvent;
-import javax.xml.bind.ValidationEventHandler;
+import javax.xml.bind.*;
 import javax.xml.transform.Source;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
+import org.springframework.ws.soap.SoapHeaderElement;
+
 import org.openhubframework.openhub.api.asynch.model.TraceHeader;
 import org.openhubframework.openhub.api.asynch.model.TraceIdentifier;
 import org.openhubframework.openhub.api.common.ExchangeConstants;
 import org.openhubframework.openhub.api.exception.InternalErrorEnum;
 import org.openhubframework.openhub.api.exception.ValidationIntegrationException;
-import org.openhubframework.openhub.common.log.Log;
 import org.openhubframework.openhub.core.common.validator.TraceIdentifierValidator;
-import org.springframework.util.Assert;
-import org.springframework.ws.soap.SoapHeaderElement;
 
 
 /**
@@ -53,6 +50,8 @@ import org.springframework.ws.soap.SoapHeaderElement;
  * @author Petr Juza
  */
 public class TraceHeaderProcessor implements Processor {
+
+    private static final Logger LOG = LoggerFactory.getLogger(TraceHeaderProcessor.class);
 
     /**
      * Header value that holds {@link TraceHeader}.
@@ -109,7 +108,7 @@ public class TraceHeaderProcessor implements Processor {
                 return;
             }
         } catch (JAXBException exc) {
-            Log.debug("Failed to unmarshal body as TraceHeader", exc);
+            LOG.debug("Failed to unmarshal body as TraceHeader", exc);
         }
 
         if (isMandatoryHeader()) {
@@ -151,7 +150,7 @@ public class TraceHeaderProcessor implements Processor {
 
                 validateTraceIdentifier(traceId);
                 exchange.getIn().setHeader(TRACE_HEADER, traceHeader);
-                Log.debug("traceHeader saved to exchange: " + ToStringBuilder.reflectionToString(traceId));
+                LOG.debug("traceHeader saved to exchange: " + ToStringBuilder.reflectionToString(traceId));
             }
         }
     }
@@ -160,7 +159,7 @@ public class TraceHeaderProcessor implements Processor {
         return new ValidationEventHandler() {
             public boolean handleEvent(ValidationEvent event) {
                 if (event.getSeverity() == ValidationEvent.WARNING) {
-                    Log.warn("Ignored {}", event, event.getLinkedException());
+                    LOG.warn("Ignored {}", event, event.getLinkedException());
                     return true; // handled - ignore as WARNING does not prevent unmarshalling
                 } else {
                     return false; // not handled - ERROR and FATAL_ERROR prevent successful unmarshalling
@@ -180,13 +179,13 @@ public class TraceHeaderProcessor implements Processor {
 
         // if not defined some implementation, the validation is skipped
         if (validatorList == null || validatorList.isEmpty()) {
-            Log.debug("no traceIdentifier validator found");
+            LOG.debug("no traceIdentifier validator found");
             return;
         }
 
         for (TraceIdentifierValidator validator : validatorList) {
             if (validator.isValid(traceId)) {
-                Log.debug("the trace identifier '{0}' is allowed", ToStringBuilder.reflectionToString(traceId));
+                LOG.debug("the trace identifier '{0}' is allowed", ToStringBuilder.reflectionToString(traceId));
                 return;
             }
         }

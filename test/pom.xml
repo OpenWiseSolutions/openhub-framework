@@ -20,6 +20,10 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>openhub-core-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>openhub-common</artifactId>
+        </dependency>
 
         <!-- Spring Boot -->
         <dependency>

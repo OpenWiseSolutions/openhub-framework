@@ -22,18 +22,11 @@ import static org.junit.Assert.assertThat;
 
 import java.util.UUID;
 
-import org.openhubframework.openhub.api.entity.ExternalCall;
-import org.openhubframework.openhub.api.entity.ExternalCallStateEnum;
-import org.openhubframework.openhub.api.entity.Message;
-import org.openhubframework.openhub.common.log.Log;
-import org.openhubframework.openhub.core.AbstractCoreDbTest;
-import org.openhubframework.openhub.core.common.dao.ExternalCallDao;
-import org.openhubframework.openhub.test.ExternalSystemTestEnum;
-import org.openhubframework.openhub.test.ServiceTestEnum;
-
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
@@ -42,6 +35,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import org.openhubframework.openhub.api.entity.ExternalCall;
+import org.openhubframework.openhub.api.entity.ExternalCallStateEnum;
+import org.openhubframework.openhub.api.entity.Message;
+import org.openhubframework.openhub.core.AbstractCoreDbTest;
+import org.openhubframework.openhub.core.common.dao.ExternalCallDao;
+import org.openhubframework.openhub.test.ExternalSystemTestEnum;
+import org.openhubframework.openhub.test.ServiceTestEnum;
+
 
 /**
  * Tests {@link RepairExternalCallDbImpl}
@@ -49,6 +50,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 @Transactional
 @ContextConfiguration(loader = SpringockitoContextLoader.class)
 public class RepairExternalCallDbImplTest extends AbstractCoreDbTest {
+
+    private static final Logger LOG = LoggerFactory.getLogger(RepairExternalCallDbImpl.class);
 
     @Autowired
     private ExternalCallDao externalCallDao;
@@ -70,7 +73,7 @@ public class RepairExternalCallDbImplTest extends AbstractCoreDbTest {
         externalCallService.repairProcessingExternalCalls();
 
         for (ExternalCall externalCall : externalCalls) {
-            Log.info("Verifying external call {}", externalCall);
+            LOG.info("Verifying external call {}", externalCall);
             ExternalCall found = externalCallDao.getExternalCall(
                     externalCall.getOperationName(), externalCall.getEntityId());
             assertThat(found, notNullValue());

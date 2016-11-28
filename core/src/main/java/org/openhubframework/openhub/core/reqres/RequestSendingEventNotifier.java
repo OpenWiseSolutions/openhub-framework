@@ -19,21 +19,21 @@ package org.openhubframework.openhub.core.reqres;
 import java.util.EventObject;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.annotation.PostConstruct;
+
+import org.apache.camel.Exchange;
+import org.apache.camel.management.event.ExchangeSendingEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.Assert;
 
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.Request;
 import org.openhubframework.openhub.api.event.EventNotifier;
 import org.openhubframework.openhub.api.event.EventNotifierBase;
-import org.openhubframework.openhub.common.log.Log;
-
-import org.apache.camel.Exchange;
-import org.apache.camel.management.event.ExchangeSendingEvent;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.util.Assert;
 
 
 /**
@@ -46,6 +46,8 @@ import org.springframework.util.Assert;
  */
 @EventNotifier
 public class RequestSendingEventNotifier extends EventNotifierBase<ExchangeSendingEvent> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(RequestSendingEventNotifier.class);
 
     /**
      * Header name for saving request for next use.
@@ -100,7 +102,7 @@ public class RequestSendingEventNotifier extends EventNotifierBase<ExchangeSendi
                 // add to exchange for later use when response arrives
                 event.getExchange().getIn().setHeader(SAVE_REQ_HEADER, req);
             } catch (Exception ex) {
-                Log.error("Request didn't saved.", ex);
+                LOG.error("Request didn't saved.", ex);
             }
         }
     }

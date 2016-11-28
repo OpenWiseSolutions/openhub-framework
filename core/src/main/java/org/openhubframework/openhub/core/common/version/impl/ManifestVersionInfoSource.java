@@ -25,19 +25,19 @@ import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 import java.util.regex.PatternSyntaxException;
-
 import javax.annotation.Nullable;
 
-import org.openhubframework.openhub.common.log.Log;
-import org.openhubframework.openhub.core.common.version.VersionInfo;
-import org.openhubframework.openhub.core.common.version.VersionInfoSource;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
+
+import org.openhubframework.openhub.core.common.version.VersionInfo;
+import org.openhubframework.openhub.core.common.version.VersionInfoSource;
 
 
 /**
@@ -50,6 +50,8 @@ import org.springframework.web.context.WebApplicationContext;
  */
 @Component
 public class ManifestVersionInfoSource implements VersionInfoSource, ApplicationContextAware {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ManifestVersionInfoSource.class);
 
     //----------------------------------------------------------------------
     // class (static) fields
@@ -124,7 +126,7 @@ public class ManifestVersionInfoSource implements VersionInfoSource, Application
                 result.addAll(getVersionData(MANIFEST_CONTEXT_RESOURCE_NAME, filter));
             }
         } catch (Exception e) {
-            Log.warn("Unable to retrieve version information: {}", e.getMessage());
+            LOG.warn("Unable to retrieve version information: {}", e.getMessage());
         }
         return result.toArray(new VersionInfo[result.size()]);
     }
@@ -143,7 +145,6 @@ public class ManifestVersionInfoSource implements VersionInfoSource, Application
                 if (is != null) {
                     Manifest manifest = new Manifest(is);
                     VersionInfo info = createVersionInfo(manifest);
-//                    Log.debug(location + ": " + info);
                     // Version entries may be empty or incomplete.
                     // Return only entries that match the specified filter.
 
@@ -152,11 +153,11 @@ public class ManifestVersionInfoSource implements VersionInfoSource, Application
                     }
                 }
             } catch (IOException e) {
-                Log.error("Unable to process manifest resource '{}'", e, resource.getURL());
+                LOG.error("Unable to process manifest resource '{}'", e, resource.getURL());
                 throw e;
 
             } catch (PatternSyntaxException e) {
-                Log.error("Unable to process version data, invalid filter '{}'", e, filter.toString());
+                LOG.error("Unable to process version data, invalid filter '{}'", e, filter.toString());
             }
         }
         return result;

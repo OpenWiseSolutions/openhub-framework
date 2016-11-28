@@ -21,9 +21,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.openhubframework.openhub.common.log.Log;
-
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 
@@ -33,6 +33,8 @@ import org.springframework.util.Assert;
  * @author Petr Juza
  */
 public class DirectCallRegistryMemoryImpl implements DirectCallRegistry {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DirectCallRegistryMemoryImpl.class);
 
     private static final int OLD_PARAMS_INTERVAL = 60 * 1000;
 
@@ -49,7 +51,7 @@ public class DirectCallRegistryMemoryImpl implements DirectCallRegistry {
 
         registry.put(callId, params);
 
-        Log.debug("Call params with callId=" + callId + " added to registry: " + params);
+        LOG.debug("Call params with callId=" + callId + " added to registry: " + params);
 
         removeOldParams();
     }
@@ -68,7 +70,7 @@ public class DirectCallRegistryMemoryImpl implements DirectCallRegistry {
     @Override
     public void removeParams(String callId) {
         if (registry.remove(callId) != null) {
-            Log.debug("Call params with callId=" + callId + " were removed from registry");
+            LOG.debug("Call params with callId=" + callId + " were removed from registry");
         }
     }
 

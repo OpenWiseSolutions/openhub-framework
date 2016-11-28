@@ -28,15 +28,17 @@ import org.apache.camel.ProducerTemplate;
 import org.apache.camel.impl.DefaultProducer;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
+
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
 import org.openhubframework.openhub.api.asynch.msg.ChildMessage;
 import org.openhubframework.openhub.api.entity.ExternalSystemExtEnum;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
 import org.openhubframework.openhub.api.entity.ServiceExtEnum;
-import org.openhubframework.openhub.common.log.Log;
 import org.openhubframework.openhub.spi.msg.MessageService;
-import org.springframework.util.Assert;
 
 
 /**
@@ -47,6 +49,8 @@ import org.springframework.util.Assert;
 public class AsynchChildProducer extends DefaultProducer {
 
     public static final String DEFAULT_EXTERNAL_SYSTEM = "IP";
+
+    private static final Logger LOG = LoggerFactory.getLogger(AsynchChildProducer.class);
 
     /**
      * Creates new producer.
@@ -69,7 +73,7 @@ public class AsynchChildProducer extends DefaultProducer {
         String correlationId = (StringUtils.isNotEmpty(endpoint.getCorrelationId())
                                 ? endpoint.getCorrelationId() : generateCorrelationId());
 
-        Log.debug("Creates child message from " + (parentMsg != null ? "synchronous" : "asynchronous") + " message.");
+        LOG.debug("Creates child message from " + (parentMsg != null ? "synchronous" : "asynchronous") + " message.");
 
         ServiceExtEnum serviceExt = new ServiceExtEnum() {
             @Override
@@ -197,7 +201,7 @@ public class AsynchChildProducer extends DefaultProducer {
             getProducerTemplate().sendBodyAndHeader(AsynchConstants.URI_ASYNC_MSG, ExchangePattern.InOnly, msg,
                     AsynchConstants.MSG_QUEUE_INSERT_HEADER, System.currentTimeMillis());
         } catch (CamelExecutionException ex) {
-            Log.error("Error occurred in message " + msg.toHumanString() + " processing", ex);
+            LOG.error("Error occurred in message " + msg.toHumanString() + " processing", ex);
             throw ex;
         }
     }

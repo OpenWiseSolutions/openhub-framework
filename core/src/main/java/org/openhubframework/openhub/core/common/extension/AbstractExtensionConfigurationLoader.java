@@ -18,15 +18,16 @@ package org.openhubframework.openhub.core.common.extension;
 
 import java.util.Map;
 
-import org.openhubframework.openhub.api.route.AbstractExtRoute;
-import org.openhubframework.openhub.common.log.Log;
-
 import org.apache.camel.CamelContext;
 import org.apache.camel.CamelContextAware;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.api.route.AbstractExtRoute;
 
 
 /**
@@ -41,6 +42,8 @@ import org.springframework.util.Assert;
  * @see ClassPathXmlApplicationContext
  */
 public abstract class AbstractExtensionConfigurationLoader implements ApplicationContextAware, CamelContextAware {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractExtensionConfigurationLoader.class);
 
     private ApplicationContext parentContext;
 
@@ -90,7 +93,7 @@ public abstract class AbstractExtensionConfigurationLoader implements Applicatio
             } catch (Exception ex) {
                 String msg = "error during extension configuration '" + extConfigLocation + "' loading";
 
-                Log.error(msg, ex);
+                LOG.error(msg, ex);
 
                 throw new ExtensionConfigurationException(msg, ex);
             }
@@ -98,7 +101,7 @@ public abstract class AbstractExtensionConfigurationLoader implements Applicatio
     }
 
     private void loadExtension(String extConfigLocation, int extNumber) throws Exception {
-        Log.debug("new extension context for '" + extConfigLocation + "' started ...");
+        LOG.debug("new extension context for '" + extConfigLocation + "' started ...");
 
         ClassPathXmlApplicationContext extContext = new ClassPathXmlApplicationContext(parentContext);
         extContext.setId("OpenHub extension nr. " + extNumber);
@@ -119,7 +122,7 @@ public abstract class AbstractExtensionConfigurationLoader implements Applicatio
             }
         }
 
-        Log.debug("new extension context for '" + extConfigLocation + "' was successfully created");
+        LOG.debug("new extension context for '" + extConfigLocation + "' was successfully created");
     }
 
     /**

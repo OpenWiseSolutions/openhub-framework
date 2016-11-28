@@ -16,17 +16,17 @@
 
 package org.openhubframework.openhub.core.common.asynch;
 
-import static org.openhubframework.openhub.api.asynch.AsynchConstants.ASYNCH_MSG_HEADER;
-import static org.openhubframework.openhub.api.asynch.AsynchConstants.ENTITY_TYPE_HEADER;
-import static org.openhubframework.openhub.api.asynch.AsynchConstants.MSG_HEADER;
-import static org.openhubframework.openhub.api.asynch.AsynchConstants.NO_EFFECT_PROCESS_HEADER;
-import static org.openhubframework.openhub.api.asynch.AsynchConstants.OBJECT_ID_HEADER;
-import static org.openhubframework.openhub.api.asynch.AsynchConstants.URI_ERROR_FATAL;
-import static org.openhubframework.openhub.api.asynch.AsynchConstants.URI_ERROR_HANDLING;
+import static org.openhubframework.openhub.api.asynch.AsynchConstants.*;
 
 import java.util.Map;
-
 import javax.annotation.Nullable;
+
+import org.apache.camel.*;
+import org.apache.camel.component.spring.ws.SpringWebserviceConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.Assert;
 
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
 import org.openhubframework.openhub.api.asynch.confirm.ConfirmationCallback;
@@ -37,23 +37,10 @@ import org.openhubframework.openhub.api.entity.MsgStateEnum;
 import org.openhubframework.openhub.api.extcall.ExtCallComponentParams;
 import org.openhubframework.openhub.api.route.AbstractBasicRoute;
 import org.openhubframework.openhub.api.route.CamelConfiguration;
-import org.openhubframework.openhub.common.log.Log;
 import org.openhubframework.openhub.common.log.LogContextFilter;
 import org.openhubframework.openhub.core.common.asynch.confirm.ConfirmationService;
 import org.openhubframework.openhub.core.common.event.AsynchEventHelper;
 import org.openhubframework.openhub.spi.msg.MessageService;
-
-import org.apache.camel.Body;
-import org.apache.camel.Exchange;
-import org.apache.camel.Handler;
-import org.apache.camel.Header;
-import org.apache.camel.Headers;
-import org.apache.camel.LoggingLevel;
-import org.apache.camel.Predicate;
-import org.apache.camel.Processor;
-import org.apache.camel.component.spring.ws.SpringWebserviceConstants;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.util.Assert;
 
 
 /**
@@ -70,6 +57,8 @@ import org.springframework.util.Assert;
  */
 @CamelConfiguration(value = AsynchMessageRoute.ROUTE_BEAN)
 public class AsynchMessageRoute extends AbstractBasicRoute {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AsynchMessageRoute.class);
 
     public static final String ROUTE_BEAN = "msgRouteBean";
 
@@ -385,7 +374,7 @@ public class AsynchMessageRoute extends AbstractBasicRoute {
     public void logStartProcessing(@Body Message msg,
             @Nullable @Header(AsynchConstants.MSG_QUEUE_INSERT_HEADER) Long msgInsertTime) {
 
-        Log.debug("Starts processing of the message {}, waited in queue for {} ms", msg.toHumanString(),
+        LOG.debug("Starts processing of the message {}, waited in queue for {} ms", msg.toHumanString(),
                 msgInsertTime != null ? (System.currentTimeMillis() - msgInsertTime) : "-");
     }
 

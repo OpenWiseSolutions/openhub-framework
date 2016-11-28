@@ -16,9 +16,17 @@
 
 package org.openhubframework.openhub.modules.in.hello;
 
-import static org.openhubframework.openhub.common.jaxb.JaxbDataFormatHelper.jaxb;
+import static org.openhubframework.openhub.api.common.jaxb.JaxbDataFormatHelper.jaxb;
 
 import javax.xml.namespace.QName;
+
+import org.apache.camel.Body;
+import org.apache.camel.Expression;
+import org.apache.camel.Handler;
+import org.apache.camel.builder.xml.Namespaces;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
 
 import org.openhubframework.openhub.api.asynch.AsynchResponseProcessor;
 import org.openhubframework.openhub.api.asynch.AsynchRouteBuilder;
@@ -26,16 +34,9 @@ import org.openhubframework.openhub.api.asynch.model.CallbackResponse;
 import org.openhubframework.openhub.api.route.AbstractBasicRoute;
 import org.openhubframework.openhub.api.route.CamelConfiguration;
 import org.openhubframework.openhub.api.route.XPathValidator;
-import org.openhubframework.openhub.common.log.Log;
 import org.openhubframework.openhub.modules.ServiceEnum;
 import org.openhubframework.openhub.modules.in.hello.model.AsyncHelloRequest;
 import org.openhubframework.openhub.modules.in.hello.model.AsyncHelloResponse;
-
-import org.apache.camel.Body;
-import org.apache.camel.Expression;
-import org.apache.camel.Handler;
-import org.apache.camel.builder.xml.Namespaces;
-import org.springframework.util.Assert;
 
 
 /**
@@ -45,6 +46,8 @@ import org.springframework.util.Assert;
  */
 @CamelConfiguration(value = AsyncHelloRoute.ROUTE_BEAN)
 public class AsyncHelloRoute extends AbstractBasicRoute {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AsyncHelloRoute.class);
 
     public static final String ROUTE_BEAN = "asyncHelloRouteBean";
 
@@ -124,6 +127,6 @@ public class AsyncHelloRoute extends AbstractBasicRoute {
 
         String greeting = "Hello " + req.getName();
 
-        Log.debug("Greeting: " + greeting);
+        LOG.debug("Greeting: " + greeting);
     }
 }

@@ -19,15 +19,16 @@ package org.openhubframework.openhub.core.common.event;
 import java.util.EventObject;
 import java.util.List;
 
-import org.openhubframework.openhub.api.event.AbstractAsynchEvent;
-import org.openhubframework.openhub.common.log.Log;
-
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.StatefulService;
 import org.apache.camel.spi.EventNotifier;
 import org.apache.camel.spi.ManagementStrategy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.api.event.AbstractAsynchEvent;
 
 
 /**
@@ -36,6 +37,8 @@ import org.springframework.util.Assert;
  * @author Petr Juza
  */
 public final class AsynchEventHelper {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AsynchEventHelper.class);
 
     private static final AsynchEventFactory factory = new DefaultAsynchEventFactory();
 
@@ -172,21 +175,21 @@ public final class AsynchEventHelper {
         }
 
         if (!started) {
-            Log.debug("Ignoring notifying event {}. The EventNotifier has not been started yet: {}", event, notifier);
+            LOG.debug("Ignoring notifying event {}. The EventNotifier has not been started yet: {}", event, notifier);
             return;
         }
 
         if (!notifier.isEnabled(event)) {
-            Log.debug("Notification of event is disabled: {}", event);
+            LOG.debug("Notification of event is disabled: {}", event);
             return;
         }
 
         try {
-            Log.debug("Event {} arrived to notifier {}", event, notifier.getClass().getName());
+            LOG.debug("Event {} arrived to notifier {}", event, notifier.getClass().getName());
 
             notifier.notify(event);
         } catch (Throwable e) {
-            Log.warn("Error notifying event " + event + ". This exception will be ignored. ", e);
+            LOG.warn("Error notifying event " + event + ". This exception will be ignored. ", e);
         }
     }
 }

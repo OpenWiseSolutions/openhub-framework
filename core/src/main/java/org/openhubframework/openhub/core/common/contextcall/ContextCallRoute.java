@@ -16,16 +16,17 @@
 
 package org.openhubframework.openhub.core.common.contextcall;
 
-import org.openhubframework.openhub.api.route.AbstractBasicRoute;
-import org.openhubframework.openhub.api.route.CamelConfiguration;
-import org.openhubframework.openhub.common.log.Log;
-import org.openhubframework.openhub.core.common.route.RouteConstants;
-
 import org.apache.camel.Handler;
 import org.apache.camel.Header;
 import org.apache.camel.LoggingLevel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.api.route.AbstractBasicRoute;
+import org.openhubframework.openhub.api.route.CamelConfiguration;
+import org.openhubframework.openhub.core.common.route.RouteConstants;
 
 
 /**
@@ -36,6 +37,8 @@ import org.springframework.util.Assert;
  */
 @CamelConfiguration
 public class ContextCallRoute extends AbstractBasicRoute {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ContextCallRoute.class);
 
     static final String SERVLET_URL = "contextCall";
     static final String CALL_ID_HEADER = "callId";
@@ -74,6 +77,6 @@ public class ContextCallRoute extends AbstractBasicRoute {
         // save response
         callRegistry.addResponse(callId, res);
 
-        Log.debug("Response of the call ID '" + callId + "' was saved: " + res);
+        LOG.debug("Response of the call ID '" + callId + "' was saved: " + res);
     }
 }

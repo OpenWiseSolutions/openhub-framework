@@ -21,20 +21,24 @@ import static org.springframework.util.StringUtils.hasText;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultProducer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
+
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
 import org.openhubframework.openhub.api.entity.ExternalCall;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.exception.LockFailureException;
 import org.openhubframework.openhub.api.extcall.ExtCallComponentParams;
-import org.openhubframework.openhub.common.log.Log;
 import org.openhubframework.openhub.spi.extcall.ExternalCallService;
-import org.springframework.util.Assert;
 
 
 /**
  * See {@link ExternalCallComponent}
  */
 public class ExternalCallProducer extends DefaultProducer {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ExternalCallProducer.class);
 
     public ExternalCallProducer(ExternalCallEndpoint externalCallEndpoint) {
         super(externalCallEndpoint);
@@ -48,7 +52,7 @@ public class ExternalCallProducer extends DefaultProducer {
         String key = getOperationKey(exchange);
         ExternalCallService service = getService(exchange);
 
-        Log.debug("External call check: operation URI = {}, operation key = {}, msgTimestamp = {}",
+        LOG.debug("External call check: operation URI = {}, operation key = {}, msgTimestamp = {}",
                 operation, key, message.getMsgTimestamp());
 
         ExternalCall externalCall = prepareExternalCall(operation, key, message, service);
@@ -59,8 +63,8 @@ public class ExternalCallProducer extends DefaultProducer {
                 finalizeExternalCall(exchange, externalCall, service); // in either case release the external call
             }
         } else {
-            Log.debug("External call was skipped. See external call service log for detailed info. " +
-                    "Call: target={} operation={} key={} msgId={} msgTimestamp={}",
+            LOG.debug("External call was skipped. See external call service log for detailed info. " +
+                            "Call: target={} operation={} key={} msgId={} msgTimestamp={}",
                     targetURI, operation, key, message.getMsgId(), message.getMsgTimestamp());
         }
     }

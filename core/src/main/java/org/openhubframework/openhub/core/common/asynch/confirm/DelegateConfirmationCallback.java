@@ -16,23 +16,19 @@
 
 package org.openhubframework.openhub.core.common.asynch.confirm;
 
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
+import java.util.*;
 import javax.annotation.Nullable;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 
 import org.openhubframework.openhub.api.asynch.confirm.ConfirmationCallback;
 import org.openhubframework.openhub.api.asynch.confirm.ExternalSystemConfirmation;
 import org.openhubframework.openhub.api.entity.ExternalSystemExtEnum;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
-import org.openhubframework.openhub.common.log.Log;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
 
 
 /**
@@ -42,6 +38,8 @@ import org.springframework.util.Assert;
  * @author Petr Juza
  */
 public class DelegateConfirmationCallback implements ConfirmationCallback {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DelegateConfirmationCallback.class);
 
     private static final Set<MsgStateEnum> ALLOWED_STATES =
             Collections.unmodifiableSet(EnumSet.of(MsgStateEnum.OK, MsgStateEnum.FAILED));
@@ -58,7 +56,7 @@ public class DelegateConfirmationCallback implements ConfirmationCallback {
         if (impl != null) {
             impl.confirm(msg);
         } else {
-            Log.debug("Confirmation {} - no suitable ExternalSystemConfirmation implementation "
+            LOG.debug("Confirmation {} - no suitable ExternalSystemConfirmation implementation "
                     + "for the following external system: {}", msg.getState(), msg.getSourceSystem());
         }
     }

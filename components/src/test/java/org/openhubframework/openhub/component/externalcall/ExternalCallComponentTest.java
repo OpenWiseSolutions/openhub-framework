@@ -27,27 +27,23 @@ import static org.junit.Assume.assumeThat;
 import static org.junit.Assume.assumeTrue;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
 import javax.annotation.Nullable;
 
-import org.apache.camel.EndpointInject;
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
-import org.apache.camel.Produce;
-import org.apache.camel.ProducerTemplate;
+import org.apache.camel.*;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
 import org.openhubframework.openhub.api.entity.ExternalCall;
 import org.openhubframework.openhub.api.entity.ExternalCallStateEnum;
@@ -56,21 +52,20 @@ import org.openhubframework.openhub.api.exception.IntegrationException;
 import org.openhubframework.openhub.api.exception.InternalErrorEnum;
 import org.openhubframework.openhub.api.exception.LockFailureException;
 import org.openhubframework.openhub.api.extcall.ExtCallComponentParams;
-import org.openhubframework.openhub.common.log.Log;
 import org.openhubframework.openhub.component.AbstractComponentsDbTest;
 import org.openhubframework.openhub.core.common.asynch.AsynchMessageRoute;
 import org.openhubframework.openhub.core.common.dao.ExternalCallDao;
 import org.openhubframework.openhub.test.ActiveRoutes;
 import org.openhubframework.openhub.test.ExternalSystemTestEnum;
 import org.openhubframework.openhub.test.ServiceTestEnum;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
 /**
  * Test suite for {@link ExternalCallComponent}.
  */
 @ActiveRoutes(classes = {AsynchMessageRoute.class})
 public class ExternalCallComponentTest extends AbstractComponentsDbTest {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ExternalCallComponentTest.class);
 
     private static final String REQUEST_XML =
             "  <cus:setCustomerRequest xmlns=\"http://openhubframework.org/ws/Customer-v1\""
@@ -459,7 +454,7 @@ public class ExternalCallComponentTest extends AbstractComponentsDbTest {
                         replyAvailable = false; // mark reply unavailable to resend the original message
                     } else {
                         // fail by rethrowing
-                        Log.error("Unexpected failure for message {} --", message, exc);
+                        LOG.error("Unexpected failure for message {} --", message, exc);
                         throw exc;
                     }
                 }
@@ -574,7 +569,7 @@ public class ExternalCallComponentTest extends AbstractComponentsDbTest {
     private void verifyAndRecordCallId(Exchange exchange, String operationName, String entityId) {
         Message msg = exchange.getIn().getHeader(AsynchConstants.MSG_HEADER, Message.class);
         ExternalCall extCall = externalCallDao.getExternalCall(operationName, entityId);
-        Log.info("Processing ExternalCall={} for Message={}", extCall, msg);
+        LOG.info("Processing ExternalCall={} for Message={}", extCall, msg);
 
         assertNotNull(extCall);
         assertEquals(extCall.getState(), ExternalCallStateEnum.PROCESSING);

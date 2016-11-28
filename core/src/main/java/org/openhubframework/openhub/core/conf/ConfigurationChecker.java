@@ -21,13 +21,12 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.openhubframework.openhub.common.log.Log;
-import org.openhubframework.openhub.core.common.route.RouteConstants;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -35,6 +34,8 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.core.common.route.RouteConstants;
 
 
 /**
@@ -52,6 +53,8 @@ import org.springframework.util.Assert;
  * @see ConfCheck
  */
 public class ConfigurationChecker implements ApplicationListener<ContextRefreshedEvent> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ConfigurationChecker.class);
 
     private static final String ENDPOINTS_INCLUDE_PATTERN = "endpoints.includePattern";
 
@@ -94,7 +97,7 @@ public class ConfigurationChecker implements ApplicationListener<ContextRefreshe
      * @param context the application context
      */
     void checkConfiguration(ApplicationContext context) {
-        Log.debug("Checking configuration validity ...");
+        LOG.debug("Checking configuration validity ...");
 
         Assert.state(context.getParent() != null,
                 "ConfigurationChecker must be initialized in child context");
@@ -113,7 +116,7 @@ public class ConfigurationChecker implements ApplicationListener<ContextRefreshe
                 }
             }
         } catch (ConfigurationException ex) {
-            Log.error("Configuration error", ex);
+            LOG.error("Configuration error", ex);
 
             // stop parent context (I don't know how to stop it in other way)
             ConfigurableApplicationContext rootContext =
@@ -140,7 +143,7 @@ public class ConfigurationChecker implements ApplicationListener<ContextRefreshe
             IOUtils.closeQuietly(httpClient);
         }
 
-        Log.debug("Parameter '" + LOCALHOST_URI + "' is OK");
+        LOG.debug("Parameter '" + LOCALHOST_URI + "' is OK");
     }
 
     /**
@@ -164,7 +167,7 @@ public class ConfigurationChecker implements ApplicationListener<ContextRefreshe
                     + pattern + "' has wrong syntax, can't be compiled.", ex);
         }
 
-        Log.debug("Parameter '" + paramName + "' is OK");
+        LOG.debug("Parameter '" + paramName + "' is OK");
     }
 
     /**

@@ -16,21 +16,18 @@
 
 package org.openhubframework.openhub.core.throttling;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.lang3.time.DateUtils;
 import org.joda.time.DateTime;
-import org.openhubframework.openhub.common.log.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
+
 import org.openhubframework.openhub.spi.throttling.ThrottleCounter;
 import org.openhubframework.openhub.spi.throttling.ThrottleScope;
-import org.springframework.util.Assert;
 
 
 /**
@@ -41,6 +38,8 @@ import org.springframework.util.Assert;
  * @author Petr Juza
  */
 public class ThrottleCounterMemoryImpl implements ThrottleCounter {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ThrottleCounterMemoryImpl.class);
 
     private static final int DUMP_PERIOD = 60;
 
@@ -121,7 +120,7 @@ public class ThrottleCounterMemoryImpl implements ThrottleCounter {
 
 
         // make dump only once in the specified interval
-        if (Log.isDebugEnabled() && (DateUtils.addSeconds(new Date(), -DUMP_PERIOD).after(lastDumpTimestamp))) {
+        if (LOG.isDebugEnabled() && (DateUtils.addSeconds(new Date(), -DUMP_PERIOD).after(lastDumpTimestamp))) {
             dumpMemory();
 
             lastDumpTimestamp = new Date();
@@ -147,6 +146,6 @@ public class ThrottleCounterMemoryImpl implements ThrottleCounter {
             dump.append("\n");
         }
 
-        Log.debug(dump.toString());
+        LOG.debug(dump.toString());
     }
 }

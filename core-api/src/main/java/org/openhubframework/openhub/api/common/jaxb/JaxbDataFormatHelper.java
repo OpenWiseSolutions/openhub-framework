@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.common.jaxb;
+package org.openhubframework.openhub.api.common.jaxb;
 
 import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -25,6 +25,8 @@ import org.apache.camel.model.dataformat.JaxbDataFormat;
 
 /**
  * Helper class for creating Camel {@link JaxbDataFormat} used for marshalling and unmarshalling.
+ *
+ * @author Petr Juza
  */
 public class JaxbDataFormatHelper {
 

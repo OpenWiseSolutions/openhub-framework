@@ -53,16 +53,6 @@
             <property name="database" value="H2"/>
         </bean>
 
-        <bean id="h2Server" class="org.h2.tools.Server" factory-method="createTcpServer" init-method="start"
-              destroy-method="stop" depends-on="h2WebServer">
-            <constructor-arg value="-tcp,-tcpAllowOthers,-tcpPort,9092"/>
-        </bean>
-
-        <bean id="h2WebServer" class="org.h2.tools.Server" factory-method="createWebServer" init-method="start"
-              destroy-method="stop">
-            <constructor-arg value="-web,-webAllowOthers,-webPort,8082"/>
-        </bean>
-
         <jdbc:initialize-database data-source="dataSource">
             <jdbc:script location="classpath:db/db_schema_h2.sql"/>
         </jdbc:initialize-database>

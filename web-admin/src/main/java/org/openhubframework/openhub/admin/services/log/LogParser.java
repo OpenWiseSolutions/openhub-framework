@@ -25,12 +25,12 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 
-import org.openhubframework.openhub.common.log.Log;
-
 import org.apache.commons.io.comparator.LastModifiedFileComparator;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -40,6 +40,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class LogParser {
+
+    private static final Logger LOG = LoggerFactory.getLogger(LogParser.class);
 
     // log file format: logFile_%d{yyyy-MM-dd}_%i.log
     public static final DateTimeFormatter FILE_DATE_FORMAT = DateTimeFormat.forPattern("yyyy-MM-dd");
@@ -73,10 +75,10 @@ public class LogParser {
         Arrays.sort(files, LastModifiedFileComparator.LASTMODIFIED_COMPARATOR);
 
         if (files.length == 0) {
-            Log.debug("No log files ending with {}, containing {}, modified after {}, at {}",
+            LOG.debug("No log files ending with {}, containing {}, modified after {}, at {}",
                     FILE_EXTENSION, logDateFormatted, date, logFolderPath);
         } else {
-            Log.debug("Found log files for {}: {}", date, files);
+            LOG.debug("Found log files for {}: {}", date, files);
         }
 
         return files;

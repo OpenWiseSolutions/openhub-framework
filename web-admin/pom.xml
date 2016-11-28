@@ -80,7 +80,7 @@
             <groupId>org.jolokia</groupId>
             <artifactId>jolokia-core</artifactId>
         </dependency>
-        <!-- TODO (pjuza) neni potreba pro Boot 1.4.1 -->
+        <!-- TODO PJUZA neni potreba pro Boot 1.4.1 -->
         <dependency>
             <groupId>com.googlecode.json-simple</groupId>
             <artifactId>json-simple</artifactId>

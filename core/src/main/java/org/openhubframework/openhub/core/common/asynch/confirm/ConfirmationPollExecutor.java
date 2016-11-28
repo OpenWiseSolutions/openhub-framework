@@ -16,13 +16,14 @@
 
 package org.openhubframework.openhub.core.common.asynch.confirm;
 
+import org.apache.camel.ProducerTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
 import org.openhubframework.openhub.api.entity.ExternalCall;
 import org.openhubframework.openhub.api.exception.LockFailureException;
-import org.openhubframework.openhub.common.log.Log;
-
-import org.apache.camel.ProducerTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
@@ -34,6 +35,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Petr Juza
  */
 public class ConfirmationPollExecutor implements Runnable {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ConfirmationPollExecutor.class);
 
     private static final int LOCK_FAILURE_LIMIT = 5;
 
@@ -48,7 +51,7 @@ public class ConfirmationPollExecutor implements Runnable {
 
     @Override
     public void run() {
-        Log.debug("Confirmation pooling starts ...");
+        LOG.debug("Confirmation pooling starts ...");
 
         // is there confirmation for processing?
         ExternalCall extCall = null;
@@ -69,16 +72,16 @@ public class ConfirmationPollExecutor implements Runnable {
                 lockFailureCount++;
 
                 if (lockFailureCount > LOCK_FAILURE_LIMIT) {
-                    Log.warn("Probably problem with locking confirmations - count of lock failures exceeds limit ("
+                    LOG.warn("Probably problem with locking confirmations - count of lock failures exceeds limit ("
                             + LOCK_FAILURE_LIMIT + ").");
                     break;
                 }
             } catch (Exception ex) {
-                Log.error("Error occurred while getting confirmations "
+                LOG.error("Error occurred while getting confirmations "
                         + (extCall != null ? extCall.toHumanString() : ""), ex);
             }
         }
 
-        Log.debug("Confirmation pooling finished.");
+        LOG.debug("Confirmation pooling finished.");
     }
 }

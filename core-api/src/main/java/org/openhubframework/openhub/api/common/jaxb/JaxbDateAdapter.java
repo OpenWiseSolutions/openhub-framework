@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.common.jaxb;
+package org.openhubframework.openhub.api.common.jaxb;
 
 import javax.annotation.Nullable;
 import javax.xml.bind.DatatypeConverter;

@@ -16,27 +16,24 @@
 
 package org.openhubframework.openhub.core.common.asynch.msg;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
+import java.util.*;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
 import org.openhubframework.openhub.api.entity.ExternalSystemExtEnum;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
 import org.openhubframework.openhub.api.exception.ErrorExtEnum;
-import org.openhubframework.openhub.common.log.Log;
 import org.openhubframework.openhub.core.common.dao.MessageDao;
 import org.openhubframework.openhub.core.common.exception.ExceptionTranslator;
 import org.openhubframework.openhub.spi.msg.MessageService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 
 /**
@@ -45,6 +42,8 @@ import org.springframework.util.Assert;
  * @author Petr Juza
  */
 public class MessageServiceImpl implements MessageService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MessageServiceImpl.class);
 
     @Autowired
     private MessageDao messageDao;
@@ -60,7 +59,7 @@ public class MessageServiceImpl implements MessageService {
 
         messageDao.insert(message);
 
-        Log.debug("Inserted new message " + message.toHumanString());        
+        LOG.debug("Inserted new message " + message.toHumanString());
     }
 
     @Transactional
@@ -87,7 +86,7 @@ public class MessageServiceImpl implements MessageService {
 
         messageDao.update(msg);
 
-        Log.debug("State of the message " + msg.toHumanString() + " was changed to " + MsgStateEnum.OK);
+        LOG.debug("State of the message " + msg.toHumanString() + " was changed to " + MsgStateEnum.OK);
 
         // check parent message with HARD binding - if any
         if (msg.existHardParent()) {
@@ -115,7 +114,8 @@ public class MessageServiceImpl implements MessageService {
 
                 messageDao.update(parentMsg);
 
-                Log.debug("State of the parent message " + parentMsg.toHumanString() + " was changed to " + MsgStateEnum.OK);
+                LOG.debug("State of the parent message " + parentMsg.toHumanString() + " was changed to "
+                        + MsgStateEnum.OK);
             }
         }
     }
@@ -134,7 +134,7 @@ public class MessageServiceImpl implements MessageService {
 
         messageDao.update(msg);
 
-        Log.debug("State of the message " + msg.toHumanString() + " was changed to " + MsgStateEnum.PROCESSING);
+        LOG.debug("State of the message " + msg.toHumanString() + " was changed to " + MsgStateEnum.PROCESSING);
     }
 
     private String getBusinessErrorsFromChildMessages(List<Message> messages) {
@@ -162,7 +162,7 @@ public class MessageServiceImpl implements MessageService {
 
             messageDao.update(msg);
 
-            Log.debug("State of the message " + msg.toHumanString() + " was changed to " + MsgStateEnum.WAITING);
+            LOG.debug("State of the message " + msg.toHumanString() + " was changed to " + MsgStateEnum.WAITING);
         }
     }
 
@@ -181,9 +181,9 @@ public class MessageServiceImpl implements MessageService {
 
             messageDao.update(msg);
 
-            Log.debug("State of the message " + msg.toHumanString() + " was changed to " + MsgStateEnum.WAITING_FOR_RES);
+            LOG.debug("State of the message " + msg.toHumanString() + " was changed to " + MsgStateEnum.WAITING_FOR_RES);
         } else {
-            Log.debug("Message " + msg.toHumanString() + " was already in " + MsgStateEnum.WAITING_FOR_RES + " state.");
+            LOG.debug("Message " + msg.toHumanString() + " was already in " + MsgStateEnum.WAITING_FOR_RES + " state.");
         }
     }
 
@@ -198,7 +198,7 @@ public class MessageServiceImpl implements MessageService {
 
         messageDao.update(msg);
 
-        Log.debug("State of the message " + msg.toHumanString() + " was changed to " + MsgStateEnum.PARTLY_FAILED
+        LOG.debug("State of the message " + msg.toHumanString() + " was changed to " + MsgStateEnum.PARTLY_FAILED
                 + ", but WITHOUT increasing error counter");
     }
 
@@ -212,7 +212,7 @@ public class MessageServiceImpl implements MessageService {
         msg.setState(MsgStateEnum.PARTLY_FAILED);
         updateErrorMessage(msg, ex, errCode, customData, props);
 
-        Log.debug("State of the message " + msg.toHumanString() + " was changed to "
+        LOG.debug("State of the message " + msg.toHumanString() + " was changed to "
                 + MsgStateEnum.PARTLY_FAILED + " (failed count = " + msg.getFailedCount() + ")");
     }
 
@@ -226,7 +226,7 @@ public class MessageServiceImpl implements MessageService {
         msg.setState(MsgStateEnum.FAILED);
         updateErrorMessage(msg, ex, errCode, customData, props);
 
-        Log.debug("State of the message " + msg.toHumanString() + " was changed to "
+        LOG.debug("State of the message " + msg.toHumanString() + " was changed to "
                 + MsgStateEnum.FAILED + " (failed count = " + msg.getFailedCount() + ")");
 
         // check parent message with HARD binding - if any
@@ -252,7 +252,7 @@ public class MessageServiceImpl implements MessageService {
 
         messageDao.update(parentMsg);
 
-        Log.debug("State of the parent message " + parentMsg.toHumanString() + " was changed to " + MsgStateEnum.FAILED);
+        LOG.debug("State of the parent message " + parentMsg.toHumanString() + " was changed to " + MsgStateEnum.FAILED);
     }
 
     @Transactional
@@ -270,7 +270,7 @@ public class MessageServiceImpl implements MessageService {
 
         messageDao.update(msg);
 
-        Log.debug("State of the message " + msg.toHumanString() + " was changed to "
+        LOG.debug("State of the message " + msg.toHumanString() + " was changed to "
                 + MsgStateEnum.FAILED + " (failed count = " + msg.getFailedCount() + ")");
 
         // check parent message with HARD binding - if any
@@ -376,7 +376,7 @@ public class MessageServiceImpl implements MessageService {
 
         messageDao.update(msg);
 
-        Log.debug("State of the message " + msg.toHumanString() + " was changed to " + MsgStateEnum.POSTPONED);
+        LOG.debug("State of the message " + msg.toHumanString() + " was changed to " + MsgStateEnum.POSTPONED);
     }
 
     @Transactional
@@ -393,6 +393,6 @@ public class MessageServiceImpl implements MessageService {
 
         messageDao.update(msg);
 
-        Log.debug("Sets funnel ID of the message " + msg.toHumanString() + " to value: " + funnelCompId);
+        LOG.debug("Sets funnel ID of the message " + msg.toHumanString() + " to value: " + funnelCompId);
     }
 }

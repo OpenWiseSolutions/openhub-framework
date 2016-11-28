@@ -20,12 +20,13 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
+
 import org.openhubframework.openhub.api.asynch.confirm.ConfirmationCallback;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
-import org.openhubframework.openhub.common.log.Log;
-
-import org.springframework.util.Assert;
 
 
 /**
@@ -34,6 +35,8 @@ import org.springframework.util.Assert;
  * @author Petr Juza
  */
 public class DefaultConfirmationCallback implements ConfirmationCallback {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultConfirmationCallback.class);
 
     private static final Set<MsgStateEnum> ALLOWED_STATES =
             Collections.unmodifiableSet(EnumSet.of(MsgStateEnum.OK, MsgStateEnum.FAILED));
@@ -45,10 +48,10 @@ public class DefaultConfirmationCallback implements ConfirmationCallback {
 
         switch(msg.getState()) {
             case OK:
-                Log.debug("Confirmation - the message " + msg.toHumanString() + " was successfully processed.");
+                LOG.debug("Confirmation - the message " + msg.toHumanString() + " was successfully processed.");
                 break;
             case FAILED:
-                Log.debug("Confirmation - processing of the message " + msg.toHumanString() + " failed.");
+                LOG.debug("Confirmation - processing of the message " + msg.toHumanString() + " failed.");
                 break;
         }
     }

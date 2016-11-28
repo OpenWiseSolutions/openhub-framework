@@ -16,20 +16,20 @@
 
 package org.openhubframework.openhub.modules.in.hello;
 
-import static org.openhubframework.openhub.common.jaxb.JaxbDataFormatHelper.jaxb;
+import static org.openhubframework.openhub.api.common.jaxb.JaxbDataFormatHelper.jaxb;
 
 import javax.xml.namespace.QName;
+
+import org.apache.camel.Body;
+import org.apache.camel.Handler;
+import org.apache.camel.LoggingLevel;
+import org.springframework.util.Assert;
 
 import org.openhubframework.openhub.api.route.AbstractBasicRoute;
 import org.openhubframework.openhub.api.route.CamelConfiguration;
 import org.openhubframework.openhub.modules.ServiceEnum;
 import org.openhubframework.openhub.modules.in.hello.model.SyncHelloRequest;
 import org.openhubframework.openhub.modules.in.hello.model.SyncHelloResponse;
-
-import org.apache.camel.Body;
-import org.apache.camel.Handler;
-import org.apache.camel.LoggingLevel;
-import org.springframework.util.Assert;
 
 
 /**

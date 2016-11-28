@@ -20,11 +20,8 @@ import static java.lang.Math.min;
 
 import java.util.List;
 
-import org.openhubframework.openhub.api.entity.ExternalCall;
-import org.openhubframework.openhub.api.entity.ExternalCallStateEnum;
-import org.openhubframework.openhub.common.log.Log;
-import org.openhubframework.openhub.core.common.dao.ExternalCallDao;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,11 +32,17 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.Assert;
 
+import org.openhubframework.openhub.api.entity.ExternalCall;
+import org.openhubframework.openhub.api.entity.ExternalCallStateEnum;
+import org.openhubframework.openhub.core.common.dao.ExternalCallDao;
+
 /**
  * Implementation that uses DB to find external calls
  * and also uses DB to write them back after they're repaired.
  */
 public class RepairExternalCallDbImpl implements RepairExternalCallService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(RepairExternalCallDbImpl.class);
 
     private static final int BATCH_SIZE = 10;
 
@@ -59,7 +62,7 @@ public class RepairExternalCallDbImpl implements RepairExternalCallService {
         // find external calls in PROCESSING state
         List<ExternalCall> extCalls = findProcessingExternalCalls();
 
-        Log.debug("Found {} external call(s) for repairing ...", extCalls.size());
+        LOG.debug("Found {} external call(s) for repairing ...", extCalls.size());
 
         // repair external calls in batches
         int batchStartIncl = 0;
@@ -87,7 +90,7 @@ public class RepairExternalCallDbImpl implements RepairExternalCallService {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
                 for (ExternalCall extCall : externalCalls) {
-                    Log.warn("The extCall {} is in {} state and is being changed to {}.",
+                    LOG.warn("The extCall {} is in {} state and is being changed to {}.",
                             extCall.toHumanString(), extCall.getState(), ExternalCallStateEnum.FAILED);
 
                     extCall.setState(ExternalCallStateEnum.FAILED);

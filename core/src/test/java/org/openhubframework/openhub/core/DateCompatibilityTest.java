@@ -22,13 +22,13 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assume.assumeThat;
 
-import org.openhubframework.openhub.common.Tools;
-import org.openhubframework.openhub.common.jaxb.JaxbDateAdapter;
-
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.junit.Before;
 import org.junit.Test;
+
+import org.openhubframework.openhub.api.common.jaxb.JaxbDateAdapter;
+import org.openhubframework.openhub.common.Tools;
 
 
 /**

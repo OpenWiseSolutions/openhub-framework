@@ -19,21 +19,14 @@ package org.openhubframework.openhub.test;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
-import org.openhubframework.openhub.api.entity.ExternalCall;
-import org.openhubframework.openhub.api.entity.ExternalSystemExtEnum;
-import org.openhubframework.openhub.api.entity.Message;
-import org.openhubframework.openhub.api.entity.MsgStateEnum;
-import org.openhubframework.openhub.api.entity.Request;
-import org.openhubframework.openhub.api.entity.Response;
-import org.openhubframework.openhub.api.entity.ServiceExtEnum;
-import org.openhubframework.openhub.common.log.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -43,6 +36,8 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import org.openhubframework.openhub.api.entity.*;
+
 
 /**
  * Extends {@link AbstractTest} and adds support for test with database.
@@ -51,6 +46,8 @@ import org.springframework.transaction.support.TransactionTemplate;
  */
 @ContextConfiguration(locations = {"classpath:/META-INF/test_persistence.xml"})
 public abstract class AbstractDbTest extends AbstractTest {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractDbTest.class);
 
     /**
      * Default database unit name of Hibernate.
@@ -92,10 +89,10 @@ public abstract class AbstractDbTest extends AbstractTest {
         List<Response> responses = em.createQuery(
                 "SELECT r FROM " + Response.class.getName() + " r", Response.class).getResultList();
 
-        Log.info("Messages:\n{}", StringUtils.join(messages, "\n"));
-        Log.info("External Calls:\n{}", StringUtils.join(externalCalls, "\n"));
-        Log.info("Requests:\n{}", StringUtils.join(requests, "\n"));
-        Log.info("Responses:\n{}", StringUtils.join(responses, "\n"));
+        LOG.info("Messages:\n{}", StringUtils.join(messages, "\n"));
+        LOG.info("External Calls:\n{}", StringUtils.join(externalCalls, "\n"));
+        LOG.info("Requests:\n{}", StringUtils.join(requests, "\n"));
+        LOG.info("Responses:\n{}", StringUtils.join(responses, "\n"));
     }
 
     /**

@@ -18,16 +18,17 @@ package org.openhubframework.openhub.core.common.asynch.confirm;
 
 import javax.annotation.Nullable;
 
-import org.openhubframework.openhub.api.entity.ExternalCall;
-import org.openhubframework.openhub.api.entity.ExternalCallStateEnum;
-import org.openhubframework.openhub.api.exception.LockFailureException;
-import org.openhubframework.openhub.common.log.Log;
-import org.openhubframework.openhub.core.common.dao.ExternalCallDao;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.api.entity.ExternalCall;
+import org.openhubframework.openhub.api.entity.ExternalCallStateEnum;
+import org.openhubframework.openhub.api.exception.LockFailureException;
+import org.openhubframework.openhub.core.common.dao.ExternalCallDao;
 
 
 /**
@@ -37,6 +38,8 @@ import org.springframework.util.Assert;
  * @author Petr Juza
  */
 public class ConfirmationPoolDbImpl implements ConfirmationPool {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ConfirmationPoolDbImpl.class);
 
     @Autowired
     private ExternalCallDao extCallDao;
@@ -55,7 +58,7 @@ public class ConfirmationPoolDbImpl implements ConfirmationPool {
         final ExternalCall extCall = extCallDao.findConfirmation(interval);
 
         if (extCall == null) {
-            Log.debug("There is no FAILED confirmation for processing.");
+            LOG.debug("There is no FAILED confirmation for processing.");
             return null;
         }
 
@@ -68,7 +71,7 @@ public class ConfirmationPoolDbImpl implements ConfirmationPool {
 
         try {
             ExternalCall lockedCall = extCallDao.lockConfirmation(extCall);
-            Log.debug("Success in getting lock for confirmation " + lockedCall.toHumanString());
+            LOG.debug("Success in getting lock for confirmation " + lockedCall.toHumanString());
             return lockedCall;
         } catch (Exception ex) {
             throw new LockFailureException("Not success in getting lock for confirmation " + extCall.toHumanString(), ex);
