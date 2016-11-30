@@ -46,7 +46,7 @@
     <!-- define JPA component -->
     <bean id="jpa" class="org.apache.camel.component.jpa.JpaComponent">
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
-        <property name="transactionManager" ref="jpaTxManager"/>
+        <property name="transactionManager" ref="transactionManager"/>
         <property name="camelContext" ref="camelContext"/>
     </bean>
 

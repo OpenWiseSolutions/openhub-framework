@@ -26,28 +26,40 @@ import net.bull.javamelody.MonitoringFilter;
 import net.bull.javamelody.SessionListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
+import org.springframework.boot.context.web.ErrorPageFilter;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.*;
 
+import org.openhubframework.openhub.admin.web.OpenHubWebApplication;
 import org.openhubframework.openhub.admin.web.filter.RequestResponseLoggingFilter;
+import org.openhubframework.openhub.common.AutoConfiguration;
 import org.openhubframework.openhub.common.log.LogContextFilter;
 
 
 /**
  * OpenHub application configuration.
+ * <p/>
+ * This class configures root Spring context. Two child contexts are created:
+ * <ul>
+ *     <li>Spring MVC web context
+ *     <li>Spring WS context
+ * </ul>
  *
  * @author <a href="mailto:petr.juza@openwise.cz">Petr Juza</a>
  * @since 1.1
  */
 //@SpringBootApplication
-//@EnableAutoConfiguration(exclude = {JacksonAutoConfiguration.class})
+@EnableAutoConfiguration
 //@EnableConfigurationProperties
-//@ComponentScan(basePackages = "com.openwise.wiseporter",
-//        excludeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = AutoConfiguration.class))
+@ComponentScan(basePackages = {"org.openhubframework.openhub.core.common.route",
+        "org.openhubframework.openhub.common.datasource",
+        "org.openhubframework.openhub.core.common.version",
+        "org.openhubframework.openhub.core.common.dao",
+        "org.openhubframework.openhub.core.persistence"},
+        excludeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = AutoConfiguration.class))
 @Configuration
 @ImportResource({"classpath:net/bull/javamelody/monitoring-spring.xml",
         "classpath:rootApplicationContext.xml",
@@ -101,7 +113,26 @@ public class OpenHubApplication extends SpringBootServletInitializer {
         super.onStartup(container);
     }
 
+    // ----------------------------------------------
+    // reason of this code snippet: http://stackoverflow.com/questions/30170586/how-to-disable-errorpagefilter-in-spring-boot
+
+    @Bean
+    public ErrorPageFilter errorPageFilter() {
+        return new ErrorPageFilter();
+    }
+
+    @Bean
+    public FilterRegistrationBean disableSpringBootErrorFilter(ErrorPageFilter filter) {
+        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
+        filterRegistrationBean.setFilter(filter);
+        filterRegistrationBean.setEnabled(false);
+        return filterRegistrationBean;
+    }
+    // ----------------------------------------------
+
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(OpenHubApplication.class, args);
+        new SpringApplicationBuilder(OpenHubApplication.class)
+                .child(OpenHubWebApplication.class).web(true)
+                .run(args);
     }
 }

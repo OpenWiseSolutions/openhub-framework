@@ -15,7 +15,7 @@
     <context:component-scan base-package="org.openhubframework.openhub.core.common.dao"/>
 
     <!-- SPI implementations -->
-    <bean id="messageService" class="org.openhubframework.openhub.core.common.asynch.msg.MessageServiceImpl"/>
+    <!--<bean id="messageService" class="org.openhubframework.openhub.core.common.asynch.msg.MessageServiceImpl"/>-->
     <bean id="externalCallService" class="org.openhubframework.openhub.core.common.asynch.ExternalCallServiceImpl"/>
 
 </beans>

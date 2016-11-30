@@ -18,13 +18,14 @@ package org.openhubframework.openhub.core.common.contextcall;
 
 import java.io.IOException;
 
-import org.openhubframework.openhub.core.common.route.RouteConstants;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import org.openhubframework.openhub.core.common.route.RouteConstants;
 
 
 /**
@@ -32,6 +33,7 @@ import org.springframework.beans.factory.annotation.Value;
  *
  * @author Petr Juza
  */
+@Service
 public class ContextCallHttpImpl extends AbstractContextCall {
 
     /**

@@ -13,9 +13,9 @@
 
     <context:component-scan base-package="org.openhubframework.openhub.core"/>
 
-    <bean id="messageService" class="org.openhubframework.openhub.core.common.asynch.msg.MessageServiceImpl"/>
+    <!--<bean id="messageService" class="org.openhubframework.openhub.core.common.asynch.msg.MessageServiceImpl"/>-->
 
-    <bean id="reqResService" class="org.openhubframework.openhub.core.reqres.RequestResponseServiceDefaultImpl"/>
+    <!--<bean id="reqResService" class="org.openhubframework.openhub.core.reqres.RequestResponseServiceDefaultImpl"/>-->
 
     <!-- priority queue for AsynchMessageRoute -->
     <bean id="priorityQueueFactory" class="org.apache.camel.component.seda.PriorityBlockingQueueFactory">

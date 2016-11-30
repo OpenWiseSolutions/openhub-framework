@@ -16,7 +16,7 @@
     <import resource="classpath:/META-INF/sp_jmx.xml"/>
 
     <context:annotation-config />
-    <tx:annotation-driven transaction-manager="jpaTxManager"/>
+    <tx:annotation-driven transaction-manager="transactionManager"/>
 
     <!-- init all routes from modules -->
     <context:component-scan base-package="org.openhubframework.openhub.core, org.openhubframework.openhub.modules" use-default-filters="false"

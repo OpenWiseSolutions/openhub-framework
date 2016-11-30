@@ -24,26 +24,6 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-    <!--
-        A filter that provides way to specify a character encoding for requests.
-    -->
-    <filter>
-        <filter-name>charsetFilter</filter-name>
-        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
-        <init-param>
-            <param-name>encoding</param-name>
-            <param-value>UTF-8</param-value>
-        </init-param>
-        <init-param>
-            <param-name>forceEncoding</param-name>
-            <param-value>true</param-value>
-        </init-param>
-    </filter>
-
-    <filter-mapping>
-        <filter-name>charsetFilter</filter-name>
-        <servlet-name>spring-admin-mvc</servlet-name>
-    </filter-mapping>
 
     <!-- Camel servlet-->
     <servlet>
@@ -71,19 +51,6 @@
         <servlet-name>spring-ws</servlet-name>
         <url-pattern>/ws/*</url-pattern>
     </servlet-mapping>
-
-    <!-- Spring MVC -->
-    <servlet>
-        <servlet-name>spring-admin-mvc</servlet-name>
-        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-        <load-on-startup>2</load-on-startup>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>spring-admin-mvc</servlet-name>
-        <url-pattern>/web/admin/*</url-pattern>
-    </servlet-mapping>
-
 
     <!-- Error handling -->
     <error-page>

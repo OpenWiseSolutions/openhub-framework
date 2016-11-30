@@ -18,8 +18,6 @@ package org.openhubframework.openhub.core.common.directcall;
 
 import java.io.IOException;
 
-import org.openhubframework.openhub.core.common.route.RouteConstants;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -29,7 +27,10 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.core.common.route.RouteConstants;
 
 
 /**
@@ -38,6 +39,7 @@ import org.springframework.util.Assert;
  * @author Petr Juza
  * @see DirectCallWsRoute
  */
+@Service
 public class DirectCallHttpImpl implements DirectCall {
 
     /**

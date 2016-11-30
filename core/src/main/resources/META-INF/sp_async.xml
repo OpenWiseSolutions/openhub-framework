@@ -14,18 +14,18 @@
 
     <!-- message repairing -->
     <bean id="repairMessageService" class="org.openhubframework.openhub.core.common.asynch.repair.RepairMessageServiceDbImpl">
-        <property name="transactionManager" ref="jpaTxManager"/>
+        <property name="transactionManager" ref="transactionManager"/>
     </bean>
 
     <bean id="repairExternalCallService" class="org.openhubframework.openhub.core.common.asynch.repair.RepairExternalCallDbImpl">
-        <property name="transactionManager" ref="jpaTxManager"/>
+        <property name="transactionManager" ref="transactionManager"/>
     </bean>
 
 
     <!-- message poling -->
     <bean id="partlyFailedMessagesPool"
           class="org.openhubframework.openhub.core.common.asynch.queue.MessagesPoolDbImpl">
-        <property name="transactionManager" ref="jpaTxManager"/>
+        <property name="transactionManager" ref="transactionManager"/>
     </bean>
 
     <bean id="jobStarterForMessagePooling"

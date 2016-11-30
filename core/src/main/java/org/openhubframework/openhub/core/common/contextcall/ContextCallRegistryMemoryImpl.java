@@ -25,6 +25,7 @@ import javax.annotation.Nullable;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import org.openhubframework.openhub.api.exception.NoDataFoundException;
@@ -35,6 +36,7 @@ import org.openhubframework.openhub.api.exception.NoDataFoundException;
  *
  * @author Petr Juza
  */
+@Service
 public class ContextCallRegistryMemoryImpl implements ContextCallRegistry {
 
     private static final Logger LOG = LoggerFactory.getLogger(ContextCallRegistryMemoryImpl.class);

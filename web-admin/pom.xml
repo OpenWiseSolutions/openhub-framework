@@ -113,10 +113,6 @@
             </properties>
             <dependencies>
                 <dependency>
-                    <groupId>com.mchange</groupId>
-                    <artifactId>c3p0</artifactId>
-                </dependency>
-                <dependency>
                     <groupId>com.h2database</groupId>
                     <artifactId>h2</artifactId>
                 </dependency>
@@ -141,10 +137,6 @@
             <!-- profile for PostgreSQL -->
             <id>esb.psSql</id>
             <dependencies>
-                <dependency>
-                    <groupId>net.sourceforge.jtds</groupId>
-                    <artifactId>jtds</artifactId>
-                </dependency>
                 <dependency>
                     <groupId>org.postgresql</groupId>
                     <artifactId>postgresql</artifactId>

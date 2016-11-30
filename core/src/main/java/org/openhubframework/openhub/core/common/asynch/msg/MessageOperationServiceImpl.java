@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.openhubframework.openhub.api.entity.Message;
@@ -34,6 +35,7 @@ import org.openhubframework.openhub.core.common.dao.MessageOperationDao;
  *
  * @author Viliam Elischer
  */
+@Service
 public class MessageOperationServiceImpl implements MessageOperationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MessageOperationServiceImpl.class);

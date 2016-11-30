@@ -24,6 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 
@@ -32,6 +33,7 @@ import org.springframework.util.Assert;
  *
  * @author Petr Juza
  */
+@Service
 public class DirectCallRegistryMemoryImpl implements DirectCallRegistry {
 
     private static final Logger LOG = LoggerFactory.getLogger(DirectCallRegistryMemoryImpl.class);

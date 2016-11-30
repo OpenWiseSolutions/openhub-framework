@@ -13,11 +13,11 @@
         Basic Spring configuration of the Spring MVC (child) application context.
     </description>
 
-    <context:annotation-config/>
-    <tx:annotation-driven transaction-manager="jpaTxManager"/>
+    <!--<context:annotation-config/>-->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
 
     <!-- init web admin part only -->
-    <context:component-scan base-package="org.openhubframework.openhub.admin"/>
+    <!--<context:component-scan base-package="org.openhubframework.openhub.admin"/>-->
 
     <!-- property configuration files -->
     <context:property-placeholder ignore-resource-not-found="true"

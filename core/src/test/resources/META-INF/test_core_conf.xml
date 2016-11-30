@@ -37,14 +37,14 @@
     <bean class="org.openhubframework.openhub.core.throttling.ThrottleProcessorImpl" />
 
     <!-- direct call -->
-    <bean class="org.openhubframework.openhub.core.common.directcall.DirectCallRegistryMemoryImpl"/>
-    <bean class="org.openhubframework.openhub.core.common.directcall.DirectCallWsRoute"/>
+    <!--<bean class="org.openhubframework.openhub.core.common.directcall.DirectCallRegistryMemoryImpl"/>-->
+    <!--<bean class="org.openhubframework.openhub.core.common.directcall.DirectCallWsRoute"/>-->
 
     <!-- context call -->
-    <bean class="org.openhubframework.openhub.core.common.contextcall.ContextCallRegistryMemoryImpl"/>
+    <!--<bean class="org.openhubframework.openhub.core.common.contextcall.ContextCallRegistryMemoryImpl"/>-->
     <bean class="org.openhubframework.openhub.core.common.contextcall.ContextCallRoute"/>
 
     <!-- stopping -->
-    <bean id="stoppingService" class="org.openhubframework.openhub.core.common.asynch.stop.StopServiceNodeImpl"/>
+    <!--<bean id="stoppingService" class="org.openhubframework.openhub.core.common.asynch.stop.StopServiceNodeImpl"/>-->
 
 </beans>

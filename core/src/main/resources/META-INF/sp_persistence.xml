@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:tx="http://www.springframework.org/schema/tx"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <description>
         Spring persistence configuration.
     </description>
 
-    <bean id="entityManagerFactoryTemplate" abstract="true" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+<!--    <bean id="entityManagerFactoryTemplate" abstract="true" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="persistenceUnitName" value="OpenHub"/>
         <property name="jpaVendorAdapter" ref="jpaVendorAdapter"/>
@@ -35,13 +31,13 @@
 
     <tx:annotation-driven transaction-manager="jpaTxManager"/>
 
-    <!-- DAOs -->
+    &lt;!&ndash; DAOs &ndash;&gt;
     <context:component-scan base-package="org.openhubframework.openhub.core.common.dao"/>
 
     <bean id="jpaPropertiesTemplate" abstract="true" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
         <property name="properties">
             <props>
-                <prop key="hibernate.hbm2ddl.auto">create</prop> <!-- validate | update | create | create-drop -->
+                <prop key="hibernate.hbm2ddl.auto">create</prop> &lt;!&ndash; validate | update | create | create-drop &ndash;&gt;
                 <prop key="hibernate.show_sql">true</prop>
                 <prop key="hibernate.use_sql_comments">true</prop>
                 <prop key="hibernate.format_sql">true</prop>
@@ -50,6 +46,6 @@
         </property>
     </bean>
 
-    <bean id="jpaProperties" parent="jpaPropertiesTemplate"/>
+    <bean id="jpaProperties" parent="jpaPropertiesTemplate"/>-->
 
 </beans>

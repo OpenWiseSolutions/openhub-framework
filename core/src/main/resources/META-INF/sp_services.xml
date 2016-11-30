@@ -7,24 +7,24 @@
         Spring configuration of common services.
     </description>
 
-    <bean id="messageService" class="org.openhubframework.openhub.core.common.asynch.msg.MessageServiceImpl"/>
-    <bean id="messageOperationService" class="org.openhubframework.openhub.core.common.asynch.msg.MessageOperationServiceImpl"/>
+    <!--<bean id="messageService" class="org.openhubframework.openhub.core.common.asynch.msg.MessageServiceImpl"/>-->
+    <!--<bean id="messageOperationService" class="org.openhubframework.openhub.core.common.asynch.msg.MessageOperationServiceImpl"/>-->
 
     <!-- direct call -->
-    <bean class="org.openhubframework.openhub.core.common.directcall.DirectCallRegistryMemoryImpl"/>
-    <bean class="org.openhubframework.openhub.core.common.directcall.DirectCallHttpImpl"/>
+    <!--<bean class="org.openhubframework.openhub.core.common.directcall.DirectCallRegistryMemoryImpl"/>-->
+    <!--<bean class="org.openhubframework.openhub.core.common.directcall.DirectCallHttpImpl"/>-->
 
     <!-- context call -->
-    <bean class="org.openhubframework.openhub.core.common.contextcall.ContextCallRegistryMemoryImpl"/>
-    <bean class="org.openhubframework.openhub.core.common.contextcall.ContextCallHttpImpl"/>
+    <!--<bean class="org.openhubframework.openhub.core.common.contextcall.ContextCallRegistryMemoryImpl"/>-->
+    <!--<bean class="org.openhubframework.openhub.core.common.contextcall.ContextCallHttpImpl"/>-->
 
     <!-- stopping -->
-    <bean id="stoppingService" class="org.openhubframework.openhub.core.common.asynch.stop.StopServiceNodeImpl"/>
+    <!--<bean id="stoppingService" class="org.openhubframework.openhub.core.common.asynch.stop.StopServiceNodeImpl"/>-->
 
     <!-- request/response saving -->
-    <bean id="reqResService" class="org.openhubframework.openhub.core.reqres.RequestResponseServiceDefaultImpl"/>
+    <!--<bean id="reqResService" class="org.openhubframework.openhub.core.reqres.RequestResponseServiceDefaultImpl"/>-->
 
     <!-- file repository -->
-    <bean id="fileRepository" class="org.openhubframework.openhub.core.common.file.DefaultFileRepository"/>
+    <!--<bean id="fileRepository" class="org.openhubframework.openhub.core.common.file.DefaultFileRepository"/>-->
 
 </beans>

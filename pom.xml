@@ -64,7 +64,8 @@
         <java.version>1.7</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <!-- OpenHub application start class -->
+        <!-- Spring Boot (change version for parent !!!) -->
+        <spring-boot-version>1.4.1.RELEASE</spring-boot-version>
         <start-class>org.openhubframework.openhub.admin.OpenHubApplication</start-class>
 
         <camel-version>2.17.3</camel-version>
@@ -186,6 +187,11 @@
 
             <!-- testing -->
             <dependency>
+                <groupId>org.kubek2k</groupId>
+                <artifactId>springockito-annotations</artifactId>
+                <version>1.0.9</version>
+            </dependency>
+            <dependency>
                 <groupId>xmlunit</groupId>
                 <artifactId>xmlunit</artifactId>
                 <version>1.6</version>
@@ -214,6 +220,7 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-aspects</artifactId>
                 <version>4.2.5.RELEASE</version>
+                <!--<version>${spring.version}</version>-->
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -334,7 +341,7 @@
 
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>2.6</version>
+                    <version>2.4</version>
                     <configuration>
                         <archive>
                             <addMavenDescriptor>false</addMavenDescriptor>
@@ -343,8 +350,10 @@
                                 <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             </manifest>
                             <manifestEntries>
+                                <!--suppress MavenModelInspection -->
                                 <Implementation-Build>${buildNumber}</Implementation-Build>
-                                <Implementation-Build-Time>${maven.build.timestamp}</Implementation-Build-Time>
+                                <!--suppress MavenModelInspection -->
+                                <Implementation-Timestamp>${timestamp}</Implementation-Timestamp>
                             </manifestEntries>
                         </archive>
                     </configuration>
@@ -361,8 +370,10 @@
                                 <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             </manifest>
                             <manifestEntries>
+                                <!--suppress MavenModelInspection -->
                                 <Implementation-Build>${buildNumber}</Implementation-Build>
-                                <Implementation-Build-Time>${maven.build.timestamp}</Implementation-Build-Time>
+                                <!--suppress MavenModelInspection -->
+                                <Implementation-Timestamp>${timestamp}</Implementation-Timestamp>
                             </manifestEntries>
                         </archive>
                     </configuration>
@@ -526,12 +537,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
             </plugin>
-            
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
