@@ -14,24 +14,22 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.admin.web;
+package org.openhubframework.openhub.admin.web.config;
 
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 
 /**
- * OpenHub application WEB configuration.
+ * Web MVC configuration.
  *
  * @author <a href="mailto:petr.juza@openwise.cz">Petr Juza</a>
- * @since 1.1
+ * @since 2.0
  */
-@EnableAutoConfiguration
 @Configuration
-@ComponentScan(basePackages = {"org.openhubframework.openhub.admin"})
-@ImportResource({"classpath:spring-admin-mvc-servlet.xml"})
-public class OpenHubWebApplication {
+//note: If you want to take complete control of Spring MVC, you can add your own @Configuration annotated with @EnableWebMvc.
+// If you want to keep Spring Boot MVC features, and you just want to add additional MVC configuration (interceptors,
+// formatters, view controllers etc.) you can add your own @Bean of type WebMvcConfigurerAdapter, but without @EnableWebMvc.
+public class MvcConfiguration extends WebMvcConfigurerAdapter {
 
 }

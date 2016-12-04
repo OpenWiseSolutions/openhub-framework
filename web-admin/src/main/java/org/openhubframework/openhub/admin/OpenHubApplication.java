@@ -17,6 +17,7 @@
 package org.openhubframework.openhub.admin;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import javax.servlet.Filter;
 import javax.servlet.ServletContext;
@@ -29,14 +30,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
+import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.boot.context.web.ErrorPageFilter;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.*;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
-import org.openhubframework.openhub.admin.web.OpenHubWebApplication;
 import org.openhubframework.openhub.admin.web.filter.RequestResponseLoggingFilter;
+import org.openhubframework.openhub.api.exception.ErrorExtEnum;
 import org.openhubframework.openhub.common.AutoConfiguration;
 import org.openhubframework.openhub.common.log.LogContextFilter;
+import org.openhubframework.openhub.modules.ErrorEnum;
 
 
 /**
@@ -56,14 +63,22 @@ import org.openhubframework.openhub.common.log.LogContextFilter;
 //@EnableConfigurationProperties
 @ComponentScan(basePackages = {"org.openhubframework.openhub.core.common.route",
         "org.openhubframework.openhub.common.datasource",
+        "org.openhubframework.openhub.core.common.contextcall",
+        "org.openhubframework.openhub.core.common.directcall",
         "org.openhubframework.openhub.core.common.version",
+        "org.openhubframework.openhub.core.common.asynch.stop",
+        "org.openhubframework.openhub.core.common.asynch.msg",
+        "org.openhubframework.openhub.core.reqres",
+        "org.openhubframework.openhub.core.common.file",
         "org.openhubframework.openhub.core.common.dao",
-        "org.openhubframework.openhub.core.persistence"},
+        "org.openhubframework.openhub.core.persistence",
+        "org.openhubframework.openhub.admin"},
         excludeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = AutoConfiguration.class))
 @Configuration
 @ImportResource({"classpath:net/bull/javamelody/monitoring-spring.xml",
         "classpath:rootApplicationContext.xml",
         "classpath:rootSecurity.xml",
+        "classpath:spring-admin-mvc-servlet.xml",
         "classpath:sp_h2.xml"})
 public class OpenHubApplication extends SpringBootServletInitializer {
 
@@ -82,6 +97,16 @@ public class OpenHubApplication extends SpringBootServletInitializer {
         filter.setLogUnsupportedContentType(true);
 
         return new FilterRegistrationBean(filter);
+    }
+
+    /**
+     * Registers URL prefix.
+     */
+    @Bean
+    public ServletRegistrationBean dispatcherRegistration(DispatcherServlet dispatcherServlet) {
+        ServletRegistrationBean registration = new ServletRegistrationBean(dispatcherServlet);
+        registration.addUrlMappings("/web/admin/*");
+        return registration;
     }
 
     /**
@@ -104,6 +129,29 @@ public class OpenHubApplication extends SpringBootServletInitializer {
     public Filter logContextFilter() {
         return new LogContextFilter();
     }
+
+
+    @Bean
+    public ReloadableResourceBundleMessageSource messageSource() {
+        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        messageSource.setBasename("classpath:messages/messages");
+        messageSource.setDefaultEncoding("UTF-8");
+        return messageSource;
+    }
+
+    @Bean
+    public LocaleResolver localeResolver() {
+        SessionLocaleResolver localeResolver = new SessionLocaleResolver();
+        localeResolver.setDefaultLocale(Locale.ENGLISH);
+        return localeResolver;
+    }
+
+    @Bean
+    public Map<String, ErrorExtEnum[]> errorCodesCatalog() {
+          Map<String, ErrorExtEnum[]> map = new HashMap<>();
+          map.put("core", ErrorEnum.values());
+          return map;
+      }
 
     @Override
     public void onStartup(ServletContext container) throws ServletException {
@@ -132,7 +180,7 @@ public class OpenHubApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) throws Exception {
         new SpringApplicationBuilder(OpenHubApplication.class)
-                .child(OpenHubWebApplication.class).web(true)
+//                .child(OpenHubWebApplication.class).web(true)
                 .run(args);
     }
 }
