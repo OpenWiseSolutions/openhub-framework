@@ -11,6 +11,7 @@
     <!--
          JMX - the MBean exporter.
      -->
+<!--
     <bean id="exporter" class="org.springframework.jmx.export.MBeanExporter">
         <property name="server">
             <bean class="java.lang.management.ManagementFactory" factory-method="getPlatformMBeanServer"/>
@@ -43,5 +44,6 @@
             </map>
         </property>
     </bean>
+-->
 
 </beans>

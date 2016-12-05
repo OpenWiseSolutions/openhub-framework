@@ -18,21 +18,16 @@ package org.openhubframework.openhub.core.alerts;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.management.Attribute;
-import javax.management.AttributeList;
-import javax.management.AttributeNotFoundException;
-import javax.management.DynamicMBean;
-import javax.management.InvalidAttributeValueException;
-import javax.management.MBeanAttributeInfo;
-import javax.management.MBeanException;
-import javax.management.MBeanInfo;
-import javax.management.ReflectionException;
+import javax.management.*;
 
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.openhubframework.openhub.spi.alerts.AlertInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jmx.export.annotation.ManagedResource;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.spi.alerts.AlertInfo;
 
 
 /**
@@ -41,6 +36,9 @@ import org.springframework.util.Assert;
  * @author Petr Juza
  * @since 0.4
  */
+@Service
+@ManagedResource(objectName = "org.openhubframework.openhub.core.alerts:name=AlertsConfiguration",
+        description = "Alerts configuration")
 public class AlertsJmxConfiguration implements DynamicMBean {
 
     private static final String LIMIT_SUFFIX = ".limit";
@@ -53,6 +51,7 @@ public class AlertsJmxConfiguration implements DynamicMBean {
      *
      * @param configuration alerts configuration
      */
+    @Autowired
     public AlertsJmxConfiguration(AbstractAlertsConfiguration configuration) {
         Assert.notNull(configuration, "configuration must not be null");
 

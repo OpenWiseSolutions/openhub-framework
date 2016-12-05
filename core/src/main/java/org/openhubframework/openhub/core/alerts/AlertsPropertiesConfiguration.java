@@ -36,7 +36,7 @@ import org.openhubframework.openhub.spi.alerts.AlertInfo;
  * @author Petr Juza
  * @since 0.4
  */
-@Service(value = "alertsConfiguration")
+@Service
 public class AlertsPropertiesConfiguration extends AbstractAlertsConfiguration {
 
     public static final String ALERT_PROP_PREFIX = "alerts.";

@@ -45,5 +45,4 @@ public class JpaConfiguration {
                 .persistenceUnit(DbConst.UNIT_NAME)
                 .build();
     }
-
 }

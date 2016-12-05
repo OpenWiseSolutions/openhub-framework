@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.jmx.export.annotation.ManagedResource;
+import org.springframework.stereotype.Service;
 
 import org.openhubframework.openhub.core.common.asynch.msg.MessageOperationService;
 import org.openhubframework.openhub.core.common.asynch.queue.JobStarterForMessagePooling;
@@ -32,7 +33,9 @@ import org.openhubframework.openhub.core.common.asynch.repair.RepairMessageServi
  *
  * @author Petr Juza
  */
-@ManagedResource(description = "Message Administration")
+@Service
+@ManagedResource(objectName = "org.openhubframework.openhub.core.monitoring:name=MessagesAdmin",
+        description = "Message Administration")
 public class MessageAdminOperations {
 
     private static final Logger LOG = LoggerFactory.getLogger(MessageAdminOperations.class);

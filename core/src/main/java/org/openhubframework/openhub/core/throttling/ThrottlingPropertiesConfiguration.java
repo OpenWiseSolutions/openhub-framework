@@ -36,7 +36,7 @@ import org.openhubframework.openhub.spi.throttling.ThrottleScope;
  *
  * @author Petr Juza
  */
-@Service(value = "throttlingConfiguration")
+@Service
 public class ThrottlingPropertiesConfiguration extends AbstractThrottlingConfiguration {
 
     //TODO PJUZA ${disable.throttling}

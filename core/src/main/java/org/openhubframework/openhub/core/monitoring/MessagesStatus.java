@@ -17,13 +17,14 @@
 package org.openhubframework.openhub.core.monitoring;
 
 
-import org.openhubframework.openhub.api.entity.MsgStateEnum;
-import org.openhubframework.openhub.spi.msg.MessageService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jmx.export.annotation.ManagedAttribute;
 import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.jmx.export.annotation.ManagedResource;
+import org.springframework.stereotype.Service;
+
+import org.openhubframework.openhub.api.entity.MsgStateEnum;
+import org.openhubframework.openhub.spi.msg.MessageService;
 
 /**
  * JMX exporter of message processing statistics.
@@ -31,7 +32,9 @@ import org.springframework.jmx.export.annotation.ManagedResource;
  * @author Jaromir Stradej
  * @since 0.1
  */
-@ManagedResource(description = "Message State Information")
+@Service
+@ManagedResource(objectName = "org.openhubframework.openhub.core.monitoring:name=MessagesStatus",
+        description = "Message State Information")
 public class MessagesStatus {
 
     @Autowired

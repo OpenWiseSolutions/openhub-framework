@@ -19,21 +19,16 @@ package org.openhubframework.openhub.core.throttling;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import javax.management.Attribute;
-import javax.management.AttributeList;
-import javax.management.AttributeNotFoundException;
-import javax.management.DynamicMBean;
-import javax.management.InvalidAttributeValueException;
-import javax.management.MBeanAttributeInfo;
-import javax.management.MBeanException;
-import javax.management.MBeanInfo;
-import javax.management.ReflectionException;
+import javax.management.*;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jmx.export.annotation.ManagedResource;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+
 import org.openhubframework.openhub.spi.throttling.ThrottleProps;
 import org.openhubframework.openhub.spi.throttling.ThrottleScope;
-import org.springframework.util.Assert;
 
 
 /**
@@ -41,6 +36,9 @@ import org.springframework.util.Assert;
  *
  * @author Petr Juza
  */
+@Service
+@ManagedResource(objectName = "org.openhubframework.openhub.core.throttling:name=ThrottlingConfiguration",
+        description = "Throttling configuration")
 public class JmxThrottlingConfiguration implements DynamicMBean {
 
     private AbstractThrottlingConfiguration configuration;
@@ -50,6 +48,7 @@ public class JmxThrottlingConfiguration implements DynamicMBean {
      *
      * @param configuration throttling configuration
      */
+    @Autowired
     public JmxThrottlingConfiguration(AbstractThrottlingConfiguration configuration) {
         Assert.notNull(configuration, "configuration must not be null");
 
