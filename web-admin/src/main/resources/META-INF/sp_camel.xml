@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:camel="http://camel.apache.org/schema/spring"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-            http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <description>
         Apache Camel configuration.
@@ -11,41 +9,49 @@
 
     <import resource="sp_camel_services.xml"/>
 
+<!--
     <camel:camelContext id="camelContext" trace="true" handleFault="true">
         <camel:propertyPlaceholder id="properties" ignoreMissingLocation="true"
                 location="classpath:applicationCore.cfg,classpath:application.cfg,classpath:application0.cfg"/>
 
         <camel:contextScan/>
 
-        <camel:errorHandler id="logErrorHandler" type="LoggingErrorHandler"
-                            logName="org.openhubframework.openhub.core"/>
+        &lt;!&ndash;<camel:errorHandler id="logErrorHandler" type="LoggingErrorHandler"&ndash;&gt;
+                            &lt;!&ndash;logName="org.openhubframework.openhub.core"/>&ndash;&gt;
 
-        <camel:template id="producerTemplate"/>
+        &lt;!&ndash;<camel:template id="producerTemplate"/>&ndash;&gt;
 
-        <camel:threadPoolProfile id="defaultThreadProfile"
-                                 defaultProfile="true"
-                                 maxPoolSize="30"/>
+        &lt;!&ndash;<camel:threadPoolProfile id="defaultThreadProfile"&ndash;&gt;
+                                 &lt;!&ndash;defaultProfile="true"&ndash;&gt;
+                                 &lt;!&ndash;maxPoolSize="30"/>&ndash;&gt;
     </camel:camelContext>
+-->
 
+<!--
     <bean id="priorityQueueFactory" class="org.apache.camel.component.seda.PriorityBlockingQueueFactory">
         <property name="comparator">
             <bean class="org.openhubframework.openhub.core.common.asynch.msg.MsgPriorityComparator"/>
         </property>
     </bean>
+-->
 
     <!-- configures Camel trace log -->
+<!--
     <bean id="traceFormatter" class="org.apache.camel.processor.interceptor.DefaultTraceFormatter">
         <property name="showHeaders" value="false"/>
     </bean>
+-->
 
-    <bean id="camelTracer" class="org.apache.camel.processor.interceptor.Tracer"/>
+    <!--<bean id="camelTracer" class="org.apache.camel.processor.interceptor.Tracer"/>-->
 
     <!-- define JPA component -->
+<!--
     <bean id="jpa" class="org.apache.camel.component.jpa.JpaComponent">
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
         <property name="transactionManager" ref="transactionManager"/>
         <property name="camelContext" ref="camelContext"/>
     </bean>
+-->
 
     <!-- security -->
 <!--

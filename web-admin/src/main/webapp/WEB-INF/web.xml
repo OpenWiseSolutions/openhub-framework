@@ -7,17 +7,6 @@
     <display-name>OpenHub integration server</display-name>
     <description>OpenHub integration server</description>
 
-    <!-- Camel servlet-->
-    <servlet>
-        <servlet-name>CamelServlet</servlet-name>
-        <servlet-class>org.apache.camel.component.servlet.CamelHttpTransportServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>CamelServlet</servlet-name>
-        <url-pattern>/http/*</url-pattern>
-    </servlet-mapping>
-
     <!-- Error handling -->
     <error-page>
         <error-code>400</error-code>

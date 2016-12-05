@@ -16,11 +16,25 @@
 
 package org.openhubframework.openhub.admin.web.config;
 
+import javax.persistence.EntityManagerFactory;
+
+import org.apache.camel.CamelContext;
+import org.apache.camel.Exchange;
+import org.apache.camel.builder.LoggingErrorHandlerBuilder;
+import org.apache.camel.component.jpa.JpaComponent;
 import org.apache.camel.component.quartz2.QuartzComponent;
+import org.apache.camel.component.seda.PriorityBlockingQueueFactory;
+import org.apache.camel.processor.interceptor.DefaultTraceFormatter;
+import org.apache.camel.processor.interceptor.Tracer;
+import org.apache.camel.spi.ThreadPoolProfile;
+import org.apache.camel.spring.boot.CamelContextConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import org.openhubframework.openhub.core.common.asynch.confirm.DelegateConfirmationCallback;
+import org.openhubframework.openhub.core.common.asynch.msg.MsgPriorityComparator;
 
 
 /**
@@ -33,11 +47,71 @@ import org.openhubframework.openhub.core.common.asynch.confirm.DelegateConfirmat
 public class CamelConfig {
 
     @Bean
+    public CamelContextConfiguration contextConfiguration() {
+      return new CamelContextConfiguration() {
+
+          @Override
+          public void beforeApplicationStart(CamelContext camelContext) {
+              // error handler
+              LoggingErrorHandlerBuilder handlerBuilder = new LoggingErrorHandlerBuilder();
+              handlerBuilder.logName("org.openhubframework.openhub.core");
+              camelContext.setErrorHandlerBuilder(handlerBuilder);
+
+              // default thread profile (see DefaultExecutorServiceManager for defaults)
+              ThreadPoolProfile threadPoolProfile = camelContext.getExecutorServiceManager()
+                      .getDefaultThreadPoolProfile();
+              threadPoolProfile.setId("defaultThreadProfile");
+              threadPoolProfile.setMaxPoolSize(30);
+          }
+
+          @Override
+          public void afterApplicationStart(CamelContext camelContext) {
+              // nothing to set
+          }
+      };
+    }
+
+    @Bean
+    public JpaComponent jpaComponent(PlatformTransactionManager transactionManager, CamelContext camelContext,
+            EntityManagerFactory entityManagerFactory) {
+        JpaComponent jpaComponent = new JpaComponent();
+        jpaComponent.setEntityManagerFactory(entityManagerFactory);
+        jpaComponent.setTransactionManager(transactionManager);
+        jpaComponent.setCamelContext(camelContext);
+
+        return jpaComponent;
+    }
+
+    @Bean(name = "priorityQueueFactory")
+    public PriorityBlockingQueueFactory priorityQueueFactory() {
+        PriorityBlockingQueueFactory<Exchange> queueFactory = new PriorityBlockingQueueFactory<>();
+        queueFactory.setComparator(new MsgPriorityComparator());
+        return queueFactory;
+    }
+
+    /**
+     * Configures Camel trace log.
+     */
+    @Bean
+    public DefaultTraceFormatter traceFormatter() {
+        DefaultTraceFormatter formatter = new DefaultTraceFormatter();
+        formatter.setShowHeaders(false);
+        return formatter;
+    }
+
+    @Bean
+    public Tracer camelTracer() {
+        return new Tracer();
+    }
+
+    @Bean
+    @Profile("prod")
     public DelegateConfirmationCallback confirmationCallback() {
         return new DelegateConfirmationCallback();
     }
 
     @Bean
+    @Profile("prod")
     public QuartzComponent quartzComponent() {
         QuartzComponent quartz = new QuartzComponent();
         quartz.setStartDelayedSeconds(90);
