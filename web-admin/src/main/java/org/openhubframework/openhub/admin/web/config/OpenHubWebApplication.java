@@ -26,6 +26,7 @@ package org.openhubframework.openhub.admin.web.config;
 //@Configuration
 //@ComponentScan(basePackages = {"org.openhubframework.openhub.admin"})
 //@ImportResource({"classpath:spring-admin-mvc-servlet.xml"})
+//TODO PJUZA is this class needed?
 public class OpenHubWebApplication {
 
 }

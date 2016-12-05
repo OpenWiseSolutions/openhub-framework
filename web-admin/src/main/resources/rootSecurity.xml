@@ -1,7 +1,7 @@
-<beans:beans xmlns="http://www.springframework.org/schema/security"
-             xmlns:beans="http://www.springframework.org/schema/beans"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="
+<beans:beans
+        xmlns:beans="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
              http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
              http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
@@ -9,7 +9,8 @@
         Spring security configuration.
     </beans:description>
 
-    <!-- HTTP basic authentication for web services -->
+<!--
+    &lt;!&ndash; HTTP basic authentication for web services &ndash;&gt;
     <http pattern="/ws/**">
         <csrf disabled="true"/>
         <intercept-url pattern="/ws/**" access="hasRole('ROLE_WS')"/>
@@ -17,7 +18,7 @@
         <logout/>
     </http>
 
-    <!-- Form based authentication for admin console -->
+    &lt;!&ndash; Form based authentication for admin console &ndash;&gt;
     <http entry-point-ref="loginUrlAuthenticationEntryPoint">
         <csrf disabled="true"/>
         <intercept-url pattern="/web/admin/homepage/**" access="permitAll"/>
@@ -59,5 +60,6 @@
             </beans:list>
         </beans:constructor-arg>
     </beans:bean>
+-->
 
 </beans:beans>
