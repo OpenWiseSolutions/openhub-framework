@@ -22,6 +22,7 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import org.openhubframework.openhub.api.asynch.confirm.ConfirmationCallback;
@@ -34,6 +35,7 @@ import org.openhubframework.openhub.api.entity.MsgStateEnum;
  *
  * @author Petr Juza
  */
+@Service(ConfirmationCallback.BEAN)
 public class DefaultConfirmationCallback implements ConfirmationCallback {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultConfirmationCallback.class);

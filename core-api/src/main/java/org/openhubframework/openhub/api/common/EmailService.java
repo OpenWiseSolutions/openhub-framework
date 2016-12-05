@@ -23,7 +23,7 @@ package org.openhubframework.openhub.api.common;
  */
 public interface EmailService {
 
-    public static final String BEAN = "emailService";
+    String BEAN = "emailService";
 
     /**
      * Sends email to administrators.

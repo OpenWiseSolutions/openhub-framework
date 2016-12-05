@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <description>
         Basic Spring configuration of the Spring WS (child) application context.
@@ -15,17 +13,23 @@
     <import resource="classpath:/META-INF/sp_ws_wsdl.xml"/>
     <import resource="classpath:/META-INF/sp_jmx.xml"/>
 
+<!--
     <context:annotation-config />
     <tx:annotation-driven transaction-manager="transactionManager"/>
+-->
 
     <!-- init all routes from modules -->
+<!--
+    TODO PJUZA remake for Java configuration (component-scan is per Spring context)
     <context:component-scan base-package="org.openhubframework.openhub.core, org.openhubframework.openhub.modules" use-default-filters="false"
             name-generator="org.openhubframework.openhub.core.common.route.RouteBeanNameGenerator">
         <context:include-filter type="custom" expression="org.openhubframework.openhub.core.common.spring.SystemIncludeRegexPatternTypeFilter"/>
         <context:exclude-filter type="custom" expression="org.openhubframework.openhub.core.common.spring.SystemExcludeRegexPatternTypeFilter"/>
     </context:component-scan>
+-->
 
-    <!-- property configuration files -->
+<!--
+    &lt;!&ndash; property configuration files &ndash;&gt;
     <context:property-placeholder ignore-resource-not-found="true" properties-ref="confProperties"/>
 
     <bean id="confProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
@@ -46,7 +50,8 @@
             </list>
         </property>
     </bean>
+-->
 
-    <bean class="org.openhubframework.openhub.core.conf.ConfigurationChecker"/>
+    <!--<bean class="org.openhubframework.openhub.core.conf.ConfigurationChecker"/>-->
 
 </beans>

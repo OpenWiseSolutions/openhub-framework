@@ -20,6 +20,7 @@ import org.apache.camel.ProducerTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
 import org.openhubframework.openhub.api.entity.ExternalCall;
@@ -34,6 +35,7 @@ import org.openhubframework.openhub.api.exception.LockFailureException;
  *
  * @author Petr Juza
  */
+@Service
 public class ConfirmationPollExecutor implements Runnable {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConfirmationPollExecutor.class);

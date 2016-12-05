@@ -20,10 +20,13 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
-
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 
@@ -33,6 +36,8 @@ import org.springframework.util.Assert;
  *
  * @author Petr Juza
  */
+@Service
+@DependsOn("camelContext")
 public class PropertiesExtensionConfigurationLoader extends AbstractExtensionConfigurationLoader {
 
     public static final String PROPERTY_PREFIX = "context.ext";
@@ -44,7 +49,8 @@ public class PropertiesExtensionConfigurationLoader extends AbstractExtensionCon
      *
      * @param properties the properties
      */
-    public PropertiesExtensionConfigurationLoader(Properties properties) {
+    @Autowired
+    public PropertiesExtensionConfigurationLoader(@Qualifier("confProperties") Properties properties) {
         Assert.notNull(properties, "the properties must not be null");
 
         this.properties = properties;

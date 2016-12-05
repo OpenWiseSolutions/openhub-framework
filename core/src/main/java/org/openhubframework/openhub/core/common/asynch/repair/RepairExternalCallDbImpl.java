@@ -23,9 +23,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
@@ -40,6 +40,7 @@ import org.openhubframework.openhub.core.common.dao.ExternalCallDao;
  * Implementation that uses DB to find external calls
  * and also uses DB to write them back after they're repaired.
  */
+@Service(RepairExternalCallService.BEAN)
 public class RepairExternalCallDbImpl implements RepairExternalCallService {
 
     private static final Logger LOG = LoggerFactory.getLogger(RepairExternalCallDbImpl.class);
@@ -56,6 +57,13 @@ public class RepairExternalCallDbImpl implements RepairExternalCallService {
      */
     @Value("${asynch.repairRepeatTime}")
     private int repeatInterval;
+
+    @Autowired
+    public RepairExternalCallDbImpl(PlatformTransactionManager transactionManager) {
+        Assert.notNull(transactionManager, "the transactionManager must not be null");
+
+        this.transactionTemplate = new TransactionTemplate(transactionManager);
+    }
 
     @Override
     public void repairProcessingExternalCalls() {
@@ -98,13 +106,6 @@ public class RepairExternalCallDbImpl implements RepairExternalCallService {
                 }
             }
         });
-    }
-
-    @Required
-    public void setTransactionManager(JpaTransactionManager transactionManager) {
-        Assert.notNull(transactionManager, "the transactionManager must not be null");
-
-        this.transactionTemplate = new TransactionTemplate(transactionManager);
     }
 
     public void setExternalCallDao(ExternalCallDao externalCallDao) {

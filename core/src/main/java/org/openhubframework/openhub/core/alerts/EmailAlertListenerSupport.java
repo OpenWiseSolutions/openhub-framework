@@ -20,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import org.openhubframework.openhub.api.common.EmailService;
@@ -38,6 +39,7 @@ import org.openhubframework.openhub.spi.alerts.AlertListener;
  * @author Petr Juza
  * @since 0.4
  */
+@Service
 public class EmailAlertListenerSupport implements AlertListener {
 
     private static final String DEFAULT_ALERT_SUBJECT = "Alert (%s) notification";

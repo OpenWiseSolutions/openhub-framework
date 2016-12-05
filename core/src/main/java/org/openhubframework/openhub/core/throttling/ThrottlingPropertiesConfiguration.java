@@ -22,9 +22,13 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+
 import org.openhubframework.openhub.spi.throttling.ThrottleProps;
 import org.openhubframework.openhub.spi.throttling.ThrottleScope;
-import org.springframework.util.Assert;
 
 
 /**
@@ -32,7 +36,10 @@ import org.springframework.util.Assert;
  *
  * @author Petr Juza
  */
+@Service(value = "throttlingConfiguration")
 public class ThrottlingPropertiesConfiguration extends AbstractThrottlingConfiguration {
+
+    //TODO PJUZA ${disable.throttling}
 
     public static final String PROPERTY_PREFIX = "throttling.";
     static final String DEFAULT_INTERVAL_PROP = PROPERTY_PREFIX + "defaultInterval";
@@ -45,7 +52,8 @@ public class ThrottlingPropertiesConfiguration extends AbstractThrottlingConfigu
      *
      * @param properties the properties
      */
-    public ThrottlingPropertiesConfiguration(Properties properties) {
+    @Autowired
+    public ThrottlingPropertiesConfiguration(@Qualifier("confProperties") Properties properties) {
         Assert.notNull(properties, "the properties must not be null");
 
         this.properties = properties;

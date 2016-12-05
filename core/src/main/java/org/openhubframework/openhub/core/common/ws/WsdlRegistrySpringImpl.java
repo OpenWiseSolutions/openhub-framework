@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.ws.wsdl.wsdl11.SimpleWsdl11Definition;
 
 
@@ -32,6 +33,7 @@ import org.springframework.ws.wsdl.wsdl11.SimpleWsdl11Definition;
  *
  * @author Petr Juza
  */
+@Service
 public class WsdlRegistrySpringImpl implements WsdlRegistry {
 
     @Autowired

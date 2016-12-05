@@ -19,6 +19,7 @@ package org.openhubframework.openhub.core.common.asynch.confirm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 
 /**
@@ -28,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  *
  * @author Petr Juza
  */
+@Service
 public class JobStarterForConfirmationPooling {
 
     private static final Logger LOG = LoggerFactory.getLogger(JobStarterForConfirmationPooling.class);

@@ -17,6 +17,7 @@
 package org.openhubframework.openhub.api.asynch.confirm;
 
 import org.apache.camel.Header;
+
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
@@ -29,7 +30,7 @@ import org.openhubframework.openhub.api.entity.MsgStateEnum;
  */
 public interface ConfirmationCallback {
 
-    public static final String BEAN = "confirmationCallback";
+    String BEAN = "confirmationCallback";
 
     /**
      * Confirms that the message was fully processed.

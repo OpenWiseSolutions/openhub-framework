@@ -16,19 +16,18 @@
 
 package org.openhubframework.openhub.core.alerts;
 
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.openhubframework.openhub.spi.alerts.AlertInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.spi.alerts.AlertInfo;
 
 
 /**
@@ -37,6 +36,7 @@ import org.springframework.util.Assert;
  * @author Petr Juza
  * @since 0.4
  */
+@Service(value = "alertsConfiguration")
 public class AlertsPropertiesConfiguration extends AbstractAlertsConfiguration {
 
     public static final String ALERT_PROP_PREFIX = "alerts.";
@@ -60,7 +60,8 @@ public class AlertsPropertiesConfiguration extends AbstractAlertsConfiguration {
      *
      * @param properties the properties
      */
-    public AlertsPropertiesConfiguration(Properties properties) {
+    @Autowired
+    public AlertsPropertiesConfiguration(@Qualifier("confProperties") Properties properties) {
         Assert.notNull(properties, "the properties must not be null");
 
         this.properties = properties;

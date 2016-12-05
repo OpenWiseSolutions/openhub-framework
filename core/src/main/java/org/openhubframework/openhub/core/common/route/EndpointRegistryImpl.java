@@ -20,13 +20,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.annotation.Nullable;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.CamelContextAware;
 import org.apache.camel.Endpoint;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 
@@ -35,6 +35,7 @@ import org.springframework.util.Assert;
  *
  * @author Petr Juza
  */
+@Service
 public class EndpointRegistryImpl implements EndpointRegistry, CamelContextAware {
 
     private CamelContext camelContext;

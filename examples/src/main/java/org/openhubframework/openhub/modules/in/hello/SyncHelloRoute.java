@@ -53,7 +53,8 @@ public class SyncHelloRoute extends AbstractBasicRoute {
         from(getInWsUri(new QName(HELLO_SERVICE_NS, "syncHelloRequest")))
                 .routeId(ROUTE_ID_SYNC_HELLO)
 
-                .policy("roleWsAuthPolicy")
+                //TODO PJUZA configuration must be done firstly
+//                .policy("roleWsAuthPolicy")
 
                 .to("throttling:sync:" + OPERATION_NAME)
 

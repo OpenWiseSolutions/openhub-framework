@@ -52,6 +52,8 @@ import org.openhubframework.openhub.core.common.route.RouteConstants;
  * @see CheckingConfMessageDispatcherServlet
  * @see ConfCheck
  */
+//@Component
+//TODO PJUZA is this checker still needed?
 public class ConfigurationChecker implements ApplicationListener<ContextRefreshedEvent> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConfigurationChecker.class);

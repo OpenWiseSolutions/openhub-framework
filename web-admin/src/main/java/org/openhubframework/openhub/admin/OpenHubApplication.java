@@ -63,15 +63,18 @@ import org.openhubframework.openhub.modules.ErrorEnum;
 //@EnableConfigurationProperties
 @ComponentScan(basePackages = {"org.openhubframework.openhub.core.common.route",
         "org.openhubframework.openhub.common.datasource",
-        "org.openhubframework.openhub.core.common.contextcall",
-        "org.openhubframework.openhub.core.common.directcall",
-        "org.openhubframework.openhub.core.common.version",
-        "org.openhubframework.openhub.core.common.asynch.stop",
-        "org.openhubframework.openhub.core.common.asynch.msg",
-        "org.openhubframework.openhub.core.reqres",
-        "org.openhubframework.openhub.core.common.file",
-        "org.openhubframework.openhub.core.common.dao",
-        "org.openhubframework.openhub.core.persistence",
+//        "org.openhubframework.openhub.core.common.contextcall",
+//        "org.openhubframework.openhub.core.common.directcall",
+//        "org.openhubframework.openhub.core.common.version",
+//        "org.openhubframework.openhub.core.common.asynch.stop",
+//        "org.openhubframework.openhub.core.common.asynch.msg",
+//        "org.openhubframework.openhub.core.reqres",
+//        "org.openhubframework.openhub.core.common.file",
+//        "org.openhubframework.openhub.core.common.dao",
+//        "org.openhubframework.openhub.core.persistence",
+//        "org.openhubframework.openhub.core.conf",
+        "org.openhubframework.openhub.core",
+        "org.openhubframework.openhub.modules",
         "org.openhubframework.openhub.admin"},
         excludeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = AutoConfiguration.class))
 @Configuration
@@ -79,6 +82,7 @@ import org.openhubframework.openhub.modules.ErrorEnum;
         "classpath:rootApplicationContext.xml",
         "classpath:rootSecurity.xml",
         "classpath:spring-admin-mvc-servlet.xml",
+        "classpath:spring-ws-servlet.xml",
         "classpath:sp_h2.xml"})
 public class OpenHubApplication extends SpringBootServletInitializer {
 
@@ -103,7 +107,7 @@ public class OpenHubApplication extends SpringBootServletInitializer {
      * Registers URL prefix.
      */
     @Bean
-    public ServletRegistrationBean dispatcherRegistration(DispatcherServlet dispatcherServlet) {
+    public ServletRegistrationBean dispatcherWebRegistration(DispatcherServlet dispatcherServlet) {
         ServletRegistrationBean registration = new ServletRegistrationBean(dispatcherServlet);
         registration.addUrlMappings("/web/admin/*");
         return registration;

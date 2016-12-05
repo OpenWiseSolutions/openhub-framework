@@ -7,12 +7,6 @@
     <display-name>OpenHub integration server</display-name>
     <description>OpenHub integration server</description>
 
-    <!-- default Spring profile - development environment -->
-    <context-param>
-        <param-name>spring.profiles.default</param-name>
-        <param-value>dev,h2</param-value>
-    </context-param>
-
     <!-- Camel servlet-->
     <servlet>
         <servlet-name>CamelServlet</servlet-name>
@@ -22,22 +16,6 @@
     <servlet-mapping>
         <servlet-name>CamelServlet</servlet-name>
         <url-pattern>/http/*</url-pattern>
-    </servlet-mapping>
-
-    <!-- Spring WS servlet -->
-    <servlet>
-        <servlet-name>spring-ws</servlet-name>
-        <servlet-class>org.springframework.ws.transport.http.MessageDispatcherServlet</servlet-class>
-        <init-param>
-            <!-- Transform the location attributes in WSDLs -->
-            <param-name>transformWsdlLocations</param-name>
-            <param-value>true</param-value>
-        </init-param>
-        <load-on-startup>2</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>spring-ws</servlet-name>
-        <url-pattern>/ws/*</url-pattern>
     </servlet-mapping>
 
     <!-- Error handling -->

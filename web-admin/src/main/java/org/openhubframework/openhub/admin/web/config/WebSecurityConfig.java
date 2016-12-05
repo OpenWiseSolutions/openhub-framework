@@ -34,10 +34,10 @@ import org.springframework.security.config.annotation.web.configurers.Expression
 @Configuration
 @EnableGlobalMethodSecurity // allows AOP @PreAuthorize and some other annotations to be applied to methods
 @EnableWebSecurity
-public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String LOGIN_PAGE_URL = "/web/admin/login";
-    private static final String[] COOKIES_TO_DELETE = new String[]{"JSESSIONID"};
+    private static final String[] COOKIES_TO_DELETE = new String[] {"JSESSIONID"};
 
     @Override
     @SuppressWarnings("unchecked")
@@ -52,7 +52,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         urlRegistry.antMatchers("/css/**").permitAll();
 
         // web services
-        urlRegistry.antMatchers("/ws/**").hasRole(AuthRole.WS.getName())
+        urlRegistry.antMatchers("/ws/**").hasRole(AuthRole.WS.name())
                 .and()
                 .httpBasic();
 
@@ -60,9 +60,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         urlRegistry
                 .antMatchers("/web/admin/homepage/**").permitAll()
                 .antMatchers("/web/admin/login/**").permitAll()
-                .antMatchers("/web/admin/**").hasRole(AuthRole.WEB.getName())
-                .antMatchers("/web/admin/**/*").hasRole(AuthRole.WEB.getName())
-                .antMatchers("/monitoring/**").hasRole(AuthRole.MONITORING.getName())
+                .antMatchers("/web/admin/**").hasRole(AuthRole.WEB.name())
+                .antMatchers("/web/admin/**/*").hasRole(AuthRole.WEB.name())
+                .antMatchers("/monitoring/**").hasRole(AuthRole.MONITORING.name())
                 .and()
                 .formLogin()
                     .loginPage(LOGIN_PAGE_URL)
@@ -84,9 +84,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         // deactivate CSRF
         urlRegistry.and().csrf().disable();
 
-        // explicit deactivate HTTP basic auth
-        urlRegistry.and().httpBasic().disable();
-
         // activate remember me functionality
         urlRegistry.and().rememberMe();
     }
@@ -94,11 +91,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
    	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         //TODO PJUZA replace from properties
-   		auth.inMemoryAuthentication().withUser("wsUser").password("wsPassword").roles(AuthRole.WS.getName());
-   		auth.inMemoryAuthentication().withUser("webUser").password("webPassword").roles(AuthRole.WEB.getName(),
-                AuthRole.WS.getName(), AuthRole.MONITORING.getName());
+   		auth.inMemoryAuthentication().withUser("wsUser").password("wsPassword").roles(AuthRole.WS.name());
+   		auth.inMemoryAuthentication().withUser("webUser").password("webPassword").roles(AuthRole.WEB.name(),
+                AuthRole.WS.name(), AuthRole.MONITORING.name());
    		auth.inMemoryAuthentication().withUser("monUser").password("monPassword").roles(
-   		        AuthRole.MONITORING.getName());
+   		        AuthRole.MONITORING.name());
    	}
 
     private enum AuthRole {
@@ -106,10 +103,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         WS,
         WEB,
         MONITORING;
-
-        public String getName() {
-            return name();
-        }
     }
 }
 

@@ -19,7 +19,31 @@
     <!--<context:component-scan base-package="org.openhubframework.openhub.core.common.route, org.openhubframework.openhub.core.common.version"/>-->
 
     <!-- property configuration files -->
+<!--
     <context:property-placeholder ignore-resource-not-found="true"
         location="classpath:applicationCore.cfg,classpath:application.cfg,classpath:application0.cfg"/>
+-->
+
+    <!-- property configuration files -->
+    <context:property-placeholder ignore-resource-not-found="true" properties-ref="confProperties"/>
+
+    <bean id="confProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="ignoreResourceNotFound" value="true"/>
+        <property name="locations">
+            <list>
+                <value>classpath:applicationCore.cfg</value>
+                <value>classpath:application.cfg</value>
+                <value>classpath:application0.cfg</value>
+                <value>classpath:throttlingCore.cfg</value>
+                <value>classpath:throttling.cfg</value>
+                <value>classpath:throttling0.cfg</value>
+                <value>classpath:alertsCore.cfg</value>
+                <value>classpath:alerts.cfg</value>
+                <value>classpath:alerts0.cfg</value>
+                <value>classpath:extensions.cfg</value>
+                <value>classpath:extensions0.cfg</value>
+            </list>
+        </property>
+    </bean>
 
 </beans>

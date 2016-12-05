@@ -21,10 +21,10 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
-import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -40,6 +40,7 @@ import org.openhubframework.openhub.core.common.dao.MessageDao;
  *
  * @author Petr Juza
  */
+@Service
 public class MessagesPoolDbImpl implements MessagesPool {
 
     private static final Logger LOG = LoggerFactory.getLogger(MessagesPoolDbImpl.class);
@@ -61,8 +62,8 @@ public class MessagesPoolDbImpl implements MessagesPool {
     @Value("${asynch.postponedInterval}")
     private int postponedInterval;
 
-    @Required
-    public void setTransactionManager(JpaTransactionManager transactionManager) {
+    @Autowired
+    public MessagesPoolDbImpl(PlatformTransactionManager transactionManager) {
         Assert.notNull(transactionManager, "the transactionManager must not be null");
 
         this.transactionTemplate = new TransactionTemplate(transactionManager);

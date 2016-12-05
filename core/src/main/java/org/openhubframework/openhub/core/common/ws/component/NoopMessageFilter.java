@@ -17,16 +17,20 @@
 package org.openhubframework.openhub.core.common.ws.component;
 
 import org.apache.camel.Exchange;
+import org.apache.camel.component.spring.ws.SpringWebserviceComponent;
 import org.apache.camel.component.spring.ws.filter.MessageFilter;
 import org.apache.camel.component.spring.ws.filter.impl.BasicMessageFilter;
+import org.springframework.stereotype.Component;
 import org.springframework.ws.WebServiceMessage;
 
 /**
- * Does no message filtering (post-processing).
+ * Does no message filtering (post-processing). Picked up by {@link SpringWebserviceComponent} to skip setting camel
+ * headers/attachments to outbound SOAP message.
  * <p/>
  * Used instead of the default {@link BasicMessageFilter}, which adds Camel Message headers to Soap Message headers,
  * and Camel Message attachments to Soap Message attachments.
  */
+@Component
 public class NoopMessageFilter implements MessageFilter {
 
     @Override

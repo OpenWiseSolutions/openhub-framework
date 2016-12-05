@@ -28,9 +28,9 @@ import org.apache.camel.ProducerTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
@@ -49,6 +49,7 @@ import org.openhubframework.openhub.core.common.dao.MessageDao;
  *
  * @author Petr Juza
  */
+@Service(RepairMessageService.BEAN)
 public class RepairMessageServiceDbImpl implements RepairMessageService {
 
     private static final Logger LOG = LoggerFactory.getLogger(RepairMessageServiceDbImpl.class);
@@ -75,6 +76,12 @@ public class RepairMessageServiceDbImpl implements RepairMessageService {
     @Value("${asynch.countPartlyFailsBeforeFailed}")
     private int countPartlyFailsBeforeFailed;
 
+    @Autowired
+    public RepairMessageServiceDbImpl(PlatformTransactionManager transactionManager) {
+        Assert.notNull(transactionManager, "the transactionManager must not be null");
+
+        this.transactionTemplate = new TransactionTemplate(transactionManager);
+    }
 
     @Override
     public void repairProcessingMessages() {
@@ -146,12 +153,5 @@ public class RepairMessageServiceDbImpl implements RepairMessageService {
                 }
             }
         });
-    }
-
-    @Required
-    public void setTransactionManager(JpaTransactionManager transactionManager) {
-        Assert.notNull(transactionManager, "the transactionManager must not be null");
-
-        this.transactionTemplate = new TransactionTemplate(transactionManager);
     }
 }

@@ -24,6 +24,7 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import org.openhubframework.openhub.spi.throttling.ThrottleCounter;
@@ -37,6 +38,7 @@ import org.openhubframework.openhub.spi.throttling.ThrottleScope;
  *
  * @author Petr Juza
  */
+@Service
 public class ThrottleCounterMemoryImpl implements ThrottleCounter {
 
     private static final Logger LOG = LoggerFactory.getLogger(ThrottleCounterMemoryImpl.class);

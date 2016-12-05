@@ -16,20 +16,32 @@
 
 package org.openhubframework.openhub.admin.web.config;
 
+import org.apache.camel.component.quartz2.QuartzComponent;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+import org.openhubframework.openhub.core.common.asynch.confirm.DelegateConfirmationCallback;
 
 
 /**
- * Web MVC configuration.
+ * Camel configuration.
  *
  * @author <a href="mailto:petr.juza@openwise.cz">Petr Juza</a>
  * @since 2.0
  */
 @Configuration
-//note: If you want to take complete control of Spring MVC, you can add your own @Configuration annotated with @EnableWebMvc.
-// If you want to keep Spring Boot MVC features, and you just want to add additional MVC configuration (interceptors,
-// formatters, view controllers etc.) you can add your own @Bean of type WebMvcConfigurerAdapter, but without @EnableWebMvc.
-public class MvcConfiguration extends WebMvcConfigurerAdapter {
+public class CamelConfig {
 
+    @Bean
+    public DelegateConfirmationCallback confirmationCallback() {
+        return new DelegateConfirmationCallback();
+    }
+
+    @Bean
+    public QuartzComponent quartzComponent() {
+        QuartzComponent quartz = new QuartzComponent();
+        quartz.setStartDelayedSeconds(90);
+
+        return quartz;
+    }
 }

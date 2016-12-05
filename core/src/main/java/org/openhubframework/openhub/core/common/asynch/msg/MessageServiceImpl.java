@@ -42,7 +42,7 @@ import org.openhubframework.openhub.spi.msg.MessageService;
  *
  * @author Petr Juza
  */
-@Service
+@Service(MessageService.BEAN)
 public class MessageServiceImpl implements MessageService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MessageServiceImpl.class);

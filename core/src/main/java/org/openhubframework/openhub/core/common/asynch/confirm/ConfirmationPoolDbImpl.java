@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
@@ -37,6 +38,7 @@ import org.openhubframework.openhub.core.common.dao.ExternalCallDao;
 
  * @author Petr Juza
  */
+@Service
 public class ConfirmationPoolDbImpl implements ConfirmationPool {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConfirmationPoolDbImpl.class);
