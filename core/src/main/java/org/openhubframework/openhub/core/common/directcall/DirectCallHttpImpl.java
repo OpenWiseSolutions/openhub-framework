@@ -16,6 +16,8 @@
 
 package org.openhubframework.openhub.core.common.directcall;
 
+import static org.openhubframework.openhub.api.route.RouteConstants.HTTP_URI_PREFIX;
+
 import java.io.IOException;
 
 import org.apache.http.HttpEntity;
@@ -29,8 +31,6 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-
-import org.openhubframework.openhub.core.common.route.RouteConstants;
 
 
 /**
@@ -55,7 +55,7 @@ public class DirectCallHttpImpl implements DirectCall {
         CloseableHttpClient httpClient = HttpClients.createDefault();
 
         try {
-            HttpGet httpGet = new HttpGet(localhostUri + RouteConstants.HTTP_URI_PREFIX
+            HttpGet httpGet = new HttpGet(localhostUri + HTTP_URI_PREFIX
                     + DirectCallWsRoute.SERVLET_URL + "?" + DirectCallWsRoute.CALL_ID_HEADER + "=" + callId);
 
             // Create a custom response handler

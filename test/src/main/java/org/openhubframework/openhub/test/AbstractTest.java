@@ -25,15 +25,8 @@ import static org.springframework.core.annotation.AnnotationUtils.findAnnotation
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
-
-import org.openhubframework.openhub.api.exception.ErrorExtEnum;
-import org.openhubframework.openhub.api.route.CamelConfiguration;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -42,12 +35,7 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.model.ModelCamelContext;
 import org.apache.camel.model.RouteDefinition;
-import org.apache.camel.test.spring.CamelSpringJUnit4ClassRunner;
-import org.custommonkey.xmlunit.Diff;
-import org.custommonkey.xmlunit.Difference;
-import org.custommonkey.xmlunit.DifferenceListener;
-import org.custommonkey.xmlunit.XMLAssert;
-import org.custommonkey.xmlunit.XMLUnit;
+import org.custommonkey.xmlunit.*;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matcher;
 import org.hamcrest.core.IsEqual;
@@ -58,13 +46,19 @@ import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.ReflectionUtils;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
+
+import org.openhubframework.openhub.api.exception.ErrorExtEnum;
+import org.openhubframework.openhub.api.route.CamelConfiguration;
+import org.openhubframework.openhub.common.Profiles;
 
 
 /**
@@ -72,8 +66,9 @@ import org.xml.sax.SAXException;
  *
  * @author Petr Juza
  */
-@RunWith(CamelSpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:/META-INF/test_camel.xml"})
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(TestConfig.class)
+@ActiveProfiles(profiles = Profiles.TEST)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public abstract class AbstractTest {
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.admin.web.config;
+package org.openhubframework.openhub.core.config;
 
 import javax.persistence.EntityManagerFactory;
 
@@ -24,15 +24,20 @@ import org.apache.camel.builder.LoggingErrorHandlerBuilder;
 import org.apache.camel.component.jpa.JpaComponent;
 import org.apache.camel.component.quartz2.QuartzComponent;
 import org.apache.camel.component.seda.PriorityBlockingQueueFactory;
+import org.apache.camel.component.servlet.CamelHttpTransportServlet;
 import org.apache.camel.processor.interceptor.DefaultTraceFormatter;
 import org.apache.camel.processor.interceptor.Tracer;
 import org.apache.camel.spi.ThreadPoolProfile;
 import org.apache.camel.spring.boot.CamelContextConfiguration;
+import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import org.openhubframework.openhub.api.asynch.AsynchConstants;
+import org.openhubframework.openhub.api.route.RouteConstants;
+import org.openhubframework.openhub.common.Profiles;
 import org.openhubframework.openhub.core.common.asynch.confirm.DelegateConfirmationCallback;
 import org.openhubframework.openhub.core.common.asynch.msg.MsgPriorityComparator;
 
@@ -45,6 +50,10 @@ import org.openhubframework.openhub.core.common.asynch.msg.MsgPriorityComparator
  */
 @Configuration
 public class CamelConfig {
+
+    private static final String DEFAULT_THREAD_PROFILE = "defaultThreadProfile";
+
+    private static final int MAX_THREAD_POOL_SIZE = 30;
 
     @Bean
     public CamelContextConfiguration contextConfiguration() {
@@ -60,8 +69,8 @@ public class CamelConfig {
               // default thread profile (see DefaultExecutorServiceManager for defaults)
               ThreadPoolProfile threadPoolProfile = camelContext.getExecutorServiceManager()
                       .getDefaultThreadPoolProfile();
-              threadPoolProfile.setId("defaultThreadProfile");
-              threadPoolProfile.setMaxPoolSize(30);
+              threadPoolProfile.setId(DEFAULT_THREAD_PROFILE);
+              threadPoolProfile.setMaxPoolSize(MAX_THREAD_POOL_SIZE);
           }
 
           @Override
@@ -71,6 +80,23 @@ public class CamelConfig {
       };
     }
 
+    /**
+     * Configures servlet for HTTP communication.
+     */
+    @Bean
+   	public ServletRegistrationBean camelHttpServlet() {
+        CamelHttpTransportServlet servlet = new CamelHttpTransportServlet();
+        servlet.setServletName(RouteConstants.CAMEL_SERVLET);
+
+        ServletRegistrationBean bean = new ServletRegistrationBean(servlet,
+                RouteConstants.HTTP_URI_PREFIX + "*");
+        bean.setName(servlet.getServletName());
+        return bean;
+   	}
+
+    /**
+     * Configures JPA component.
+     */
     @Bean
     public JpaComponent jpaComponent(PlatformTransactionManager transactionManager, CamelContext camelContext,
             EntityManagerFactory entityManagerFactory) {
@@ -78,11 +104,10 @@ public class CamelConfig {
         jpaComponent.setEntityManagerFactory(entityManagerFactory);
         jpaComponent.setTransactionManager(transactionManager);
         jpaComponent.setCamelContext(camelContext);
-
         return jpaComponent;
     }
 
-    @Bean(name = "priorityQueueFactory")
+    @Bean(name = AsynchConstants.PRIORITY_QUEUE_FACTORY)
     public PriorityBlockingQueueFactory priorityQueueFactory() {
         PriorityBlockingQueueFactory<Exchange> queueFactory = new PriorityBlockingQueueFactory<>();
         queueFactory.setComparator(new MsgPriorityComparator());
@@ -99,19 +124,25 @@ public class CamelConfig {
         return formatter;
     }
 
+    /**
+     * Configures Tracer for tracing routes.
+     */
     @Bean
     public Tracer camelTracer() {
         return new Tracer();
     }
 
+
+    // =================== production ================
+
     @Bean
-    @Profile("prod")
+    @Profile(Profiles.PROD)
     public DelegateConfirmationCallback confirmationCallback() {
         return new DelegateConfirmationCallback();
     }
 
     @Bean
-    @Profile("prod")
+    @Profile(Profiles.PROD)
     public QuartzComponent quartzComponent() {
         QuartzComponent quartz = new QuartzComponent();
         quartz.setStartDelayedSeconds(90);

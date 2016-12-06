@@ -31,12 +31,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import org.openhubframework.openhub.api.entity.*;
+import org.openhubframework.openhub.common.Profiles;
 
 
 /**
@@ -45,6 +47,7 @@ import org.openhubframework.openhub.api.entity.*;
  * @author Petr Juza
  */
 @ContextConfiguration(locations = {"classpath:/META-INF/test_persistence.xml"})
+@ActiveProfiles(profiles = Profiles.H2)
 public abstract class AbstractDbTest extends AbstractTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractDbTest.class);

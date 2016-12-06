@@ -18,7 +18,6 @@ package org.openhubframework.openhub.core.common.spring;
 
 import java.io.IOException;
 import java.util.regex.Pattern;
-
 import javax.annotation.Nullable;
 
 import org.springframework.core.type.classreading.MetadataReader;
@@ -40,7 +39,7 @@ import org.springframework.core.type.filter.TypeFilter;
  */
 public class SystemExcludeRegexPatternTypeFilter implements TypeFilter {
 
-    public static final String PATTERN_PROP_NAME = "springExcludePattern";
+    private static final String PATTERN_PROP_NAME = "springExcludePattern";
 
     @Nullable
     private Pattern pattern;

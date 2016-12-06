@@ -14,16 +14,21 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.admin.web.config;
+package org.openhubframework.openhub.core.config;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.camel.component.spring.ws.bean.CamelEndpointMapping;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.ws.config.annotation.EnableWs;
 import org.springframework.ws.config.annotation.WsConfigurerAdapter;
 import org.springframework.ws.server.EndpointAdapter;
@@ -36,10 +41,11 @@ import org.springframework.ws.soap.saaj.SaajSoapMessageFactory;
 import org.springframework.ws.soap.server.endpoint.interceptor.SoapEnvelopeLoggingInterceptor;
 import org.springframework.ws.transport.http.MessageDispatcherServlet;
 import org.springframework.ws.transport.http.WebServiceMessageReceiverHandlerAdapter;
-import org.springframework.ws.wsdl.wsdl11.SimpleWsdl11Definition;
 import org.springframework.xml.xsd.SimpleXsdSchema;
 import org.springframework.xml.xsd.XsdSchema;
 
+import org.openhubframework.openhub.api.configuration.WebServiceValidatingSources;
+import org.openhubframework.openhub.api.route.RouteConstants;
 import org.openhubframework.openhub.core.common.route.SpringWsUriBuilder;
 import org.openhubframework.openhub.core.common.ws.ErrorCodeAwareSoapExceptionResolver;
 import org.openhubframework.openhub.core.common.ws.ErrorCodeAwareWebServiceMessageReceiverHandlerAdapter;
@@ -54,13 +60,20 @@ import org.openhubframework.openhub.core.common.ws.HeaderAndPayloadValidatingInt
  */
 @EnableWs
 @Configuration
+@AutoConfigureBefore(value = CamelConfig.class)
 public class WebServiceConfig extends WsConfigurerAdapter {
+
+    private static final ClassPathResource XSD_COMMON_RESOURCE = new ClassPathResource(
+            "org/openhubframework/openhub/api/modules/in/common/commonTypes-v1.0.xsd");
+
+    @Autowired(required = false)
+    private List<WebServiceValidatingSources> xsdSources;
 
     @Bean
    	public ServletRegistrationBean dispatcherWsRegistration(ApplicationContext applicationContext) {
    		MessageDispatcherServlet servlet = new MessageDispatcherServlet();
    		servlet.setApplicationContext(applicationContext);
-   		return new ServletRegistrationBean(servlet, "/ws/*");
+   		return new ServletRegistrationBean(servlet, RouteConstants.WS_URI_PREFIX + "*");
    	}
 
     @Bean
@@ -73,14 +86,22 @@ public class WebServiceConfig extends WsConfigurerAdapter {
     public HeaderAndPayloadValidatingInterceptor validatingInterceptor() {
         HeaderAndPayloadValidatingInterceptor validatingInterceptor = new HeaderAndPayloadValidatingInterceptor();
         validatingInterceptor.setFaultStringOrReason("E101: the request message is not valid against XSD schema");
-        validatingInterceptor.setSchemas(
-                // the order of XSDs is important: commons -> entity XSD -> service XSD
-                new ClassPathResource("org/openhubframework/openhub/api/modules/in/common/commonTypes-v1.0.xsd"),
-                new ClassPathResource("org/openhubframework/openhub/modules/in/hello/ws/v1_0/helloOperations-v1.0.xsd"));
         validatingInterceptor.setValidateRequest(true);
         validatingInterceptor.setValidateResponse(true);
-        validatingInterceptor.setIgnoreRequests(
-                Arrays.asList("{http://openhubframework.org/ws/HelloService-v1}syncHelloRequest"));
+
+        // get all schema resources
+        // the order of XSDs is important: commons -> entity XSD -> service XSD
+        List<Resource> schemas = new ArrayList<>();
+        List<String> ignoreRequests = new ArrayList<>();
+        schemas.add(XSD_COMMON_RESOURCE);
+        if (xsdSources != null) {
+            for (WebServiceValidatingSources xsdSource : xsdSources) {
+                schemas.addAll(Arrays.asList(xsdSource.getXsdSchemas()));
+                ignoreRequests.addAll(Arrays.asList(xsdSource.getIgnoreRequests()));
+            }
+        }
+        validatingInterceptor.setSchemas(schemas.toArray(new Resource[]{}));
+        validatingInterceptor.setIgnoreRequests(ignoreRequests);
 
         return validatingInterceptor;
     }
@@ -90,7 +111,7 @@ public class WebServiceConfig extends WsConfigurerAdapter {
         return new SoapEnvelopeLoggingInterceptor();
     }
 
-   	@Bean(name = "endpointMapping")
+   	@Bean(name = RouteConstants.ENDPOINT_MAPPING_BEAN)
     public EndpointMapping endpointMapping(SoapEnvelopeLoggingInterceptor loggingInterceptor,
             HeaderAndPayloadValidatingInterceptor validatingInterceptor) {
         CamelEndpointMapping mapping = new CamelEndpointMapping();
@@ -124,21 +145,6 @@ public class WebServiceConfig extends WsConfigurerAdapter {
 
    	@Bean(name = "commonTypes-v1.0")
    	public XsdSchema commonTypes() {
-   		return new SimpleXsdSchema(new ClassPathResource(
-   		        "org/openhubframework/openhub/api/modules/in/common/commonTypes-v1.0.xsd"));
-   	}
-
-   	@Bean(name = "helloOperations-v1.0")
-   	public XsdSchema helloOperations() {
-   		return new SimpleXsdSchema(new ClassPathResource(
-   		        "org/openhubframework/openhub/modules/in/hello/ws/v1_0/helloOperations-v1.0.xsd"));
-   	}
-
-    @Bean(name = "hello")
-   	public SimpleWsdl11Definition helloWsdl() {
-        SimpleWsdl11Definition wsdl = new SimpleWsdl11Definition();
-        wsdl.setWsdl(new ClassPathResource(
-                "org/openhubframework/openhub/modules/in/hello/ws/v1_0/hello-v1.0.wsdl"));
-   		return wsdl;
+        return new SimpleXsdSchema(XSD_COMMON_RESOURCE);
    	}
 }

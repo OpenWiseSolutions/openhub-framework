@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.core.persistence;
+package org.openhubframework.openhub.core.config;
 
 import javax.sql.DataSource;
 
@@ -36,6 +36,9 @@ import org.openhubframework.openhub.core.common.dao.DbConst;
 @Configuration
 public class JpaConfiguration {
 
+    /**
+     * Configures JPA entity manager.
+     */
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder,
             DataSource dataSource) {

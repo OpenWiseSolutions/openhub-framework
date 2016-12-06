@@ -19,16 +19,16 @@ package org.openhubframework.openhub.core;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.joda.time.DateTime;
+import org.junit.Before;
+import org.springframework.test.context.ContextConfiguration;
+
 import org.openhubframework.openhub.api.asynch.model.TraceHeader;
 import org.openhubframework.openhub.api.asynch.model.TraceIdentifier;
 import org.openhubframework.openhub.core.common.asynch.AsynchInMessageRoute;
 import org.openhubframework.openhub.core.common.asynch.TraceHeaderProcessor;
 import org.openhubframework.openhub.test.AbstractDbTest;
 import org.openhubframework.openhub.test.ActiveRoutes;
-
-import org.joda.time.DateTime;
-import org.junit.Before;
-import org.springframework.test.context.ContextConfiguration;
 
 
 /**
@@ -37,6 +37,7 @@ import org.springframework.test.context.ContextConfiguration;
  * @author Petr Juza
  */
 @ContextConfiguration(locations = {"classpath:/META-INF/test_core_db_conf.xml", "classpath:/META-INF/sp_async.xml"})
+//sp_async.xml = externalCallService, confirmationService, partlyFailedMessagesPool, ...
 @ActiveRoutes(classes = {AsynchInMessageRoute.class})
 public abstract class AbstractCoreDbTest extends AbstractDbTest {
 

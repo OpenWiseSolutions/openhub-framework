@@ -14,22 +14,16 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.modules;
-
-import org.openhubframework.openhub.core.common.asynch.ExceptionTranslationRoute;
-import org.openhubframework.openhub.test.AbstractDbTest;
-import org.openhubframework.openhub.test.ActiveRoutes;
-
-import org.springframework.test.context.ContextConfiguration;
-
+package org.openhubframework.openhub.core.confcheck;
 
 /**
- * Parent class for all tests with database.
+ * Indicates error in OpenHub configuration.
  *
  * @author Petr Juza
  */
-@ActiveRoutes(classes = ExceptionTranslationRoute.class)
-@ContextConfiguration(locations = {"classpath:/META-INF/test_modules_db_conf.xml"})
-public abstract class AbstractModulesDbTest extends AbstractDbTest {
+public class ConfigurationException extends RuntimeException {
 
+    public ConfigurationException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 }

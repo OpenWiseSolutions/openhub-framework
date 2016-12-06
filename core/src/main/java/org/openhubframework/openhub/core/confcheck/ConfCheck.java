@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.core.conf;
+package org.openhubframework.openhub.core.confcheck;
 
 /**
  * Contract for configuration checking.

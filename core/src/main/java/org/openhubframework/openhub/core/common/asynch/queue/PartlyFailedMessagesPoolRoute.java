@@ -27,6 +27,7 @@ import org.springframework.context.annotation.Profile;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
 import org.openhubframework.openhub.api.route.AbstractBasicRoute;
 import org.openhubframework.openhub.api.route.CamelConfiguration;
+import org.openhubframework.openhub.common.Profiles;
 import org.openhubframework.openhub.core.common.asynch.repair.RepairProcessingMsgRoute;
 import org.openhubframework.openhub.core.common.asynch.stop.StopService;
 
@@ -38,7 +39,7 @@ import org.openhubframework.openhub.core.common.asynch.stop.StopService;
  * @author Petr Juza
  */
 @CamelConfiguration(value = PartlyFailedMessagesPoolRoute.ROUTE_BEAN)
-@Profile("prod")
+@Profile(Profiles.PROD)
 public class PartlyFailedMessagesPoolRoute extends SpringRouteBuilder {
 
     private static final Logger LOG = LoggerFactory.getLogger(PartlyFailedMessagesPoolRoute.class);

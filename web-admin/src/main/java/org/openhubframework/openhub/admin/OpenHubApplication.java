@@ -16,6 +16,8 @@
 
 package org.openhubframework.openhub.admin;
 
+import static org.openhubframework.openhub.api.route.RouteConstants.WEB_URI_PREFIX;
+
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -31,6 +33,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.context.web.ErrorPageFilter;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.*;
@@ -39,51 +42,48 @@ import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
+import org.openhubframework.openhub.admin.web.config.CamelRoutesConfig;
+import org.openhubframework.openhub.admin.web.config.MvcConfig;
+import org.openhubframework.openhub.admin.web.config.WebSecurityConfig;
 import org.openhubframework.openhub.admin.web.filter.RequestResponseLoggingFilter;
 import org.openhubframework.openhub.api.exception.ErrorExtEnum;
+import org.openhubframework.openhub.api.route.CamelConfiguration;
 import org.openhubframework.openhub.common.AutoConfiguration;
 import org.openhubframework.openhub.common.log.LogContextFilter;
+import org.openhubframework.openhub.core.config.CamelConfig;
+import org.openhubframework.openhub.core.config.JpaConfiguration;
+import org.openhubframework.openhub.core.config.WebServiceConfig;
 import org.openhubframework.openhub.modules.ErrorEnum;
 
 
 /**
  * OpenHub application configuration.
  * <p/>
- * This class configures root Spring context. Two child contexts are created:
- * <ul>
- *     <li>Spring MVC web context
- *     <li>Spring WS context
- * </ul>
+ * This class configures root Spring context. One child context for Spring MVC is created.
  *
  * @author <a href="mailto:petr.juza@openwise.cz">Petr Juza</a>
- * @since 1.1
+ * @since 2.0
+ * @see CamelRoutesConfig
+ * @see MvcConfig
+ * @see WebSecurityConfig
+ * @see CamelConfig
+ * @see WebServiceConfig
+ * @see JpaConfiguration
  */
-//@SpringBootApplication
 @EnableAutoConfiguration
-//@EnableConfigurationProperties
-@ComponentScan(basePackages = {"org.openhubframework.openhub.core.common.route",
-        "org.openhubframework.openhub.common.datasource",
-//        "org.openhubframework.openhub.core.common.contextcall",
-//        "org.openhubframework.openhub.core.common.directcall",
-//        "org.openhubframework.openhub.core.common.version",
-//        "org.openhubframework.openhub.core.common.asynch.stop",
-//        "org.openhubframework.openhub.core.common.asynch.msg",
-//        "org.openhubframework.openhub.core.reqres",
-//        "org.openhubframework.openhub.core.common.file",
-//        "org.openhubframework.openhub.core.common.dao",
-//        "org.openhubframework.openhub.core.persistence",
-//        "org.openhubframework.openhub.core.conf",
+@EnableConfigurationProperties
+// note: all routes with @CamelConfiguration are configured in CamelRoutesConfig
+@ComponentScan(basePackages = {"org.openhubframework.openhub.common",
         "org.openhubframework.openhub.core",
         "org.openhubframework.openhub.modules",
         "org.openhubframework.openhub.admin"},
-        excludeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = AutoConfiguration.class))
+        excludeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, classes = AutoConfiguration.class),
+                @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = CamelConfiguration.class)})
 @Configuration
-@ImportResource({"classpath:net/bull/javamelody/monitoring-spring.xml",
-        "classpath:rootApplicationContext.xml",
-        "classpath:rootSecurity.xml",
-        "classpath:spring-admin-mvc-servlet.xml",
-        "classpath:spring-ws-servlet.xml",
-        "classpath:sp_h2.xml"})
+@ImportResource({"classpath:net/bull/javamelody/monitoring-spring.xml", "classpath:sp_h2_server.xml"})
+// note: I re-define property sources from CoreProperties because I need to determine priorities of processing
+@PropertySource(value = {"classpath:/applicationCore.cfg", "classpath:/alertsCore.cfg", "classpath:/throttlingCore.cfg",
+        "classpath:/throttling.cfg", "classpath:/alerts.cfg", "classpath:/extensions.cfg"})
 public class OpenHubApplication extends SpringBootServletInitializer {
 
     private static final Logger LOG = LoggerFactory.getLogger(OpenHubApplication.class);
@@ -109,7 +109,7 @@ public class OpenHubApplication extends SpringBootServletInitializer {
     @Bean
     public ServletRegistrationBean dispatcherWebRegistration(DispatcherServlet dispatcherServlet) {
         ServletRegistrationBean registration = new ServletRegistrationBean(dispatcherServlet);
-        registration.addUrlMappings("/web/admin/*");
+        registration.addUrlMappings(WEB_URI_PREFIX + "*");
         return registration;
     }
 
@@ -129,12 +129,17 @@ public class OpenHubApplication extends SpringBootServletInitializer {
    		return registration;
    	}
 
+    /**
+     * Sets up filter for adding context information to logging.
+     */
     @Bean
     public Filter logContextFilter() {
         return new LogContextFilter();
     }
 
-
+    /**
+     * Defines localized messages for admin GUI.
+     */
     @Bean
     public ReloadableResourceBundleMessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
@@ -150,6 +155,9 @@ public class OpenHubApplication extends SpringBootServletInitializer {
         return localeResolver;
     }
 
+    /**
+     * Defines error codes catalogue.
+     */
     @Bean
     public Map<String, ErrorExtEnum[]> errorCodesCatalog() {
           Map<String, ErrorExtEnum[]> map = new HashMap<>();
@@ -184,7 +192,6 @@ public class OpenHubApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) throws Exception {
         new SpringApplicationBuilder(OpenHubApplication.class)
-//                .child(OpenHubWebApplication.class).web(true)
                 .run(args);
     }
 }

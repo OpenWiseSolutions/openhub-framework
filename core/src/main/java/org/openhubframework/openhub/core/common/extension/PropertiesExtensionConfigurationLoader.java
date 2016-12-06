@@ -16,18 +16,19 @@
 
 package org.openhubframework.openhub.core.common.extension;
 
-import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.Properties;
 import java.util.Set;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.common.Tools;
 
 
 /**
@@ -42,18 +43,13 @@ public class PropertiesExtensionConfigurationLoader extends AbstractExtensionCon
 
     public static final String PROPERTY_PREFIX = "context.ext";
 
-    private Properties properties;
+    @Autowired
+    private ConfigurableEnvironment env;
 
     /**
-     * Creates new extension loader with specified properties.
-     *
-     * @param properties the properties
+     * Creates new extension loader with properties from {@link Environment environment}.
      */
-    @Autowired
-    public PropertiesExtensionConfigurationLoader(@Qualifier("confProperties") Properties properties) {
-        Assert.notNull(properties, "the properties must not be null");
-
-        this.properties = properties;
+    public PropertiesExtensionConfigurationLoader() {
     }
 
     /**
@@ -61,15 +57,14 @@ public class PropertiesExtensionConfigurationLoader extends AbstractExtensionCon
      */
     @PostConstruct
     private void initExtensions() {
+        Assert.notNull(env, "env must not be null");
+
         // gets extension config locations
         Set<String> confLocations = new HashSet<String>();
 
-        Enumeration<?> propNamesEnum = properties.propertyNames();
-        while (propNamesEnum.hasMoreElements()) {
-            String propName = (String) propNamesEnum.nextElement();
-
+        for (String propName : Tools.getAllKnownPropertyNames(env)) {
             if (propName.startsWith(PROPERTY_PREFIX)) {
-                String configLoc = properties.getProperty(propName);
+                String configLoc = env.getProperty(propName);
 
                 if (StringUtils.isNotEmpty(configLoc)) {
                     confLocations.add(configLoc);

@@ -1,11 +1,11 @@
 /*
- * Copyright 2014 the original author or authors.
+ * Copyright 2002-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,17 +14,29 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.core.common.route;
+package org.openhubframework.openhub.api.route;
+
+import org.openhubframework.openhub.api.asynch.AsynchConstants;
+
 
 /**
- * Common route constants.
+ * Common constants regarding to route implementation.
  *
- * @author Petr Juza
+ * @author <a href="mailto:petr.juza@openwise.cz">Petr Juza</a>
+ * @see AsynchConstants
+ * @since 2.0
  */
 public final class RouteConstants {
 
-    private RouteConstants() {
-    }
+    /**
+     * Bean name of authorization policy for web services.
+     */
+    public static final String WS_AUTH_POLICY = "roleWsAuthPolicy";
+
+    /**
+     * Bean name of web services endpoint mapping.
+     */
+    public static final String ENDPOINT_MAPPING_BEAN = "endpointMapping";
 
     /**
      * Name of the servlet for incoming HTTP communication.
@@ -45,4 +57,8 @@ public final class RouteConstants {
      * URI prefix for web admin GUI - "spring-admin-mvc" in web.xml.
      */
     public static final String WEB_URI_PREFIX = "/web/admin/";
+
+
+    private RouteConstants() {
+    }
 }

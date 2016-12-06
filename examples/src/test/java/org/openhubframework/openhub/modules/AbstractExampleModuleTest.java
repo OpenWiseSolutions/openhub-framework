@@ -16,11 +16,12 @@
 
 package org.openhubframework.openhub.modules;
 
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+
 import org.openhubframework.openhub.core.common.asynch.ExceptionTranslationRoute;
 import org.openhubframework.openhub.test.AbstractTest;
 import org.openhubframework.openhub.test.ActiveRoutes;
-
-import org.springframework.test.context.ContextConfiguration;
 
 
 /**
@@ -30,7 +31,8 @@ import org.springframework.test.context.ContextConfiguration;
  * @author Petr Juza
  */
 @ActiveRoutes(classes = ExceptionTranslationRoute.class)
-@ContextConfiguration(locations = {"classpath:/META-INF/test_modules_conf.xml"})
-public abstract class AbstractModulesTest extends AbstractTest {
+@ContextConfiguration(classes = ExampleTestConfig.class)
+@ActiveProfiles(profiles = ExampleProperties.EXAMPLE_PROFILE)
+public abstract class AbstractExampleModuleTest extends AbstractTest {
 
 }

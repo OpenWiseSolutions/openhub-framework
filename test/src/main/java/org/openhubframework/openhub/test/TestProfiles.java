@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.modules;
+package org.openhubframework.openhub.test;
 
 import org.springframework.test.annotation.IfProfileValue;
 

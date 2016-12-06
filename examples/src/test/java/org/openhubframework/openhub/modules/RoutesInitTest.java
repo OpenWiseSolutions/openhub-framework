@@ -25,7 +25,7 @@ import org.junit.Test;
  *
  * @author Petr Juza
  */
-public class RoutesInitTest extends AbstractModulesDbTest {
+public class RoutesInitTest extends AbstractExampleModulesDbTest {
 
     @BeforeClass
     public static void setInitAllRoutes() {

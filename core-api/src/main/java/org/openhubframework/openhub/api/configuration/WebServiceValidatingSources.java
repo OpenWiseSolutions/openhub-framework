@@ -14,28 +14,33 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.common;
+package org.openhubframework.openhub.api.configuration;
+
+import org.springframework.core.io.Resource;
+
 
 /**
- * OpenHub constants used to uniform access to OpenHub properties.
+ * Contract for definition of XSD schemas for header and payload validation.
  *
  * @author <a href="mailto:petr.juza@openwise.cz">Petr Juza</a>
  * @since 2.0
  */
-public class OpenHubPropertyConstants {
+public interface WebServiceValidatingSources {
 
     /**
-     * Spring root property prefix name.
+     * Sets the schema resources to use for validation.
+     *
+     * @return array of schema resources
      */
-    public static final String SPRING_PREFIX = "spring";
+    Resource[] getXsdSchemas();
 
     /**
-     * OpenHub property prefix name used for custom properties created for OpenHub.
-     * These property names should have the same prefix.
+     * Sets request root element names which will be ignored from validation checking.
+     * <p>
+     * Example: {@code {http://openhubframework.org/ws/HelloService-v1}syncHelloRequest}
+     *
+     * @return array of root element names
      */
-    public static final String PREFIX = "ohf";
+    String[] getIgnoreRequests();
 
-    private OpenHubPropertyConstants() {
-        // avoid instantiation
-    }
 }

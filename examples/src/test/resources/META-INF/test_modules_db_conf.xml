@@ -9,7 +9,7 @@
         Base Spring configuration for test with database of "modules" routes.
     </description>
 
-    <import resource="test_modules_conf.xml"/>
+    <!--<import resource="test_modules_conf.xml"/>-->
 
     <!-- init addons camel routes -->
     <context:component-scan base-package="org.openhubframework.openhub.core.common.dao"/>

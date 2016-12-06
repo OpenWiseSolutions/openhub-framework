@@ -14,28 +14,20 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.common;
+package org.openhubframework.openhub.core;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+
 
 /**
- * OpenHub constants used to uniform access to OpenHub properties.
+ * Defines core (default) properties.
  *
  * @author <a href="mailto:petr.juza@openwise.cz">Petr Juza</a>
  * @since 2.0
  */
-public class OpenHubPropertyConstants {
+@Configuration
+@PropertySource(value = {"classpath:/applicationCore.cfg", "classpath:/alertsCore.cfg", "classpath:/throttlingCore.cfg"})
+public class CoreProperties {
 
-    /**
-     * Spring root property prefix name.
-     */
-    public static final String SPRING_PREFIX = "spring";
-
-    /**
-     * OpenHub property prefix name used for custom properties created for OpenHub.
-     * These property names should have the same prefix.
-     */
-    public static final String PREFIX = "ohf";
-
-    private OpenHubPropertyConstants() {
-        // avoid instantiation
-    }
 }

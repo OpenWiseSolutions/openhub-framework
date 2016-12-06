@@ -54,7 +54,7 @@ public interface WebServiceUriBuilder {
 
 
     /**
-     * Gets "from" URI for handling incoming WS messages with default "endpointMapping" bean.
+     * Gets "from" URI for handling incoming WS messages.
      *
      * @return from URI
      * @param qName the operation QName (namespace + local part)

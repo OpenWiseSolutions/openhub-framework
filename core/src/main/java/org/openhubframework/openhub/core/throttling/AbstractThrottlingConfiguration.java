@@ -36,7 +36,7 @@ import org.openhubframework.openhub.spi.throttling.ThrottlingConfiguration;
  */
 public abstract class AbstractThrottlingConfiguration implements ThrottlingConfiguration {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractThrottlingConfiguration.class);
+    protected static final Logger LOG = LoggerFactory.getLogger(AbstractThrottlingConfiguration.class);
 
     /**
      * Default time interval (in seconds).

@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.core.conf;
+package org.openhubframework.openhub.core.confcheck;
+
+import static org.openhubframework.openhub.api.route.RouteConstants.HTTP_URI_PREFIX;
 
 import java.io.IOException;
 import java.util.List;
@@ -33,9 +35,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.util.Assert;
-
-import org.openhubframework.openhub.core.common.route.RouteConstants;
+import org.springframework.stereotype.Component;
 
 
 /**
@@ -52,8 +52,7 @@ import org.openhubframework.openhub.core.common.route.RouteConstants;
  * @see CheckingConfMessageDispatcherServlet
  * @see ConfCheck
  */
-//@Component
-//TODO PJUZA is this checker still needed?
+@Component
 public class ConfigurationChecker implements ApplicationListener<ContextRefreshedEvent> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConfigurationChecker.class);
@@ -101,9 +100,6 @@ public class ConfigurationChecker implements ApplicationListener<ContextRefreshe
     void checkConfiguration(ApplicationContext context) {
         LOG.debug("Checking configuration validity ...");
 
-        Assert.state(context.getParent() != null,
-                "ConfigurationChecker must be initialized in child context");
-
         try {
             if (checkUrl) {
                 checkLocalhostUri();
@@ -121,9 +117,11 @@ public class ConfigurationChecker implements ApplicationListener<ContextRefreshe
             LOG.error("Configuration error", ex);
 
             // stop parent context (I don't know how to stop it in other way)
-            ConfigurableApplicationContext rootContext =
-                    (ConfigurableApplicationContext)context.getParent();
-            rootContext.close();
+            if (context.getParent() != null) {
+                context = context.getParent();
+            }
+
+            ((ConfigurableApplicationContext)context).close();
         }
     }
 
@@ -135,7 +133,7 @@ public class ConfigurationChecker implements ApplicationListener<ContextRefreshe
 
         try {
             // for example: http://localhost:8080/esb/http/ping
-            HttpGet httpGet = new HttpGet(localhostUri + RouteConstants.HTTP_URI_PREFIX + "ping");
+            HttpGet httpGet = new HttpGet(localhostUri + HTTP_URI_PREFIX + "ping");
 
             httpClient.execute(httpGet);
         } catch (IOException ex) {

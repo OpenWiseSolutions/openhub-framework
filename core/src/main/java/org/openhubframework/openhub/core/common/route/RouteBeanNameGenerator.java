@@ -20,7 +20,6 @@ import java.beans.Introspector;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.openhubframework.openhub.api.route.CamelConfiguration;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
@@ -28,6 +27,8 @@ import org.springframework.beans.factory.support.BeanNameGenerator;
 import org.springframework.context.annotation.AnnotationBeanNameGenerator;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.util.ClassUtils;
+
+import org.openhubframework.openhub.api.route.CamelConfiguration;
 
 
 /**
@@ -49,17 +50,15 @@ import org.springframework.util.ClassUtils;
  */
 public class RouteBeanNameGenerator extends AnnotationBeanNameGenerator {
 
-    private static final String CAMEL_CONF_CLASSNAME = "org.openhubframework.openhub.api.route.CamelConfiguration";
+    private static final String BEAN_SUFFIX = "Bean";
 
-    public static final String BEAN_SUFFIX = "Bean";
+    private static final String MODULES_IN = "In";
 
-    public static final String MODULES_IN = "In";
+    private static final String MODULES_PACKAGE_IN = "modules.in";
 
-    public static final String MODULES_PACKAGE_IN = "modules.in";
+    private static final String MODULES_OUT = "Out";
 
-    public static final String MODULES_OUT = "Out";
-
-    public static final String MODULES_PACKAGE_OUT = "modules.out";
+    private static final String MODULES_PACKAGE_OUT = "modules.out";
 
     @Override
     public String generateBeanName(BeanDefinition definition, BeanDefinitionRegistry registry) {
@@ -93,7 +92,7 @@ public class RouteBeanNameGenerator extends AnnotationBeanNameGenerator {
         AnnotationMetadata amd = annotatedDef.getMetadata();
         Set<String> types = amd.getAnnotationTypes();
         for (String type : types) {
-            if (type.equals(CAMEL_CONF_CLASSNAME)) {
+            if (type.equals(CamelConfiguration.class.getName())) {
                 return true;
             }
         }

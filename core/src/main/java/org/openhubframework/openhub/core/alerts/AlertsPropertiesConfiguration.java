@@ -19,14 +19,17 @@ package org.openhubframework.openhub.core.alerts;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import org.openhubframework.openhub.common.Tools;
 import org.openhubframework.openhub.spi.alerts.AlertInfo;
 
 
@@ -53,26 +56,22 @@ public class AlertsPropertiesConfiguration extends AbstractAlertsConfiguration {
 
     public static final String MAIL_BODY_PROP = "mail.body";
 
-    private Properties properties;
+    @Autowired
+    private ConfigurableEnvironment env;
 
     /**
-     * Creates new configuration with specified properties.
-     *
-     * @param properties the properties
+     * Creates new configuration with properties from {@link Environment environment}.
      */
-    @Autowired
-    public AlertsPropertiesConfiguration(@Qualifier("confProperties") Properties properties) {
-        Assert.notNull(properties, "the properties must not be null");
-
-        this.properties = properties;
-
-        initProps();
+    public AlertsPropertiesConfiguration() {
     }
 
     /**
      * Initializes configuration from properties.
      */
+    @PostConstruct
     private void initProps() {
+        Assert.notNull(env, "env must not be null");
+
         // example of alert configuration
 //        alerts.900.id=WAITING_MSG_ALERT
 //        alerts.900.limit=0
@@ -85,15 +84,11 @@ public class AlertsPropertiesConfiguration extends AbstractAlertsConfiguration {
         // get relevant properties for alerts
         List<String> propNames = new ArrayList<String>();
 
-        Enumeration<?> propNamesEnum = properties.propertyNames();
-        while (propNamesEnum.hasMoreElements()) {
-            String propName = (String) propNamesEnum.nextElement();
-
+        for (String propName : Tools.getAllKnownPropertyNames(env)) {
             if (propName.startsWith(ALERT_PROP_PREFIX)) {
                 propNames.add(propName);
             }
         }
-
 
         // get alert IDs
         Set<String> orders = new HashSet<String>();
@@ -120,7 +115,7 @@ public class AlertsPropertiesConfiguration extends AbstractAlertsConfiguration {
         for (String order : orders) {
             String propPrefix = ALERT_PROP_PREFIX + order + ".";
 
-            String id = properties.getProperty(propPrefix + ID_PROP);
+            String id = env.getProperty(propPrefix + ID_PROP);
 
             // check if id is unique
             if (ids.contains(id)) {
@@ -129,8 +124,8 @@ public class AlertsPropertiesConfiguration extends AbstractAlertsConfiguration {
                 ids.add(id);
             }
 
-            String limit = properties.getProperty(propPrefix + LIMIT_PROP);
-            String sql = properties.getProperty(propPrefix + SQL_PROP);
+            String limit = env.getProperty(propPrefix + LIMIT_PROP);
+            String sql = env.getProperty(propPrefix + SQL_PROP);
 
             // check if sql contains count()
             if (!StringUtils.containsIgnoreCase(sql, "count(")) {
@@ -138,11 +133,11 @@ public class AlertsPropertiesConfiguration extends AbstractAlertsConfiguration {
                         + "' doesn't contain count().");
             }
 
-            String enabled = properties.getProperty(propPrefix + ENABLED_PROP);
+            String enabled = env.getProperty(propPrefix + ENABLED_PROP);
             enabled = enabled == null ? "true" : enabled;
 
-            String subject = properties.getProperty(propPrefix + MAIL_SBJ_PROP);
-            String body = properties.getProperty(propPrefix + MAIL_BODY_PROP);
+            String subject = env.getProperty(propPrefix + MAIL_SBJ_PROP);
+            String body = env.getProperty(propPrefix + MAIL_BODY_PROP);
 
 
             // add new alert

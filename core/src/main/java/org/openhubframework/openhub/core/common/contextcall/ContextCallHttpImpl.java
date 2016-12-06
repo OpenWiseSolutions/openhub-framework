@@ -16,6 +16,8 @@
 
 package org.openhubframework.openhub.core.common.contextcall;
 
+import static org.openhubframework.openhub.api.route.RouteConstants.HTTP_URI_PREFIX;
+
 import java.io.IOException;
 
 import org.apache.commons.io.IOUtils;
@@ -24,8 +26,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import org.openhubframework.openhub.core.common.route.RouteConstants;
 
 
 /**
@@ -47,7 +47,7 @@ public class ContextCallHttpImpl extends AbstractContextCall {
         CloseableHttpClient httpClient = HttpClients.createDefault();
 
         try {
-            HttpGet httpGet = new HttpGet(localhostUri + RouteConstants.HTTP_URI_PREFIX
+            HttpGet httpGet = new HttpGet(localhostUri + HTTP_URI_PREFIX
                     + ContextCallRoute.SERVLET_URL + "?" + ContextCallRoute.CALL_ID_HEADER + "=" + callId);
 
             httpClient.execute(httpGet);

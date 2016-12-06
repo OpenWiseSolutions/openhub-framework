@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <description>
         Base Spring configuration for test of "modules" routes.
     </description>
 
     <!-- init addons camel routes -->
-    <context:component-scan base-package="org.openhubframework.openhub.modules"/>
+    <!--<context:component-scan base-package="org.openhubframework.openhub.modules"/>-->
 
-    <bean class="org.openhubframework.openhub.core.common.asynch.ExceptionTranslationRoute"/>
+    <!--<bean class="org.openhubframework.openhub.core.common.asynch.ExceptionTranslationRoute"/>-->
 
-    <!-- property configuration files -->
+<!--
+    &lt;!&ndash; property configuration files &ndash;&gt;
     <context:property-placeholder ignore-resource-not-found="true" properties-ref="testProperties"/>
 
     <bean id="testProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
@@ -28,15 +27,20 @@
             </list>
         </property>
     </bean>
+-->
 
-    <bean id="roleWsAuthPolicy" class="org.openhubframework.openhub.test.DummyPolicy"/>
+    <!--<bean id="roleWsAuthPolicy" class="org.openhubframework.openhub.test.DummyPolicy"/>-->
 
     <!-- throttling -->
+<!--
     <bean class="org.openhubframework.openhub.core.throttling.ThrottlingPropertiesConfiguration">
         <constructor-arg ref="testProperties"/>
     </bean>
+-->
 
+<!--
     <bean class="org.openhubframework.openhub.core.throttling.ThrottleCounterMemoryImpl" />
     <bean class="org.openhubframework.openhub.core.throttling.ThrottleProcessorImpl" />
+-->
 
 </beans>

@@ -20,17 +20,17 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-import org.openhubframework.openhub.common.Tools;
-import org.openhubframework.openhub.modules.AbstractModulesTest;
-import org.openhubframework.openhub.modules.in.hello.model.SyncHelloResponse;
-import org.openhubframework.openhub.test.ActiveRoutes;
-import org.openhubframework.openhub.test.route.TestWsUriBuilder;
-
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.junit.Test;
+
+import org.openhubframework.openhub.common.Tools;
+import org.openhubframework.openhub.modules.AbstractExampleModuleTest;
+import org.openhubframework.openhub.modules.in.hello.model.SyncHelloResponse;
+import org.openhubframework.openhub.test.ActiveRoutes;
+import org.openhubframework.openhub.test.route.TestWsUriBuilder;
 
 
 /**
@@ -39,7 +39,7 @@ import org.junit.Test;
  * @author Petr Juza
  */
 @ActiveRoutes(classes = SyncHelloRoute.class)
-public class SyncHelloRouteTest extends AbstractModulesTest {
+public class SyncHelloRouteTest extends AbstractExampleModuleTest {
 
     @Produce(uri = TestWsUriBuilder.URI_WS_IN + "syncHelloRequest")
     private ProducerTemplate producer;

@@ -23,10 +23,13 @@ import javax.xml.namespace.QName;
 import org.apache.camel.Body;
 import org.apache.camel.Handler;
 import org.apache.camel.LoggingLevel;
+import org.springframework.context.annotation.Profile;
 import org.springframework.util.Assert;
 
 import org.openhubframework.openhub.api.route.AbstractBasicRoute;
 import org.openhubframework.openhub.api.route.CamelConfiguration;
+import org.openhubframework.openhub.api.route.RouteConstants;
+import org.openhubframework.openhub.modules.ExampleProperties;
 import org.openhubframework.openhub.modules.ServiceEnum;
 import org.openhubframework.openhub.modules.in.hello.model.SyncHelloRequest;
 import org.openhubframework.openhub.modules.in.hello.model.SyncHelloResponse;
@@ -38,23 +41,23 @@ import org.openhubframework.openhub.modules.in.hello.model.SyncHelloResponse;
  * @author Petr Juza
  */
 @CamelConfiguration(value = SyncHelloRoute.ROUTE_BEAN)
+@Profile(ExampleProperties.EXAMPLE_PROFILE)
 public class SyncHelloRoute extends AbstractBasicRoute {
 
-    public static final String ROUTE_BEAN = "syncHelloRouteBean";
+    static final String ROUTE_BEAN = "syncHelloRouteBean";
 
     private static final String OPERATION_NAME = "syncHello";
 
-    public static final String ROUTE_ID_SYNC_HELLO = getRouteId(ServiceEnum.HELLO, OPERATION_NAME);
+    private static final String ROUTE_ID_SYNC_HELLO = getRouteId(ServiceEnum.HELLO, OPERATION_NAME);
 
-    public static final String HELLO_SERVICE_NS = "http://openhubframework.org/ws/HelloService-v1";
+    static final String HELLO_SERVICE_NS = "http://openhubframework.org/ws/HelloService-v1";
 
     @Override
     protected void doConfigure() throws Exception {
         from(getInWsUri(new QName(HELLO_SERVICE_NS, "syncHelloRequest")))
                 .routeId(ROUTE_ID_SYNC_HELLO)
 
-                //TODO PJUZA configuration must be done firstly
-//                .policy("roleWsAuthPolicy")
+                .policy(RouteConstants.WS_AUTH_POLICY)
 
                 .to("throttling:sync:" + OPERATION_NAME)
 

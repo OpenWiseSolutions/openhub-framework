@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:camel="http://camel.apache.org/schema/spring"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-         http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <description>
         Base Camel configuration for tests.
     </description>
 
+<!--
     <camel:camelContext id="testCamelContext" trace="true">
         <camel:propertyPlaceholder id="properties" ignoreMissingLocation="true"
                 location="classpath:applicationCore.cfg,classpath:application.cfg,classpath:application0.cfg"/>
@@ -17,7 +16,6 @@
                                  defaultProfile="true"
                                  maxPoolSize="5" poolSize="2" />
     </camel:camelContext>
-
-    <bean class="org.openhubframework.openhub.test.route.TestWsUriBuilder"/>
+-->
 
 </beans>

@@ -16,13 +16,30 @@
 
 package org.openhubframework.openhub.admin.web.config;
 
+import static org.openhubframework.openhub.api.route.RouteConstants.WEB_URI_PREFIX;
+import static org.openhubframework.openhub.api.route.RouteConstants.WS_AUTH_POLICY;
+
+import java.util.Collections;
+
+import org.apache.camel.component.spring.security.SpringSecurityAccessPolicy;
+import org.apache.camel.component.spring.security.SpringSecurityAuthorizationPolicy;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.vote.AffirmativeBased;
+import org.springframework.security.access.vote.RoleVoter;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
+
+import org.openhubframework.openhub.core.config.CamelConfig;
 
 
 /**
@@ -34,10 +51,15 @@ import org.springframework.security.config.annotation.web.configurers.Expression
 @Configuration
 @EnableGlobalMethodSecurity // allows AOP @PreAuthorize and some other annotations to be applied to methods
 @EnableWebSecurity
+@AutoConfigureBefore(value = CamelConfig.class)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private static final String LOGIN_PAGE_URL = "/web/admin/login";
+    private static final String LOGIN_PAGE_URL = WEB_URI_PREFIX + "login";
+
     private static final String[] COOKIES_TO_DELETE = new String[] {"JSESSIONID"};
+
+    @Autowired
+    private DefaultSecurityUsers defaultUsers;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -58,24 +80,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // web admin
         urlRegistry
-                .antMatchers("/web/admin/homepage/**").permitAll()
-                .antMatchers("/web/admin/login/**").permitAll()
-                .antMatchers("/web/admin/**").hasRole(AuthRole.WEB.name())
-                .antMatchers("/web/admin/**/*").hasRole(AuthRole.WEB.name())
+                .antMatchers(WEB_URI_PREFIX + "homepage/**").permitAll()
+                .antMatchers(WEB_URI_PREFIX + "login/**").permitAll()
+                .antMatchers(WEB_URI_PREFIX + "**").hasRole(AuthRole.WEB.name())
+                .antMatchers(WEB_URI_PREFIX + "**/*").hasRole(AuthRole.WEB.name())
                 .antMatchers("/monitoring/**").hasRole(AuthRole.MONITORING.name())
                 .and()
                 .formLogin()
                     .loginPage(LOGIN_PAGE_URL)
                     .loginProcessingUrl("/login")
-                    .defaultSuccessUrl("/web/admin/console")
-                    .failureUrl("/web/admin/login?error")
+                    .defaultSuccessUrl(WEB_URI_PREFIX + "console")
+                    .failureUrl(WEB_URI_PREFIX + "login?error")
                     .permitAll()
                     .and()
                 .logout()
                     .permitAll()
                     .invalidateHttpSession(true)
                     .deleteCookies(COOKIES_TO_DELETE)
-                    .logoutSuccessUrl("/web/admin/homepage")
+                    .logoutSuccessUrl(WEB_URI_PREFIX + "homepage")
                     .and()
                 .sessionManagement()
                     .maximumSessions(1)
@@ -90,13 +112,40 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
    	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        //TODO PJUZA replace from properties
-   		auth.inMemoryAuthentication().withUser("wsUser").password("wsPassword").roles(AuthRole.WS.name());
-   		auth.inMemoryAuthentication().withUser("webUser").password("webPassword").roles(AuthRole.WEB.name(),
-                AuthRole.WS.name(), AuthRole.MONITORING.name());
-   		auth.inMemoryAuthentication().withUser("monUser").password("monPassword").roles(
-   		        AuthRole.MONITORING.name());
+   		auth.inMemoryAuthentication().withUser(defaultUsers.getWsUser())
+                .password(defaultUsers.getWsPassword()).roles(AuthRole.WS.name());
+   		auth.inMemoryAuthentication().withUser(defaultUsers.getWebUser())
+                .password(defaultUsers.getWebPassword()).roles(AuthRole.WEB.name(), AuthRole.WS.name(), AuthRole.MONITORING.name());
+   		auth.inMemoryAuthentication().withUser(defaultUsers.getMonitoringUser())
+                .password(defaultUsers.getMonitoringPassword()).roles(AuthRole.MONITORING.name());
    	}
+
+    /**
+     * Configures access decision manager.
+     */
+    @Bean
+    public AffirmativeBased accessDecisionManager() {
+        AffirmativeBased accessManager = new AffirmativeBased(
+                Collections.<AccessDecisionVoter<? extends Object>>singletonList(new RoleVoter()));
+        accessManager.setAllowIfAllAbstainDecisions(true);
+
+        return accessManager;
+    }
+
+    /**
+     * Configures authorization policy for Camel.
+     */
+    @Bean(name = WS_AUTH_POLICY)
+    public SpringSecurityAuthorizationPolicy authorizationPolicy(AccessDecisionManager accessDecisionManager,
+            AuthenticationManager authManager) {
+        SpringSecurityAuthorizationPolicy authPolicy = new SpringSecurityAuthorizationPolicy();
+        authPolicy.setAccessDecisionManager(accessDecisionManager);
+        authPolicy.setAuthenticationManager(authManager);
+        authPolicy.setUseThreadSecurityContext(true);
+        authPolicy.setSpringSecurityAccessPolicy(new SpringSecurityAccessPolicy(AuthRole.WS.name()));
+        return authPolicy;
+    }
+
 
     private enum AuthRole {
         USER,

@@ -36,7 +36,7 @@ import org.springframework.ws.wsdl.wsdl11.SimpleWsdl11Definition;
 @Service
 public class WsdlRegistrySpringImpl implements WsdlRegistry {
 
-    @Autowired
+    @Autowired(required = false)
     private Map<String, SimpleWsdl11Definition> wsdls;
 
     @Override

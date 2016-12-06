@@ -230,24 +230,24 @@ public abstract class AbstractBasicRoute extends SpringRouteBuilder {
     }
 
     /**
-     * Gets "from" URI for handling incoming WS messages with default "endpointMapping" bean.
+     * Gets "from" URI for handling incoming WS messages with default '{@value RouteConstants#ENDPOINT_MAPPING_BEAN}' bean.
      *
      * @return from URI
      * @param qName the operation QName (namespace + local part)
      */
     protected String getInWsUri(QName qName) {
-        return wsUriBuilder.getInWsUri(qName, "endpointMapping", null);
+        return wsUriBuilder.getInWsUri(qName, RouteConstants.ENDPOINT_MAPPING_BEAN, null);
     }
 
     /**
-     * Gets "from" URI for handling incoming WS messages with default "endpointMapping" bean.
+     * Gets "from" URI for handling incoming WS messages with default '{@value RouteConstants#ENDPOINT_MAPPING_BEAN}' bean.
      *
      * @return from URI
      * @param qName the operation QName (namespace + local part)
      * @param params the endpoint URI parameters (without leading signs ? or &)
      */
     protected String getInWsUri(QName qName, @Nullable String params) {
-        return wsUriBuilder.getInWsUri(qName, "endpointMapping", params);
+        return wsUriBuilder.getInWsUri(qName, RouteConstants.ENDPOINT_MAPPING_BEAN, params);
     }
 
     /**

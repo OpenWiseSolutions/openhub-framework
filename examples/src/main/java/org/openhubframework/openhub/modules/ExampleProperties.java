@@ -14,28 +14,27 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.common;
+package org.openhubframework.openhub.modules;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
+
 
 /**
- * OpenHub constants used to uniform access to OpenHub properties.
+ * Module "example" properties.
  *
  * @author <a href="mailto:petr.juza@openwise.cz">Petr Juza</a>
  * @since 2.0
  */
-public class OpenHubPropertyConstants {
+@Component
+@ConfigurationProperties(prefix = "module.example")
+@Profile(ExampleProperties.EXAMPLE_PROFILE)
+public class ExampleProperties {
 
     /**
-     * Spring root property prefix name.
+     * Spring profile for module "example".
      */
-    public static final String SPRING_PREFIX = "spring";
+    public static final String EXAMPLE_PROFILE = "example-module";
 
-    /**
-     * OpenHub property prefix name used for custom properties created for OpenHub.
-     * These property names should have the same prefix.
-     */
-    public static final String PREFIX = "ohf";
-
-    private OpenHubPropertyConstants() {
-        // avoid instantiation
-    }
 }

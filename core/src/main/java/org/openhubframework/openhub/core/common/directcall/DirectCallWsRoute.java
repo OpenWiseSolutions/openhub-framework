@@ -16,6 +16,8 @@
 
 package org.openhubframework.openhub.core.common.directcall;
 
+import static org.openhubframework.openhub.api.route.RouteConstants.CAMEL_SERVLET;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.Handler;
 import org.apache.camel.Header;
@@ -28,7 +30,6 @@ import org.springframework.util.Assert;
 
 import org.openhubframework.openhub.api.route.AbstractBasicRoute;
 import org.openhubframework.openhub.api.route.CamelConfiguration;
-import org.openhubframework.openhub.core.common.route.RouteConstants;
 
 
 /**
@@ -53,7 +54,7 @@ public class DirectCallWsRoute extends AbstractBasicRoute {
 
     @Override
     protected void doConfigure() throws Exception {
-        from("servlet:///" + SERVLET_URL + "?servletName=" + RouteConstants.CAMEL_SERVLET)
+        from("servlet:///" + SERVLET_URL + "?servletName=" + CAMEL_SERVLET)
             .routeId(ROUTE_ID_DIRECT_CALL)
 
             .validate(header(CALL_ID_HEADER).isNotNull())

@@ -18,28 +18,29 @@ package org.openhubframework.openhub.core.common.spring;
 
 import java.io.IOException;
 import java.util.regex.Pattern;
-
 import javax.annotation.Nullable;
 
+import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.core.type.filter.TypeFilter;
-import org.springframework.stereotype.Component;
+
+import org.openhubframework.openhub.api.route.CamelConfiguration;
 
 
 /**
  * Custom {@link TypeFilter} for using with {@code context:component-scan: include-filter} Spring element.
  * This filter checks system and environment property "{@value #PATTERN_PROP_NAME}" and if defined then property value
  * is used for {@link Pattern} compilation and only classes which match the pattern are included.
- * If there is no property defined then all Spring {@link Component} beans are included.
+ * If there is no property defined then all Spring {@link CamelConfiguration} beans are included.
  * System property has higher priority.
  * <p/>
  * Example:
-    <pre>
- &lt;context:component-scan base-package="org.openhubframework.openhub.core" use-default-filters="false">
-     &lt;context:include-filter type="custom" expression="org.openhubframework.openhub.core.common.spring.SystemIncludeRegexPatternTypeFilter"/>
- &lt;/context:component-scan>
-    </pre>
+ * <pre>
+ * &lt;context:component-scan base-package="org.openhubframework.openhub.core" use-default-filters="false">
+ * &lt;context:include-filter type="custom" expression="org.openhubframework.openhub.core.common.spring.SystemIncludeRegexPatternTypeFilter"/>
+ * &lt;/context:component-scan>
+ * </pre>
  *
  * <p/>
  * Remember: include filters are applied after exclude filters.
@@ -49,7 +50,7 @@ import org.springframework.stereotype.Component;
  */
 public class SystemIncludeRegexPatternTypeFilter implements TypeFilter {
 
-    public static final String PATTERN_PROP_NAME = "springIncludePattern";
+    private static final String PATTERN_PROP_NAME = "springIncludePattern";
 
     @Nullable
     private Pattern pattern;
@@ -69,7 +70,10 @@ public class SystemIncludeRegexPatternTypeFilter implements TypeFilter {
 
     @Override
     public boolean match(MetadataReader metadataReader, MetadataReaderFactory metadataReaderFactory) throws IOException {
-        return (pattern == null && metadataReader.getAnnotationMetadata().hasMetaAnnotation(Component.class.getName()))
-               || (pattern != null && pattern.matcher(metadataReader.getClassMetadata().getClassName()).matches());
+        AnnotationMetadata annotationMetadata = metadataReader.getAnnotationMetadata();
+        return (pattern == null
+                && (annotationMetadata.hasMetaAnnotation(CamelConfiguration.class.getName())
+                        || annotationMetadata.hasAnnotation(CamelConfiguration.class.getName())))
+                || (pattern != null && pattern.matcher(metadataReader.getClassMetadata().getClassName()).matches());
     }
 }

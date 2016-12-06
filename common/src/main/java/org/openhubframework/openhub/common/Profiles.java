@@ -17,25 +17,33 @@
 package org.openhubframework.openhub.common;
 
 /**
- * OpenHub constants used to uniform access to OpenHub properties.
+ * Defines Spring profile constants.
  *
  * @author <a href="mailto:petr.juza@openwise.cz">Petr Juza</a>
  * @since 2.0
  */
-public class OpenHubPropertyConstants {
+public final class Profiles {
 
     /**
-     * Spring root property prefix name.
+     * Spring profile for development.
      */
-    public static final String SPRING_PREFIX = "spring";
+    public static final String DEV = "dev";
 
     /**
-     * OpenHub property prefix name used for custom properties created for OpenHub.
-     * These property names should have the same prefix.
+     * Spring profile for unit testing.
      */
-    public static final String PREFIX = "ohf";
+    public static final String TEST = "test";
 
-    private OpenHubPropertyConstants() {
-        // avoid instantiation
+    /**
+     * Spring profile for production.
+     */
+    public static final String PROD = "prod";
+
+    /**
+     * Spring profile for running H2 DB.
+     */
+    public static final String H2 = "h2";
+
+    private Profiles() {
     }
 }

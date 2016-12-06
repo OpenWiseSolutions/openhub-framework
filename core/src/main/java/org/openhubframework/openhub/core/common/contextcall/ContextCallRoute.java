@@ -16,6 +16,8 @@
 
 package org.openhubframework.openhub.core.common.contextcall;
 
+import static org.openhubframework.openhub.api.route.RouteConstants.CAMEL_SERVLET;
+
 import org.apache.camel.Handler;
 import org.apache.camel.Header;
 import org.apache.camel.LoggingLevel;
@@ -26,7 +28,6 @@ import org.springframework.util.Assert;
 
 import org.openhubframework.openhub.api.route.AbstractBasicRoute;
 import org.openhubframework.openhub.api.route.CamelConfiguration;
-import org.openhubframework.openhub.core.common.route.RouteConstants;
 
 
 /**
@@ -50,7 +51,7 @@ public class ContextCallRoute extends AbstractBasicRoute {
 
     @Override
     protected void doConfigure() throws Exception {
-        from("servlet:///" + SERVLET_URL + "?servletName=" + RouteConstants.CAMEL_SERVLET)
+        from("servlet:///" + SERVLET_URL + "?servletName=" + CAMEL_SERVLET)
             .routeId(ROUTE_ID_CONTEXT_CALL)
 
             .validate(header(CALL_ID_HEADER).isNotNull())

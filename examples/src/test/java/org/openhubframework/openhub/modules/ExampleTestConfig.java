@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.admin.web.config;
+package org.openhubframework.openhub.modules;
+
+import org.springframework.context.annotation.ComponentScan;
+
 
 /**
- * OpenHub application WEB configuration.
+ * Configuration for test in "example" module.
  *
  * @author <a href="mailto:petr.juza@openwise.cz">Petr Juza</a>
- * @since 1.1
+ * @since 2.0
  */
-//@EnableAutoConfiguration
-//@Configuration
-//@ComponentScan(basePackages = {"org.openhubframework.openhub.admin"})
-//@ImportResource({"classpath:spring-admin-mvc-servlet.xml"})
-//TODO PJUZA is this class needed?
-public class OpenHubWebApplication {
+@ComponentScan(basePackages = {"org.openhubframework.openhub.modules"})
+public class ExampleTestConfig {
 
 }

@@ -22,6 +22,13 @@ import static org.junit.Assert.fail;
 
 import java.util.Properties;
 
+import org.apache.camel.*;
+import org.apache.camel.builder.RouteBuilder;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
+
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.exception.IntegrationException;
 import org.openhubframework.openhub.api.exception.InternalErrorEnum;
@@ -29,17 +36,6 @@ import org.openhubframework.openhub.core.AbstractCoreTest;
 import org.openhubframework.openhub.spi.throttling.ThrottleScope;
 import org.openhubframework.openhub.spi.throttling.ThrottlingProcessor;
 import org.openhubframework.openhub.test.ExternalSystemTestEnum;
-
-import org.apache.camel.CamelExecutionException;
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
-import org.apache.camel.Produce;
-import org.apache.camel.ProducerTemplate;
-import org.apache.camel.builder.RouteBuilder;
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
 
 
 /**
@@ -65,7 +61,8 @@ public class ThrottleMsgProcessorTest extends AbstractCoreTest {
         props.put(prefix + "crm.createCustomer", "2/10");
 
         // create configuration
-        ThrottlingPropertiesConfiguration conf = new ThrottlingPropertiesConfiguration(props);
+        //TODO PJUZA correct unit tests for properties
+        ThrottlingPropertiesConfiguration conf = new ThrottlingPropertiesConfiguration();
 
         setPrivateField(throttlingProcessor, "configuration", conf);
     }
@@ -103,7 +100,7 @@ public class ThrottleMsgProcessorTest extends AbstractCoreTest {
     @Test
     public void testSyncProcessorWithDefaults() throws Exception {
         // create configuration
-        ThrottlingPropertiesConfiguration confDefaults = new ThrottlingPropertiesConfiguration(new Properties());
+        ThrottlingPropertiesConfiguration confDefaults = new ThrottlingPropertiesConfiguration();
 
         setPrivateField(throttlingProcessor, "configuration", confDefaults);
 

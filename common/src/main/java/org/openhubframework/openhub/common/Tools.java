@@ -19,7 +19,9 @@ package org.openhubframework.openhub.common;
 
 import java.io.StringReader;
 import java.io.StringWriter;
-
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -32,6 +34,10 @@ import org.apache.camel.converter.jaxp.XmlConverter;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.EnumerablePropertySource;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.PropertySource;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
 
@@ -179,5 +185,23 @@ public final class Tools {
         DateTimeZone dateTimeZone = DateTimeZone.getDefault();
         long localTime = dateTimeZone.convertUTCToLocal(utcMillis);
         return new DateTime(localTime, dateTimeZone);
+    }
+
+    /**
+     * Gets all property names from {@link Environment environment}.
+     *
+     * @param env The environment
+     * @return set of property names
+     */
+    public static Set<String> getAllKnownPropertyNames(ConfigurableEnvironment env) {
+        Set<String> names = new HashSet<>();
+
+        for (PropertySource<?> propertySource : env.getPropertySources()) {
+            if (propertySource instanceof EnumerablePropertySource) {
+                Collections.addAll(names, ((EnumerablePropertySource) propertySource).getPropertyNames());
+            }
+        }
+
+        return names;
     }
 }

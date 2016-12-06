@@ -21,12 +21,14 @@ import org.openhubframework.openhub.api.entity.EntityTypeExtEnum;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.ServiceExtEnum;
 import org.openhubframework.openhub.api.exception.ErrorExtEnum;
+import org.openhubframework.openhub.api.route.RouteConstants;
 
 
 /**
  * Constants regarding to asynchronous processing.
  *
  * @author Petr Juza
+ * @see RouteConstants
  */
 public final class AsynchConstants {
 
@@ -123,6 +125,11 @@ public final class AsynchConstants {
      */
     public static final String EXCEPTION_ERROR_CODE = "exceptionErrorCode";
 
+    /**
+     * Name of the priority queue factory.
+     */
+    public static final String PRIORITY_QUEUE_FACTORY = "priorityQueueFactory";
+
 
     // ------------- URIs ----------------
 
@@ -148,13 +155,12 @@ public final class AsynchConstants {
      */
     public static final String URI_ERROR_FATAL = "direct:errorAsyncFatal";
 
-
     /**
      * URI for asynchronous message processing (with SEDA).
      */
     public static final String URI_ASYNC_MSG = "seda:asynch_message_route"
             + "?concurrentConsumers={{asynch.concurrentConsumers}}&waitForTaskToComplete=Never"
-            + "&blockWhenFull=true&queueFactory=#priorityQueueFactory";
+            + "&blockWhenFull=true&queueFactory=#" + PRIORITY_QUEUE_FACTORY;
 
     /**
      * URI of the route that makes post-processing after OK message.
