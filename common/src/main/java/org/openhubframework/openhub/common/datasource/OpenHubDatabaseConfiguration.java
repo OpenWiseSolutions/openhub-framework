@@ -45,7 +45,7 @@ import org.openhubframework.openhub.common.AutoConfiguration;
 
 
 /**
- * Default {@link DataSource} WisePorter provider for domain database.
+ * Default {@link DataSource} OpenHub provider for domain database.
  *
  * @author <a href="mailto:tomas.hanus@openwise.cz">Tomas Hanus</a>
  * @since 2.0
@@ -66,11 +66,11 @@ public class OpenHubDatabaseConfiguration extends AbstractDatabaseConfig {
      * Creates {@link JdbcOperations} with OpenHub {@link DataSource} defined by {@link OpenHubDataSource} qualifier.
      *
      * @param dataSource as {@link OpenHubDataSource} type
-     * @return WisePorter {@link DataSource datasource}
+     * @return OpenHub {@link DataSource datasource}
      */
     @Bean
     public JdbcOperations JdbcOperations(@OpenHubDataSource DataSource dataSource) {
-        Assert.notNull(dataSource, "WIS Datasource must not be null");
+        Assert.notNull(dataSource, "OpenHub Datasource must not be null");
 
         return new JdbcTemplate(dataSource);
     }

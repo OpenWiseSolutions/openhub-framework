@@ -341,7 +341,7 @@
 
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>2.4</version>
+                    <version>2.6</version>
                     <configuration>
                         <archive>
                             <addMavenDescriptor>false</addMavenDescriptor>
@@ -350,10 +350,8 @@
                                 <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             </manifest>
                             <manifestEntries>
-                                <!--suppress MavenModelInspection -->
                                 <Implementation-Build>${buildNumber}</Implementation-Build>
-                                <!--suppress MavenModelInspection -->
-                                <Implementation-Timestamp>${timestamp}</Implementation-Timestamp>
+                                <Implementation-Build-Time>${maven.build.timestamp}</Implementation-Build-Time>
                             </manifestEntries>
                         </archive>
                     </configuration>
@@ -370,10 +368,8 @@
                                 <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             </manifest>
                             <manifestEntries>
-                                <!--suppress MavenModelInspection -->
                                 <Implementation-Build>${buildNumber}</Implementation-Build>
-                                <!--suppress MavenModelInspection -->
-                                <Implementation-Timestamp>${timestamp}</Implementation-Timestamp>
+                                <Implementation-Build-Time>${maven.build.timestamp}</Implementation-Build-Time>
                             </manifestEntries>
                         </archive>
                     </configuration>
@@ -538,6 +534,16 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
             </plugin>
 
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>

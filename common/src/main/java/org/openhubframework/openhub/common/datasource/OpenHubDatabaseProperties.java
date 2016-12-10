@@ -27,7 +27,7 @@ import org.openhubframework.openhub.common.OpenHubPropertyConstants;
 
 
 /**
- * Properties for WisePorter {@link DataSource}s (transactional and non-transactional).
+ * Properties for OpenHub {@link DataSource}s (transactional and non-transactional).
  *
  * @author <a href="mailto:tomas.hanus@openwise.cz">Tomas Hanus</a>
  * @since 2.0

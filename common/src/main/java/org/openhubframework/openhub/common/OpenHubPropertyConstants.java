@@ -30,7 +30,7 @@ public class OpenHubPropertyConstants {
     public static final String SPRING_PREFIX = "spring";
 
     /**
-     * OpenHub property prefix name used for custom properties created for WIS.
+     * OpenHub property prefix name used for custom properties created for OpenHub.
      * These property names should have the same prefix.
      */
     public static final String PREFIX = "ohf";
