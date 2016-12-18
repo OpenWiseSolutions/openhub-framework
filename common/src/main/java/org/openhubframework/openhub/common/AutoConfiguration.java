@@ -36,7 +36,7 @@ import org.springframework.context.annotation.Configuration;
  * {@literal org.springframework.boot.autoconfigure.EnableAutoConfiguration} property you want to have bean annotated with this annotation.
  * Note that the bean should not be also annotated with {@link Configuration} annotation.
  *
- * @author <a href="mailto:tomas.hanus@openwise.cz">Tomas Hanus</a>
+ * @author Tomas Hanus
  * @since 2.0
  * @see <a href="http://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-developing-auto-configuration.html">Spring Boot
  * Auto-configuration</a>

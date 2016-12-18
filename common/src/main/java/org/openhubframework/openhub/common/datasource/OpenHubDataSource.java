@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
  *
  * Note that we cannot use {@link Autowired} with {@link Qualifier}, as if only one {@link DataSource} is does not inject by bean name.
  *
- * @author <a href="mailto:tomas.hanus@openwise.cz">Tomas Hanus</a>
+ * @author Tomas Hanus
  * @since 2.0
  */
 @Target({ ElementType.CONSTRUCTOR, ElementType.FIELD, ElementType.METHOD, ElementType.ANNOTATION_TYPE, ElementType.PARAMETER })

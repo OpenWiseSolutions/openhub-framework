@@ -29,7 +29,7 @@ import org.openhubframework.openhub.common.OpenHubPropertyConstants;
 /**
  * Properties for OpenHub {@link DataSource}s (transactional and non-transactional).
  *
- * @author <a href="mailto:tomas.hanus@openwise.cz">Tomas Hanus</a>
+ * @author Tomas Hanus
  * @since 2.0
  */
 @Component

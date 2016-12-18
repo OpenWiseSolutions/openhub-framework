@@ -24,7 +24,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 /**
  * OpenHub {@link javax.sql.DataSource} properties holder.
  *
- * @author <a href="mailto:tomas.hanus@openwise.cz">Tomas Hanus</a>
+ * @author Tomas Hanus
  * @since 2.0
  */
 public class OpenHubDataSourceProperties extends DataSourceProperties {

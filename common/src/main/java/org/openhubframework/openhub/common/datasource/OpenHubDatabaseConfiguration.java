@@ -47,7 +47,7 @@ import org.openhubframework.openhub.common.AutoConfiguration;
 /**
  * Default {@link DataSource} OpenHub provider for domain database.
  *
- * @author <a href="mailto:tomas.hanus@openwise.cz">Tomas Hanus</a>
+ * @author Tomas Hanus
  * @since 2.0
  */
 @AutoConfigureBefore(DataSourceAutoConfiguration.class)

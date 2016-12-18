@@ -29,7 +29,7 @@ import org.springframework.jmx.support.JmxUtils;
  * Abstract class that provides configuration capability of {@link DataSource} by {@link #dataSource()}.
  * </p>
  *
- * @author <a href="mailto:tomas.hanus@openwise.cz">Tomas Hanus</a>
+ * @author Tomas Hanus
  * @since 2.0
  */
 public abstract class AbstractDatabaseConfig {
