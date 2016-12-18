@@ -1,10 +1,17 @@
-import React from 'react'
-import './HomeView.scss'
+import React, { Component } from 'react'
+import Radium from 'radium'
 
-export const HomeView = () => (
-  <div>
-    <h2>DASHBOARD...</h2>
-  </div>
-)
+@Radium
+class HomeView extends Component {
+  render () {
+    return (
+      <div>
+        <h2>DASHBOARD...</h2>
+      </div>
+    )
+  }
+}
+
+HomeView.propTypes = {}
 
 export default HomeView

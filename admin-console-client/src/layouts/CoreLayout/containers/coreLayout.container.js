@@ -5,7 +5,8 @@ import CoreLayout from '../components/CoreLayout'
 
 function mapStateToProps (state, props) {
   return {
-    sidebarExtended: state.coreLayout.sidebarExtended
+    sidebarExtended: state.coreLayout.sidebarExtended,
+    navbarUserExpanded: state.coreLayout.navbarUserExpanded
   }
 }
 

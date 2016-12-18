@@ -1,16 +1,21 @@
-import React from 'react'
-import classes from '../../utils/classes'
+import React, { Component } from 'react'
+import Radium from 'radium'
+import styles from './sidebar.styles'
 // todo import { IndexLink, Link } from 'react-router'
 
-const Sidebar = ({ extended }) => {
-  const sidebarClasses = classes(
-    'core-sidebar',
-    extended && 'extended'
-  )
+@Radium
+class Sidebar extends Component {
+  render () {
+    const { extended } = this.props
+    const computedStyles = [
+      styles.main,
+      extended && styles.extended
+    ]
 
-  return (
-    <div className={sidebarClasses} />
-  )
+    return (
+      <div style={computedStyles} />
+    )
+  }
 }
 
 Sidebar.propTypes = {
