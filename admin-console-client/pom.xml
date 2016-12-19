@@ -15,20 +15,16 @@
     <description>OpenHub integration framework - web admin console</description>
     
     <properties>
-        <!-- module configuration -->
-        <module-name>console</module-name>
-        <src-root-dir>src/main/resources/META-INF/resources</src-root-dir>
-        
         <!-- dependency versions-->
         <frontend-plugin-version>0.0.29</frontend-plugin-version>
-        <node-version>v4.2.2</node-version>
-        <npm-version>2.14.7</npm-version>
+        <node-version>v7.2.1</node-version>
+        <npm-version>3.10.10</npm-version>
     </properties>
 
     <profiles>
         <profile>
             <!-- Profile which is used to clean all admin client libs -->
-            <id>clean-admin-client</id>
+            <id>clean</id>
             
             <build>
                 <plugins>
@@ -37,17 +33,17 @@
                         <configuration>
                             <filesets>
                                 <fileset>
-                                    <directory>${src-root-dir}/node</directory>
+                                    <directory>node</directory>
                                 </fileset>
                                 <fileset>
-                                    <directory>${src-root-dir}/node_modules</directory>
+                                    <directory>node_modules</directory>
                                 </fileset>
                                 <fileset>
-                                    <directory>${src-root-dir}/bower_components</directory>
+                                    <directory>coverage</directory>
                                 </fileset>
                                 <fileset>
-                                    <directory>${src-root-dir}/.tmp</directory>
-                                </fileset>
+                                    <directory>dist</directory>
+                                </fileset>                                
                             </filesets>
                         </configuration>
                     </plugin>
@@ -57,24 +53,12 @@
     </profiles>
 
     <build>
-        <resources>
-            <resource>
-                <directory>${basedir}/src/main/resources</directory>
-                <excludes>
-                    <exclude>META-INF/**</exclude>
-                </excludes>
-            </resource>
-        </resources>
         
         <plugins>
             <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
                 <version>${frontend-plugin-version}</version>
-
-                <configuration>
-                    <workingDirectory>${src-root-dir}</workingDirectory>
-                </configuration>
                 
                 <executions>
                     <execution>
@@ -99,45 +83,18 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>npm install gulp</id>
+                        <id>npm run deploy</id>
                         <goals>
                             <goal>npm</goal>
                         </goals>
                         <phase>generate-resources</phase>
                         <configuration>
-                            <arguments>install gulp</arguments>
+                            <arguments>run deploy</arguments>
                         </configuration>
-                    </execution>
-                    <execution>
-                        <id>npm install bower</id>
-                        <goals>
-                            <goal>npm</goal>
-                        </goals>
-                        <phase>generate-resources</phase>
-                        <configuration>
-                            <arguments>install bower</arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>bower install</id>
-                        <goals>
-                            <goal>bower</goal>
-                        </goals>
-                        <phase>generate-resources</phase>
-                        <configuration>
-                            <arguments>install</arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>gulp build</id>
-                        <goals>
-                            <goal>gulp</goal>
-                        </goals>
-                        <phase>generate-resources</phase>
                     </execution>
                 </executions>
             </plugin>
-
+            
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
 
@@ -154,11 +111,11 @@
                                 for specific module name via property module-name
                             -->
                             <outputDirectory>
-                                ${project.build.directory}/classes/META-INF/resources/web/module/${module-name}
+                                ${project.build.directory}/classes/META-INF/resources/console
                             </outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${basedir}/src/main/resources/META-INF/resources/dist</directory>
+                                    <directory>${basedir}/dist</directory>
                                     <filtering>false</filtering>
                                 </resource>
                             </resources>
