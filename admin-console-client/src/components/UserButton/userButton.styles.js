@@ -1,5 +1,5 @@
 import { lightColor, secondaryColor } from '../../styles/colors'
-import { itemSize, gap } from '../../styles/constants'
+import { itemSize, gap, userMenuWidth } from '../../styles/constants'
 
 export default {
   main: {
@@ -21,8 +21,8 @@ export default {
     position: 'absolute',
     top: `${itemSize}px`,
     right: 0,
-    width: 300,
-    minHeight: 200,
+    width: userMenuWidth,
+    height: 'auto',
     backgroundColor: lightColor
   }
 }

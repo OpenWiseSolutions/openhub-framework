@@ -1,4 +1,5 @@
-import { primaryColor, secondaryColor } from '../../styles/colors'
+import tc from 'tinycolor2'
+import { primaryColor, secondaryColor, darkColor } from '../../styles/colors'
 import { itemSize } from '../../styles/constants'
 
 export default {
@@ -26,5 +27,13 @@ export default {
     lineHeight: `${itemSize}px`,
     maxWidth: '50%',
     minWidth: `${itemSize}px`
+  },
+  item: {
+    backgroundColor: 'transparent',
+    color: tc(darkColor).lighten(30).toString(),
+    ':hover': {
+      backgroundColor: tc(secondaryColor).setAlpha(0.2).toString(),
+      color: darkColor
+    }
   }
 }

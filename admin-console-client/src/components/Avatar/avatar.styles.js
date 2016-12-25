@@ -13,7 +13,8 @@ export default {
     float: 'left',
     marginRight: gap,
     marginTop: `${itemSize * 0.1}px`,
-    backgroundColor: secondaryColor
+    backgroundColor: secondaryColor,
+    outline: 'white'
   }
 }
 

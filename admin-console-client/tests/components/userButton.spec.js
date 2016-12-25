@@ -4,6 +4,7 @@ import { expect } from 'chai'
 import { shallow } from 'enzyme'
 import { spy } from 'sinon'
 import UserButton from '../../src/components/UserButton/UserButton'
+import Item from '../../src/components/Item/Item'
 import Avatar from '../../src/components/Avatar/Avatar'
 import ArrowDown from 'react-icons/lib/md/keyboard-arrow-down'
 
@@ -19,7 +20,13 @@ describe('UserButton Component', () => {
     {
       toggle,
       name: 'Test Name',
-      expanded: true
+      expanded: true,
+      avatar: <Avatar />,
+      links: [
+        <Item label='Random Label' />,
+        <Item label='Random Label' />,
+        <Item label='Random Label' />
+      ]
     }
   )
 
@@ -37,5 +44,21 @@ describe('UserButton Component', () => {
 
   it('should be expanded', () => {
     expect(wrapper.find('.menu')).to.have.length(1)
+  })
+
+  it('should render links', () => {
+    expect(wrapper.find('.menu')).to.have.exactly(3).descendants(Item)
+  })
+
+  it('should not have any links and arrow', () => {
+    const wrp = getWrapper(
+      {
+        toggle,
+        expanded: true,
+        name: 'Test Name'
+      }
+    )
+    expect(wrp).to.not.have.descendants(ArrowDown)
+    expect(wrp).to.not.have.descendants('.menu')
   })
 })

@@ -1,15 +1,24 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 import Radium from 'radium'
 import styles from './avatar.styles'
-// todo links! import { IndexLink, Link } from 'react-router'
 
 @Radium
 class Avatar extends Component {
   render () {
+    const { image } = this.props
+    const computedStyle = [
+      styles.main,
+      image && { backgroundImage: `url(${image})` }
+    ]
+
     return (
-      <div style={styles.main} />
+      <div style={computedStyle} />
     )
   }
+}
+
+Avatar.propTypes = {
+  image: PropTypes.string
 }
 
 export default Avatar
