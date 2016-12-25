@@ -1,4 +1,8 @@
-<configuration debug="true">
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
 
     <!-- This is the default development console appender, it uses System.out and it should not be used in the production mode. -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
@@ -10,13 +14,16 @@
                  127.0.1.1:4c8ed99e:12f244556e1:-7fdd, 6B6*****C6C2, deih3u36bh] INFO  c.c.s.f.w.f.screen.ScreenFormPanel - the
                  message for key 'widget16_label_key' was not found: form='demo_form1', locale='cs'
             -->
-            <pattern>%d{ISO8601} [${MACHINE}, %thread, %X{REQUEST_URI}, %X{REQUEST_ID}, %X{SESSION_ID}, %X{CORRELATION_ID}] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%clr(%d{ISO8601}){faint} [%clr(${serverId}, ${MACHINE}){magenta}, %thread, %X{REQUEST_URI}, %X{REQUEST_ID}, %X{SESSION_ID}, %X{SOURCE_SYSTEM}, %X{CORRELATION_ID}, %X{PROCESS_ID}] %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(%logger{36}){cyan} - %msg%n</pattern>
         </encoder>
     </appender>
     
     <!-- OpenHub integration namespaces -->
-    <logger name="org.openhubframework.openhub" level="debug"/>
-    <logger name="org.apache.camel" level="info"/>
+    <logger name="org.openhubframework.openhub" level="DEBUG"/>
+    <!-- Third party -->
+    <logger name="org.springframework" level="WARN"/>
+    <logger name="org.apache.camel" level="ERROR"/>
+    
     <root level="error">
         <appender-ref ref="CONSOLE"/>
     </root>

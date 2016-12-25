@@ -215,7 +215,6 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-aspects</artifactId>
                 <version>4.2.5.RELEASE</version>
-                <!--<version>${spring.version}</version>-->
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -527,11 +526,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-            </plugin>
-
-            <plugin>
-                <groupId>pl.project13.maven</groupId>
-                <artifactId>git-commit-id-plugin</artifactId>
             </plugin>
             
             <plugin>

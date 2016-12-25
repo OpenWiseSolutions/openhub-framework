@@ -7,6 +7,6 @@ ${AnsiColor.CYAN} | |_| | |_) |  __/ | | |  _  | |_| | |_) |
 ${AnsiColor.CYAN}  \___/| .__/ \___|_| |_|_| |_|\__,_|_.__/ 
 ${AnsiColor.CYAN}       |_|                   ${AnsiColor.MAGENTA}version: ${info.app.core.version}              
 ${AnsiColor.CYAN} ===========================
-${AnsiColor.YELLOW}  :: Spring Boot ::          (${spring-boot.version})
+${AnsiColor.YELLOW}  :: Spring Boot ::          (${spring-boot.version})${Ansi.DEFAULT}
 
 

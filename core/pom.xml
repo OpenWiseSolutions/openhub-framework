@@ -39,7 +39,6 @@
         <!-- Spring web services -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <!--<artifactId>spring-boot-starter-web-services</artifactId>-->
             <artifactId>spring-boot-starter-ws</artifactId>
         </dependency>
 
