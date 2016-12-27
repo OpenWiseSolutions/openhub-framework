@@ -64,8 +64,7 @@
         <java.version>1.7</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <!-- Spring Boot (change version for parent !!!) -->
-        <spring-boot-version>1.4.1.RELEASE</spring-boot-version>
+        <!-- OpenHub Spring Boot application -->
         <start-class>org.openhubframework.openhub.admin.OpenHubApplication</start-class>
 
         <camel-version>2.17.3</camel-version>
