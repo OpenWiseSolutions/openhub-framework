@@ -19,17 +19,19 @@ package org.openhubframework.openhub.modules;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import org.openhubframework.openhub.test.route.ActiveRoutesCollector;
+
 
 /**
  * Test that verifies if all Camel routes are correctly initialized - if there are unique route IDs and unique URIs.
  *
  * @author Petr Juza
  */
-public class RoutesInitTest extends AbstractModulesDbTest {
+public class RoutesInitTest extends AbstractExampleModulesDbTest {
 
     @BeforeClass
-    public static void setInitAllRoutes() {
-        setInitAllRoutes(true);
+    public static void setProperty() {
+        System.setProperty(ActiveRoutesCollector.TEST_CAMEL_INIT_ALL_ROUTES, "true");
     }
 
     @Test

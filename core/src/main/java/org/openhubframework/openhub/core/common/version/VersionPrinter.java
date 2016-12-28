@@ -18,8 +18,8 @@ package org.openhubframework.openhub.core.common.version;
 
 import javax.annotation.PostConstruct;
 
-import org.openhubframework.openhub.common.log.Log;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,6 +31,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class VersionPrinter {
+
+    private static final Logger LOG = LoggerFactory.getLogger(VersionPrinter.class);
 
     @Autowired
     private VersionInfoSource versionInfoSource;
@@ -50,6 +52,6 @@ public class VersionPrinter {
             versionStr = versions[0].getFullVersion() + " (" + versions[0].getDate() + ")";
         }
 
-        Log.info("OpenHub version: " + versionStr);
+        LOG.info("OpenHub version: " + versionStr);
     }
 }

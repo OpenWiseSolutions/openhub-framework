@@ -19,12 +19,13 @@ package org.openhubframework.openhub.core.alerts;
 import java.util.Collection;
 import java.util.List;
 
-import org.openhubframework.openhub.common.log.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import org.openhubframework.openhub.spi.alerts.AlertInfo;
 import org.openhubframework.openhub.spi.alerts.AlertListener;
 import org.openhubframework.openhub.spi.alerts.AlertsConfiguration;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
@@ -35,6 +36,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public abstract class AbstractAlertsCheckingService implements AlertsCheckingService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractAlertsCheckingService.class);
+
     @Autowired
     private AlertsConfiguration alertsConfig;
 
@@ -43,10 +46,10 @@ public abstract class AbstractAlertsCheckingService implements AlertsCheckingSer
 
     @Override
     public final void checkAlerts() {
-        Log.debug("Alerts checking starts ...");
+        LOG.debug("Alerts checking starts ...");
 
         if (listeners.isEmpty()) {
-            Log.debug("There is no listeners => not reason for alerts checking.");
+            LOG.debug("There is no listeners => not reason for alerts checking.");
 
             return;
         }
@@ -57,7 +60,7 @@ public abstract class AbstractAlertsCheckingService implements AlertsCheckingSer
             long count = getCount(alert);
 
             if (count > alert.getLimit()) {
-                Log.debug("Actual count=" + count + " exceeded limit (" + alert.getLimit()
+                LOG.debug("Actual count=" + count + " exceeded limit (" + alert.getLimit()
                         + ") of alert (" + alert.toHumanString() + ")");
 
                 // notify all listeners
@@ -67,14 +70,14 @@ public abstract class AbstractAlertsCheckingService implements AlertsCheckingSer
                             listener.onAlert(alert, count);
                         }
                     } catch (Exception ex) {
-                        Log.error("Listener (" + listener.getClass().getName() + ") for alert (" + alert
+                        LOG.error("Listener (" + listener.getClass().getName() + ") for alert (" + alert
                                 + ") ends with exception.", ex);
                     }
                 }
             }
         }
 
-        Log.debug("Alerts checking ends.");
+        LOG.debug("Alerts checking ends.");
     }
 
     /**

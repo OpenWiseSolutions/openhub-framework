@@ -16,17 +16,13 @@
 
 package org.openhubframework.openhub.core.common.event;
 
+import org.apache.camel.Exchange;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
 import org.openhubframework.openhub.api.entity.Message;
-import org.openhubframework.openhub.api.event.CompletedMsgAsynchEvent;
-import org.openhubframework.openhub.api.event.FailedMsgAsynchEvent;
-import org.openhubframework.openhub.api.event.PartlyFailedMsgAsynchEvent;
-import org.openhubframework.openhub.api.event.PostponedMsgAsynchEvent;
-import org.openhubframework.openhub.api.event.ProcessingMsgAsynchEvent;
-import org.openhubframework.openhub.api.event.WaitingMsgAsynchEvent;
-import org.openhubframework.openhub.common.log.Log;
-
-import org.apache.camel.Exchange;
+import org.openhubframework.openhub.api.event.*;
 
 
 /**
@@ -36,11 +32,13 @@ import org.apache.camel.Exchange;
  */
 public class DefaultAsynchEventFactory implements AsynchEventFactory {
 
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultAsynchEventFactory.class);
+
     @Override
     public CompletedMsgAsynchEvent createCompletedMsgEvent(Exchange exchange) {
         CompletedMsgAsynchEvent event = new CompletedMsgAsynchEvent(exchange, getMsgFromExchange(exchange));
 
-        Log.debug("New event was created: {}", event);
+        LOG.debug("New event was created: {}", event);
 
         return event;
     }
@@ -49,7 +47,7 @@ public class DefaultAsynchEventFactory implements AsynchEventFactory {
     public PartlyFailedMsgAsynchEvent createPartlyFailedMsgEvent(Exchange exchange) {
         PartlyFailedMsgAsynchEvent event = new PartlyFailedMsgAsynchEvent(exchange, getMsgFromExchange(exchange));
 
-        Log.debug("New event was created: {}", event);
+        LOG.debug("New event was created: {}", event);
 
         return event;
     }
@@ -58,7 +56,7 @@ public class DefaultAsynchEventFactory implements AsynchEventFactory {
     public FailedMsgAsynchEvent createFailedMsgEvent(Exchange exchange) {
         FailedMsgAsynchEvent event = new FailedMsgAsynchEvent(exchange, getMsgFromExchange(exchange));
 
-        Log.debug("New event was created: {}", event);
+        LOG.debug("New event was created: {}", event);
 
         return event;
     }
@@ -67,7 +65,7 @@ public class DefaultAsynchEventFactory implements AsynchEventFactory {
     public WaitingMsgAsynchEvent createWaitingMsgEvent(Exchange exchange) {
         WaitingMsgAsynchEvent event = new WaitingMsgAsynchEvent(exchange, getMsgFromExchange(exchange));
 
-        Log.debug("New event was created: {}", event);
+        LOG.debug("New event was created: {}", event);
 
         return event;
     }
@@ -76,7 +74,7 @@ public class DefaultAsynchEventFactory implements AsynchEventFactory {
     public ProcessingMsgAsynchEvent createProcessingMsgEvent(Exchange exchange) {
         ProcessingMsgAsynchEvent event = new ProcessingMsgAsynchEvent(exchange, getMsgFromExchange(exchange));
 
-        Log.debug("New event was created: {}", event);
+        LOG.debug("New event was created: {}", event);
 
         return event;
     }
@@ -85,7 +83,7 @@ public class DefaultAsynchEventFactory implements AsynchEventFactory {
     public PostponedMsgAsynchEvent createPostponedMsgEvent(Exchange exchange) {
         PostponedMsgAsynchEvent event = new PostponedMsgAsynchEvent(exchange, getMsgFromExchange(exchange));
 
-        Log.debug("New event was created: {}", event);
+        LOG.debug("New event was created: {}", event);
 
         return event;
     }

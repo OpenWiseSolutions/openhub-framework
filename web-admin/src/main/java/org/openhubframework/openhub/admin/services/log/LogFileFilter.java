@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 
@@ -35,7 +36,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class LogFileFilter implements IOFileFilter, InitializingBean, FileFilter {
 
+    @Value("${log.file.pattern}")
     private String formatPattern;
+
     private Pattern pattern;
 
     @Override
@@ -52,10 +55,6 @@ public class LogFileFilter implements IOFileFilter, InitializingBean, FileFilter
 
     public String getFormatPattern() {
         return formatPattern;
-    }
-
-    public void setFormatPattern(String formatPattern) {
-        this.formatPattern = formatPattern;
     }
 
     @Override

@@ -24,17 +24,8 @@ import static org.junit.Assert.fail;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
-
 import javax.annotation.Nullable;
 import javax.persistence.Query;
-
-import org.openhubframework.openhub.api.entity.ExternalCall;
-import org.openhubframework.openhub.api.entity.ExternalCallStateEnum;
-import org.openhubframework.openhub.api.entity.Message;
-import org.openhubframework.openhub.api.entity.MsgStateEnum;
-import org.openhubframework.openhub.core.AbstractCoreDbTest;
-import org.openhubframework.openhub.test.ExternalSystemTestEnum;
-import org.openhubframework.openhub.test.ServiceTestEnum;
 
 import org.apache.camel.EndpointInject;
 import org.apache.camel.component.mock.MockEndpoint;
@@ -45,6 +36,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
+
+import org.openhubframework.openhub.api.entity.ExternalCall;
+import org.openhubframework.openhub.api.entity.ExternalCallStateEnum;
+import org.openhubframework.openhub.api.entity.Message;
+import org.openhubframework.openhub.api.entity.MsgStateEnum;
+import org.openhubframework.openhub.core.AbstractCoreDbTest;
+import org.openhubframework.openhub.test.ExternalSystemTestEnum;
+import org.openhubframework.openhub.test.ServiceTestEnum;
 
 
 /**
@@ -81,7 +80,7 @@ public class ConfirmationPollExecutorTest extends AbstractCoreDbTest {
     @Test
     public void testGetNextMessage_moreThreads() throws InterruptedException {
         // firstly commit messages to DB (we can commit because we have embedded DB for tests only)
-        TransactionTemplate txTemplate = new TransactionTemplate(jpaTransactionManager);
+        TransactionTemplate txTemplate = new TransactionTemplate(transactionManager);
         txTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {

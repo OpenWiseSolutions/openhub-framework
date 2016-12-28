@@ -19,14 +19,15 @@ package org.openhubframework.openhub.core.common.asynch.notification;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.openhubframework.openhub.api.common.EmailService;
-import org.openhubframework.openhub.common.Strings;
-
 import org.apache.camel.ProducerTemplate;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.api.common.EmailService;
+import org.openhubframework.openhub.common.Strings;
 
 
 /**
@@ -34,6 +35,7 @@ import org.springframework.util.Assert;
  *
  * @author Petr Juza
  */
+@Service(EmailService.BEAN)
 public class EmailServiceCamelSmtpImpl implements EmailService {
 
     @Autowired

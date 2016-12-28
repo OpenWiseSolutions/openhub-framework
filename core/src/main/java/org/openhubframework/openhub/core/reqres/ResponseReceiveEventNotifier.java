@@ -19,7 +19,6 @@ package org.openhubframework.openhub.core.reqres;
 import java.io.StringWriter;
 import java.util.EventObject;
 import java.util.regex.Pattern;
-
 import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import javax.xml.transform.Transformer;
@@ -27,23 +26,24 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.camel.Endpoint;
+import org.apache.camel.Exchange;
+import org.apache.camel.management.event.ExchangeSentEvent;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.Assert;
+import org.springframework.ws.soap.client.SoapFaultClientException;
+
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.Request;
 import org.openhubframework.openhub.api.entity.Response;
 import org.openhubframework.openhub.api.event.EventNotifier;
 import org.openhubframework.openhub.api.event.EventNotifierBase;
-import org.openhubframework.openhub.common.log.Log;
-
-import org.apache.camel.Endpoint;
-import org.apache.camel.Exchange;
-import org.apache.camel.management.event.ExchangeSentEvent;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.exception.ExceptionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.util.Assert;
-import org.springframework.ws.soap.client.SoapFaultClientException;
 
 
 /**
@@ -56,6 +56,8 @@ import org.springframework.ws.soap.client.SoapFaultClientException;
  */
 @EventNotifier
 public class ResponseReceiveEventNotifier extends EventNotifierBase<ExchangeSentEvent> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ResponseReceiveEventNotifier.class);
 
     /**
      * True for enabling saving requests/responses for filtered endpoints URI.
@@ -122,14 +124,14 @@ public class ResponseReceiveEventNotifier extends EventNotifierBase<ExchangeSent
                 Response response = Response.createResponse(request, resStr, failedReason, msg);
 
                 if (request == null) {
-                    Log.warn("There is no corresponding request for response " + response.toHumanString());
+                    LOG.warn("There is no corresponding request for response " + response.toHumanString());
                 }
 
                 try {
                     // save response
                     requestResponseService.insertResponse(response);
                 } catch (Exception ex) {
-                    Log.error("Response didn't saved.", ex);
+                    LOG.error("Response didn't saved.", ex);
                 }
             }
         }
@@ -148,7 +150,7 @@ public class ResponseReceiveEventNotifier extends EventNotifierBase<ExchangeSent
         Request req = exchange.getIn().getHeader(RequestSendingEventNotifier.SAVE_REQ_HEADER, Request.class);
 
         if (req == null) {
-            Log.debug("There is no request in exchange header '" + RequestSendingEventNotifier.SAVE_REQ_HEADER + "'");
+            LOG.debug("There is no request in exchange header '" + RequestSendingEventNotifier.SAVE_REQ_HEADER + "'");
 
             // if it's asynchronous message then use correlation ID
             Message msg = exchange.getIn().getHeader(AsynchConstants.MSG_HEADER, Message.class);
@@ -156,16 +158,16 @@ public class ResponseReceiveEventNotifier extends EventNotifierBase<ExchangeSent
                 req = requestResponseService.findLastRequest(endpoint.getEndpointUri(), msg.getCorrelationId());
 
                 if (req == null) {
-                    Log.warn("There is no request for URI=" + endpoint.getEndpointUri()
+                    LOG.warn("There is no request for URI=" + endpoint.getEndpointUri()
                             + ", correlationId=" + msg.getCorrelationId());
                 }
             } else {
-                Log.debug("It's not asynchronous message - no message");
+                LOG.debug("It's not asynchronous message - no message");
 
                 req = requestResponseService.findLastRequest(endpoint.getEndpointUri(), exchange.getExchangeId());
 
                 if (req == null) {
-                    Log.warn("There is no request for URI=" + endpoint.getEndpointUri()
+                    LOG.warn("There is no request for URI=" + endpoint.getEndpointUri()
                             + ", exchangeId=" + exchange.getExchangeId());
                 }
             }
@@ -201,7 +203,7 @@ public class ResponseReceiveEventNotifier extends EventNotifierBase<ExchangeSent
                     exceptionString = sb.toString();
                 }
             } catch (TransformerException e) {
-                Log.warn("Error occurs during transformation SOAP Fault to XML representation", e);
+                LOG.warn("Error occurs during transformation SOAP Fault to XML representation", e);
             }
         }
 

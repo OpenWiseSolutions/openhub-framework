@@ -18,14 +18,15 @@ package org.openhubframework.openhub.component.funnel;
 
 import java.util.List;
 
-import org.openhubframework.openhub.api.asynch.AsynchConstants;
-import org.openhubframework.openhub.api.entity.Message;
-import org.openhubframework.openhub.common.log.Log;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultProducer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
+
+import org.openhubframework.openhub.api.asynch.AsynchConstants;
+import org.openhubframework.openhub.api.entity.Message;
 
 
 /**
@@ -36,6 +37,8 @@ import org.springframework.util.StringUtils;
 public class MsgFunnelProducer extends DefaultProducer {
 
     private static final String FUNNEL_COMP_PREFIX = "funnel_";
+
+    private static final Logger LOG = LoggerFactory.getLogger(MsgFunnelProducer.class);
 
     /**
      * Creates new producer.
@@ -53,7 +56,7 @@ public class MsgFunnelProducer extends DefaultProducer {
         Assert.notNull(msg, "message must be defined, msg-funnel component is for asynchronous messages only");
 
         if (StringUtils.isEmpty(msg.getFunnelValue())) {
-            Log.debug("Message " + msg.toHumanString() + " doesn't have funnel value => won't be filtered");
+            LOG.debug("Message " + msg.toHumanString() + " doesn't have funnel value => won't be filtered");
         } else {
             MsgFunnelEndpoint endpoint = (MsgFunnelEndpoint) getEndpoint();
 
@@ -72,17 +75,17 @@ public class MsgFunnelProducer extends DefaultProducer {
                         funnelCompId);
 
                 if (messages.size() == 1) {
-                    Log.debug("There is only one processing message with funnel value: " + msg.getFunnelValue()
+                    LOG.debug("There is only one processing message with funnel value: " + msg.getFunnelValue()
                             + " => no filtering");
 
                 // is specified message first one for processing?
                 } else if (messages.get(0).equals(msg)) {
-                    Log.debug("Processing message (msg_id = {}, funnel value = '{}') is the first one"
+                    LOG.debug("Processing message (msg_id = {}, funnel value = '{}') is the first one"
                             + " => no filtering", msg.getMsgId(), msg.getFunnelValue());
 
                 } else {
-                    Log.debug("There is at least one processing message with funnel value '{}'"
-                            + " before current message (msg_id = {}); message {} will be postponed.",
+                    LOG.debug("There is at least one processing message with funnel value '{}'"
+                                    + " before current message (msg_id = {}); message {} will be postponed.",
                             msg.getFunnelValue(), msg.getMsgId(), msg.toHumanString());
 
                     postponeMessage(exchange, msg, endpoint);
@@ -95,13 +98,13 @@ public class MsgFunnelProducer extends DefaultProducer {
 
                 if (count > 1) {
                     // note: one processing message is this message
-                    Log.debug("There are more processing messages with funnel value '" + msg.getFunnelValue()
+                    LOG.debug("There are more processing messages with funnel value '" + msg.getFunnelValue()
                             + "', message " + msg.toHumanString() + " will be postponed.");
 
                     postponeMessage(exchange, msg, endpoint);
 
                 } else {
-                    Log.debug("There is only one processing message with funnel value: " + msg.getFunnelValue()
+                    LOG.debug("There is only one processing message with funnel value: " + msg.getFunnelValue()
                             + " => no filtering");
                 }
             }

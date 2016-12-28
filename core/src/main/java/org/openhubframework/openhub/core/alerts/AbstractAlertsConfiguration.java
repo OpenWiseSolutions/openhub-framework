@@ -20,14 +20,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-
 import javax.annotation.Nullable;
 
-import org.openhubframework.openhub.common.log.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
+
 import org.openhubframework.openhub.spi.alerts.AlertInfo;
 import org.openhubframework.openhub.spi.alerts.AlertsConfiguration;
-
-import org.springframework.util.Assert;
 
 
 /**
@@ -37,6 +37,8 @@ import org.springframework.util.Assert;
  * @since 0.4
  */
 public abstract class AbstractAlertsConfiguration implements AlertsConfiguration {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractAlertsConfiguration.class);
 
     private List<AlertInfo> alerts = new CopyOnWriteArrayList<AlertInfo>();
 
@@ -48,7 +50,7 @@ public abstract class AbstractAlertsConfiguration implements AlertsConfiguration
             throw new IllegalStateException("Wrong alert's configuration - alert (id = '"
                     + alertInfo.getId() + "') already exist.");
         } else {
-            Log.debug("New alert info added: " + alertInfo);
+            LOG.debug("New alert info added: " + alertInfo);
             alerts.add(alertInfo);
         }
     }

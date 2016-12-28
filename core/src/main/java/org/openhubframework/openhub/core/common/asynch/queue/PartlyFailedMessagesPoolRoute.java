@@ -16,18 +16,20 @@
 
 package org.openhubframework.openhub.core.common.asynch.queue;
 
-import org.openhubframework.openhub.api.entity.MsgStateEnum;
-import org.openhubframework.openhub.api.route.AbstractBasicRoute;
-import org.openhubframework.openhub.api.route.CamelConfiguration;
-import org.openhubframework.openhub.common.log.Log;
-import org.openhubframework.openhub.core.common.asynch.repair.RepairProcessingMsgRoute;
-import org.openhubframework.openhub.core.common.asynch.stop.StopService;
-
 import org.apache.camel.Handler;
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.quartz.SimpleTrigger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
+
+import org.openhubframework.openhub.api.entity.MsgStateEnum;
+import org.openhubframework.openhub.api.route.AbstractBasicRoute;
+import org.openhubframework.openhub.api.route.CamelConfiguration;
+import org.openhubframework.openhub.common.Profiles;
+import org.openhubframework.openhub.core.common.asynch.repair.RepairProcessingMsgRoute;
+import org.openhubframework.openhub.core.common.asynch.stop.StopService;
 
 
 /**
@@ -37,8 +39,10 @@ import org.springframework.context.annotation.Profile;
  * @author Petr Juza
  */
 @CamelConfiguration(value = PartlyFailedMessagesPoolRoute.ROUTE_BEAN)
-@Profile("prod")
+@Profile(Profiles.PROD)
 public class PartlyFailedMessagesPoolRoute extends SpringRouteBuilder {
+
+    private static final Logger LOG = LoggerFactory.getLogger(PartlyFailedMessagesPoolRoute.class);
 
     public static final String ROUTE_BEAN = "partlyFailedMsgPoolRouteBean";
 
@@ -76,7 +80,7 @@ public class PartlyFailedMessagesPoolRoute extends SpringRouteBuilder {
     public boolean isNotInStoppingMode() {
         StopService stopService = getApplicationContext().getBean(StopService.class);
 
-        Log.debug("ESB stopping mode is switched on: " + stopService.isStopping());
+        LOG.debug("ESB stopping mode is switched on: " + stopService.isStopping());
 
         return !stopService.isStopping();
     }

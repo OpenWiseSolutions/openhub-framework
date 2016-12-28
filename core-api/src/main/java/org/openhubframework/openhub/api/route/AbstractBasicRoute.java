@@ -17,33 +17,25 @@
 package org.openhubframework.openhub.api.route;
 
 import java.util.Set;
-
 import javax.annotation.Nullable;
 import javax.xml.namespace.QName;
 
-import org.openhubframework.openhub.api.asynch.AsynchConstants;
-import org.openhubframework.openhub.api.entity.ExternalSystemExtEnum;
-import org.openhubframework.openhub.api.entity.ServiceExtEnum;
-import org.openhubframework.openhub.api.exception.BusinessException;
-import org.openhubframework.openhub.api.exception.LockFailureException;
-import org.openhubframework.openhub.api.exception.MultipleDataFoundException;
-import org.openhubframework.openhub.api.exception.NoDataFoundException;
-import org.openhubframework.openhub.api.exception.ValidationIntegrationException;
-import org.openhubframework.openhub.common.log.Log;
-
-import org.apache.camel.Exchange;
-import org.apache.camel.Handler;
-import org.apache.camel.Header;
-import org.apache.camel.LoggingLevel;
-import org.apache.camel.ValidationException;
+import org.apache.camel.*;
 import org.apache.camel.processor.DefaultExchangeFormatter;
 import org.apache.camel.spi.EventNotifier;
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.apache.camel.util.MessageHelper;
-import org.apache.commons.lang.BooleanUtils;
-import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.api.asynch.AsynchConstants;
+import org.openhubframework.openhub.api.entity.ExternalSystemExtEnum;
+import org.openhubframework.openhub.api.entity.ServiceExtEnum;
+import org.openhubframework.openhub.api.exception.*;
 
 
 /**
@@ -52,6 +44,8 @@ import org.springframework.util.Assert;
  * @author Petr Juza
  */
 public abstract class AbstractBasicRoute extends SpringRouteBuilder {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractBasicRoute.class);
 
     /**
      * Suffix for synchronous routes.
@@ -135,7 +129,7 @@ public abstract class AbstractBasicRoute extends SpringRouteBuilder {
     public void printMessageHistory(Exchange exchange) {
         // print message history
         String routeStackTrace = MessageHelper.dumpMessageHistoryStacktrace(exchange, historyFormatter, false);
-        Log.debug(routeStackTrace);
+        LOG.debug(routeStackTrace);
     }
 
     @Handler
@@ -159,27 +153,27 @@ public abstract class AbstractBasicRoute extends SpringRouteBuilder {
 
         if (ExceptionUtils.indexOfThrowable(ex, ValidationException.class) >= 0
                 || ExceptionUtils.indexOfThrowable(ex, ValidationIntegrationException.class) >= 0) {
-            Log.warn("Validation error, no further processing - " + ex.getMessage());
+            LOG.warn("Validation error, no further processing - " + ex.getMessage());
             nextUri = AsynchConstants.URI_ERROR_FATAL;
 
         } else if (ExceptionUtils.indexOfThrowable(ex, BusinessException.class) >= 0) {
-            Log.warn("Business exception, no further processing.");
+            LOG.warn("Business exception, no further processing.");
             nextUri = AsynchConstants.URI_ERROR_FATAL;
 
         } else if (ExceptionUtils.indexOfThrowable(ex, NoDataFoundException.class) >= 0) {
-            Log.warn("No data found, no further processing.");
+            LOG.warn("No data found, no further processing.");
             nextUri = AsynchConstants.URI_ERROR_FATAL;
 
         } else if (ExceptionUtils.indexOfThrowable(ex, MultipleDataFoundException.class) >= 0) {
-            Log.warn("Multiple data found, no further processing.");
+            LOG.warn("Multiple data found, no further processing.");
             nextUri = AsynchConstants.URI_ERROR_FATAL;
 
         } else if (ExceptionUtils.indexOfThrowable(ex, LockFailureException.class) >= 0) {
-            Log.warn("Locking exception.");
+            LOG.warn("Locking exception.");
             nextUri = AsynchConstants.URI_ERROR_HANDLING;
 
         } else {
-            Log.error("Unspecified exception - " + ex.getClass().getSimpleName() + " (" + ex.getMessage() + ")");
+            LOG.error("Unspecified exception - " + ex.getClass().getSimpleName() + " (" + ex.getMessage() + ")");
             nextUri = AsynchConstants.URI_ERROR_HANDLING;
         }
 
@@ -236,24 +230,24 @@ public abstract class AbstractBasicRoute extends SpringRouteBuilder {
     }
 
     /**
-     * Gets "from" URI for handling incoming WS messages with default "endpointMapping" bean.
+     * Gets "from" URI for handling incoming WS messages with default '{@value RouteConstants#ENDPOINT_MAPPING_BEAN}' bean.
      *
      * @return from URI
      * @param qName the operation QName (namespace + local part)
      */
     protected String getInWsUri(QName qName) {
-        return wsUriBuilder.getInWsUri(qName, "endpointMapping", null);
+        return wsUriBuilder.getInWsUri(qName, RouteConstants.ENDPOINT_MAPPING_BEAN, null);
     }
 
     /**
-     * Gets "from" URI for handling incoming WS messages with default "endpointMapping" bean.
+     * Gets "from" URI for handling incoming WS messages with default '{@value RouteConstants#ENDPOINT_MAPPING_BEAN}' bean.
      *
      * @return from URI
      * @param qName the operation QName (namespace + local part)
      * @param params the endpoint URI parameters (without leading signs ? or &)
      */
     protected String getInWsUri(QName qName, @Nullable String params) {
-        return wsUriBuilder.getInWsUri(qName, "endpointMapping", params);
+        return wsUriBuilder.getInWsUri(qName, RouteConstants.ENDPOINT_MAPPING_BEAN, params);
     }
 
     /**

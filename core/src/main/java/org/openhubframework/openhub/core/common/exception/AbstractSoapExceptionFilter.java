@@ -21,17 +21,18 @@ import javax.xml.namespace.QName;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.ws.WebFault;
 
-import org.openhubframework.openhub.api.asynch.AsynchConstants;
-import org.openhubframework.openhub.api.exception.ErrorExtEnum;
-import org.openhubframework.openhub.api.exception.IntegrationException;
-import org.openhubframework.openhub.common.log.Log;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.ws.soap.SoapFaultDetail;
 import org.springframework.ws.soap.client.SoapFaultClientException;
 import org.w3c.dom.Node;
+
+import org.openhubframework.openhub.api.asynch.AsynchConstants;
+import org.openhubframework.openhub.api.exception.ErrorExtEnum;
+import org.openhubframework.openhub.api.exception.IntegrationException;
 
 
 /**
@@ -57,6 +58,8 @@ import org.w3c.dom.Node;
  */
 //TODO (juza) applicant for moving to API
 public abstract class AbstractSoapExceptionFilter implements Processor {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractSoapExceptionFilter.class);
 
     private boolean asynchMessage;
 
@@ -87,7 +90,7 @@ public abstract class AbstractSoapExceptionFilter implements Processor {
                 faultException = getFaultException(soapEx.getSoapFault().getFaultDetail());
 
                 if (faultException != null) {
-                    Log.debug("get new exception (asynchMessage = " + asynchMessage + "): " + faultException);
+                    LOG.debug("get new exception (asynchMessage = " + asynchMessage + "): " + faultException);
 
                     if (asynchMessage) {
                         // throw exception for asynchronous processing - parent routes will catch it

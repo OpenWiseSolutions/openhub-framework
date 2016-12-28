@@ -16,7 +16,9 @@
 
 package org.openhubframework.openhub.core.common.asynch.stop;
 
-import org.openhubframework.openhub.common.log.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 
 /**
@@ -25,7 +27,10 @@ import org.openhubframework.openhub.common.log.Log;
  * @author Petr Juza
  * @since 0.4
  */
+@Service
 public class StopServiceNodeImpl implements StopService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(StopServiceNodeImpl.class);
 
     private boolean stopping = false;
 
@@ -38,13 +43,13 @@ public class StopServiceNodeImpl implements StopService {
     public synchronized void stop() {
         this.stopping = true;
 
-        Log.info("ESB starts stopping ...");
+        LOG.info("ESB starts stopping ...");
     }
 
     @Override
     public synchronized void cancelStopping() {
         this.stopping = false;
 
-        Log.info("ESB stopping was canceled.");
+        LOG.info("ESB stopping was canceled.");
     }
 }

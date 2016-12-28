@@ -16,14 +16,16 @@
 
 package org.openhubframework.openhub.core.alerts;
 
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+
 import org.openhubframework.openhub.api.common.EmailService;
-import org.openhubframework.openhub.common.log.Log;
 import org.openhubframework.openhub.spi.alerts.AlertInfo;
 import org.openhubframework.openhub.spi.alerts.AlertListener;
-
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
 
 
 /**
@@ -37,11 +39,14 @@ import org.springframework.util.Assert;
  * @author Petr Juza
  * @since 0.4
  */
+@Service
 public class EmailAlertListenerSupport implements AlertListener {
 
     private static final String DEFAULT_ALERT_SUBJECT = "Alert (%s) notification";
 
     private static final String DEFAULT_ALERT_BODY = "Actual count '%d' of the alert (%s) exceeded limit '%d'";
+
+    private static final Logger LOG = LoggerFactory.getLogger(EmailAlertListenerSupport.class);
 
     @Autowired
     private EmailService emailService;
@@ -61,7 +66,7 @@ public class EmailAlertListenerSupport implements AlertListener {
      */
     @Override
     public final void onAlert(AlertInfo alert, long actualCount) {
-        Log.debug("onAlert (" + alert.toHumanString() + ")");
+        LOG.debug("onAlert (" + alert.toHumanString() + ")");
 
         // use default subject or body if not defined specific one
         String subject = StringUtils.isNotEmpty(alert.getNotificationSubject())
@@ -79,14 +84,14 @@ public class EmailAlertListenerSupport implements AlertListener {
         try {
             sendEmail(subject, body);
         } catch (Exception ex) {
-            Log.error("Error occurred during email sending for alert id=" + alert.getId(), ex);
+            LOG.error("Error occurred during email sending for alert id=" + alert.getId(), ex);
         }
 
         // do whatever else
         try {
             onAlert(alert);
         } catch (Exception ex) {
-            Log.error("Error occurred during final action for alert id=" + alert.getId(), ex);
+            LOG.error("Error occurred during final action for alert id=" + alert.getId(), ex);
         }
     }
 

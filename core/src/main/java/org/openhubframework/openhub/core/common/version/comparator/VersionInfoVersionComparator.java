@@ -19,9 +19,8 @@ package org.openhubframework.openhub.core.common.version.comparator;
 import java.io.Serializable;
 import java.util.Comparator;
 
+import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.openhubframework.openhub.core.common.version.VersionInfo;
-
-import org.apache.commons.lang.builder.CompareToBuilder;
 
 
 /**

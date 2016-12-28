@@ -22,11 +22,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.openhubframework.openhub.admin.dao.dto.MessageReportDto;
-import org.openhubframework.openhub.admin.services.MessageReportService;
-import org.openhubframework.openhub.common.log.Log;
-
-import org.apache.commons.lang.time.DateUtils;
+import org.apache.commons.lang3.time.DateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -35,6 +33,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import org.openhubframework.openhub.admin.dao.dto.MessageReportDto;
+import org.openhubframework.openhub.admin.services.MessageReportService;
 
 
 /**
@@ -45,6 +46,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/messages")
 public class MessageReportController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MessageReportController.class);
 
     private final SimpleDateFormat inputDateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
@@ -118,7 +121,7 @@ public class MessageReportController {
         try {
             myDate = inputDateFormat.parse(paramFromWeb);
         } catch (ParseException e) {
-            Log.error("Parse exception occurred in MessageDaoImpl.dateHandler", e);
+            LOG.error("Parse exception occurred in MessageDaoImpl.dateHandler", e);
         }
         return myDate;
     }

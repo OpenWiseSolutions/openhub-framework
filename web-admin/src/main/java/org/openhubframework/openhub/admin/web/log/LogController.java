@@ -19,24 +19,12 @@ package org.openhubframework.openhub.admin.web.log;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Set;
-
-import org.openhubframework.openhub.admin.services.log.LogEvent;
-import org.openhubframework.openhub.admin.services.log.LogParser;
-import org.openhubframework.openhub.admin.services.log.LogParserConfig;
-import org.openhubframework.openhub.admin.services.log.LogParserConstants;
-import org.openhubframework.openhub.admin.web.common.editor.DateTimeEditor;
-import org.openhubframework.openhub.common.log.Log;
+import java.util.*;
 
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,6 +37,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.UriUtils;
 
+import org.openhubframework.openhub.admin.services.log.LogEvent;
+import org.openhubframework.openhub.admin.services.log.LogParser;
+import org.openhubframework.openhub.admin.services.log.LogParserConfig;
+import org.openhubframework.openhub.admin.services.log.LogParserConstants;
+import org.openhubframework.openhub.admin.web.common.editor.DateTimeEditor;
+
 
 /**
  * Controller that encapsulates actions around logs.
@@ -56,6 +50,8 @@ import org.springframework.web.util.UriUtils;
 @Controller
 @RequestMapping("/log")
 public class LogController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(LogController.class);
 
     @Autowired
     private LogParser logParser;
@@ -112,7 +108,7 @@ public class LogController {
             logParserConfig.setFilter(getSubProperties(params, "filter."));
             logParserConfig.setMsg(params.get("msg"));
 
-            Log.info("Looking for {}", logParserConfig.describe());
+            LOG.info("Looking for {}", logParserConfig.describe());
 
             File[] logFiles = logParser.getLogFiles(logParserConfig.getFromDate());
             Iterator<LogEvent> logEvents = (logFiles.length > 0)

@@ -18,20 +18,21 @@ package org.openhubframework.openhub.core.common.asynch.queue;
 
 import javax.annotation.Nullable;
 
-import org.openhubframework.openhub.api.entity.Message;
-import org.openhubframework.openhub.api.exception.LockFailureException;
-import org.openhubframework.openhub.common.log.Log;
-import org.openhubframework.openhub.core.common.dao.MessageDao;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
-import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.api.entity.Message;
+import org.openhubframework.openhub.api.exception.LockFailureException;
+import org.openhubframework.openhub.core.common.dao.MessageDao;
 
 
 /**
@@ -39,7 +40,10 @@ import org.springframework.util.Assert;
  *
  * @author Petr Juza
  */
+@Service
 public class MessagesPoolDbImpl implements MessagesPool {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MessagesPoolDbImpl.class);
 
     @Autowired
     private MessageDao messageDao;
@@ -58,8 +62,8 @@ public class MessagesPoolDbImpl implements MessagesPool {
     @Value("${asynch.postponedInterval}")
     private int postponedInterval;
 
-    @Required
-    public void setTransactionManager(JpaTransactionManager transactionManager) {
+    @Autowired
+    public MessagesPoolDbImpl(PlatformTransactionManager transactionManager) {
         Assert.notNull(transactionManager, "the transactionManager must not be null");
 
         this.transactionTemplate = new TransactionTemplate(transactionManager);
@@ -78,7 +82,7 @@ public class MessagesPoolDbImpl implements MessagesPool {
         }
 
         if (msg == null) {
-            Log.debug("No POSTPONED and PARTLY_FAILED message found for re-processing.");
+            LOG.debug("No POSTPONED and PARTLY_FAILED message found for re-processing.");
             return null;
         }
 
@@ -127,10 +131,10 @@ public class MessagesPoolDbImpl implements MessagesPool {
         }
 
         if (isLock) {
-            Log.debug("Successfully locked message for re-processing: {}", msg.toHumanString());
+            LOG.debug("Successfully locked message for re-processing: {}", msg.toHumanString());
             return true;
         } else {
-            Log.debug("Failed to lock message for re-processing: {}", msg.getMsgId());
+            LOG.debug("Failed to lock message for re-processing: {}", msg.getMsgId());
             return false;
         }
     }

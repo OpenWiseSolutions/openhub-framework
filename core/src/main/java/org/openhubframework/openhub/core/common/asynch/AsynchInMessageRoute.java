@@ -25,6 +25,14 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.camel.*;
+import org.apache.camel.component.spring.ws.SpringWebserviceConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
+
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
 import org.openhubframework.openhub.api.asynch.AsynchResponseProcessor;
 import org.openhubframework.openhub.api.asynch.model.CallbackResponse;
@@ -36,7 +44,6 @@ import org.openhubframework.openhub.api.exception.StoppingException;
 import org.openhubframework.openhub.api.exception.ThrottlingExceededException;
 import org.openhubframework.openhub.api.route.AbstractBasicRoute;
 import org.openhubframework.openhub.api.route.CamelConfiguration;
-import org.openhubframework.openhub.common.log.Log;
 import org.openhubframework.openhub.common.log.LogContextFilter;
 import org.openhubframework.openhub.core.common.asynch.msg.MessageTransformer;
 import org.openhubframework.openhub.core.common.asynch.stop.StopService;
@@ -46,18 +53,6 @@ import org.openhubframework.openhub.core.common.validator.TraceIdentifierValidat
 import org.openhubframework.openhub.spi.msg.MessageService;
 import org.openhubframework.openhub.spi.throttling.ThrottleScope;
 import org.openhubframework.openhub.spi.throttling.ThrottlingProcessor;
-
-import org.apache.camel.Body;
-import org.apache.camel.Exchange;
-import org.apache.camel.ExchangePattern;
-import org.apache.camel.Handler;
-import org.apache.camel.Headers;
-import org.apache.camel.LoggingLevel;
-import org.apache.camel.Processor;
-import org.apache.camel.component.spring.ws.SpringWebserviceConstants;
-import org.slf4j.MDC;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
 
 
 /**
@@ -78,6 +73,8 @@ import org.springframework.util.Assert;
  */
 @CamelConfiguration(value = AsynchInMessageRoute.ROUTE_BEAN)
 public class AsynchInMessageRoute extends AbstractBasicRoute {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AsynchInMessageRoute.class);
 
     public static final String ROUTE_BEAN = "inMsgRouteBean";
 
@@ -192,7 +189,7 @@ public class AsynchInMessageRoute extends AbstractBasicRoute {
                     @Override
                     public void process(Exchange exchange) throws Exception {
                         Exception ex = (Exception) exchange.getProperty(Exchange.EXCEPTION_CAUGHT);
-                        Log.error("Incoming route - error during saving incoming message: ", ex);
+                        LOG.error("Incoming route - error during saving incoming message: ", ex);
                     }
                 })
 
@@ -258,7 +255,7 @@ public class AsynchInMessageRoute extends AbstractBasicRoute {
     public Message insertMessage(@Body final Message msg) {
         Assert.notNull(msg, "msg can not be null");
 
-        Log.debug("Insert new asynch message '" + msg.toHumanString() + "'.");
+        LOG.debug("Insert new asynch message '" + msg.toHumanString() + "'.");
 
         messageService.insertMessage(msg);
         return msg;
@@ -282,21 +279,21 @@ public class AsynchInMessageRoute extends AbstractBasicRoute {
                     .getMessagesForGuaranteedOrderForRoute(msg.getFunnelValue(), msg.isExcludeFailedState());
 
             if (messages.size() == 1) {
-                Log.debug("There is only one processing message with funnel value: " + msg.getFunnelValue()
+                LOG.debug("There is only one processing message with funnel value: " + msg.getFunnelValue()
                         + " => continue");
 
                 return true;
 
             // is specified message first one for processing?
             } else if (messages.get(0).equals(msg)) {
-                Log.debug("Processing message (msg_id = {}, funnel value = '{}') is the first one"
+                LOG.debug("Processing message (msg_id = {}, funnel value = '{}') is the first one"
                         + " => continue", msg.getMsgId(), msg.getFunnelValue());
 
                 return true;
 
             } else {
-                Log.debug("There is at least one processing message with funnel value '{}'"
-                        + " before current message (msg_id = {}); message {} will be postponed.",
+                LOG.debug("There is at least one processing message with funnel value '{}'"
+                                + " before current message (msg_id = {}); message {} will be postponed.",
                         msg.getFunnelValue(), msg.getMsgId(), msg.toHumanString());
 
                 return false;

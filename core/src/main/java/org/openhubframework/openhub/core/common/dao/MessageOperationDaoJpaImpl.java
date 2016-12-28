@@ -18,20 +18,20 @@ package org.openhubframework.openhub.core.common.dao;
 
 import java.util.Arrays;
 import java.util.Date;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import org.openhubframework.openhub.api.entity.ExternalCall;
-import org.openhubframework.openhub.api.entity.Message;
-import org.openhubframework.openhub.api.entity.MsgStateEnum;
-import org.openhubframework.openhub.common.log.Log;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.api.entity.ExternalCall;
+import org.openhubframework.openhub.api.entity.Message;
+import org.openhubframework.openhub.api.entity.MsgStateEnum;
 
 
 /**
@@ -42,6 +42,8 @@ import org.springframework.util.Assert;
 @Repository
 @Transactional(propagation = Propagation.MANDATORY)
 public class MessageOperationDaoJpaImpl implements MessageOperationDao {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MessageOperationDaoJpaImpl.class);
 
     @PersistenceContext(unitName = DbConst.UNIT_NAME)
     private EntityManager em;
@@ -81,7 +83,7 @@ public class MessageOperationDaoJpaImpl implements MessageOperationDao {
         q.setParameter (1, msg.getMsgId());
         int updatedCount = q.executeUpdate();
 
-        Log.debug(updatedCount + " external calls were deleted for message with msgID=" + msg.getMsgId());
+        LOG.debug(updatedCount + " external calls were deleted for message with msgID=" + msg.getMsgId());
     }
 
     @Override

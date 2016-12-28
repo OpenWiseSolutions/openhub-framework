@@ -16,9 +16,10 @@
 
 package org.openhubframework.openhub.core.alerts;
 
-import org.openhubframework.openhub.spi.alerts.AlertInfo;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import org.openhubframework.openhub.spi.alerts.AlertInfo;
 
 
 /**
@@ -27,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Petr Juza
  * @since 0.4
  */
+@Service(AlertsCheckingService.BEAN)
 public class AlertsCheckingServiceDbImpl extends AbstractAlertsCheckingService {
 
     @Autowired

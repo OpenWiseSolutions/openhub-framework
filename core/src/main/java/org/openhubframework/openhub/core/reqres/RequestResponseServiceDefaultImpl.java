@@ -18,16 +18,16 @@ package org.openhubframework.openhub.core.reqres;
 
 import java.util.Date;
 import java.util.List;
-
 import javax.annotation.Nullable;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import org.openhubframework.openhub.api.entity.Request;
 import org.openhubframework.openhub.api.entity.Response;
 import org.openhubframework.openhub.core.common.dao.RequestResponseDao;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 
 /**
@@ -39,6 +39,7 @@ import org.springframework.util.Assert;
  * @since 0.4
  */
 @Transactional
+@Service
 public class RequestResponseServiceDefaultImpl implements RequestResponseService {
 
     @Autowired

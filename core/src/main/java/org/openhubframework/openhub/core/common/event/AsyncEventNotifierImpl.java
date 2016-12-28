@@ -16,9 +16,10 @@
 
 package org.openhubframework.openhub.core.common.event;
 
-import org.openhubframework.openhub.spi.AsyncEventNotifier;
-
 import org.apache.camel.Exchange;
+import org.springframework.stereotype.Service;
+
+import org.openhubframework.openhub.spi.AsyncEventNotifier;
 
 
 /**
@@ -26,6 +27,7 @@ import org.apache.camel.Exchange;
  *
  * @author Petr Juza
  */
+@Service
 public class AsyncEventNotifierImpl implements AsyncEventNotifier {
 
     @Override

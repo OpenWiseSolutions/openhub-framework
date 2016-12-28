@@ -22,10 +22,14 @@ import static org.junit.Assert.assertThat;
 
 import java.util.Properties;
 
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.PropertiesPropertySource;
+
+import org.openhubframework.openhub.core.AbstractCoreTest;
 import org.openhubframework.openhub.spi.throttling.ThrottleProps;
 import org.openhubframework.openhub.spi.throttling.ThrottleScope;
-
-import org.junit.Test;
 
 
 /**
@@ -33,7 +37,10 @@ import org.junit.Test;
  *
  * @author Petr Juza
  */
-public class ThrottlingPropertiesConfigurationTest {
+public class ThrottlingPropertiesConfigurationTest extends AbstractCoreTest {
+
+    @Autowired
+    private ConfigurableEnvironment env;
 
     @Test
     public void testConf() {
@@ -49,8 +56,12 @@ public class ThrottlingPropertiesConfigurationTest {
         props.put(prefix + "*.sendSms", "100");
         props.put(prefix + "*.sendSms", "100/6");
 
+        env.getPropertySources().addFirst(new PropertiesPropertySource("throttling-test", props));
+
         // create configuration
-        ThrottlingPropertiesConfiguration conf = new ThrottlingPropertiesConfiguration(props);
+        ThrottlingPropertiesConfiguration conf = new ThrottlingPropertiesConfiguration();
+        setPrivateField(conf, "env", env);
+        conf.initProps();
 
         // verify
         assertThrottleProp(conf, "crm", "op1", 10, 15);

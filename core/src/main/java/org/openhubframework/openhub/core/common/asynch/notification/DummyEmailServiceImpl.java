@@ -16,11 +16,12 @@
 
 package org.openhubframework.openhub.core.common.asynch.notification;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+
 import org.openhubframework.openhub.api.common.EmailService;
 import org.openhubframework.openhub.common.Strings;
-import org.openhubframework.openhub.common.log.Log;
-
-import org.springframework.beans.factory.annotation.Value;
 
 
 /**
@@ -30,6 +31,8 @@ import org.springframework.beans.factory.annotation.Value;
  */
 public class DummyEmailServiceImpl implements EmailService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(DummyEmailServiceImpl.class);
+
     /**
      * Administrator email address.
      */
@@ -38,15 +41,15 @@ public class DummyEmailServiceImpl implements EmailService {
 
     @Override
     public void sendEmailToAdmins(String subject, String body) {
-        Log.debug("Sending email:"
-            + "\nrecipients: " + recipients
-            + "\nsubject: " + subject
-            + "\nbody: " + body);
+        LOG.debug("Sending email:"
+                + "\nrecipients: " + recipients
+                + "\nsubject: " + subject
+                + "\nbody: " + body);
     }
 
     @Override
     public void sendFormattedEmail(String recipients, String subject, String body, Object... values) {
-        Log.debug("Sending email:"
+        LOG.debug("Sending email:"
                 + "\nrecipients: " + recipients
                 + "\nsubject: " + subject
                 + "\nbody: " + Strings.fm(body, values));

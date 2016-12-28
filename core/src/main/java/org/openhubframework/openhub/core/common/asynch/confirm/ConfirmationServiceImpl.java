@@ -16,17 +16,19 @@
 
 package org.openhubframework.openhub.core.common.asynch.confirm;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
 import org.openhubframework.openhub.api.entity.ExternalCall;
 import org.openhubframework.openhub.api.entity.ExternalCallStateEnum;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
-import org.openhubframework.openhub.common.log.Log;
 import org.openhubframework.openhub.core.common.dao.ExternalCallDao;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 
 /**
@@ -34,7 +36,10 @@ import org.springframework.util.Assert;
  *
  * @author Petr Juza
  */
+@Service(ConfirmationService.BEAN)
 public class ConfirmationServiceImpl implements ConfirmationService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ConfirmationServiceImpl.class);
 
     /**
      * Maximum count of confirmation fails when will finish further processing.
@@ -56,7 +61,7 @@ public class ConfirmationServiceImpl implements ConfirmationService {
 
         extCallDao.insert(extCall);
 
-        Log.debug("Inserted confirmation failed call " + msg.toHumanString());
+        LOG.debug("Inserted confirmation failed call " + msg.toHumanString());
 
         return extCall;
     }
@@ -74,7 +79,7 @@ public class ConfirmationServiceImpl implements ConfirmationService {
 
         extCallDao.update(extCall);
 
-        Log.debug("Confirmation call " + extCall.toHumanString() + " changed state to " + ExternalCallStateEnum.OK);
+        LOG.debug("Confirmation call " + extCall.toHumanString() + " changed state to " + ExternalCallStateEnum.OK);
     }
 
     @Transactional
@@ -98,6 +103,6 @@ public class ConfirmationServiceImpl implements ConfirmationService {
 
         extCallDao.update(extCall);
 
-        Log.debug("Confirmation call " + extCall.toHumanString() + " changed state to " + state);
+        LOG.debug("Confirmation call " + extCall.toHumanString() + " changed state to " + state);
     }
 }

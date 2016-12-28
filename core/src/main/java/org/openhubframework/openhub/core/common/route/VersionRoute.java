@@ -16,13 +16,14 @@
 
 package org.openhubframework.openhub.core.common.route;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import org.openhubframework.openhub.api.route.AbstractBasicRoute;
 import org.openhubframework.openhub.api.route.CamelConfiguration;
+import org.openhubframework.openhub.api.route.RouteConstants;
 import org.openhubframework.openhub.core.common.version.VersionInfo;
 import org.openhubframework.openhub.core.common.version.VersionInfoSource;
 import org.openhubframework.openhub.core.common.version.VersionPrinter;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**

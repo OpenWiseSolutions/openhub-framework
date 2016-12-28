@@ -23,9 +23,13 @@ import static org.junit.Assert.assertThat;
 
 import java.util.Properties;
 
-import org.openhubframework.openhub.spi.alerts.AlertInfo;
-
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.PropertiesPropertySource;
+
+import org.openhubframework.openhub.core.AbstractCoreTest;
+import org.openhubframework.openhub.spi.alerts.AlertInfo;
 
 
 /**
@@ -34,7 +38,10 @@ import org.junit.Test;
  * @author Petr Juza
  * @since 0.4
  */
-public class AlertsPropertiesConfigurationTest {
+public class AlertsPropertiesConfigurationTest extends AbstractCoreTest {
+
+    @Autowired
+    private ConfigurableEnvironment env;
 
     @Test
     public void testConf() {
@@ -56,8 +63,12 @@ public class AlertsPropertiesConfigurationTest {
         props.put(prefix + AlertsPropertiesConfiguration.MAIL_SBJ_PROP, "subject");
         props.put(prefix + AlertsPropertiesConfiguration.MAIL_BODY_PROP, "body");
 
-        // create configuration
-        AlertsPropertiesConfiguration conf = new AlertsPropertiesConfiguration(props);
+        env.getPropertySources().addFirst(new PropertiesPropertySource("alerts-test", props));
+
+        // configure alerts
+        AlertsPropertiesConfiguration conf = new AlertsPropertiesConfiguration();
+        setPrivateField(conf, "env", env);
+        conf.initProps();
 
         // verify
         assertThat(conf.getAlert("ID"), notNullValue());
@@ -80,6 +91,7 @@ public class AlertsPropertiesConfigurationTest {
 
     @Test(expected = IllegalStateException.class)
     public void testDuplicateId() {
+        // prepare properties
         Properties props = new Properties();
 
         // add alert (min. version)
@@ -87,6 +99,10 @@ public class AlertsPropertiesConfigurationTest {
         props.put(prefix + AlertsPropertiesConfiguration.ID_PROP, "ID");
         props.put(prefix + AlertsPropertiesConfiguration.ID_PROP, "ID");
 
-        new AlertsPropertiesConfiguration(props);
+        env.getPropertySources().addFirst(new PropertiesPropertySource("alerts-test", props));
+
+        AlertsPropertiesConfiguration conf = new AlertsPropertiesConfiguration();
+        setPrivateField(conf, "env", env);
+        conf.initProps();
     }
 }

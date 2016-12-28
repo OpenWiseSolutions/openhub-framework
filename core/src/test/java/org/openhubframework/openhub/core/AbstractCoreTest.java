@@ -16,11 +16,11 @@
 
 package org.openhubframework.openhub.core;
 
+import org.springframework.test.context.ContextConfiguration;
+
 import org.openhubframework.openhub.core.common.asynch.ExceptionTranslationRoute;
 import org.openhubframework.openhub.test.AbstractTest;
-import org.openhubframework.openhub.test.ActiveRoutes;
-
-import org.springframework.test.context.ContextConfiguration;
+import org.openhubframework.openhub.test.route.ActiveRoutes;
 
 
 /**
@@ -29,7 +29,7 @@ import org.springframework.test.context.ContextConfiguration;
  * @author Petr Juza
  */
 @ActiveRoutes(classes = ExceptionTranslationRoute.class)
-@ContextConfiguration(locations = {"classpath:/META-INF/test_core_conf.xml"})
+@ContextConfiguration(classes = CoreTestConfig.class)
 public abstract class AbstractCoreTest extends AbstractTest {
 
 }

@@ -22,6 +22,15 @@ import static org.junit.Assert.fail;
 
 import java.util.Properties;
 
+import org.apache.camel.*;
+import org.apache.camel.builder.RouteBuilder;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.PropertiesPropertySource;
+import org.springframework.util.Assert;
+
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.exception.IntegrationException;
 import org.openhubframework.openhub.api.exception.InternalErrorEnum;
@@ -29,17 +38,6 @@ import org.openhubframework.openhub.core.AbstractCoreTest;
 import org.openhubframework.openhub.spi.throttling.ThrottleScope;
 import org.openhubframework.openhub.spi.throttling.ThrottlingProcessor;
 import org.openhubframework.openhub.test.ExternalSystemTestEnum;
-
-import org.apache.camel.CamelExecutionException;
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
-import org.apache.camel.Produce;
-import org.apache.camel.ProducerTemplate;
-import org.apache.camel.builder.RouteBuilder;
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
 
 
 /**
@@ -49,12 +47,16 @@ import org.springframework.util.Assert;
  */
 public class ThrottleMsgProcessorTest extends AbstractCoreTest {
 
+    private static final String THROTTLING_PROPS_NAME = "throttling-test";
+
     @Produce(uri = "direct:start")
     private ProducerTemplate producer;
 
     @Autowired
     private ThrottlingProcessor throttlingProcessor;
 
+    @Autowired
+    private ConfigurableEnvironment env;
 
     @Before
     public void prepareConfiguration() {
@@ -64,10 +66,19 @@ public class ThrottleMsgProcessorTest extends AbstractCoreTest {
         props.put(prefix + "*.sendSms", "2/10");
         props.put(prefix + "crm.createCustomer", "2/10");
 
-        // create configuration
-        ThrottlingPropertiesConfiguration conf = new ThrottlingPropertiesConfiguration(props);
+        env.getPropertySources().addFirst(new PropertiesPropertySource(THROTTLING_PROPS_NAME, props));
+
+        // configure
+        ThrottlingPropertiesConfiguration conf = initThrottlingConf();
 
         setPrivateField(throttlingProcessor, "configuration", conf);
+    }
+
+    private ThrottlingPropertiesConfiguration initThrottlingConf() {
+        ThrottlingPropertiesConfiguration conf = new ThrottlingPropertiesConfiguration();
+        setPrivateField(conf, "env", env);
+        conf.initProps();
+        return conf;
     }
 
     @Test
@@ -103,7 +114,8 @@ public class ThrottleMsgProcessorTest extends AbstractCoreTest {
     @Test
     public void testSyncProcessorWithDefaults() throws Exception {
         // create configuration
-        ThrottlingPropertiesConfiguration confDefaults = new ThrottlingPropertiesConfiguration(new Properties());
+        env.getPropertySources().remove(THROTTLING_PROPS_NAME);
+        ThrottlingPropertiesConfiguration confDefaults = initThrottlingConf();
 
         setPrivateField(throttlingProcessor, "configuration", confDefaults);
 

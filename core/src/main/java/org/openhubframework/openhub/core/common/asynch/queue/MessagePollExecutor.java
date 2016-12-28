@@ -19,25 +19,27 @@ package org.openhubframework.openhub.core.common.asynch.queue;
 import java.util.Date;
 import java.util.List;
 
-import org.openhubframework.openhub.api.asynch.AsynchConstants;
-import org.openhubframework.openhub.api.entity.Message;
-import org.openhubframework.openhub.api.exception.IntegrationException;
-import org.openhubframework.openhub.api.exception.InternalErrorEnum;
-import org.openhubframework.openhub.api.exception.LockFailureException;
-import org.openhubframework.openhub.common.log.Log;
-import org.openhubframework.openhub.core.common.asynch.LogContextHelper;
-import org.openhubframework.openhub.core.common.event.AsynchEventHelper;
-import org.openhubframework.openhub.spi.msg.MessageService;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Processor;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.ExchangeBuilder;
-import org.apache.commons.lang.time.DateUtils;
+import org.apache.commons.lang3.time.DateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.api.asynch.AsynchConstants;
+import org.openhubframework.openhub.api.entity.Message;
+import org.openhubframework.openhub.api.exception.IntegrationException;
+import org.openhubframework.openhub.api.exception.InternalErrorEnum;
+import org.openhubframework.openhub.api.exception.LockFailureException;
+import org.openhubframework.openhub.core.common.asynch.LogContextHelper;
+import org.openhubframework.openhub.core.common.event.AsynchEventHelper;
+import org.openhubframework.openhub.spi.msg.MessageService;
 
 
 /**
@@ -48,7 +50,10 @@ import org.springframework.util.Assert;
  *
  * @author Petr Juza
  */
+@Service
 public class MessagePollExecutor implements Runnable {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MessagePollExecutor.class);
 
     private static final int LOCK_FAILURE_LIMIT = 5;
 
@@ -72,7 +77,7 @@ public class MessagePollExecutor implements Runnable {
 
     @Override
     public void run() {
-        Log.debug("Message pooling starts ...");
+        LOG.debug("Message pooling starts ...");
 
         // is there message for processing?
         Message msg = null;
@@ -95,17 +100,17 @@ public class MessagePollExecutor implements Runnable {
                 lockFailureCount++;
 
                 if (lockFailureCount > LOCK_FAILURE_LIMIT) {
-                    Log.warn("Probably problem with locking messages - count of lock failures exceeds limit ("
+                    LOG.warn("Probably problem with locking messages - count of lock failures exceeds limit ("
                             + LOCK_FAILURE_LIMIT + ").");
                     break;
                 }
             } catch (Exception ex) {
-                Log.error("Error occurred during getting message "
+                LOG.error("Error occurred during getting message "
                         + (msg != null ? msg.toHumanString() : ""), ex);
             }
         }
 
-        Log.debug("Message pooling finished.");
+        LOG.debug("Message pooling finished.");
     }
 
     void startMessageProcessing(Message msg) {
@@ -170,21 +175,21 @@ public class MessagePollExecutor implements Runnable {
                     msg.isExcludeFailedState());
 
             if (messages.size() == 1) {
-                Log.debug("There is only one processing message with funnel value: " + msg.getFunnelValue()
+                LOG.debug("There is only one processing message with funnel value: " + msg.getFunnelValue()
                         + " => continue");
 
                 return true;
 
             // is specified message first one for processing?
             } else if (messages.get(0).equals(msg)) {
-                Log.debug("Processing message (msg_id = {}, funnel value = '{}') is the first one"
+                LOG.debug("Processing message (msg_id = {}, funnel value = '{}') is the first one"
                         + " => continue", msg.getMsgId(), msg.getFunnelValue());
 
                 return true;
 
             } else {
-                Log.debug("There is at least one processing message with funnel value '{}'"
-                        + " before current message (msg_id = {}); message {} will be postponed.",
+                LOG.debug("There is at least one processing message with funnel value '{}'"
+                                + " before current message (msg_id = {}); message {} will be postponed.",
                         msg.getFunnelValue(), msg.getMsgId(), msg.toHumanString());
 
                 return false;

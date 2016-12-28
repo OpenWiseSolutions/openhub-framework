@@ -16,14 +16,16 @@
 
 package org.openhubframework.openhub.core.monitoring;
 
-import org.openhubframework.openhub.common.log.Log;
-import org.openhubframework.openhub.core.common.asynch.msg.MessageOperationService;
-import org.openhubframework.openhub.core.common.asynch.queue.JobStarterForMessagePooling;
-import org.openhubframework.openhub.core.common.asynch.repair.RepairMessageService;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.jmx.export.annotation.ManagedResource;
+import org.springframework.stereotype.Service;
+
+import org.openhubframework.openhub.core.common.asynch.msg.MessageOperationService;
+import org.openhubframework.openhub.core.common.asynch.queue.JobStarterForMessagePooling;
+import org.openhubframework.openhub.core.common.asynch.repair.RepairMessageService;
 
 
 /**
@@ -31,8 +33,12 @@ import org.springframework.jmx.export.annotation.ManagedResource;
  *
  * @author Petr Juza
  */
-@ManagedResource(description = "Message Administration")
+@Service
+@ManagedResource(objectName = "org.openhubframework.openhub.core.monitoring:name=MessagesAdmin",
+        description = "Message Administration")
 public class MessageAdminOperations {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MessageAdminOperations.class);
 
     @Autowired
     private MessageOperationService messageOperationService;
@@ -48,28 +54,28 @@ public class MessageAdminOperations {
             + "totalRestart parameter determines if message should start from scratch again (true) or "
             + "if message should continue when it failed (false).")
     public void restartMessage(long msgId, boolean totalRestart) {
-        Log.debug("Restart message by JMX ...");
+        LOG.debug("Restart message by JMX ...");
 
         messageOperationService.restartMessage(msgId, totalRestart);
     }
 
     @ManagedOperation(description = "Cancels next message processing, sets message to CANCEL state.")
     public void cancelMessage(long msgId) {
-        Log.debug("Cancel message (id = " + msgId + ") by JMX ...");
+        LOG.debug("Cancel message (id = " + msgId + ") by JMX ...");
 
         messageOperationService.cancelMessage(msgId);
     }
 
     @ManagedOperation(description = "Starts next processing of PARTLY_FAILED and POSTPONED messages.")
     public void startNextProcessing() throws Exception {
-        Log.debug("Start next processing by JMX ...");
+        LOG.debug("Start next processing by JMX ...");
 
         messagePooling.start();
     }
 
     @ManagedOperation(description = "Starts repairing processing messages.")
     public void repairProcessingMessages() throws Exception {
-        Log.debug("Starts repairing processing messages by JMX ...");
+        LOG.debug("Starts repairing processing messages by JMX ...");
 
         repairMessageService.repairProcessingMessages();
     }

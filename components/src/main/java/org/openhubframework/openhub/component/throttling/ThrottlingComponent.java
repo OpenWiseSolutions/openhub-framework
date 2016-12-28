@@ -18,12 +18,11 @@ package org.openhubframework.openhub.component.throttling;
 
 import java.util.Map;
 
-import org.openhubframework.openhub.spi.throttling.ThrottlingProcessor;
-
 import org.apache.camel.Endpoint;
 import org.apache.camel.impl.DefaultComponent;
 import org.apache.camel.util.ObjectHelper;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.openhubframework.openhub.spi.throttling.ThrottlingProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 

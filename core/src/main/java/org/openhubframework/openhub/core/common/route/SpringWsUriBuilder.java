@@ -19,10 +19,11 @@ package org.openhubframework.openhub.core.common.route;
 import javax.annotation.Nullable;
 import javax.xml.namespace.QName;
 
-import org.openhubframework.openhub.api.route.WebServiceUriBuilder;
-
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.api.route.WebServiceUriBuilder;
 
 
 /**
@@ -30,11 +31,12 @@ import org.springframework.util.Assert;
  *
  * @author Petr Juza
  */
+@Component
 public class SpringWsUriBuilder implements WebServiceUriBuilder {
 
-    private static final String MESSAGE_FACTORY_SOAP11 = "messageFactorySOAP11";
+    public static final String MESSAGE_FACTORY_SOAP11 = "messageFactorySOAP11";
 
-    private static final String MESSAGE_FACTORY_SOAP12 = "messageFactorySOAP12";
+    public static final String MESSAGE_FACTORY_SOAP12 = "messageFactorySOAP12";
 
     @Override
     public String getOutWsUri(String connectionUri, String messageSenderRef, String soapAction) {

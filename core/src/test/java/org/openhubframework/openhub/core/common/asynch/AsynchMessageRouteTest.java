@@ -16,11 +16,7 @@
 
 package org.openhubframework.openhub.core.common.asynch;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
@@ -28,8 +24,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.EventObject;
 import java.util.List;
-
 import javax.annotation.Nullable;
+
+import org.apache.camel.*;
+import org.apache.camel.builder.AdviceWithRouteBuilder;
+import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.mock.MockEndpoint;
+import org.apache.camel.model.StopDefinition;
+import org.apache.camel.support.EventNotifierSupport;
+import org.apache.camel.util.concurrent.SynchronousExecutorService;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
 import org.openhubframework.openhub.api.asynch.msg.ChildMessage;
@@ -49,29 +56,8 @@ import org.openhubframework.openhub.api.route.AbstractBasicRoute;
 import org.openhubframework.openhub.core.AbstractCoreDbTest;
 import org.openhubframework.openhub.core.common.asynch.msg.MessageSplitterImpl;
 import org.openhubframework.openhub.spi.msg.MessageService;
-import org.openhubframework.openhub.test.AbstractTest;
-import org.openhubframework.openhub.test.ActiveRoutes;
-import org.openhubframework.openhub.test.EntityTypeTestEnum;
-import org.openhubframework.openhub.test.ErrorTestEnum;
-import org.openhubframework.openhub.test.ExternalSystemTestEnum;
-import org.openhubframework.openhub.test.ServiceTestEnum;
-
-import org.apache.camel.EndpointInject;
-import org.apache.camel.Exchange;
-import org.apache.camel.LoggingLevel;
-import org.apache.camel.Processor;
-import org.apache.camel.Produce;
-import org.apache.camel.ProducerTemplate;
-import org.apache.camel.builder.AdviceWithRouteBuilder;
-import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.camel.model.StopDefinition;
-import org.apache.camel.support.EventNotifierSupport;
-import org.apache.camel.util.concurrent.SynchronousExecutorService;
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import org.openhubframework.openhub.test.*;
+import org.openhubframework.openhub.test.route.ActiveRoutes;
 
 
 /**
@@ -95,7 +81,7 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
             + "         </cus:customer>"
             + "  </cus:setCustomerRequest>";
 
-    private static final String SEDA_URI = "seda:test_seda?queueFactory=#priorityQueueFactory";
+    private static final String SEDA_URI = "seda:test_seda?queueFactory=#" + AsynchConstants.PRIORITY_QUEUE_FACTORY;
 
     @Produce(uri = AsynchMessageRoute.URI_SYNC_MSG)
     private ProducerTemplate producer;

@@ -19,22 +19,21 @@ package org.openhubframework.openhub.admin.services.log;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-
-import org.openhubframework.openhub.common.log.Log;
+import java.util.*;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * Iterates over provided log files, parsing and returning {@link LogEvent}s on demand.
  */
 class LogEventParsingIterator implements Iterator<LogEvent>, Closeable {
+
+    private static final Logger LOG = LoggerFactory.getLogger(LogEventParsingIterator.class);
+
     private final LogParser parser;
     private final LogParserConfig config;
     private final Queue<File> logFiles;
@@ -64,7 +63,7 @@ class LogEventParsingIterator implements Iterator<LogEvent>, Closeable {
      */
     private void nextEvent() throws IOException {
         if (totalCount >= config.getLimit()) {
-            Log.debug("Reached {} events limit - stopping", config.getLimit());
+            LOG.debug("Reached {} events limit - stopping", config.getLimit());
             close();
             return;
         }
@@ -153,11 +152,11 @@ class LogEventParsingIterator implements Iterator<LogEvent>, Closeable {
         lineIterator = null;
 
         if (fileEventsFound == 0) {
-            Log.debug("No events in the last file, closing prematurely");
+            LOG.debug("No events in the last file, closing prematurely");
             close(); // optimize: last file had no events, no point continuing
         } else if (!logFiles.isEmpty()) {
             File file = logFiles.poll();
-            Log.debug("Opening {}", file);
+            LOG.debug("Opening {}", file);
             lineIterator = FileUtils.lineIterator(file);
             fileEventsFound = 0; // restart per-file counter
         }
@@ -204,6 +203,6 @@ class LogEventParsingIterator implements Iterator<LogEvent>, Closeable {
         LineIterator.closeQuietly(lineIterator);
         lineIterator = null;
         logFiles.clear();
-        Log.debug("Closed");
+        LOG.debug("Closed");
     }
 }

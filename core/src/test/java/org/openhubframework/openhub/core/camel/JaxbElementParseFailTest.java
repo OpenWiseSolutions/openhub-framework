@@ -19,8 +19,6 @@ package org.openhubframework.openhub.core.camel;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 
-import org.openhubframework.openhub.core.camel.jaxb.TestXmlObject;
-
 import org.apache.camel.CamelExecutionException;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.Produce;
@@ -28,8 +26,9 @@ import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.dataformat.JaxbDataFormat;
 import org.apache.camel.test.junit4.CamelTestSupport;
-import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.junit.Test;
+import org.openhubframework.openhub.core.camel.jaxb.TestXmlObject;
 
 
 /**

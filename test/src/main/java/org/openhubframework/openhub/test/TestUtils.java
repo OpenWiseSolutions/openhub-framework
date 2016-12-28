@@ -16,14 +16,14 @@
 
 package org.openhubframework.openhub.test;
 
-import org.openhubframework.openhub.api.asynch.AsynchConstants;
-import org.openhubframework.openhub.api.asynch.model.CallbackResponse;
-import org.openhubframework.openhub.api.asynch.model.ConfirmationTypes;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.AdviceWithRouteBuilder;
 import org.apache.camel.model.ToDefinition;
+
+import org.openhubframework.openhub.api.asynch.AsynchConstants;
+import org.openhubframework.openhub.api.asynch.model.CallbackResponse;
+import org.openhubframework.openhub.api.asynch.model.ConfirmationTypes;
 
 
 /**
@@ -43,7 +43,7 @@ public final class TestUtils {
      *
      * @param builder the advice builder
      */
-    public static final void replaceToAsynch(AdviceWithRouteBuilder builder) {
+    public static void replaceToAsynch(AdviceWithRouteBuilder builder) {
         // remove AsynchInMessageRoute.URI_ASYNCH_IN_MSG
         builder.weaveByType(ToDefinition.class).replace().process(new Processor() {
             @Override
@@ -56,5 +56,4 @@ public final class TestUtils {
             }
         });
     }
-
 }

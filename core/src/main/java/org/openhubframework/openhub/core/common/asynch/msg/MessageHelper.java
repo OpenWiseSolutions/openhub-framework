@@ -21,17 +21,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
 import org.openhubframework.openhub.api.entity.Message;
-import org.openhubframework.openhub.common.log.Log;
 
-import org.apache.commons.lang.StringUtils;
 
 /**
  * Helper class for message manipulation.
  */
 //TODO (juza) applicant for moving to API
 public final class MessageHelper {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MessageHelper.class);
 
     private MessageHelper() {
     }
@@ -63,7 +67,7 @@ public final class MessageHelper {
                 Exception ex = (Exception) businessError;
                 errorList.add(ex.getMessage());
             } else {
-                Log.error("Property with suffix " + AsynchConstants.BUSINESS_ERROR_PROP_SUFFIX
+                LOG.error("Property with suffix " + AsynchConstants.BUSINESS_ERROR_PROP_SUFFIX
                         + " isn't of type Exception");
             }
         }

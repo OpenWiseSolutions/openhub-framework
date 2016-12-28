@@ -19,16 +19,12 @@ package org.openhubframework.openhub.admin.web.msg;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.UUID;
-
 import javax.annotation.Nullable;
 
-import org.openhubframework.openhub.common.log.Log;
-import org.openhubframework.openhub.core.common.directcall.DirectCall;
-import org.openhubframework.openhub.core.common.directcall.DirectCallParams;
-import org.openhubframework.openhub.core.common.directcall.DirectCallRegistry;
-
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -38,6 +34,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import org.openhubframework.openhub.core.common.directcall.DirectCall;
+import org.openhubframework.openhub.core.common.directcall.DirectCallParams;
+import org.openhubframework.openhub.core.common.directcall.DirectCallRegistry;
+
 
 /**
  * Controller for direct call form.
@@ -46,6 +46,8 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Controller
 public class DirectCallController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DirectCallController.class);
 
     private static final String VIEW_NAME = "externalCall";
     private static final String CALL_RESULT_ATTR = "callResult";
@@ -80,7 +82,7 @@ public class DirectCallController {
 
         // call external system via internal servlet route
         try {
-            Log.debug("Calling external system with callId=" + callId + ", params: " + params);
+            LOG.debug("Calling external system with callId=" + callId + ", params: " + params);
 
             String res = directCall.makeCall(callId);
 

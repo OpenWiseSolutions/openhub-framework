@@ -16,9 +16,8 @@
 
 package org.openhubframework.openhub.spi.throttling;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.openhubframework.openhub.api.common.HumanReadable;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 
 /**

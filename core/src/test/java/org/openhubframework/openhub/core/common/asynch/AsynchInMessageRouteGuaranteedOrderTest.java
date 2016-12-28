@@ -21,26 +21,26 @@ import static org.apache.camel.component.mock.MockEndpoint.assertIsSatisfied;
 import java.util.Date;
 import java.util.UUID;
 
-import org.openhubframework.openhub.api.asynch.AsynchConstants;
-import org.openhubframework.openhub.api.entity.Message;
-import org.openhubframework.openhub.api.entity.MsgStateEnum;
-import org.openhubframework.openhub.core.AbstractCoreDbTest;
-import org.openhubframework.openhub.test.ActiveRoutes;
-import org.openhubframework.openhub.test.EntityTypeTestEnum;
-import org.openhubframework.openhub.test.ExternalSystemTestEnum;
-import org.openhubframework.openhub.test.ServiceTestEnum;
-
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.AdviceWithRouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.commons.lang.time.DateUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.transaction.annotation.Transactional;
+
+import org.openhubframework.openhub.api.asynch.AsynchConstants;
+import org.openhubframework.openhub.api.entity.Message;
+import org.openhubframework.openhub.api.entity.MsgStateEnum;
+import org.openhubframework.openhub.core.AbstractCoreDbTest;
+import org.openhubframework.openhub.test.EntityTypeTestEnum;
+import org.openhubframework.openhub.test.ExternalSystemTestEnum;
+import org.openhubframework.openhub.test.ServiceTestEnum;
+import org.openhubframework.openhub.test.route.ActiveRoutes;
 
 
 /**

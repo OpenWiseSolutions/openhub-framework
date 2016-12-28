@@ -20,34 +20,25 @@ import static org.springframework.util.StringUtils.hasText;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
-import org.openhubframework.openhub.api.entity.Message;
-import org.openhubframework.openhub.common.log.Log;
-import org.openhubframework.openhub.modules.ExternalSystemEnum;
-import org.openhubframework.openhub.spi.msg.MessageService;
-
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 import org.joda.time.LocalDate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import org.openhubframework.openhub.api.entity.Message;
+import org.openhubframework.openhub.modules.ExternalSystemEnum;
+import org.openhubframework.openhub.spi.msg.MessageService;
 
 
 /**
@@ -59,6 +50,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/messages")
 public class MessageController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MessageController.class);
 
     @Autowired
     private MessageService messageService;
@@ -105,13 +98,13 @@ public class MessageController {
                 SortedSet<LocalDate> logDates = getMsgDates(msg);
                 logDates.add(new LocalDate()); // adding today just in case
 
-                Log.debug("Starts searching log for correlationId = " + correlationId);
+                LOG.debug("Starts searching log for correlationId = " + correlationId);
 
                 for (LocalDate logDate : logDates) {
                     logLines.addAll(messageLogParser.getLogLines(correlationId, logDate.toDate()));
                 }
 
-                Log.debug("Finished searching log in " + (System.currentTimeMillis() - start) + " ms.");
+                LOG.debug("Finished searching log in " + (System.currentTimeMillis() - start) + " ms.");
 
                 model.addAttribute("log", StringUtils.join(logLines, "\n"));
             } catch (IOException ex) {
@@ -239,7 +232,7 @@ public class MessageController {
             writer.write(document);
             return sw.toString();
         } catch (Exception exc) {
-            Log.debug("Error pretty-printing XML: ", exc);
+            LOG.debug("Error pretty-printing XML: ", exc);
             return original;
         }
     }

@@ -16,14 +16,15 @@
 
 package org.openhubframework.openhub.core.common.asynch.repair;
 
-import org.openhubframework.openhub.api.entity.MsgStateEnum;
-import org.openhubframework.openhub.api.route.AbstractBasicRoute;
-import org.openhubframework.openhub.api.route.CamelConfiguration;
-
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.quartz.SimpleTrigger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
+
+import org.openhubframework.openhub.api.entity.MsgStateEnum;
+import org.openhubframework.openhub.api.route.AbstractBasicRoute;
+import org.openhubframework.openhub.api.route.CamelConfiguration;
+import org.openhubframework.openhub.common.Profiles;
 
 
 /**
@@ -34,7 +35,7 @@ import org.springframework.context.annotation.Profile;
  * @author Petr Juza
  */
 @CamelConfiguration(value = RepairProcessingMsgRoute.ROUTE_BEAN)
-@Profile("prod")
+@Profile(Profiles.PROD)
 public class RepairProcessingMsgRoute extends SpringRouteBuilder {
 
     public static final String ROUTE_BEAN = "repairProcessingMsgRoute";

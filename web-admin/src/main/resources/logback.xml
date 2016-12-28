@@ -1,6 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="true">
+    
     <jmxConfigurator/>
 
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+    
     <!-- This is the default development console appender, it uses System.out and it should not be used in the production mode. -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <target>System.out</target>
@@ -11,14 +16,14 @@
                  127.0.1.1:4c8ed99e:12f244556e1:-7fdd, 6B6*****C6C2, deih3u36bh, process123] INFO  c.c.s.f.w.f.screen.ScreenFormPanel - the
                  message for key 'widget16_label_key' was not found: form='demo_form1', locale='cs'
             -->
-            <pattern>%d{ISO8601} [${serverId}, ${MACHINE}, %thread, %X{REQUEST_URI}, %X{REQUEST_ID}, %X{SESSION_ID}, %X{SOURCE_SYSTEM}, %X{CORRELATION_ID}, %X{PROCESS_ID}] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%clr(%d{ISO8601}){faint} [%clr(${serverId}, ${MACHINE}){magenta}, %thread, %X{REQUEST_URI}, %X{REQUEST_ID}, %X{SESSION_ID}, %X{SOURCE_SYSTEM}, %X{CORRELATION_ID}, %X{PROCESS_ID}] %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(%logger{36}){cyan} - %msg%n</pattern>
         </encoder>
     </appender>
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>${log.folder}logFile_%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+            <fileNamePattern>@log.folder@logFile_%d{yyyy-MM-dd}_%i.log</fileNamePattern>
 
             <!-- keep 30 days' worth of history -->
             <maxHistory>30</maxHistory>
@@ -57,10 +62,10 @@
     -->
 
     <root level="info">
-        <if condition='"${log.console.enabled}".equalsIgnoreCase("true")'>
+        <if condition='"@log.console.enabled@".equalsIgnoreCase("true")'>
             <then><appender-ref ref="CONSOLE"/></then>
         </if>
-        <if condition='"${log.file.enabled}".equalsIgnoreCase("true")'>
+        <if condition='"@log.file.enabled@".equalsIgnoreCase("true")'>
             <then><appender-ref ref="FILE"/></then>
         </if>
     </root>

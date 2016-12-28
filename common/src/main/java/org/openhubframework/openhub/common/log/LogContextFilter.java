@@ -17,15 +17,13 @@
 package org.openhubframework.openhub.common.log;
 
 import java.io.IOException;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * A filter that provides web-application specific context information to the logging subsystem. The pieces of
@@ -43,6 +41,8 @@ import javax.servlet.http.HttpSession;
  * @since 0.1
  */
 public class LogContextFilter implements Filter {
+
+    private static final Logger LOG = LoggerFactory.getLogger(LogContextFilter.class);
 
     // ----------------------------------------------------------------------
     // class (static) fields
@@ -111,12 +111,12 @@ public class LogContextFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        Log.info("Filter initialized successfully");
+        LOG.info("Filter initialized successfully");
     }
 
     @Override
     public void destroy() {
-        Log.info("Filter destroyed successfully");
+        LOG.info("Filter destroyed successfully");
     }
 
     // ----------------------------------------------------------------------
@@ -124,10 +124,10 @@ public class LogContextFilter implements Filter {
     // ----------------------------------------------------------------------
 
     private void initContext(HttpServletRequest request) {
-        Log.setContextValue(CTX_REQUEST_URI, request.getRequestURI());
+        LogContext.setContextValue(CTX_REQUEST_URI, request.getRequestURI());
 
         // request identifier
-        Log.setContextValue(CTX_REQUEST_ID, new GUID().toString());
+        LogContext.setContextValue(CTX_REQUEST_ID, new GUID().toString());
 
         // session identifier
         final HttpSession session = request.getSession(false);
@@ -138,7 +138,7 @@ public class LogContextFilter implements Filter {
                 session.setAttribute(LOG_SESSION_ID, logId = createSessionLogId(session.getId()));
             }
 
-            Log.setContextValue(CTX_SESSION_ID, logId);
+            LogContext.setContextValue(CTX_SESSION_ID, logId);
         }
     }
 
@@ -157,6 +157,6 @@ public class LogContextFilter implements Filter {
     }
 
     private void clearContext() {
-        Log.clearContext();
+        LogContext.clearContext();
     }
 }

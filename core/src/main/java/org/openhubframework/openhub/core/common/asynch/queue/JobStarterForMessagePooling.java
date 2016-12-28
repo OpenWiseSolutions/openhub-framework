@@ -16,9 +16,10 @@
 
 package org.openhubframework.openhub.core.common.asynch.queue;
 
-import org.openhubframework.openhub.common.log.Log;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 
 /**
@@ -28,7 +29,10 @@ import org.springframework.beans.factory.annotation.Autowired;
  *
  * @author Petr Juza
  */
+@Service
 public class JobStarterForMessagePooling {
+
+    private static final Logger LOG = LoggerFactory.getLogger(JobStarterForMessagePooling.class);
 
     private Boolean isRunning = Boolean.FALSE;
 
@@ -40,7 +44,7 @@ public class JobStarterForMessagePooling {
     public void start() throws Exception {
         synchronized (lock) {
             if (isRunning) {
-                Log.debug("Job hasn't been started because previous job has still been running.");
+                LOG.debug("Job hasn't been started because previous job has still been running.");
                 return;
             }
 
@@ -50,7 +54,7 @@ public class JobStarterForMessagePooling {
         try {
             messageExecutor.run();
         } catch (Exception ex) {
-            Log.error("Error occurred during polling messages.", ex);
+            LOG.error("Error occurred during polling messages.", ex);
         } finally {
             isRunning = Boolean.FALSE;
         }

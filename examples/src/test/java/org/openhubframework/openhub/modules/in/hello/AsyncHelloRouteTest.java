@@ -19,17 +19,6 @@ package org.openhubframework.openhub.modules.in.hello;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.openhubframework.openhub.api.asynch.AsynchConstants;
-import org.openhubframework.openhub.api.asynch.model.ConfirmationTypes;
-import org.openhubframework.openhub.common.Tools;
-import org.openhubframework.openhub.modules.AbstractModulesDbTest;
-import org.openhubframework.openhub.modules.in.hello.model.AsyncHelloResponse;
-import org.openhubframework.openhub.test.ActiveRoutes;
-import org.openhubframework.openhub.test.ExternalSystemTestEnum;
-import org.openhubframework.openhub.test.ServiceTestEnum;
-import org.openhubframework.openhub.test.TestUtils;
-import org.openhubframework.openhub.test.route.TestWsUriBuilder;
-
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Message;
 import org.apache.camel.Produce;
@@ -38,6 +27,17 @@ import org.apache.camel.builder.AdviceWithRouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.junit.Test;
 
+import org.openhubframework.openhub.api.asynch.AsynchConstants;
+import org.openhubframework.openhub.api.asynch.model.ConfirmationTypes;
+import org.openhubframework.openhub.common.Tools;
+import org.openhubframework.openhub.modules.AbstractExampleModulesDbTest;
+import org.openhubframework.openhub.modules.in.hello.model.AsyncHelloResponse;
+import org.openhubframework.openhub.test.ExternalSystemTestEnum;
+import org.openhubframework.openhub.test.ServiceTestEnum;
+import org.openhubframework.openhub.test.TestUtils;
+import org.openhubframework.openhub.test.route.ActiveRoutes;
+import org.openhubframework.openhub.test.route.TestWsUriBuilder;
+
 
 /**
  * Test suite for {@link AsyncHelloRoute}.
@@ -45,7 +45,7 @@ import org.junit.Test;
  * @author Petr Juza
  */
 @ActiveRoutes(classes = AsyncHelloRoute.class)
-public class AsyncHelloRouteTest extends AbstractModulesDbTest {
+public class AsyncHelloRouteTest extends AbstractExampleModulesDbTest {
 
     private static final String REQ_XML =
             "<asyncHelloRequest xmlns=\"http://openhubframework.org/ws/HelloService-v1\">"

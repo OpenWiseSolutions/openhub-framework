@@ -18,13 +18,14 @@ package org.openhubframework.openhub.api.route;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.annotation.Nullable;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.xml.InvalidXPathExpression;
 import org.apache.camel.builder.xml.Namespaces;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.openhubframework.openhub.api.exception.InternalErrorEnum;
 import org.openhubframework.openhub.api.exception.ValidationIntegrationException;
 import org.springframework.util.Assert;

@@ -21,34 +21,38 @@ import static java.lang.Math.min;
 import java.util.Date;
 import java.util.List;
 
-import org.openhubframework.openhub.api.asynch.AsynchConstants;
-import org.openhubframework.openhub.api.entity.Message;
-import org.openhubframework.openhub.api.entity.MsgStateEnum;
-import org.openhubframework.openhub.api.exception.IntegrationException;
-import org.openhubframework.openhub.api.exception.InternalErrorEnum;
-import org.openhubframework.openhub.common.log.Log;
-import org.openhubframework.openhub.core.common.dao.MessageDao;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Processor;
 import org.apache.camel.ProducerTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.Assert;
 
+import org.openhubframework.openhub.api.asynch.AsynchConstants;
+import org.openhubframework.openhub.api.entity.Message;
+import org.openhubframework.openhub.api.entity.MsgStateEnum;
+import org.openhubframework.openhub.api.exception.IntegrationException;
+import org.openhubframework.openhub.api.exception.InternalErrorEnum;
+import org.openhubframework.openhub.core.common.dao.MessageDao;
+
 /**
  * DB implementation of {@link RepairMessageService} interface.
  *
  * @author Petr Juza
  */
+@Service(RepairMessageService.BEAN)
 public class RepairMessageServiceDbImpl implements RepairMessageService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(RepairMessageServiceDbImpl.class);
 
     private static final int BATCH_SIZE = 10;
 
@@ -72,13 +76,19 @@ public class RepairMessageServiceDbImpl implements RepairMessageService {
     @Value("${asynch.countPartlyFailsBeforeFailed}")
     private int countPartlyFailsBeforeFailed;
 
+    @Autowired
+    public RepairMessageServiceDbImpl(PlatformTransactionManager transactionManager) {
+        Assert.notNull(transactionManager, "the transactionManager must not be null");
+
+        this.transactionTemplate = new TransactionTemplate(transactionManager);
+    }
 
     @Override
     public void repairProcessingMessages() {
         // find messages in PROCESSING state
         List<Message> messages = findProcessingMessages();
 
-        Log.debug("Found {} message(s) for repairing ...", messages.size());
+        LOG.debug("Found {} message(s) for repairing ...", messages.size());
 
         // repair messages in batches
         int batchStartIncl = 0;
@@ -114,7 +124,7 @@ public class RepairMessageServiceDbImpl implements RepairMessageService {
                 for (final Message msg : messages) {
                     // checks if failed count exceeds limit for failing
                     if (msg.getFailedCount() >= countPartlyFailsBeforeFailed) {
-                        Log.warn("The message " + msg.toHumanString() + " was in PROCESSING state and exceeded "
+                        LOG.warn("The message " + msg.toHumanString() + " was in PROCESSING state and exceeded "
                                 + "max. count of failures. Message is redirected to processing of failed message.");
 
                         // redirect to "FAILED" route
@@ -137,18 +147,11 @@ public class RepairMessageServiceDbImpl implements RepairMessageService {
 
                         messageDao.update(msg);
 
-                        Log.warn("The message " + msg.toHumanString() + " was in PROCESSING state "
+                        LOG.warn("The message " + msg.toHumanString() + " was in PROCESSING state "
                                 + "and changed to PARTLY_FAILED.", msg.getMsgId(), msg.getCorrelationId());
                     }
                 }
             }
         });
-    }
-
-    @Required
-    public void setTransactionManager(JpaTransactionManager transactionManager) {
-        Assert.notNull(transactionManager, "the transactionManager must not be null");
-
-        this.transactionTemplate = new TransactionTemplate(transactionManager);
     }
 }

@@ -18,7 +18,7 @@ package org.openhubframework.openhub.admin.dao.dto;
 
 import java.util.Date;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * DTO with main message attributes used for message reports.

@@ -17,15 +17,21 @@
 package org.openhubframework.openhub.core.throttling;
 
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
+import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.common.Tools;
 import org.openhubframework.openhub.spi.throttling.ThrottleProps;
 import org.openhubframework.openhub.spi.throttling.ThrottleScope;
-
-import org.apache.commons.lang.StringUtils;
-import org.springframework.util.Assert;
 
 
 /**
@@ -33,55 +39,60 @@ import org.springframework.util.Assert;
  *
  * @author Petr Juza
  */
+@Service
 public class ThrottlingPropertiesConfiguration extends AbstractThrottlingConfiguration {
 
-    public static final String PROPERTY_PREFIX = "throttling.";
+    static final String PROPERTY_PREFIX = "throttling.";
     static final String DEFAULT_INTERVAL_PROP = PROPERTY_PREFIX + "defaultInterval";
     static final String DEFAULT_LIMIT_PROP = PROPERTY_PREFIX + "defaultLimit";
 
-    private Properties properties;
+    @Autowired
+    private ConfigurableEnvironment env;
 
     /**
-     * Creates new configuration with specified properties.
+     * Creates new configuration with properties from {@link Environment environment}.
      *
-     * @param properties the properties
+     * @param throttlingDisabled the properties
      */
-    public ThrottlingPropertiesConfiguration(Properties properties) {
-        Assert.notNull(properties, "the properties must not be null");
+    //TODO PJUZA why this value is not overridden from application.properties?
+    public ThrottlingPropertiesConfiguration(@Value("${disable.throttling:false}") boolean throttlingDisabled) {
+        LOG.debug("throttlingDisabled set to: " + throttlingDisabled);
 
-        this.properties = properties;
-
-        initProps();
+        this.setThrottlingDisabled(throttlingDisabled);
     }
 
     /**
-     * Creates new configuration with disabled throttling.
+     * Creates new configuration with properties from {@link Environment environment}.
      */
     public ThrottlingPropertiesConfiguration() {
-        this.setThrottlingDisabled(true);
+        this(false);
     }
 
     /**
      * Initializes configuration from properties.
      */
-    private void initProps() {
+    @PostConstruct
+    void initProps() {
+        Assert.notNull(env, "env must not be null");
+
         // extracts relevant property values
         int defaultInterval = DEFAULT_INTERVAL;
         int defaultLimit = DEFAULT_LIMIT;
 
         List<String> propNames = new ArrayList<String>();
 
-        Enumeration<?> propNamesEnum = properties.propertyNames();
-        while (propNamesEnum.hasMoreElements()) {
-            String propName = (String) propNamesEnum.nextElement();
-
+        for (String propName : Tools.getAllKnownPropertyNames(env)) {
             if (propName.startsWith(PROPERTY_PREFIX)) {
-                if (propName.equals(DEFAULT_INTERVAL_PROP)) {
-                    defaultInterval = Integer.valueOf(properties.getProperty(DEFAULT_INTERVAL_PROP));
-                } else if (propName.equals(DEFAULT_LIMIT_PROP)) {
-                    defaultLimit = Integer.valueOf(properties.getProperty(DEFAULT_LIMIT_PROP));
-                } else {
-                    propNames.add(propName);
+                switch (propName) {
+                    case DEFAULT_INTERVAL_PROP:
+                        defaultInterval = Integer.valueOf(env.getProperty(DEFAULT_INTERVAL_PROP));
+                        break;
+                    case DEFAULT_LIMIT_PROP:
+                        defaultLimit = Integer.valueOf(env.getProperty(DEFAULT_LIMIT_PROP));
+                        break;
+                    default:
+                        propNames.add(propName);
+                        break;
                 }
             }
         }
@@ -102,7 +113,7 @@ public class ThrottlingPropertiesConfiguration extends AbstractThrottlingConfigu
                         + "e.g. 'throttling.crm.setActivityExt'");
             }
 
-            String propValue = properties.getProperty(propName);
+            String propValue = env.getProperty(propName);
 
             // format: limit [/interval]
             String[] valueParts = StringUtils.split(propValue, ThrottleProps.PROP_VALUE_SEPARATOR);

@@ -19,30 +19,24 @@ package org.openhubframework.openhub.test;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
-import org.openhubframework.openhub.api.entity.ExternalCall;
-import org.openhubframework.openhub.api.entity.ExternalSystemExtEnum;
-import org.openhubframework.openhub.api.entity.Message;
-import org.openhubframework.openhub.api.entity.MsgStateEnum;
-import org.openhubframework.openhub.api.entity.Request;
-import org.openhubframework.openhub.api.entity.Response;
-import org.openhubframework.openhub.api.entity.ServiceExtEnum;
-import org.openhubframework.openhub.common.log.Log;
-
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
+
+import org.openhubframework.openhub.api.entity.*;
+import org.openhubframework.openhub.common.Profiles;
 
 
 /**
@@ -50,20 +44,21 @@ import org.springframework.transaction.support.TransactionTemplate;
  *
  * @author Petr Juza
  */
-@ContextConfiguration(locations = {"classpath:/META-INF/test_persistence.xml"})
+@ActiveProfiles(profiles = Profiles.H2)
 public abstract class AbstractDbTest extends AbstractTest {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractDbTest.class);
 
     /**
      * Default database unit name of Hibernate.
      */
-    public static final String UNIT_NAME = "OpenHub";
+    private static final String UNIT_NAME = "OpenHub";
 
     @PersistenceContext(unitName = UNIT_NAME)
     protected EntityManager em;
 
     @Autowired
-    @Qualifier(value = "jpaTxManager")
-    protected JpaTransactionManager jpaTransactionManager;
+    protected PlatformTransactionManager transactionManager;
 
     @Autowired
     private DataSource dataSource;
@@ -83,6 +78,9 @@ public abstract class AbstractDbTest extends AbstractTest {
         return jdbcTemplate;
     }
 
+    /**
+     * Print current state of entities.
+     */
     public void printEntities() {
         List<Message> messages = em.createQuery(
                 "SELECT m FROM " + Message.class.getName() + " m", Message.class).getResultList();
@@ -93,10 +91,10 @@ public abstract class AbstractDbTest extends AbstractTest {
         List<Response> responses = em.createQuery(
                 "SELECT r FROM " + Response.class.getName() + " r", Response.class).getResultList();
 
-        Log.info("Messages:\n{}", StringUtils.join(messages, "\n"));
-        Log.info("External Calls:\n{}", StringUtils.join(externalCalls, "\n"));
-        Log.info("Requests:\n{}", StringUtils.join(requests, "\n"));
-        Log.info("Responses:\n{}", StringUtils.join(responses, "\n"));
+        LOG.info("Messages:\n{}", StringUtils.join(messages, "\n"));
+        LOG.info("External Calls:\n{}", StringUtils.join(externalCalls, "\n"));
+        LOG.info("Requests:\n{}", StringUtils.join(requests, "\n"));
+        LOG.info("Responses:\n{}", StringUtils.join(responses, "\n"));
     }
 
     /**
@@ -129,19 +127,14 @@ public abstract class AbstractDbTest extends AbstractTest {
         return msg;
     }
 
-    protected Message createAndSaveMessage(ExternalSystemExtEnum sourceSystem,
-                                           final ServiceExtEnum service,
-                                           final String operationName,
-                                           final String payload) {
+    protected Message createAndSaveMessage(ExternalSystemExtEnum sourceSystem, ServiceExtEnum service,
+            String operationName, String payload) {
         return createAndSaveMessages(1, sourceSystem, service, operationName, payload)[0];
     }
 
-    protected Message[] createAndSaveMessages(final int messageCount,
-                                              final ExternalSystemExtEnum sourceSystem,
-                                              final ServiceExtEnum service,
-                                              final String operationName,
-                                              final String payload) {
-        TransactionTemplate tx = new TransactionTemplate(jpaTransactionManager);
+    protected Message[] createAndSaveMessages(final int messageCount, final ExternalSystemExtEnum sourceSystem,
+            final ServiceExtEnum service, final String operationName, final String payload) {
+        TransactionTemplate tx = new TransactionTemplate(transactionManager);
         return tx.execute(new TransactionCallback<Message[]>() {
             @Override
             public Message[] doInTransaction(TransactionStatus status) {
@@ -158,7 +151,7 @@ public abstract class AbstractDbTest extends AbstractTest {
     }
 
     protected Message[] createAndSaveMessages(final int messageCount, final MessageProcessor initializer) {
-        TransactionTemplate tx = new TransactionTemplate(jpaTransactionManager);
+        TransactionTemplate tx = new TransactionTemplate(transactionManager);
         return tx.execute(new TransactionCallback<Message[]>() {
             @Override
             public Message[] doInTransaction(TransactionStatus status) {
@@ -184,7 +177,7 @@ public abstract class AbstractDbTest extends AbstractTest {
      * Interface for defining processors that can affect {@link Message} in one way or another.
      * Used for initializing the message before it's finally sent to its destination (async OUT route).
      */
-    public static interface MessageProcessor {
+    public interface MessageProcessor {
         void process(Message message) throws Exception;
     }
 }

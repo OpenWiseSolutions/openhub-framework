@@ -18,13 +18,13 @@ package org.openhubframework.openhub.core.common.asynch;
 
 import javax.annotation.Nullable;
 
-import org.openhubframework.openhub.api.entity.Message;
-import org.openhubframework.openhub.common.log.GUID;
-import org.openhubframework.openhub.common.log.Log;
-import org.openhubframework.openhub.common.log.LogContextFilter;
-
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
+
+import org.openhubframework.openhub.api.entity.Message;
+import org.openhubframework.openhub.common.log.GUID;
+import org.openhubframework.openhub.common.log.LogContext;
+import org.openhubframework.openhub.common.log.LogContextFilter;
 
 
 /**
@@ -57,19 +57,19 @@ public final class LogContextHelper {
         Assert.notNull(message, "the message must not be null");
 
         // source system
-        Log.setContextValue(LogContextFilter.CTX_SOURCE_SYSTEM, message.getSourceSystem().getSystemName());
+        LogContext.setContextValue(LogContextFilter.CTX_SOURCE_SYSTEM, message.getSourceSystem().getSystemName());
 
         // correlation ID
-        Log.setContextValue(LogContextFilter.CTX_CORRELATION_ID, message.getCorrelationId());
+        LogContext.setContextValue(LogContextFilter.CTX_CORRELATION_ID, message.getCorrelationId());
 
         // process ID
-        Log.setContextValue(LogContextFilter.CTX_PROCESS_ID, message.getProcessId());
+        LogContext.setContextValue(LogContextFilter.CTX_PROCESS_ID, message.getProcessId());
 
         // request ID
         if (StringUtils.hasText(requestId)) {
-            Log.setContextValue(LogContextFilter.CTX_REQUEST_ID, requestId);
+            LogContext.setContextValue(LogContextFilter.CTX_REQUEST_ID, requestId);
         } else {
-            Log.setContextValue(LogContextFilter.CTX_REQUEST_ID, new GUID().toString());
+            LogContext.setContextValue(LogContextFilter.CTX_REQUEST_ID, new GUID().toString());
         }
     }
 }

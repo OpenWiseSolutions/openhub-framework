@@ -19,10 +19,11 @@ package org.openhubframework.openhub.core.throttling;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.annotation.Nullable;
 
-import org.openhubframework.openhub.common.log.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.openhubframework.openhub.spi.throttling.ThrottleProps;
 import org.openhubframework.openhub.spi.throttling.ThrottleScope;
 import org.openhubframework.openhub.spi.throttling.ThrottlingConfiguration;
@@ -34,6 +35,8 @@ import org.openhubframework.openhub.spi.throttling.ThrottlingConfiguration;
  * @author Petr Juza
  */
 public abstract class AbstractThrottlingConfiguration implements ThrottlingConfiguration {
+
+    protected static final Logger LOG = LoggerFactory.getLogger(AbstractThrottlingConfiguration.class);
 
     /**
      * Default time interval (in seconds).
@@ -88,9 +91,9 @@ public abstract class AbstractThrottlingConfiguration implements ThrottlingConfi
         ThrottleProps throttleProps = new ThrottleProps(interval, limit);
 
         if (props.put(scope, throttleProps) == null) {
-            Log.debug("new throttle properties added: " + scope + ", props: " + throttleProps);
+            LOG.debug("new throttle properties added: " + scope + ", props: " + throttleProps);
         } else {
-            Log.debug("throttle properties updated: " + scope + ", props: " + throttleProps);
+            LOG.debug("throttle properties updated: " + scope + ", props: " + throttleProps);
         }
     }
 

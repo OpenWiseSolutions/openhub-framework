@@ -23,21 +23,12 @@ import static org.junit.Assert.assertThat;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
-
 import javax.annotation.Nullable;
 import javax.persistence.Query;
 
-import org.openhubframework.openhub.api.entity.Message;
-import org.openhubframework.openhub.api.entity.MsgStateEnum;
-import org.openhubframework.openhub.core.AbstractCoreDbTest;
-import org.openhubframework.openhub.core.common.asynch.AsynchMessageRoute;
-import org.openhubframework.openhub.test.ActiveRoutes;
-import org.openhubframework.openhub.test.ExternalSystemTestEnum;
-import org.openhubframework.openhub.test.ServiceTestEnum;
-
 import org.apache.camel.EndpointInject;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.commons.lang.time.DateUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
@@ -47,6 +38,14 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
+
+import org.openhubframework.openhub.api.entity.Message;
+import org.openhubframework.openhub.api.entity.MsgStateEnum;
+import org.openhubframework.openhub.core.AbstractCoreDbTest;
+import org.openhubframework.openhub.core.common.asynch.AsynchMessageRoute;
+import org.openhubframework.openhub.test.ExternalSystemTestEnum;
+import org.openhubframework.openhub.test.ServiceTestEnum;
+import org.openhubframework.openhub.test.route.ActiveRoutes;
 
 
 /**
@@ -77,7 +76,7 @@ public class MessagePollExecutorTest extends AbstractCoreDbTest {
         setPrivateField(messagePollExecutor, "postponedIntervalWhenFailed", 0);
 
         // firstly commit messages to DB (we can commit because we have embedded DB for tests only)
-        TransactionTemplate txTemplate = new TransactionTemplate(jpaTransactionManager);
+        TransactionTemplate txTemplate = new TransactionTemplate(transactionManager);
         txTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {

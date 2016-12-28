@@ -18,18 +18,20 @@ package org.openhubframework.openhub.core.common.asynch;
 
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
 import org.openhubframework.openhub.api.entity.ExternalCall;
 import org.openhubframework.openhub.api.entity.ExternalCallStateEnum;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.exception.LockFailureException;
-import org.openhubframework.openhub.common.log.Log;
 import org.openhubframework.openhub.core.common.dao.ExternalCallDao;
 import org.openhubframework.openhub.spi.extcall.ExternalCallService;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 
 /**
@@ -38,7 +40,10 @@ import org.springframework.util.Assert;
  *
  * @author Petr Juza
  */
+@Service
 public class ExternalCallServiceImpl implements ExternalCallService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ExternalCallServiceImpl.class);
 
     @Value("${asynch.externalCall.skipUriPattern}")
     private Pattern skipOperationUriList;
@@ -50,19 +55,19 @@ public class ExternalCallServiceImpl implements ExternalCallService {
     @Transactional
     public ExternalCall prepare(String operationUri, String operationKey, Message message) {
         if (skipOperationUriList != null && skipOperationUriList.matcher(operationUri).matches()) {
-            Log.warn("Not allowing an external call for ignored operation URI: [{}] matches pattern [{}]",
+            LOG.warn("Not allowing an external call for ignored operation URI: [{}] matches pattern [{}]",
                     operationUri, skipOperationUriList);
             return null;
         }
 
         ExternalCall extCall = extCallDao.getExternalCall(operationUri, operationKey);
-        Log.debug("Locking msgId={}, extCall={}", message.getMsgId(), extCall);
+        LOG.debug("Locking msgId={}, extCall={}", message.getMsgId(), extCall);
 
         if (extCall == null) {
             // create a new call in the Processing state, if none registered so far
             extCall = ExternalCall.createProcessingCall(operationUri, operationKey, message);
             extCallDao.insert(extCall);
-            Log.debug("Locked msgId={}, extCall={}", message.getMsgId(), extCall);
+            LOG.debug("Locked msgId={}, extCall={}", message.getMsgId(), extCall);
             return extCall;
         }
 
@@ -77,22 +82,22 @@ public class ExternalCallServiceImpl implements ExternalCallService {
             case OK:
                 if (extCallAge < 0) {
                     // the existing external call is younger/newer and is OK, skip this new call
-                    Log.warn("Not allowing an external call, since it's older than a successful call: {}", extCall);
+                    LOG.warn("Not allowing an external call, since it's older than a successful call: {}", extCall);
                     return null;
                 } else if (extCallAge == 0) {
                     // this external call already happened with OK result, skip it
-                    Log.info("Not allowing an external call, since it's a duplicate of a successful call: {}", extCall);
+                    LOG.info("Not allowing an external call, since it's a duplicate of a successful call: {}", extCall);
                     return null;
                 }
                 break;
             default:
-                Log.error("Unexpected ExternalCall State: " + extCall);
+                LOG.error("Unexpected ExternalCall State: " + extCall);
                 // log error, but otherwise behave as if it was FAILED:
             case FAILED:
             case FAILED_END:
                 if (extCallAge < 0) {
                     // the existing external call is younger/newer, skip this new call
-                    Log.warn("Not allowing an external call, since it's older than a failed call: {}", extCall);
+                    LOG.warn("Not allowing an external call, since it's older than a failed call: {}", extCall);
                     return null;
                 }
                 break;
@@ -102,7 +107,7 @@ public class ExternalCallServiceImpl implements ExternalCallService {
         extCall.setMessage(message);
         extCall.setMsgId(message.getMsgId());
         extCall.setMsgTimestamp(message.getMsgTimestamp());
-        Log.debug("Locked msgId={}, extCall={}", message.getMsgId(), extCall);
+        LOG.debug("Locked msgId={}, extCall={}", message.getMsgId(), extCall);
         return extCall;
     }
 
@@ -114,7 +119,7 @@ public class ExternalCallServiceImpl implements ExternalCallService {
                 "the external call must be in PROCESSING state, but state is " + extCall.getState());
         extCall.setState(ExternalCallStateEnum.OK);
         extCallDao.update(extCall);
-        Log.debug("External call " + extCall.toHumanString() + " changed state to " + ExternalCallStateEnum.OK);
+        LOG.debug("External call " + extCall.toHumanString() + " changed state to " + ExternalCallStateEnum.OK);
     }
 
     @Override
@@ -125,7 +130,7 @@ public class ExternalCallServiceImpl implements ExternalCallService {
                 "the external call must be in PROCESSING state, but state is " + extCall.getState());
         extCall.setState(ExternalCallStateEnum.FAILED);
         extCallDao.update(extCall);
-        Log.debug("External call " + extCall.toHumanString() + " changed state to " + ExternalCallStateEnum.FAILED);
+        LOG.debug("External call " + extCall.toHumanString() + " changed state to " + ExternalCallStateEnum.FAILED);
     }
 
     public Pattern getSkipOperationUriList() {

@@ -16,10 +16,12 @@
 
 package org.openhubframework.openhub.core.common.route;
 
-import org.openhubframework.openhub.api.route.AbstractBasicRoute;
-import org.openhubframework.openhub.api.route.CamelConfiguration;
+import static org.openhubframework.openhub.api.route.RouteConstants.CAMEL_SERVLET;
 
 import org.apache.camel.LoggingLevel;
+
+import org.openhubframework.openhub.api.route.AbstractBasicRoute;
+import org.openhubframework.openhub.api.route.CamelConfiguration;
 
 
 /**
@@ -35,7 +37,7 @@ public class PingRoute extends AbstractBasicRoute {
 
     @Override
     public void doConfigure() throws Exception {
-        from("servlet:///ping?servletName=" + RouteConstants.CAMEL_SERVLET)
+        from("servlet:///ping?servletName=" + CAMEL_SERVLET)
                 .routeId(ROUTE_ID_PING)
 
                 .log(LoggingLevel.INFO, "Incoming PING request ... ")

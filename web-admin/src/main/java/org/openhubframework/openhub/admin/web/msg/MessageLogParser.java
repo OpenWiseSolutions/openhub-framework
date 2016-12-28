@@ -16,32 +16,22 @@
 
 package org.openhubframework.openhub.admin.web.msg;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.zip.GZIPInputStream;
-
 import javax.annotation.Nullable;
-
-import org.openhubframework.openhub.common.log.Log;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
 import org.apache.commons.io.comparator.LastModifiedFileComparator;
 import org.apache.commons.io.filefilter.IOFileFilter;
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -62,6 +52,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class MessageLogParser {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MessageLogParser.class);
 
     // log file format: logFile_%d{yyyy-MM-dd}_%i.log
     private SimpleDateFormat fileFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -132,7 +124,7 @@ public class MessageLogParser {
     private List<String> getLogLines(File logFile, String correlationId) throws IOException {
         List<String> logLines = new ArrayList<String>();
 
-        Log.debug("Go through the following log file: " + logFile);
+        LOG.debug("Go through the following log file: " + logFile);
 
         int year = Calendar.getInstance().get(Calendar.YEAR);
         String[] possibleYears = new String[] {String.valueOf(year-1), String.valueOf(year)};
@@ -160,7 +152,7 @@ public class MessageLogParser {
                         requestId = getRequestId(line);
 
                         if (requestId != null) {
-                            Log.debug("correlationId (" + correlationId + ") => requestId (" + requestId + ")");
+                            LOG.debug("correlationId (" + correlationId + ") => requestId (" + requestId + ")");
                         }
                     }
                 } else {
@@ -213,7 +205,7 @@ public class MessageLogParser {
     }
 
     private String formatLogLine(String line) {
-        String resLine = StringEscapeUtils.escapeHtml(line);
+        String resLine = StringEscapeUtils.escapeHtml4(line);
 
         // highlight ERROR log line
         if (StringUtils.contains(line, " ERROR ")

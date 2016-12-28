@@ -16,9 +16,18 @@
 
 package org.openhubframework.openhub.modules.in.hello;
 
-import static org.openhubframework.openhub.common.jaxb.JaxbDataFormatHelper.jaxb;
+import static org.openhubframework.openhub.api.common.jaxb.JaxbDataFormatHelper.jaxb;
 
 import javax.xml.namespace.QName;
+
+import org.apache.camel.Body;
+import org.apache.camel.Expression;
+import org.apache.camel.Handler;
+import org.apache.camel.builder.xml.Namespaces;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
+import org.springframework.util.Assert;
 
 import org.openhubframework.openhub.api.asynch.AsynchResponseProcessor;
 import org.openhubframework.openhub.api.asynch.AsynchRouteBuilder;
@@ -26,16 +35,10 @@ import org.openhubframework.openhub.api.asynch.model.CallbackResponse;
 import org.openhubframework.openhub.api.route.AbstractBasicRoute;
 import org.openhubframework.openhub.api.route.CamelConfiguration;
 import org.openhubframework.openhub.api.route.XPathValidator;
-import org.openhubframework.openhub.common.log.Log;
+import org.openhubframework.openhub.modules.ExampleProperties;
 import org.openhubframework.openhub.modules.ServiceEnum;
 import org.openhubframework.openhub.modules.in.hello.model.AsyncHelloRequest;
 import org.openhubframework.openhub.modules.in.hello.model.AsyncHelloResponse;
-
-import org.apache.camel.Body;
-import org.apache.camel.Expression;
-import org.apache.camel.Handler;
-import org.apache.camel.builder.xml.Namespaces;
-import org.springframework.util.Assert;
 
 
 /**
@@ -44,17 +47,20 @@ import org.springframework.util.Assert;
  * @author Petr Juza
  */
 @CamelConfiguration(value = AsyncHelloRoute.ROUTE_BEAN)
+@Profile(ExampleProperties.EXAMPLE_PROFILE)
 public class AsyncHelloRoute extends AbstractBasicRoute {
 
-    public static final String ROUTE_BEAN = "asyncHelloRouteBean";
+    private static final Logger LOG = LoggerFactory.getLogger(AsyncHelloRoute.class);
+
+    static final String ROUTE_BEAN = "asyncHelloRouteBean";
 
     private static final String OPERATION_NAME = "asyncHello";
 
-    public static final String ROUTE_ID_ASYNC_IN = getInRouteId(ServiceEnum.HELLO, OPERATION_NAME);
+    static final String ROUTE_ID_ASYNC_IN = getInRouteId(ServiceEnum.HELLO, OPERATION_NAME);
 
-    public static final String ROUTE_ID_ASYNC_OUT = getOutRouteId(ServiceEnum.HELLO, OPERATION_NAME);
+    static final String ROUTE_ID_ASYNC_OUT = getOutRouteId(ServiceEnum.HELLO, OPERATION_NAME);
 
-    public static final String URI_ASYNC_HELLO_OUT = "direct:" + ROUTE_ID_ASYNC_OUT;
+    static final String URI_ASYNC_HELLO_OUT = "direct:" + ROUTE_ID_ASYNC_OUT;
 
     private static final String URI_PRINT_GREETING = "direct:printGreeting";
 
@@ -124,6 +130,6 @@ public class AsyncHelloRoute extends AbstractBasicRoute {
 
         String greeting = "Hello " + req.getName();
 
-        Log.debug("Greeting: " + greeting);
+        LOG.debug("Greeting: " + greeting);
     }
 }

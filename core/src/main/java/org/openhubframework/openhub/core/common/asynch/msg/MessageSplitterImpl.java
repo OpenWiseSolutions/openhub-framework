@@ -20,22 +20,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
+import org.apache.camel.Body;
+import org.apache.camel.Handler;
+import org.apache.camel.Header;
+import org.apache.camel.ProducerTemplate;
+import org.apache.camel.model.ModelCamelContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
+
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
 import org.openhubframework.openhub.api.asynch.msg.ChildMessage;
 import org.openhubframework.openhub.api.asynch.msg.MessageSplitterCallback;
 import org.openhubframework.openhub.api.asynch.msg.MsgSplitter;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
-import org.openhubframework.openhub.common.log.Log;
 import org.openhubframework.openhub.core.common.asynch.AsynchMessageRoute;
 import org.openhubframework.openhub.spi.msg.MessageService;
-
-import org.apache.camel.Body;
-import org.apache.camel.Handler;
-import org.apache.camel.Header;
-import org.apache.camel.ProducerTemplate;
-import org.apache.camel.model.ModelCamelContext;
-import org.springframework.util.Assert;
 
 
 /**
@@ -44,6 +45,8 @@ import org.springframework.util.Assert;
  * @author Petr Juza
  */
 public final class MessageSplitterImpl implements MsgSplitter {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MessageSplitterImpl.class);
 
     private final ModelCamelContext camelCtx;
 
@@ -83,7 +86,7 @@ public final class MessageSplitterImpl implements MsgSplitter {
         // get child messages
         List<ChildMessage> childMessages = splitterCallback.getChildMessages(parentMsg, body);
 
-        Log.debug("Count of child messages: " + childMessages.size());
+        LOG.debug("Count of child messages: " + childMessages.size());
 
         // create messages
         final List<Message> messages = new ArrayList<Message>(childMessages.size());
@@ -111,12 +114,12 @@ public final class MessageSplitterImpl implements MsgSplitter {
                 @Override
                 public void run() {
                     for (Message msg : messages) {
-                        Log.debug("Message " + msg.toHumanString() + " will be processed ...");
+                        LOG.debug("Message " + msg.toHumanString() + " will be processed ...");
 
                         // send to process (wait for reply and then process next child message); it's new exchange
                         msgProducer.requestBody(AsynchMessageRoute.URI_SYNC_MSG, msg);
 
-                        Log.debug("Message " + msg.toHumanString() + " was successfully processed.");
+                        LOG.debug("Message " + msg.toHumanString() + " was successfully processed.");
                     }
                 }
             });
@@ -125,7 +128,7 @@ public final class MessageSplitterImpl implements MsgSplitter {
                 try {
                     msgProducer.stop();
                 } catch (Exception ex) {
-                    Log.error("error occurred during stopping producerTemplate", ex);
+                    LOG.error("error occurred during stopping producerTemplate", ex);
                 }
             }
         }
