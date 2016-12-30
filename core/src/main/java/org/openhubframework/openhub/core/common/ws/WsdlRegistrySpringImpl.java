@@ -17,17 +17,18 @@
 package org.openhubframework.openhub.core.common.ws;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ws.wsdl.wsdl11.SimpleWsdl11Definition;
+import org.springframework.ws.wsdl.wsdl11.Wsdl11Definition;
 
 
 /**
  * Implementation of {@link WsdlRegistry} based on Spring capabilities that supposes the following prerequisites:
  * <ul>
- *     <li>all WSDLs are defined/published via {@link SimpleWsdl11Definition}
+ *     <li>all WSDLs are defined/published via {@link Wsdl11Definition}
  *     <li>Spring bean IDs will contain the WSDL name
  * </ul>
  *
@@ -36,8 +37,16 @@ import org.springframework.ws.wsdl.wsdl11.SimpleWsdl11Definition;
 @Service
 public class WsdlRegistrySpringImpl implements WsdlRegistry {
 
+    private Map<String, Wsdl11Definition> wsdls;
+
     @Autowired(required = false)
-    private Map<String, SimpleWsdl11Definition> wsdls;
+    public WsdlRegistrySpringImpl(Map<String, Wsdl11Definition> wsdls) {
+        if (wsdls != null) {
+            this.wsdls = wsdls;
+        } else {
+            this.wsdls = Collections.emptyMap();
+        }
+    }
 
     @Override
     public Collection<String> getWsdls() {

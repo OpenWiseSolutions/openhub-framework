@@ -21,14 +21,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.openhubframework.openhub.core.common.contextcall.ContextCall;
-import org.openhubframework.openhub.core.common.ws.WsdlRegistry;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import org.openhubframework.openhub.core.common.ws.WsdlRegistry;
 
 
 /**
@@ -40,16 +39,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class WsdlController {
 
-    public static final String VIEW_NAME = "wsdl";
+    private static final String VIEW_NAME = "wsdl";
 
     @Autowired
-    private ContextCall contextCall;
-
+    private WsdlRegistry wsdlRegistry;
 
     @RequestMapping("/" + VIEW_NAME)
     @SuppressWarnings("unchecked")
     public String getEndpoints(@ModelAttribute("model") ModelMap model) {
-        Collection<String> wsdls = contextCall.makeCall(WsdlRegistry.class, "getWsdls", Collection.class);
+        Collection<String> wsdls = wsdlRegistry.getWsdls();
 
         // note: wsdls will be always != null
         if (wsdls != null) {

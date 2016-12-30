@@ -29,7 +29,7 @@ import org.springframework.util.ReflectionUtils;
  *
  * @author Petr Juza
  */
-public final class ReflectionCallUtils {
+final class ReflectionCallUtils {
 
     private ReflectionCallUtils() {
     }
@@ -41,7 +41,7 @@ public final class ReflectionCallUtils {
      * @param beanFactory the Spring bean factory
      * @return response
      */
-    public static Object invokeMethod(ContextCallParams params, BeanFactory beanFactory) {
+    static Object invokeMethod(ContextCallParams params, BeanFactory beanFactory) {
         // find target service
         Object targetService = beanFactory.getBean(params.getTargetType());
 

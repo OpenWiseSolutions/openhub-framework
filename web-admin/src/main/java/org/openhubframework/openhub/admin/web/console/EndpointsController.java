@@ -21,15 +21,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.openhubframework.openhub.core.common.contextcall.ContextCall;
-import org.openhubframework.openhub.core.common.route.EndpointRegistry;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import org.openhubframework.openhub.core.common.route.EndpointRegistry;
 
 
 /**
@@ -41,10 +40,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class EndpointsController {
 
-    public static final String VIEW_NAME = "endpoints";
+    private static final String VIEW_NAME = "endpoints";
 
     @Autowired
-    private ContextCall contextCall;
+    private EndpointRegistry endpointRegistry;
 
     /**
      * Pattern for filtering endpoints URI - only whose URIs will match specified pattern will be returned.
@@ -56,8 +55,7 @@ public class EndpointsController {
     @RequestMapping("/" + VIEW_NAME)
     @SuppressWarnings("unchecked")
     public String getEndpoints(@ModelAttribute("model") ModelMap model) {
-        Collection<String> endpoints = contextCall.makeCall(EndpointRegistry.class, "getEndpointURIs", Collection.class,
-                endpointsIncludePattern);
+        Collection<String> endpoints = endpointRegistry.getEndpointURIs(endpointsIncludePattern);
 
         // note: endpoints will be always != null
         if (endpoints != null) {

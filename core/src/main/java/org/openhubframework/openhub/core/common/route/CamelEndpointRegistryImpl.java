@@ -36,7 +36,7 @@ import org.springframework.util.Assert;
  * @author Petr Juza
  */
 @Service
-public class EndpointRegistryImpl implements EndpointRegistry, CamelContextAware {
+public class CamelEndpointRegistryImpl implements EndpointRegistry, CamelContextAware {
 
     private CamelContext camelContext;
 
@@ -80,11 +80,7 @@ public class EndpointRegistryImpl implements EndpointRegistry, CamelContextAware
         }
 
         Matcher matcher = pattern.matcher(endpointURI);
-        if (matcher.matches()) {
-            return true;
-        }
-
-        return false;
+        return matcher.matches();
     }
 
     @Override
