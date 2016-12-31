@@ -37,19 +37,16 @@ import org.springframework.ws.wsdl.wsdl11.Wsdl11Definition;
 @Service
 public class WsdlRegistrySpringImpl implements WsdlRegistry {
 
-    private Map<String, Wsdl11Definition> wsdls;
-
+    // note: I can't use binding via constructor because it throws error if there is no any autowired Wsdl11Definition
     @Autowired(required = false)
-    public WsdlRegistrySpringImpl(Map<String, Wsdl11Definition> wsdls) {
-        if (wsdls != null) {
-            this.wsdls = wsdls;
-        } else {
-            this.wsdls = Collections.emptyMap();
-        }
-    }
+    private Map<String, Wsdl11Definition> wsdls;
 
     @Override
     public Collection<String> getWsdls() {
-        return wsdls.keySet();
+        if (wsdls != null) {
+            return wsdls.keySet();
+        } else {
+            return Collections.emptyList();
+        }
     }
 }
