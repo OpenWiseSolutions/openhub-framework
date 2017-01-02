@@ -90,7 +90,7 @@ public class ExternalCallComponentTest extends AbstractComponentsDbTest {
 
     private Long extCallId;
 
-    @Value("${asynch.externalCall.skipUriPattern}")
+    @Value("${ohf.asynch.externalCall.skipUriPattern}")
     private String skipUriPattern;
 
     @Before

@@ -19,22 +19,23 @@ package org.openhubframework.openhub.core.common.dao;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
-
 import javax.annotation.Nullable;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.apache.commons.lang3.time.DateUtils;
-import org.openhubframework.openhub.api.entity.ExternalSystemExtEnum;
-import org.openhubframework.openhub.api.entity.Message;
-import org.openhubframework.openhub.api.entity.MsgStateEnum;
-import org.openhubframework.openhub.api.exception.NoDataFoundException;
+import org.joda.time.LocalDateTime;
+import org.joda.time.Seconds;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.api.entity.ExternalSystemExtEnum;
+import org.openhubframework.openhub.api.entity.Message;
+import org.openhubframework.openhub.api.entity.MsgStateEnum;
+import org.openhubframework.openhub.api.exception.NoDataFoundException;
 
 
 /**
@@ -137,9 +138,9 @@ public class MessageDaoJpaImpl implements MessageDao {
 
     @Override
     @Nullable
-    public Message findPartlyFailedMessage(int interval) {
+    public Message findPartlyFailedMessage(Seconds interval) {
         // find message that was lastly processed before specified interval
-        Date lastUpdateLimit = DateUtils.addSeconds(new Date(), -interval);
+        LocalDateTime lastUpdateLimit = LocalDateTime.now().minus(interval);
 
         String jSql = "SELECT m "
                 + "FROM " + Message.class.getName() + " m "
@@ -148,7 +149,7 @@ public class MessageDaoJpaImpl implements MessageDao {
                 + " ORDER BY m.msgTimestamp";
 
         TypedQuery<Message> q = em.createQuery(jSql, Message.class);
-        q.setParameter("lastTime", new Timestamp(lastUpdateLimit.getTime()));
+        q.setParameter("lastTime", new Timestamp(lastUpdateLimit.toDate().getTime()));
         q.setMaxResults(1);
         List<Message> messages = q.getResultList();
 
@@ -161,9 +162,9 @@ public class MessageDaoJpaImpl implements MessageDao {
 
     @Override
     @Nullable
-    public Message findPostponedMessage(int interval) {
+    public Message findPostponedMessage(Seconds interval) {
         // find message that was lastly processed before specified interval
-        Date lastUpdateLimit = DateUtils.addSeconds(new Date(), -interval);
+        LocalDateTime lastUpdateLimit = LocalDateTime.now().minus(interval);
 
         String jSql = "SELECT m "
                 + "FROM " + Message.class.getName() + " m "
@@ -172,7 +173,7 @@ public class MessageDaoJpaImpl implements MessageDao {
                 + " ORDER BY m.msgTimestamp";
 
         TypedQuery<Message> q = em.createQuery(jSql, Message.class);
-        q.setParameter("lastTime", new Timestamp(lastUpdateLimit.getTime()));
+        q.setParameter("lastTime", new Timestamp(lastUpdateLimit.toDate().getTime()));
         q.setMaxResults(1);
         List<Message> messages = q.getResultList();
 
@@ -214,8 +215,8 @@ public class MessageDaoJpaImpl implements MessageDao {
     }
 
     @Override
-    public List<Message> findProcessingMessages(int interval) {
-        final Date startProcessLimit = DateUtils.addSeconds(new Date(), -interval);
+    public List<Message> findProcessingMessages(Seconds interval) {
+        LocalDateTime startProcessLimit = LocalDateTime.now().minus(interval);
 
         String jSql = "SELECT m "
                 + "FROM " + Message.class.getName() + " m "
@@ -223,34 +224,34 @@ public class MessageDaoJpaImpl implements MessageDao {
                 + "     AND m.startProcessTimestamp < :startTime";
 
         TypedQuery<Message> q = em.createQuery(jSql, Message.class);
-        q.setParameter("startTime", new Timestamp(startProcessLimit.getTime()));
+        q.setParameter("startTime", new Timestamp(startProcessLimit.toDate().getTime()));
         q.setMaxResults(MAX_MESSAGES_IN_ONE_QUERY);
         return q.getResultList();
     }
 
     @Override
-    public int getCountMessages(MsgStateEnum state, Integer interval) {
-        Date lastUpdateTime = null;
+    public int getCountMessages(MsgStateEnum state, Seconds interval) {
+        LocalDateTime lastUpdateTime = null;
 
         String jSql = "SELECT COUNT(m) "
                 + "FROM " + Message.class.getName() + " m "
                 + "WHERE m.state = '" + state.name() + "'";
 
         if (interval != null) {
-            lastUpdateTime = DateUtils.addSeconds(new Date(), -interval);
+            lastUpdateTime = LocalDateTime.now().minus(interval);
             jSql += " AND m.lastUpdateTimestamp >= :lastUpdateTime";
         }
 
         TypedQuery<Number> q = em.createQuery(jSql, Number.class);
         if (lastUpdateTime != null) {
-            q.setParameter("lastUpdateTime", new Timestamp(lastUpdateTime.getTime()));
+            q.setParameter("lastUpdateTime", new Timestamp(lastUpdateTime.toDate().getTime()));
         }
 
         return q.getSingleResult().intValue();
     }
 
     @Override
-    public int getCountProcessingMessagesForFunnel(String funnelValue, int idleInterval, String funnelCompId) {
+    public int getCountProcessingMessagesForFunnel(String funnelValue, Seconds idleInterval, String funnelCompId) {
         String jSql = "SELECT COUNT(m) "
                 + "FROM " + Message.class.getName() + " m "
                 + "WHERE (m.state = '" + MsgStateEnum.PROCESSING + "' "
@@ -260,7 +261,7 @@ public class MessageDaoJpaImpl implements MessageDao {
                 + "      AND m.startProcessTimestamp >= :startTime";
 
         TypedQuery<Number> q = em.createQuery(jSql, Number.class);
-        q.setParameter("startTime", new Timestamp(DateUtils.addSeconds(new Date(), -idleInterval).getTime()));
+        q.setParameter("startTime", new Timestamp(LocalDateTime.now().minus(idleInterval).toDate().getTime()));
 
         return q.getSingleResult().intValue();
     }
@@ -290,7 +291,7 @@ public class MessageDaoJpaImpl implements MessageDao {
     }
 
     @Override
-    public List<Message> getMessagesForGuaranteedOrderForFunnel(String funnelValue, int idleInterval,
+    public List<Message> getMessagesForGuaranteedOrderForFunnel(String funnelValue, Seconds idleInterval,
             boolean excludeFailedState, String funnelCompId) {
 
         String jSql = "SELECT m "
@@ -313,7 +314,7 @@ public class MessageDaoJpaImpl implements MessageDao {
         //TODO (juza) limit select to specific number of items + add msgId DESC to sorting (parent vs. child)
 
         TypedQuery<Message> q = em.createQuery(jSql, Message.class);
-        q.setParameter("startTime", new Timestamp(DateUtils.addSeconds(new Date(), -idleInterval).getTime()));
+        q.setParameter("startTime", new Timestamp(LocalDateTime.now().minus(idleInterval).toDate().getTime()));
 
         return q.getResultList();
     }

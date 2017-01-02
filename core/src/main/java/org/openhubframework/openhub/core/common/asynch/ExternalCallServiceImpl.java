@@ -17,15 +17,18 @@
 package org.openhubframework.openhub.core.common.asynch;
 
 import java.util.regex.Pattern;
+import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import org.openhubframework.openhub.api.configuration.ConfigurableValue;
+import org.openhubframework.openhub.api.configuration.ConfigurationItem;
 import org.openhubframework.openhub.api.entity.ExternalCall;
 import org.openhubframework.openhub.api.entity.ExternalCallStateEnum;
 import org.openhubframework.openhub.api.entity.Message;
@@ -45,18 +48,30 @@ public class ExternalCallServiceImpl implements ExternalCallService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ExternalCallServiceImpl.class);
 
-    @Value("${asynch.externalCall.skipUriPattern}")
-    private Pattern skipOperationUriList;
+    // note: can't be used ConfigurationItem<Pattern> because property can be null/empty and then
+    //  it's problem to create pattern, see PropertySourcesPropertyResolver.getProperty:
+    //  java.lang.IllegalArgumentException: Cannot convert value [] from source type [String] to target type [Pattern]
+    @ConfigurableValue(key = "ohf.asynch.externalCall.skipUriPattern")
+    private ConfigurationItem<String> skipOperationUriList;
+
+    private Pattern uriPattern;
 
     @Autowired
     private ExternalCallDao extCallDao;
 
+    @PostConstruct
+    public void initPattern() {
+        if (StringUtils.isNotEmpty(skipOperationUriList.getValue())) {
+            uriPattern = Pattern.compile(skipOperationUriList.getValue());
+        }
+    }
+
     @Override
     @Transactional
     public ExternalCall prepare(String operationUri, String operationKey, Message message) {
-        if (skipOperationUriList != null && skipOperationUriList.matcher(operationUri).matches()) {
+        if (uriPattern != null && uriPattern.matcher(operationUri).matches()) {
             LOG.warn("Not allowing an external call for ignored operation URI: [{}] matches pattern [{}]",
-                    operationUri, skipOperationUriList);
+                    operationUri, uriPattern);
             return null;
         }
 
@@ -131,13 +146,5 @@ public class ExternalCallServiceImpl implements ExternalCallService {
         extCall.setState(ExternalCallStateEnum.FAILED);
         extCallDao.update(extCall);
         LOG.debug("External call " + extCall.toHumanString() + " changed state to " + ExternalCallStateEnum.FAILED);
-    }
-
-    public Pattern getSkipOperationUriList() {
-        return skipOperationUriList;
-    }
-
-    public void setSkipOperationUriList(Pattern skipOperationUriList) {
-        this.skipOperationUriList = skipOperationUriList;
     }
 }

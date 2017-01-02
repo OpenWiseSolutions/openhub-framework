@@ -18,14 +18,16 @@ package org.openhubframework.openhub.core.common.asynch.confirm;
 
 import javax.annotation.Nullable;
 
+import org.joda.time.Seconds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import org.openhubframework.openhub.api.configuration.ConfigurableValue;
+import org.openhubframework.openhub.api.configuration.ConfigurationItem;
 import org.openhubframework.openhub.api.entity.ExternalCall;
 import org.openhubframework.openhub.api.entity.ExternalCallStateEnum;
 import org.openhubframework.openhub.api.exception.LockFailureException;
@@ -49,15 +51,15 @@ public class ConfirmationPoolDbImpl implements ConfirmationPool {
     /**
      * Interval (in seconds) between two tries of failed confirmations.
      */
-    @Value("${asynch.confirmation.interval}")
-    private int interval;
+    @ConfigurableValue(key = "ohf.asynch.confirmation.intervalSec")
+    private ConfigurationItem<Seconds> interval;
 
     @Nullable
     @Override
     @Transactional
     public ExternalCall getNextConfirmation() {
         // -- is there next confirmation for processing?
-        final ExternalCall extCall = extCallDao.findConfirmation(interval);
+        final ExternalCall extCall = extCallDao.findConfirmation(interval.getValue());
 
         if (extCall == null) {
             LOG.debug("There is no FAILED confirmation for processing.");

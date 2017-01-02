@@ -20,8 +20,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.openhubframework.openhub.api.common.HumanReadable;
 import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.api.common.HumanReadable;
 
 
 /**
@@ -118,8 +119,8 @@ public final class ThrottleScope implements HumanReadable {
             ThrottleScope en = (ThrottleScope) obj;
 
             return new EqualsBuilder()
-                    .append(sourceSystem, en.sourceSystem)
-                    .append(serviceName, en.serviceName)
+                    .append(getSourceSystem(), en.getSourceSystem())
+                    .append(getServiceName(), en.getServiceName())
                     .isEquals();
         } else {
             return false;
@@ -129,8 +130,8 @@ public final class ThrottleScope implements HumanReadable {
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
-                .append(sourceSystem)
-                .append(serviceName)
+                .append(getSourceSystem())
+                .append(getServiceName())
                 .toHashCode();
     }
 

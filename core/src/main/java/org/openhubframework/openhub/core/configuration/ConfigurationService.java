@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.api.configuration;
+package org.openhubframework.openhub.core.configuration;
+
+import javax.annotation.Nullable;
+
 
 /**
  * Contract configuration service to provide uniform type-safe access to configuration properties. 
  *
- * @author <a href="mailto:tomas.hanus@openwise.cz">Tomas Hanus</a>
+ * @author Tomas Hanus
  * @since 2.0
  */
 public interface ConfigurationService {
@@ -32,6 +35,7 @@ public interface ConfigurationService {
      * @param <T>   as generic type of expected value type
      * @return type-safe value
      */
+    @Nullable
     <T> T getValue(Class<T> clazz, String key);
 
     /**

@@ -18,12 +18,14 @@ package org.openhubframework.openhub.core.common.asynch.queue;
 
 import org.apache.camel.Handler;
 import org.apache.camel.spring.SpringRouteBuilder;
+import org.joda.time.Seconds;
 import org.quartz.SimpleTrigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 
+import org.openhubframework.openhub.api.configuration.ConfigurableValue;
+import org.openhubframework.openhub.api.configuration.ConfigurationItem;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
 import org.openhubframework.openhub.api.route.AbstractBasicRoute;
 import org.openhubframework.openhub.api.route.CamelConfiguration;
@@ -51,14 +53,14 @@ public class PartlyFailedMessagesPoolRoute extends SpringRouteBuilder {
     /**
      * How often to run process for polling partly failed messages (in seconds).
      */
-    @Value("${asynch.partlyFailedRepeatTime}")
-    private int partlyFailedRepeatTime;
+    @ConfigurableValue(key = "ohf.asynch.partlyFailedRepeatTimeSec")
+    private ConfigurationItem<Seconds> partlyFailedRepeatTime;
 
     @Override
     @SuppressWarnings("unchecked")
     public final void configure() throws Exception {
         String uri = RepairProcessingMsgRoute.JOB_GROUP_NAME + "/" + JOB_NAME
-                + "?trigger.repeatInterval=" + (partlyFailedRepeatTime * 1000)
+                + "?trigger.repeatInterval=" + (partlyFailedRepeatTime.getValue().getSeconds() * 1000)
                 + "&trigger.repeatCount=" + SimpleTrigger.REPEAT_INDEFINITELY;
 
 

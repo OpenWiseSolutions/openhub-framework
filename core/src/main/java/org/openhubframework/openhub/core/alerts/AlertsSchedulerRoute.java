@@ -17,10 +17,12 @@
 package org.openhubframework.openhub.core.alerts;
 
 import org.apache.camel.spring.SpringRouteBuilder;
+import org.joda.time.Seconds;
 import org.quartz.SimpleTrigger;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 
+import org.openhubframework.openhub.api.configuration.ConfigurableValue;
+import org.openhubframework.openhub.api.configuration.ConfigurationItem;
 import org.openhubframework.openhub.api.route.AbstractBasicRoute;
 import org.openhubframework.openhub.api.route.CamelConfiguration;
 import org.openhubframework.openhub.common.Profiles;
@@ -44,14 +46,16 @@ public class AlertsSchedulerRoute extends SpringRouteBuilder {
     /**
      * How often to run checking of alerts (in seconds).
      */
-    @Value("${alerts.repeatTime}")
-    private int repeatInterval;
+    @ConfigurableValue(key = "ohf.alerts.repeatTimeSec")
+    private ConfigurationItem<Seconds> repeatInterval;
 
     @Override
     public final void configure() throws Exception {
-        if (repeatInterval != -1) {
+        int repeatSec = repeatInterval.getValue().getSeconds();
+
+        if (repeatSec != -1) {
             String uri = RepairProcessingMsgRoute.JOB_GROUP_NAME + "/" + JOB_NAME
-                    + "?trigger.repeatInterval=" + (repeatInterval * 1000)
+                    + "?trigger.repeatInterval=" + (repeatSec * 1000)
                     + "&trigger.repeatCount=" + SimpleTrigger.REPEAT_INDEFINITELY;
             from("quartz2://" + uri)
                     .routeId("alerts" + AbstractBasicRoute.ROUTE_SUFFIX)

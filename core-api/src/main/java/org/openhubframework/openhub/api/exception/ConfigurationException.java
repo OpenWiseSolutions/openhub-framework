@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.common.configuration;
+package org.openhubframework.openhub.api.exception;
 
 /**
- * Configuration item exception that reflects error state of configuration item.
+ * Configuration exception that reflects error state of configuration item.
  *
  * @author Tomas Hanus
  * @since 2.0
  */
-//TODO (thanus, 18/12/2016, TASK: OHFJIRA-9) maybe it could extends ConfigurationException
-public class ConfigurationItemException extends RuntimeException {
+public class ConfigurationException extends ValidationIntegrationException {
 
     private static final long serialVersionUID = 1L;
 
@@ -34,7 +33,9 @@ public class ConfigurationItemException extends RuntimeException {
      *
      * @param key the key value - parameter name.
      */
-    public ConfigurationItemException(String key) {
+    public ConfigurationException(String key) {
+        super(InternalErrorEnum.E122);
+
         this.key = key;
     }
 
@@ -45,8 +46,9 @@ public class ConfigurationItemException extends RuntimeException {
      *                by the {@link #getMessage()} method.
      * @param key     the key value - parameter name.
      */
-    public ConfigurationItemException(String message, String key) {
-        super(message);
+    public ConfigurationException(String message, String key) {
+        super(InternalErrorEnum.E122, message);
+
         this.key = key;
     }
 
@@ -62,30 +64,16 @@ public class ConfigurationItemException extends RuntimeException {
      *                (A <tt>null</tt> value is permitted, and indicates that the cause is nonexistent or unknown.)
      * @param key     the key value - parameter name.
      */
-    public ConfigurationItemException(String message, Throwable cause, String key) {
-        super(message, cause);
-        this.key = key;
-    }
+    public ConfigurationException(String message, Throwable cause, String key) {
+        super(InternalErrorEnum.E122, message, cause);
 
-    /**
-     * Constructs a new configuration exception for the key with the specified detail message and cause.
-     * <p>
-     * Note that the detail message associated with {@code cause} is <i>not</i> automatically incorporated
-     * in this configuration exception's detail message.
-     *
-     * @param cause the cause (which is saved for later retrieval by the {@link #getCause()} method).
-     *              (A <tt>null</tt> value is permitted, and indicates that the cause is nonexistent or unknown.)
-     * @param key   the key value - parameter name.
-     */
-    public ConfigurationItemException(Throwable cause, String key) {
-        super(cause);
         this.key = key;
     }
 
     /**
      * Gets the {@code key} that represented unique ID for configuration value.
      *
-     * @return key which is misconfigured
+     * @return key which is mis-configured
      */
     public String getKey() {
         return key;

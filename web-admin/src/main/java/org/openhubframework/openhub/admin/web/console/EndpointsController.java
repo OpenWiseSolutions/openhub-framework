@@ -22,12 +22,13 @@ import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import org.openhubframework.openhub.api.configuration.ConfigurableValue;
+import org.openhubframework.openhub.api.configuration.ConfigurationItem;
 import org.openhubframework.openhub.core.common.route.EndpointRegistry;
 
 
@@ -48,14 +49,14 @@ public class EndpointsController {
     /**
      * Pattern for filtering endpoints URI - only whose URIs will match specified pattern will be returned.
      */
-    @Value("${endpoints.includePattern}")
-    private String endpointsIncludePattern;
+    @ConfigurableValue(key = "ohf.endpoints.includePattern")
+    private ConfigurationItem<String> endpointsIncludePattern;
 
 
     @RequestMapping("/" + VIEW_NAME)
     @SuppressWarnings("unchecked")
     public String getEndpoints(@ModelAttribute("model") ModelMap model) {
-        Collection<String> endpoints = endpointRegistry.getEndpointURIs(endpointsIncludePattern);
+        Collection<String> endpoints = endpointRegistry.getEndpointURIs(endpointsIncludePattern.getValue());
 
         // note: endpoints will be always != null
         if (endpoints != null) {

@@ -23,18 +23,20 @@ import static org.junit.Assert.assertThat;
 
 import java.util.Date;
 
+import org.joda.time.Seconds;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
 import org.openhubframework.openhub.core.AbstractCoreDbTest;
 import org.openhubframework.openhub.core.common.asynch.queue.MessagesPool;
 import org.openhubframework.openhub.core.common.asynch.queue.MessagesPoolDbImpl;
+import org.openhubframework.openhub.core.configuration.FixedConfigurationItem;
 import org.openhubframework.openhub.test.ExternalSystemTestEnum;
 import org.openhubframework.openhub.test.ServiceTestEnum;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -51,7 +53,7 @@ public class PartlyFailedMessagesPoolDbTest extends AbstractCoreDbTest {
     @Before
     public void prepareData() {
         // set failed limit
-        setPrivateField(messagesPool, "partlyFailedInterval", 0);
+        setPrivateField(messagesPool, "partlyFailedInterval", new FixedConfigurationItem<>(Seconds.ZERO));
     }
 
     @Test

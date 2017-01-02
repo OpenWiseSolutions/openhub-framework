@@ -159,7 +159,7 @@ public final class AsynchConstants {
      * URI for asynchronous message processing (with SEDA).
      */
     public static final String URI_ASYNC_MSG = "seda:asynch_message_route"
-            + "?concurrentConsumers={{asynch.concurrentConsumers}}&waitForTaskToComplete=Never"
+            + "?concurrentConsumers={{ohf.asynch.concurrentConsumers}}&waitForTaskToComplete=Never"
             + "&blockWhenFull=true&queueFactory=#" + PRIORITY_QUEUE_FACTORY;
 
     /**

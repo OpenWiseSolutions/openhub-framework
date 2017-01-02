@@ -21,8 +21,9 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.openhubframework.openhub.api.common.HumanReadable;
 import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.api.common.HumanReadable;
 
 
 /**
@@ -151,7 +152,7 @@ public class AlertInfo implements HumanReadable {
             AlertInfo en = (AlertInfo) obj;
 
             return new EqualsBuilder()
-                    .append(id, en.id)
+                    .append(getId(), en.getId())
                     .isEquals();
         } else {
             return false;
@@ -161,7 +162,7 @@ public class AlertInfo implements HumanReadable {
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
-                .append(id)
+                .append(getId())
                 .toHashCode();
     }
 

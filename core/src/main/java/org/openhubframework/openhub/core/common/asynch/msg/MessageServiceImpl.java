@@ -21,6 +21,7 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.joda.time.Seconds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ import org.openhubframework.openhub.spi.msg.MessageService;
 
 
 /**
- * JPA implementation of the {@link MessageService} interface.
+ * Implementation of the {@link MessageService} interface.
  *
  * @author Petr Juza
  */
@@ -340,14 +341,14 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public int getCountMessages(MsgStateEnum state, Integer interval) {
+    public int getCountMessages(MsgStateEnum state, Seconds interval) {
         Assert.notNull(state, "the state must not be null");
 
         return messageDao.getCountMessages(state, interval);
     }
 
     @Override
-    public int getCountProcessingMessagesForFunnel(String funnelValue, int idleInterval, String funnelCompId) {
+    public int getCountProcessingMessagesForFunnel(String funnelValue, Seconds idleInterval, String funnelCompId) {
         Assert.hasText(funnelValue, "the funnelValue must not be empty");
 
         return messageDao.getCountProcessingMessagesForFunnel(funnelValue, idleInterval, funnelCompId);
@@ -359,7 +360,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<Message> getMessagesForGuaranteedOrderForFunnel(String funnelValue, int idleInterval,
+    public List<Message> getMessagesForGuaranteedOrderForFunnel(String funnelValue, Seconds idleInterval,
             boolean excludeFailedState, String funnelCompId) {
         return messageDao.getMessagesForGuaranteedOrderForFunnel(funnelValue, idleInterval, excludeFailedState,
                 funnelCompId);

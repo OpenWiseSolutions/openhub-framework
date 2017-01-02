@@ -24,8 +24,10 @@ import org.apache.commons.io.IOUtils;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import org.openhubframework.openhub.api.configuration.ConfigurableValue;
+import org.openhubframework.openhub.api.configuration.ConfigurationItem;
 
 
 /**
@@ -39,15 +41,15 @@ public class ContextCallHttpImpl extends AbstractContextCall {
     /**
      * URI of this localhost application, including port number.
      */
-    @Value("${contextCall.localhostUri}")
-    private String localhostUri;
+    @ConfigurableValue(key = "ohf.contextCall.localhostUri")
+    private ConfigurationItem<String> localhostUri;
 
     @Override
     protected void callTargetMethod(String callId, Class<?> targetType, String methodName) {
         CloseableHttpClient httpClient = HttpClients.createDefault();
 
         try {
-            HttpGet httpGet = new HttpGet(localhostUri + HTTP_URI_PREFIX
+            HttpGet httpGet = new HttpGet(localhostUri.getValue() + HTTP_URI_PREFIX
                     + ContextCallRoute.SERVLET_URL + "?" + ContextCallRoute.CALL_ID_HEADER + "=" + callId);
 
             httpClient.execute(httpGet);

@@ -24,7 +24,7 @@ import org.openhubframework.openhub.api.entity.ExternalSystemExtEnum;
  *
  * @author Petr Juza
  */
-//TODO PJUZA is here on the right place?
+//TODO PJUZA is here this class at the right place?
 public enum ExternalSystemTestEnum implements ExternalSystemExtEnum {
 
     CRM,

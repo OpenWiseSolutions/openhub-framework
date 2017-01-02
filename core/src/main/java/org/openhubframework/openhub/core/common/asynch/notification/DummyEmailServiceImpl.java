@@ -36,7 +36,7 @@ public class DummyEmailServiceImpl implements EmailService {
     /**
      * Administrator email address.
      */
-    @Value("${mail.admin}")
+    @Value("${ohf.mail.admin}")
     private String recipients;
 
     @Override

@@ -30,6 +30,7 @@ import org.apache.camel.EndpointInject;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.commons.lang3.time.DateUtils;
 import org.hamcrest.CoreMatchers;
+import org.joda.time.Seconds;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,6 +44,7 @@ import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
 import org.openhubframework.openhub.core.AbstractCoreDbTest;
 import org.openhubframework.openhub.core.common.asynch.AsynchMessageRoute;
+import org.openhubframework.openhub.core.configuration.FixedConfigurationItem;
 import org.openhubframework.openhub.test.ExternalSystemTestEnum;
 import org.openhubframework.openhub.test.ServiceTestEnum;
 import org.openhubframework.openhub.test.route.ActiveRoutes;
@@ -70,10 +72,10 @@ public class MessagePollExecutorTest extends AbstractCoreDbTest {
     @Before
     public void prepareData() {
         // set failed limit
-        setPrivateField(messagesPool, "partlyFailedInterval", 0);
-        setPrivateField(messagesPool, "postponedInterval", 0);
+        setPrivateField(messagesPool, "partlyFailedInterval", new FixedConfigurationItem<>(Seconds.ZERO));
+        setPrivateField(messagesPool, "postponedInterval", new FixedConfigurationItem<>(Seconds.ZERO));
         setPrivateField(messagePollExecutor, "targetURI", "mock:test");
-        setPrivateField(messagePollExecutor, "postponedIntervalWhenFailed", 0);
+        setPrivateField(messagePollExecutor, "postponedIntervalWhenFailed", new FixedConfigurationItem<>(Seconds.ZERO));
 
         // firstly commit messages to DB (we can commit because we have embedded DB for tests only)
         TransactionTemplate txTemplate = new TransactionTemplate(transactionManager);

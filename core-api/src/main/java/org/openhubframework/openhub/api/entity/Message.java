@@ -16,39 +16,18 @@
 
 package org.openhubframework.openhub.api.entity;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-
+import java.util.*;
 import javax.annotation.Nullable;
-import javax.persistence.Access;
-import javax.persistence.AccessType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.persistence.UniqueConstraint;
-
-import org.openhubframework.openhub.api.common.HumanReadable;
-import org.openhubframework.openhub.api.exception.ErrorExtEnum;
+import javax.persistence.*;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.api.common.HumanReadable;
+import org.openhubframework.openhub.api.exception.ErrorExtEnum;
 
 
 /**
@@ -69,7 +48,8 @@ public class Message implements HumanReadable {
 
     @Id
     @Column(name = "msg_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "openhub_id_sequence")
+    @SequenceGenerator(name="openhub_id_sequence", sequenceName="openhub_sequence", allocationSize=1)
     private Long msgId;
 
     @Column(name = "msg_timestamp", nullable = false)
@@ -771,7 +751,7 @@ public class Message implements HumanReadable {
             Message en = (Message) obj;
 
             return new EqualsBuilder()
-                    .append(msgId, en.msgId)
+                    .append(getMsgId(), en.getMsgId())
                     .isEquals();
         } else {
             return false;
@@ -781,7 +761,7 @@ public class Message implements HumanReadable {
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
-                .append(msgId)
+                .append(getMsgId())
                 .toHashCode();
     }
 

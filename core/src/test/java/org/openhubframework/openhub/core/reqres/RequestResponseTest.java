@@ -51,6 +51,7 @@ import org.openhubframework.openhub.api.entity.MsgStateEnum;
 import org.openhubframework.openhub.api.entity.Request;
 import org.openhubframework.openhub.api.entity.Response;
 import org.openhubframework.openhub.core.AbstractCoreDbTest;
+import org.openhubframework.openhub.core.configuration.FixedConfigurationItem;
 import org.openhubframework.openhub.test.ExternalSystemTestEnum;
 import org.openhubframework.openhub.test.ServiceTestEnum;
 
@@ -87,13 +88,13 @@ public class RequestResponseTest extends AbstractCoreDbTest {
 
     @Before
     public void prepareConfiguration() {
-        setPrivateField(reqSendingEventNotifier, "enable", Boolean.TRUE);
-        setPrivateField(reqSendingEventNotifier, "endpointFilter", "^(direct.*target).*$");
-        reqSendingEventNotifier.compilePattern();
+        setPrivateField(reqSendingEventNotifier, "enable", new FixedConfigurationItem<>(Boolean.TRUE));
+        setPrivateField(reqSendingEventNotifier, "endpointFilterPattern",
+                new FixedConfigurationItem<>(java.util.regex.Pattern.compile("^(direct.*target).*$")));
 
-        setPrivateField(resReceiveEventNotifier, "enable", Boolean.TRUE);
-        setPrivateField(resReceiveEventNotifier, "endpointFilter", "^(direct.*target).*$");
-        resReceiveEventNotifier.compilePattern();
+        setPrivateField(resReceiveEventNotifier, "enable", new FixedConfigurationItem<>(Boolean.TRUE));
+        setPrivateField(resReceiveEventNotifier, "endpointFilterPattern",
+                new FixedConfigurationItem<>(java.util.regex.Pattern.compile("^(direct.*target).*$")));
     }
 
     @Before
@@ -127,11 +128,10 @@ public class RequestResponseTest extends AbstractCoreDbTest {
 
 
         // try it again but change pattern for filtering
-        setPrivateField(reqSendingEventNotifier, "endpointFilter", "^(noUrl).*$");
-        reqSendingEventNotifier.compilePattern();
-
-        setPrivateField(resReceiveEventNotifier, "endpointFilter", "^(noUrl).*$");
-        resReceiveEventNotifier.compilePattern();
+        setPrivateField(reqSendingEventNotifier, "endpointFilterPattern",
+                new FixedConfigurationItem<>(java.util.regex.Pattern.compile("^(noUrl).*$")));
+        setPrivateField(resReceiveEventNotifier, "endpointFilterPattern",
+                new FixedConfigurationItem<>(java.util.regex.Pattern.compile("^(noUrl).*$")));
 
         producer.sendBody(REQUEST);
 
@@ -145,8 +145,8 @@ public class RequestResponseTest extends AbstractCoreDbTest {
 
 
         // try it again but disable saving at all
-        setPrivateField(reqSendingEventNotifier, "enable", Boolean.FALSE);
-        setPrivateField(resReceiveEventNotifier, "enable", Boolean.FALSE);
+        setPrivateField(reqSendingEventNotifier, "enable", new FixedConfigurationItem<>(Boolean.FALSE));
+        setPrivateField(resReceiveEventNotifier, "enable", new FixedConfigurationItem<>(Boolean.FALSE));
 
         producer.sendBody(REQUEST);
 
@@ -167,7 +167,7 @@ public class RequestResponseTest extends AbstractCoreDbTest {
      */
     @Test
     public void testSavingResponseOnly() throws Exception {
-        setPrivateField(reqSendingEventNotifier, "enable", Boolean.FALSE);
+        setPrivateField(reqSendingEventNotifier, "enable", new FixedConfigurationItem<>(Boolean.FALSE));
 
         // prepare target route
         prepareTargetRoute(TARGET_URI, null);
@@ -192,7 +192,7 @@ public class RequestResponseTest extends AbstractCoreDbTest {
     @Test
     @Transactional
     public void testSavingResponseWithMsgOnly() throws Exception {
-        setPrivateField(reqSendingEventNotifier, "enable", Boolean.FALSE);
+        setPrivateField(reqSendingEventNotifier, "enable", new FixedConfigurationItem<>(Boolean.FALSE));
 
         // prepare target route
         prepareTargetRoute(TARGET_URI, null);

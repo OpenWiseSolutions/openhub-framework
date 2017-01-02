@@ -22,10 +22,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.env.Environment;
 
-import org.openhubframework.openhub.api.configuration.ConfigurationService;
+import org.openhubframework.openhub.api.configuration.ConfigurableValue;
+import org.openhubframework.openhub.api.configuration.ConfigurationItem;
 import org.openhubframework.openhub.common.AutoConfiguration;
-import org.openhubframework.openhub.common.configuration.ConfigurableValue;
-import org.openhubframework.openhub.common.configuration.ConfigurationItem;
 
 /**
  * Auto-configuration of configuration item properties via parameters. This configuration registers 
@@ -36,7 +35,7 @@ import org.openhubframework.openhub.common.configuration.ConfigurationItem;
  * with {@link ConfigurationItem}. It uses {@link Environment} as system parameter repository, but it is possible 
  * to override with custom implementation.
  *
- * @author <a href="mailto:tomas.hanus@openwise.cz">Tomas Hanus</a>
+ * @author Tomas Hanus
  * @since 2.0
  * @see ConversionService
  */

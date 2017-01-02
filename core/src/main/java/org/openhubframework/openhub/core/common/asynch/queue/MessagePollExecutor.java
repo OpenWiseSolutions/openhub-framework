@@ -16,7 +16,6 @@
 
 package org.openhubframework.openhub.core.common.asynch.queue;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.camel.Exchange;
@@ -24,15 +23,17 @@ import org.apache.camel.ExchangePattern;
 import org.apache.camel.Processor;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.ExchangeBuilder;
-import org.apache.commons.lang3.time.DateUtils;
+import org.joda.time.LocalDateTime;
+import org.joda.time.Seconds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
+import org.openhubframework.openhub.api.configuration.ConfigurableValue;
+import org.openhubframework.openhub.api.configuration.ConfigurationItem;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.exception.IntegrationException;
 import org.openhubframework.openhub.api.exception.InternalErrorEnum;
@@ -69,8 +70,8 @@ public class MessagePollExecutor implements Runnable {
     /**
      * Interval (in seconds) after that postponed messages will fail.
      */
-    @Value("${asynch.postponedIntervalWhenFailed}")
-    private int postponedIntervalWhenFailed;
+    @ConfigurableValue(key = "ohf.asynch.postponedIntervalSecWhenFailedSec")
+    private ConfigurationItem<Seconds> postponedIntervalWhenFailed;
 
     // note: this is because of setting different target URI for tests
     private String targetURI = AsynchConstants.URI_ASYNC_MSG;
@@ -122,11 +123,11 @@ public class MessagePollExecutor implements Runnable {
                     AsynchConstants.MSG_QUEUE_INSERT_HEADER, System.currentTimeMillis());
 
         } else {
-            Date failedDate = DateUtils.addSeconds(new Date(), -postponedIntervalWhenFailed);
+            LocalDateTime failedDate = LocalDateTime.now().minus(postponedIntervalWhenFailed.getValue());
 
             final Message paramMsg = msg;
 
-            if (msg.getReceiveTimestamp().before(failedDate)) {
+            if (msg.getReceiveTimestamp().before(failedDate.toDate())) {
 
                 // change to failed message => redirect to "FAILED" route
                 producerTemplate.send(AsynchConstants.URI_ERROR_FATAL, ExchangePattern.InOnly,

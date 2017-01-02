@@ -17,24 +17,20 @@
 package org.openhubframework.openhub.core.common.dao;
 
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
-
 import javax.annotation.Nullable;
-import javax.persistence.EntityManager;
-import javax.persistence.LockModeType;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 
-import org.apache.commons.lang3.time.DateUtils;
-import org.openhubframework.openhub.api.entity.ExternalCall;
-import org.openhubframework.openhub.api.entity.ExternalCallStateEnum;
-import org.openhubframework.openhub.api.exception.MultipleDataFoundException;
+import org.joda.time.LocalDateTime;
+import org.joda.time.Seconds;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.api.entity.ExternalCall;
+import org.openhubframework.openhub.api.entity.ExternalCallStateEnum;
+import org.openhubframework.openhub.api.exception.MultipleDataFoundException;
 
 
 /**
@@ -46,7 +42,7 @@ import org.springframework.util.Assert;
 @Transactional(propagation = Propagation.MANDATORY)
 public class ExternalCallDaoJpaImpl implements ExternalCallDao {
 
-    public static final int MAX_MESSAGES_IN_ONE_QUERY = 50;
+    private static final int MAX_MESSAGES_IN_ONE_QUERY = 50;
 
     @PersistenceContext(unitName = DbConst.UNIT_NAME)
     private EntityManager em;
@@ -104,9 +100,9 @@ public class ExternalCallDaoJpaImpl implements ExternalCallDao {
     @Override
     @Nullable
     @SuppressWarnings("unchecked")
-    public ExternalCall findConfirmation(int interval) {
+    public ExternalCall findConfirmation(Seconds interval) {
         // find confirmation that was lastly processed before specified interval
-        Date lastUpdateLimit = DateUtils.addSeconds(new Date(), -interval);
+        LocalDateTime lastUpdateLimit = LocalDateTime.now().minus(interval);
 
         String jSql = "SELECT c "
                 + "FROM " + ExternalCall.class.getName() + " c "
@@ -118,7 +114,7 @@ public class ExternalCallDaoJpaImpl implements ExternalCallDao {
         TypedQuery<ExternalCall> q = em.createQuery(jSql, ExternalCall.class);
         q.setParameter("operationName", ExternalCall.CONFIRM_OPERATION);
         q.setParameter("state", ExternalCallStateEnum.FAILED);
-        q.setParameter("lastUpdateTimestamp", new Timestamp(lastUpdateLimit.getTime()));
+        q.setParameter("lastUpdateTimestamp", new Timestamp(lastUpdateLimit.toDate().getTime()));
         q.setMaxResults(1);
         List<ExternalCall> extCalls = q.getResultList();
 
@@ -143,8 +139,8 @@ public class ExternalCallDaoJpaImpl implements ExternalCallDao {
     }
 
     @Override
-    public List<ExternalCall> findProcessingExternalCalls(int interval) {
-        final Date startProcessLimit = DateUtils.addSeconds(new Date(), -interval);
+    public List<ExternalCall> findProcessingExternalCalls(Seconds interval) {
+        LocalDateTime startProcessLimit = LocalDateTime.now().minus(interval);
 
         String jSql = "SELECT c "
                 + "FROM " + ExternalCall.class.getName() + " c "
@@ -152,7 +148,7 @@ public class ExternalCallDaoJpaImpl implements ExternalCallDao {
                 + "     AND c.lastUpdateTimestamp < :time";
 
         TypedQuery<ExternalCall> q = em.createQuery(jSql, ExternalCall.class);
-        q.setParameter("time", new Timestamp(startProcessLimit.getTime()));
+        q.setParameter("time", new Timestamp(startProcessLimit.toDate().getTime()));
         q.setMaxResults(MAX_MESSAGES_IN_ONE_QUERY);
         return q.getResultList();
     }

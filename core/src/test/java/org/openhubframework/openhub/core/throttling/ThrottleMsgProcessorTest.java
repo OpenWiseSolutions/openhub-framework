@@ -75,8 +75,7 @@ public class ThrottleMsgProcessorTest extends AbstractCoreTest {
     }
 
     private ThrottlingPropertiesConfiguration initThrottlingConf() {
-        ThrottlingPropertiesConfiguration conf = new ThrottlingPropertiesConfiguration();
-        setPrivateField(conf, "env", env);
+        ThrottlingPropertiesConfiguration conf = new ThrottlingPropertiesConfiguration(env);
         conf.initProps();
         return conf;
     }

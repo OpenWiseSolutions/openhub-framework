@@ -38,6 +38,8 @@ import org.openhubframework.openhub.api.entity.MsgStateEnum;
 import org.openhubframework.openhub.api.exception.IntegrationException;
 import org.openhubframework.openhub.core.AbstractCoreDbTest;
 import org.openhubframework.openhub.core.common.dao.MessageDao;
+import org.openhubframework.openhub.core.configuration.FixedConfigurationItem;
+
 
 /**
  * Tests {@link RepairMessageServiceDbImpl}
@@ -72,7 +74,7 @@ public class RepairMessageServiceDbImplTest extends AbstractCoreDbTest {
 
     @Test
     public void testRepairProcessingMessagesToFailed() throws Exception {
-        setPrivateField(messageService, "countPartlyFailsBeforeFailed", 2);
+        setPrivateField(messageService, "countPartlyFailsBeforeFailed", new FixedConfigurationItem<>(2));
 
         RouteBuilder failedRoute = new RouteBuilder() {
             @Override

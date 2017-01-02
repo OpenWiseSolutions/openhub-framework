@@ -51,7 +51,7 @@ import org.openhubframework.openhub.api.route.CamelConfiguration;
 import org.openhubframework.openhub.common.AutoConfiguration;
 import org.openhubframework.openhub.common.log.LogContextFilter;
 import org.openhubframework.openhub.core.config.CamelConfig;
-import org.openhubframework.openhub.core.config.JpaConfiguration;
+import org.openhubframework.openhub.core.config.JpaConfig;
 import org.openhubframework.openhub.core.config.WebServiceConfig;
 import org.openhubframework.openhub.modules.ErrorEnum;
 
@@ -68,7 +68,7 @@ import org.openhubframework.openhub.modules.ErrorEnum;
  * @see WebSecurityConfig
  * @see CamelConfig
  * @see WebServiceConfig
- * @see JpaConfiguration
+ * @see JpaConfig
  */
 @EnableAutoConfiguration
 @EnableConfigurationProperties

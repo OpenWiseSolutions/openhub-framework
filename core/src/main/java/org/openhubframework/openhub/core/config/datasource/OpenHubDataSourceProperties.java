@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.common.datasource;
+package org.openhubframework.openhub.core.config.datasource;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

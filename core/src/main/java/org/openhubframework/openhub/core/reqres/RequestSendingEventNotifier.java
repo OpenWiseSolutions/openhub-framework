@@ -19,17 +19,17 @@ package org.openhubframework.openhub.core.reqres;
 import java.util.EventObject;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.annotation.PostConstruct;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.management.event.ExchangeSendingEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.Assert;
 
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
+import org.openhubframework.openhub.api.configuration.ConfigurableValue;
+import org.openhubframework.openhub.api.configuration.ConfigurationItem;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.Request;
 import org.openhubframework.openhub.api.event.EventNotifier;
@@ -57,36 +57,28 @@ public class RequestSendingEventNotifier extends EventNotifierBase<ExchangeSendi
     /**
      * True for enabling saving requests/responses for filtered endpoints URI.
      */
-    @Value("${requestSaving.enable}")
-    private boolean enable;
+    @ConfigurableValue(key = "ohf.requestSaving.enable")
+    private ConfigurationItem<Boolean> enable;
 
     /**
      * Pattern for filtering endpoints URI which requests/response should be saved.
      */
-    @Value("${requestSaving.endpointFilter}")
-    private String endpointFilter;
-
-    private Pattern endpointFilterPattern;
+    @ConfigurableValue(key = "ohf.requestSaving.endpointFilter")
+    private ConfigurationItem<Pattern> endpointFilterPattern;
 
     @Autowired
     private RequestResponseService requestResponseService;
 
-
-    @PostConstruct
-    public void compilePattern() {
-        endpointFilterPattern = Pattern.compile(endpointFilter);
-    }
-
     @Override
     public boolean isEnabled(EventObject event) {
-        return enable && super.isEnabled(event);
+        return enable.getValue() && super.isEnabled(event);
     }
 
     @Override
     protected void doNotify(ExchangeSendingEvent event) throws Exception {
         String endpointUri = event.getEndpoint().getEndpointUri();
 
-        if (filter(endpointUri, endpointFilterPattern)) {
+        if (filter(endpointUri, endpointFilterPattern.getValue())) {
             Message msg = event.getExchange().getIn().getHeader(AsynchConstants.MSG_HEADER, Message.class);
 
             // create request

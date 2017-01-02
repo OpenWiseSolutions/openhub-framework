@@ -56,7 +56,7 @@ public class RepairExternalCallDbImplTest extends AbstractCoreDbTest {
     @Autowired
     private RepairExternalCallDbImpl externalCallService;
 
-    @Value("${asynch.repairRepeatTime}")
+    @Value("${ohf.asynch.repairRepeatTimeSec}")
     private int repeatInterval;
 
 
