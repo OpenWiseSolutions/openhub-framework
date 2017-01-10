@@ -19,12 +19,12 @@
     </appender>
     
     <!-- OpenHub integration namespaces -->
-    <logger name="org.openhubframework.openhub" level="DEBUG"/>
+    <logger name="org.openhubframework.openhub" level="${logging.level.org.openhubframework.openhub:-DEBUG}"/>
     <!-- Third party -->
-    <logger name="org.springframework" level="WARN"/>
-    <logger name="org.apache.camel" level="ERROR"/>
+    <logger name="org.springframework" level="${logging.level.org.springframework:-WARN}"/>
+    <logger name="org.apache.camel" level="${logging.level.org.apache.camel:-ERROR}"/>
     
-    <root level="error">
+    <root level="${logging.level.root:-ERROR}">
         <appender-ref ref="CONSOLE"/>
     </root>
 </configuration>
