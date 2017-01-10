@@ -89,7 +89,7 @@
                         </goals>
                         <phase>generate-resources</phase>
                         <configuration>
-                            <arguments>run deploy</arguments>
+                            <arguments>run deploy:prod</arguments>
                         </configuration>
                     </execution>
                 </executions>

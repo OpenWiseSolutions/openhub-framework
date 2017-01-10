@@ -63,6 +63,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-freemarker</artifactId>
         </dependency>
+        
+        <!-- Admin console -->
+        <dependency>
+            <groupId>org.openhubframework</groupId>
+            <artifactId>openhub-admin-client</artifactId>
+        </dependency>
 
         <!-- Spring security JSP tags -->
         <dependency>

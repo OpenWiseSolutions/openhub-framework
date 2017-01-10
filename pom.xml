@@ -119,6 +119,11 @@
                 <artifactId>openhub-examples</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.openhubframework</groupId>
+                <artifactId>openhub-admin-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
 
             <!-- Apache Camel -->
