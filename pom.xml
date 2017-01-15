@@ -49,7 +49,6 @@
     </scm>
 
     <modules>
-        <module>admin-console-client</module>
         <module>common</module>
         <module>core</module>
         <module>core-api</module>
@@ -59,6 +58,23 @@
         <module>test</module>
         <module>web-admin</module>
     </modules>
+
+    <profiles>
+        <profile>
+            <!-- Profile which is used to build OHF with all modules (all-in-one) -->
+            <id>full-build</id>
+
+            <!-- Activated by default -->
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+
+            <modules>
+                <!-- OHF admin client -->
+                <module>admin-console</module>
+            </modules>
+        </profile>
+    </profiles>
 
     <properties>
         <!-- java language version -->
@@ -121,7 +137,7 @@
             </dependency>
             <dependency>
                 <groupId>org.openhubframework</groupId>
-                <artifactId>openhub-admin-client</artifactId>
+                <artifactId>openhub-admin-console</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

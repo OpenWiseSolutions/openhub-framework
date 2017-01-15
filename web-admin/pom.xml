@@ -64,12 +64,6 @@
             <artifactId>spring-boot-starter-freemarker</artifactId>
         </dependency>
         
-        <!-- Admin console -->
-        <dependency>
-            <groupId>org.openhubframework</groupId>
-            <artifactId>openhub-admin-client</artifactId>
-        </dependency>
-
         <!-- Spring security JSP tags -->
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -101,6 +95,18 @@
     </dependencies>
 
     <profiles>
+        <profile>
+            <!-- Profile which is used to build OHF with all modules (all-in-one) -->
+            <id>full-build</id>
+            <dependencies>
+                <!-- Admin console -->
+                <dependency>
+                    <groupId>org.openhubframework</groupId>
+                    <artifactId>openhub-admin-console</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+        
         <profile>
             <!-- default settings common for all environments -->
             <id>esb.dev</id>
