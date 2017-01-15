@@ -1,0 +1,8 @@
+.idea/
+.tmp/
+coverage/
+node_modules/
+node/
+dist/
+*.log
+.DS_STORE

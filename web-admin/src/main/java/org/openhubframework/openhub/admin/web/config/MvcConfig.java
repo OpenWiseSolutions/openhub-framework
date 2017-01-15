@@ -16,7 +16,16 @@
 
 package org.openhubframework.openhub.admin.web.config;
 
+import static org.springframework.util.StringUtils.hasText;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.ResourceProperties;
+import org.springframework.boot.autoconfigure.web.WebMvcProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 
@@ -32,4 +41,38 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 // formatters, view controllers etc.) you can add your own @Bean of type WebMvcConfigurerAdapter, but without @EnableWebMvc.
 public class MvcConfig extends WebMvcConfigurerAdapter {
 
-}
+    private static final Logger logger = LoggerFactory.getLogger(MvcConfig.class);
+
+    @Autowired
+    private ResourceProperties resourceProperties = new ResourceProperties();
+
+    @Autowired
+    private WebMvcProperties mvcProperties = new WebMvcProperties();
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        Resource page = this.resourceProperties.getWelcomePage();
+        if (page != null) {
+            final String welcomePagePath = getWelcomePagePath(mvcProperties);
+            logger.info("Adding welcome page ({}): {}" + page, welcomePagePath);
+            registry.addViewController(welcomePagePath).setViewName("forward:index.html");
+        }
+    }
+
+    /**
+     * Gets welcome page path basically from {@link WebMvcProperties#getStaticPathPattern()} configuration when pattern expression {@code "*"} 
+     * is removed, for example static path pattern defines {@code /console/**} and welcome page path will be resolved as {@code /console/}.
+     * 
+     * @param mvcProperties as configuration for 
+     * @return welcome page path on which static resource {@code index.html} will be loaded
+     */
+    protected String getWelcomePagePath(WebMvcProperties mvcProperties) {
+        if (hasText(mvcProperties.getStaticPathPattern())) {
+            return mvcProperties.getStaticPathPattern().replace("*", "");   
+        }
+        
+        // default fallback
+        return "/";
+    }
+
+}   
