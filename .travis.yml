@@ -12,5 +12,5 @@ after_success:
   - .utility/push-javadoc-to-gh-pages.sh
 notifications:
   email:
-    - openhub@openwise.cz
+    - openhub_dev@openwise.cz
 sudo: false
