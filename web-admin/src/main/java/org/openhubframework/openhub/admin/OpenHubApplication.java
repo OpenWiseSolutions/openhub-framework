@@ -80,7 +80,8 @@ import org.openhubframework.openhub.modules.ErrorEnum;
         excludeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, classes = AutoConfiguration.class),
                 @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = CamelConfiguration.class)})
 @Configuration
-@ImportResource({"classpath:net/bull/javamelody/monitoring-spring.xml", "classpath:sp_h2_server.xml"})
+@ImportResource({"classpath:net/bull/javamelody/monitoring-spring.xml", "classpath:sp_h2_server.xml",
+        "classpath:sp_camelContext.xml"})
 // note: I re-define property sources from CoreProperties because I need to determine priorities of processing
 @PropertySource(value = {"classpath:/applicationCore.cfg", "classpath:/alertsCore.cfg", "classpath:/throttlingCore.cfg",
         "classpath:/throttling.cfg", "classpath:/alerts.cfg", "classpath:/extensions.cfg"})

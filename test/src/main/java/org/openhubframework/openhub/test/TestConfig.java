@@ -25,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.camel.CamelContext;
 import org.apache.camel.spring.boot.CamelConfigurationProperties;
 import org.apache.camel.spring.boot.CamelContextConfiguration;
+import org.apache.camel.spring.boot.RoutesCollector;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.HttpEncodingAutoConfiguration;
@@ -73,6 +74,9 @@ public class TestConfig {
         return new DummyPolicy();
     }
 
+    /**
+     * Implementation of {@link RoutesCollector} for tests that adds only active routes into camel context.
+     */
     @Bean
     public ActiveRoutesCollector activeRoutesCollector(ApplicationContext applicationContext, CamelConfigurationProperties config) {
         Assert.notNull(config, "config must not be null");
