@@ -1,4 +1,4 @@
-import { sidebarWidth } from '../../../components/Sidebar/sidebar.styles'
+import { sidebarWidth } from '../../../common/components/Sidebar/sidebar.styles'
 import { dev, transition } from '../../../styles/constants'
 
 export default {

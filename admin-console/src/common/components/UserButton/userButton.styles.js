@@ -1,5 +1,7 @@
-import { lightColor, secondaryColor } from '../../styles/colors'
-import { itemSize, gap, userMenuWidth } from '../../styles/constants'
+import { primaryColor, secondaryColor } from '../../../styles/colors'
+import { itemSize, gap, userMenuWidth } from '../../../styles/constants'
+import { fadeIn } from 'react-animations'
+import Radium from 'radium'
 
 export default {
   main: {
@@ -18,11 +20,14 @@ export default {
     marginRight: gap
   },
   menu: {
+    animation: 'fadeIn 0.3s',
+    animationName: Radium.keyframes(fadeIn, 'fadeIn'),
     position: 'absolute',
     top: `${itemSize}px`,
     right: 0,
     width: userMenuWidth,
     height: 'auto',
-    backgroundColor: lightColor
+    backgroundColor: primaryColor,
+    boxShadow: '0 0 5px 0 silver'
   }
 }

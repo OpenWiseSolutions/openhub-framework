@@ -5,7 +5,7 @@ import { shallow } from 'enzyme'
 import { spy } from 'sinon'
 import ArrowDown from 'react-icons/lib/md/keyboard-arrow-down'
 import MenuIcon from 'react-icons/lib/md/menu'
-import Item from '../../src/components/Item/Item'
+import Item from '../../src/common/components/Item/Item'
 
 const getWrapper = (props) => {
   return shallow(

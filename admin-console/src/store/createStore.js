@@ -3,12 +3,14 @@ import thunk from 'redux-thunk'
 import { browserHistory } from 'react-router'
 import makeRootReducer from './reducers'
 import { updateLocation } from './location'
+import reduxPromise from 'redux-promise'
+import authMiddleware from './auth.middleware'
 
 export default (initialState = {}) => {
   // ======================================================
   // Middleware Configuration
   // ======================================================
-  const middleware = [thunk]
+  const middleware = [thunk, reduxPromise, authMiddleware]
 
   // ======================================================
   // Store Enhancers

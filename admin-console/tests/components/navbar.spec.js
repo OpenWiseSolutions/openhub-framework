@@ -3,9 +3,8 @@ import React from 'react'
 import { expect } from 'chai'
 import { shallow } from 'enzyme'
 import { spy } from 'sinon'
-import Navbar from '../../src/components/Navbar/Navbar'
+import Navbar from '../../src/common/components/Navbar/Navbar'
 import MenuIcon from 'react-icons/lib/md/menu'
-import UserButton from '../../src/components/UserButton/UserButton'
 
 const getWrapper = (props, context) => {
   return shallow(
@@ -24,7 +23,6 @@ describe('Navbar Component', () => {
   it('should render', () => {
     expect(wrapper.find('.navbar-wrapper')).to.have.length(1)
     expect(wrapper.find('.navbar-wrapper')).to.have.descendants(MenuIcon)
-    expect(wrapper.find('.navbar-wrapper')).to.have.descendants(UserButton)
   })
 
   it('should trigger sidebar open', () => {

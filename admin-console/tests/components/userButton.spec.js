@@ -3,10 +3,13 @@ import React from 'react'
 import { expect } from 'chai'
 import { shallow } from 'enzyme'
 import { spy } from 'sinon'
-import UserButton from '../../src/components/UserButton/UserButton'
-import Item from '../../src/components/Item/Item'
-import Avatar from '../../src/components/Avatar/Avatar'
+import UserButton from '../../src/common/components/UserButton/UserButton'
+import Item from '../../src/common/components/Item/Item'
+import Avatar from '../../src/common/components/Avatar/Avatar'
 import ArrowDown from 'react-icons/lib/md/keyboard-arrow-down'
+import Radium from 'radium'
+
+Radium.TestMode.enable()
 
 const getWrapper = (props, context) => {
   return shallow(
