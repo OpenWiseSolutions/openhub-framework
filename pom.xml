@@ -203,6 +203,13 @@
                 <scope>import</scope>
             </dependency>
 
+            <!-- Enabled configuration properties in OHF classes -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-configuration-processor</artifactId>
+                <version>${spring-boot.version}</version>
+                <optional>true</optional>
+            </dependency>
 
             <!-- persistence -->
             <dependency>
@@ -305,6 +312,11 @@
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjtools</artifactId>
+        </dependency>
+        <!-- enabled configuration properties in OHF classes -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
         </dependency>
     </dependencies>
 
