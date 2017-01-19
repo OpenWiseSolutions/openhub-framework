@@ -23,16 +23,16 @@ With OpenHub you have the whole source code in your hands and the community arou
 
 ## License
 
-[Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
+[Apache License 2.0]
 
 ## Getting Started
 To help you get started, try the following links:
 
-* [how to start](https://openhubframework.atlassian.net/wiki/display/OHF/Getting+started)
+* [how to start]
+* [building]
 
-* [building](https://openhubframework.atlassian.net/wiki/x/foM)
-
-We welcome [contributions](https://github.com/OpenWiseSolutions/openhub-framework/blob/master/CONTRIBUTING.md) of all kinds. Please refer to the website for details of finding the [issue tracker](https://openhubframework.atlassian.net/wiki/display/OHF) or [wiki](https://openwise.atlassian.net/projects/OHFJIRA). If you hit any problems please talk to us on the [OpenHub Framework StackOverflow](http://stackoverflow.com/questions/tagged/openhubframework).
+We welcome [contributions] of all kinds. Please refer to the website for details of finding the [issue tracker] or [wiki]. 
+If you hit any problems please talk to us on the [OpenHub Framework StackOverflow].
 
 
 We appreciate any feedback on how OpenHub fits your requirements. It helps us keep the right direction.
@@ -41,3 +41,12 @@ Enjoy!
 
 --------------------
 The OpenHub team!
+
+
+[Apache License 2.0]: http://www.apache.org/licenses/LICENSE-2.0.txt
+[how to start]: https://openhubframework.atlassian.net/wiki/display/OHF/Getting+started
+[building]: https://openhubframework.atlassian.net/wiki/x/foM
+[contributions]: https://github.com/OpenWiseSolutions/openhub-framework/blob/master/CONTRIBUTING.md
+[issue tracker]: https://openhubframework.atlassian.net/projects/OHFJIRA
+[wiki]: https://openwise.atlassian.net/projects/OHFJIRA
+[OpenHub Framework StackOverflow]: http://stackoverflow.com/questions/tagged/openhubframework
