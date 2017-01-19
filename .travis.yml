@@ -10,11 +10,16 @@ env:
 before_install:
   - chmod +x .utility/push-javadoc-to-gh-pages.sh 
   - chmod +x .utility/publish-artifacts.sh 
-install: mvn install -DskipTests=true -q
-script: mvn test javadoc:aggregate -Dlogging.level.org.openhubframework.openhub=INFO
+install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -q
+script: mvn test javadoc:aggregate jacoco:report -Dlogging.level.org.openhubframework.openhub=INFO
 after_success:  
   - .utility/push-javadoc-to-gh-pages.sh
   - .utility/publish-artifacts.sh
+  # 'coveralls:report' goal is responsible for updating coverall.io stats once travisCI build completes  
+  - mvn coveralls:report  
+cache:
+  directories:
+    - $HOME/.m2  
 notifications:
   email:
     - openhub_dev@openwise.cz
