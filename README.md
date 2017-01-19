@@ -1,4 +1,4 @@
-# Welcome to OpenHub Framework [![Build Status](https://travis-ci.org/OpenWiseSolutions/openhub-framework.svg?branch=develop)](https://travis-ci.org/OpenWiseSolutions/openhub-framework)
+# Welcome to OpenHub Framework [![Build Status](https://travis-ci.org/OpenWiseSolutions/openhub-framework.svg?branch=develop)](https://travis-ci.org/OpenWiseSolutions/openhub-framework) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.openhubframework/openhub/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.openhubframework/openhub)
 
 **ESB made by developers for developers**
 

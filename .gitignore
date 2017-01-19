@@ -1,6 +1,15 @@
+# OS files
+.DS_STORE
+
 # IDE files
 .idea
 *.iml
 
+# Java files
+*.class
+*.jar
+*.war
+*.ear
+
 # working directories
-/*/target
+target/
