@@ -20,15 +20,12 @@ import javax.persistence.EntityManagerFactory;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
-import org.apache.camel.builder.LoggingErrorHandlerBuilder;
 import org.apache.camel.component.jpa.JpaComponent;
 import org.apache.camel.component.quartz2.QuartzComponent;
 import org.apache.camel.component.seda.PriorityBlockingQueueFactory;
 import org.apache.camel.component.servlet.CamelHttpTransportServlet;
 import org.apache.camel.processor.interceptor.DefaultTraceFormatter;
 import org.apache.camel.processor.interceptor.Tracer;
-import org.apache.camel.spi.ThreadPoolProfile;
-import org.apache.camel.spring.boot.CamelContextConfiguration;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -55,31 +52,36 @@ public class CamelConfig {
 
     private static final int MAX_THREAD_POOL_SIZE = 30;
 
-    @Bean
-    public CamelContextConfiguration contextConfiguration() {
-      return new CamelContextConfiguration() {
+    //TODO PJUZA correct it when Camel is in version 2.18.0
+    //note: we have to use Spring XML configuration of CamelContext because of this error:
+    //  https://issues.apache.org/jira/browse/CAMEL-10109
+    //  Solved by https://openhubframework.atlassian.net/browse/OHFJIRA-33
 
-          @Override
-          public void beforeApplicationStart(CamelContext camelContext) {
-              // error handler
-              LoggingErrorHandlerBuilder handlerBuilder = new LoggingErrorHandlerBuilder();
-              handlerBuilder.logName("org.openhubframework.openhub.core");
-              camelContext.setErrorHandlerBuilder(handlerBuilder);
-              camelContext.setHandleFault(true);
-
-              // default thread profile (see DefaultExecutorServiceManager for defaults)
-              ThreadPoolProfile threadPoolProfile = camelContext.getExecutorServiceManager()
-                      .getDefaultThreadPoolProfile();
-              threadPoolProfile.setId(DEFAULT_THREAD_PROFILE);
-              threadPoolProfile.setMaxPoolSize(MAX_THREAD_POOL_SIZE);
-          }
-
-          @Override
-          public void afterApplicationStart(CamelContext camelContext) {
-              // nothing to set
-          }
-      };
-    }
+//    @Bean
+//    public CamelContextConfiguration contextConfiguration() {
+//      return new CamelContextConfiguration() {
+//
+//          @Override
+//          public void beforeApplicationStart(CamelContext camelContext) {
+//              // error handler
+//              LoggingErrorHandlerBuilder handlerBuilder = new LoggingErrorHandlerBuilder();
+//              handlerBuilder.logName("org.openhubframework.openhub.core");
+//              camelContext.setErrorHandlerBuilder(handlerBuilder);
+//              camelContext.setHandleFault(true);
+//
+//              // default thread profile (see DefaultExecutorServiceManager for defaults)
+//              ThreadPoolProfile threadPoolProfile = camelContext.getExecutorServiceManager()
+//                      .getDefaultThreadPoolProfile();
+//              threadPoolProfile.setId(DEFAULT_THREAD_PROFILE);
+//              threadPoolProfile.setMaxPoolSize(MAX_THREAD_POOL_SIZE);
+//          }
+//
+//          @Override
+//          public void afterApplicationStart(CamelContext camelContext) {
+//              // nothing to set
+//          }
+//      };
+//    }
 
     /**
      * Configures servlet for HTTP communication.
