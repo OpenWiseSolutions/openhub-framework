@@ -1,4 +1,4 @@
-package org.openhubframework.openhub.common.datasource;
+package org.openhubframework.openhub.core.config.datasource;
 
 import java.lang.annotation.*;
 import javax.sql.DataSource;

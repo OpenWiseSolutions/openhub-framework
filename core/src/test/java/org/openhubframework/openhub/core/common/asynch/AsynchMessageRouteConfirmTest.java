@@ -30,10 +30,10 @@ import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
+import org.joda.time.Seconds;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -41,6 +41,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
 import org.openhubframework.openhub.api.asynch.confirm.ConfirmationCallback;
+import org.openhubframework.openhub.api.configuration.ConfigurableValue;
+import org.openhubframework.openhub.api.configuration.ConfigurationItem;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
 import org.openhubframework.openhub.api.exception.IntegrationException;
@@ -94,8 +96,8 @@ public class AsynchMessageRouteConfirmTest extends AbstractCoreDbTest {
     /**
      * Interval (in seconds) between two tries of failed confirmations.
      */
-    @Value("${asynch.confirmation.interval}")
-    private int interval;
+    @ConfigurableValue(key = "ohf.asynch.confirmation.intervalSec")
+    private ConfigurationItem<Seconds> interval;
 
 
     @Configuration
@@ -184,7 +186,7 @@ public class AsynchMessageRouteConfirmTest extends AbstractCoreDbTest {
 
     @Test
     public void testConfirmationFailedRepeat() throws Exception {
-        if (interval > 0) {
+        if (interval.getValue().getSeconds() > 0) {
             fail("This test requires interval to be set to 0, otherwise the polling won't happen fast enough");
         }
 

@@ -30,16 +30,16 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.ReflectionUtils;
 
-import org.openhubframework.openhub.api.configuration.ConfigurationService;
-import org.openhubframework.openhub.common.configuration.ConfigurableValue;
-import org.openhubframework.openhub.common.configuration.ConfigurationItem;
+import org.openhubframework.openhub.api.configuration.ConfigurableValue;
+import org.openhubframework.openhub.api.configuration.ConfigurationItem;
+
 
 /**
  * Factory hook that allows to inject {@link ConfigurationItem} marked by {@link ConfigurableValue}
  * into bean instances, e.g. checking for marker interfaces or wrapping them with proxies.
  * By default {@link ConfigurationItemImpl} is provided as configuration item.
  *
- * @author <a href="mailto:tomas.hanus@openwise.cz">Tomas Hanus</a>
+ * @author Tomas Hanus
  * @see #resolveKey(Field)
  * @see #createConfigurationItem(Class, String, ConfigurationService)
  * @since 2.0

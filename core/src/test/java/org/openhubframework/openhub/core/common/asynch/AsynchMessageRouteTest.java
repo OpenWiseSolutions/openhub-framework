@@ -55,6 +55,7 @@ import org.openhubframework.openhub.api.exception.ValidationIntegrationException
 import org.openhubframework.openhub.api.route.AbstractBasicRoute;
 import org.openhubframework.openhub.core.AbstractCoreDbTest;
 import org.openhubframework.openhub.core.common.asynch.msg.MessageSplitterImpl;
+import org.openhubframework.openhub.core.configuration.FixedConfigurationItem;
 import org.openhubframework.openhub.spi.msg.MessageService;
 import org.openhubframework.openhub.test.*;
 import org.openhubframework.openhub.test.route.ActiveRoutes;
@@ -252,7 +253,7 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
     @Test
     public void testFailed() throws Exception {
         // set failed limit
-        setPrivateField(asynchMessageRoute, "countPartlyFailsBeforeFailed", 2);
+        setPrivateField(asynchMessageRoute, "countPartlyFailsBeforeFailed", new FixedConfigurationItem<>(2));
 
         // route definition that throws exception
         RouteBuilder exRoute = new AbstractBasicRoute() {
@@ -349,7 +350,7 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
     @Test
     public void testPartlyFailedWithRedelivery() throws Exception {
         // set failed limit
-        setPrivateField(asynchMessageRoute, "countPartlyFailsBeforeFailed", 2);
+        setPrivateField(asynchMessageRoute, "countPartlyFailsBeforeFailed", new FixedConfigurationItem<>(2));
 
         // setCustomer route definition
         RouteBuilder setCustomerRoute = new RouteBuilder() {
@@ -460,7 +461,7 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
     @Test
     public void testFailed_messageSplitter() throws Exception {
         // set failed limit
-        setPrivateField(asynchMessageRoute, "countPartlyFailsBeforeFailed", 0);
+        setPrivateField(asynchMessageRoute, "countPartlyFailsBeforeFailed", new FixedConfigurationItem<>(0));
 
         // setCustomer route definition
         RouteBuilder setCustomerRoute = new RouteBuilder() {

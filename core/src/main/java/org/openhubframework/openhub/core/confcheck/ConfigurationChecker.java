@@ -30,12 +30,15 @@ import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
+
+import org.openhubframework.openhub.api.configuration.ConfigurableValue;
+import org.openhubframework.openhub.api.configuration.ConfigurationItem;
+import org.openhubframework.openhub.api.exception.ConfigurationException;
 
 
 /**
@@ -57,29 +60,29 @@ public class ConfigurationChecker implements ApplicationListener<ContextRefreshe
 
     private static final Logger LOG = LoggerFactory.getLogger(ConfigurationChecker.class);
 
-    private static final String ENDPOINTS_INCLUDE_PATTERN = "endpoints.includePattern";
+    private static final String ENDPOINTS_INCLUDE_PATTERN = "ohf.endpoints.includePattern";
 
-    private static final String LOCALHOST_URI = "contextCall.localhostUri";
+    private static final String LOCALHOST_URI = "ohf.contextCall.localhostUri";
 
-    private static final String ENDPOINT_FILTER = "requestSaving.endpointFilter";
+    private static final String ENDPOINT_FILTER = "ohf.requestSaving.endpointFilter";
 
     /**
      * Pattern for filtering endpoints URI - only whose URIs will match specified pattern will be returned.
      */
-    @Value("${" + ENDPOINTS_INCLUDE_PATTERN + "}")
-    private String endpointsIncludePattern;
+    @ConfigurableValue(key = ENDPOINTS_INCLUDE_PATTERN)
+    private ConfigurationItem<String> endpointsIncludePattern;
 
     /**
      * URI of this localhost application, including port number.
      */
-    @Value("${" + LOCALHOST_URI + "}")
-    private String localhostUri;
+    @ConfigurableValue(key = LOCALHOST_URI)
+    private ConfigurationItem<String> localhostUri;
 
     /**
      * Pattern for filtering endpoints URI which requests/response should be saved.
      */
-    @Value("${" + ENDPOINT_FILTER + "}")
-    private String endpointFilter;
+    @ConfigurableValue(key = ENDPOINT_FILTER)
+    private ConfigurationItem<String> endpointFilter;
 
     private boolean checkUrl = false;
 
@@ -96,6 +99,7 @@ public class ConfigurationChecker implements ApplicationListener<ContextRefreshe
      * Checks configuration.
      *
      * @param context the application context
+     * @throws ConfigurationException when there is error in configuration
      */
     void checkConfiguration(ApplicationContext context) {
         LOG.debug("Checking configuration validity ...");
@@ -126,19 +130,19 @@ public class ConfigurationChecker implements ApplicationListener<ContextRefreshe
     }
 
     /**
-     * Checks if configuration parameter "contextCall.localhostUri" is valid - calls PING service.
+     * Checks if configuration parameter "ohf.contextCall.localhostUri" is valid - calls PING service.
      */
     private void checkLocalhostUri() {
         CloseableHttpClient httpClient = HttpClients.createDefault();
 
         try {
             // for example: http://localhost:8080/esb/http/ping
-            HttpGet httpGet = new HttpGet(localhostUri + HTTP_URI_PREFIX + "ping");
+            HttpGet httpGet = new HttpGet(localhostUri.getValue() + HTTP_URI_PREFIX + "ping");
 
             httpClient.execute(httpGet);
         } catch (IOException ex) {
             throw new ConfigurationException("Configuration error - parameter '" + LOCALHOST_URI + "' with value '"
-                    + localhostUri + "' is probably wrong, URI isn't reachable.", ex);
+                    + localhostUri + "' is probably wrong, URI isn't reachable.", ex, LOCALHOST_URI);
         } finally {
             IOUtils.closeQuietly(httpClient);
         }
@@ -154,8 +158,8 @@ public class ConfigurationChecker implements ApplicationListener<ContextRefreshe
      * </ul>
      */
     private void checkPatterns() {
-        checkPattern(endpointsIncludePattern, ENDPOINTS_INCLUDE_PATTERN);
-        checkPattern(endpointFilter, ENDPOINT_FILTER);
+        checkPattern(endpointsIncludePattern.getValue(), ENDPOINTS_INCLUDE_PATTERN);
+        checkPattern(endpointFilter.getValue(), ENDPOINT_FILTER);
     }
 
     private void checkPattern(String pattern, String paramName) {
@@ -164,7 +168,7 @@ public class ConfigurationChecker implements ApplicationListener<ContextRefreshe
         } catch (PatternSyntaxException ex) {
             throw new ConfigurationException(
                     "Configuration error - parameter '" + paramName + "' with value '"
-                    + pattern + "' has wrong syntax, can't be compiled.", ex);
+                    + pattern + "' has wrong syntax, can't be compiled.", ex, paramName);
         }
 
         LOG.debug("Parameter '" + paramName + "' is OK");

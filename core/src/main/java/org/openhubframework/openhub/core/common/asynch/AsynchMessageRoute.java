@@ -25,12 +25,13 @@ import org.apache.camel.*;
 import org.apache.camel.component.spring.ws.SpringWebserviceConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.Assert;
 
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
 import org.openhubframework.openhub.api.asynch.confirm.ConfirmationCallback;
 import org.openhubframework.openhub.api.common.EmailService;
+import org.openhubframework.openhub.api.configuration.ConfigurableValue;
+import org.openhubframework.openhub.api.configuration.ConfigurationItem;
 import org.openhubframework.openhub.api.entity.ExternalCall;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
@@ -105,8 +106,8 @@ public class AsynchMessageRoute extends AbstractBasicRoute {
     /**
      * Count of partly fails before message will be marked as completely FAILED.
      */
-    @Value("${asynch.countPartlyFailsBeforeFailed}")
-    private int countPartlyFailsBeforeFailed;
+    @ConfigurableValue(key = "ohf.asynch.countPartlyFailsBeforeFailed")
+    private ConfigurationItem<Integer> countPartlyFailsBeforeFailed;
 
 
     /**
@@ -407,7 +408,7 @@ public class AsynchMessageRoute extends AbstractBasicRoute {
     public boolean checkFailedLimit(@Header(MSG_HEADER) Message msg) {
         Assert.notNull(msg, "the msg must not be null");
 
-        return msg.getFailedCount() >= countPartlyFailsBeforeFailed;
+        return msg.getFailedCount() >= countPartlyFailsBeforeFailed.getValue();
     }
 
     @Handler

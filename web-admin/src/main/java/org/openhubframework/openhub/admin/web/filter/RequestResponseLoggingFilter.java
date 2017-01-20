@@ -41,7 +41,7 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
  * <p/>
  * This filter is very useful to log REST layer.
  *
- * @author <a href="mailto:tomas.hanus@openwise.cz">Tomas Hanus</a>
+ * @author Tomas Hanus
  * @since 2.0
  * @see #addSupportedContentTypes(String...)
  **/

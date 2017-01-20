@@ -59,8 +59,7 @@ public class ThrottlingPropertiesConfigurationTest extends AbstractCoreTest {
         env.getPropertySources().addFirst(new PropertiesPropertySource("throttling-test", props));
 
         // create configuration
-        ThrottlingPropertiesConfiguration conf = new ThrottlingPropertiesConfiguration();
-        setPrivateField(conf, "env", env);
+        ThrottlingPropertiesConfiguration conf = new ThrottlingPropertiesConfiguration(env);
         conf.initProps();
 
         // verify

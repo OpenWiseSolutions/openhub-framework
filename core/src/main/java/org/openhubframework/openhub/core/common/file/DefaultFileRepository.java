@@ -27,10 +27,12 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import org.openhubframework.openhub.api.common.Constraints;
+import org.openhubframework.openhub.api.configuration.ConfigurableValue;
+import org.openhubframework.openhub.api.configuration.ConfigurationItem;
 import org.openhubframework.openhub.api.exception.IntegrationException;
 import org.openhubframework.openhub.api.exception.InternalErrorEnum;
 import org.openhubframework.openhub.api.file.FileContentTypeExtEnum;
@@ -51,21 +53,31 @@ public class DefaultFileRepository implements FileRepository {
     /**
      * Absolute path to temporary directory where new files are stored.
      */
-    @Value("${dir.temp}")
+    @ConfigurableValue(key = "ohf.dir.temp")
+    private ConfigurationItem<File> tempDirProperty;
+
     private File tempDir;
 
     /**
      * File repository directory where files will be stored.
      */
-    @Value("${dir.fileRepository}")
+    @ConfigurableValue(key = "ohf.dir.fileRepository")
+    private ConfigurationItem<File> fileRepoDirProperty;
+
     private File fileRepoDir;
 
     @PostConstruct
     public void checkDirs() {
-        if (tempDir != null && !tempDir.exists()) {
+        Constraints.notNull(tempDirProperty, "tempDirProperty must be defined");
+        Constraints.notNull(fileRepoDirProperty, "fileRepoDirProperty must be defined");
+
+        tempDir = tempDirProperty.getValue();
+        fileRepoDir = fileRepoDirProperty.getValue();
+
+        if (tempDir != null && !tempDir.getPath().isEmpty() && !tempDir.exists()) {
             throw new IllegalStateException("the temporary directory '" + tempDir + "' doesn't exist");
         }
-        if (fileRepoDir != null && !fileRepoDir.exists()) {
+        if (fileRepoDir != null && !fileRepoDir.getPath().isEmpty() && !fileRepoDir.exists()) {
             throw new IllegalStateException("the file repository directory '" + fileRepoDir + "' doesn't exist");
         }
     }

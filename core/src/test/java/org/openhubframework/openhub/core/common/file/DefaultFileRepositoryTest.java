@@ -33,9 +33,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+
 import org.openhubframework.openhub.api.file.FileContentTypeExtEnum;
 import org.openhubframework.openhub.api.file.OutputStreamWriterCallback;
 import org.openhubframework.openhub.core.AbstractCoreTest;
+import org.openhubframework.openhub.core.configuration.FixedConfigurationItem;
 
 
 /**
@@ -52,8 +54,8 @@ public class DefaultFileRepositoryTest extends AbstractCoreTest {
 
     @Before
     public void prepareData() throws Exception {
-        setPrivateField(fileRepository, "tempDir", tempFolder.getRoot());
-        setPrivateField(fileRepository, "fileRepoDir", tempFolder.getRoot());
+        setPrivateField(fileRepository, "tempDirProperty", new FixedConfigurationItem<>(tempFolder.getRoot()));
+        setPrivateField(fileRepository, "fileRepoDirProperty", new FixedConfigurationItem<>(tempFolder.getRoot()));
     }
 
     @Test

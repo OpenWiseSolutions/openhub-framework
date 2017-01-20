@@ -20,10 +20,10 @@ import static java.lang.Math.min;
 
 import java.util.List;
 
+import org.joda.time.Seconds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
@@ -32,6 +32,8 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.Assert;
 
+import org.openhubframework.openhub.api.configuration.ConfigurableValue;
+import org.openhubframework.openhub.api.configuration.ConfigurationItem;
 import org.openhubframework.openhub.api.entity.ExternalCall;
 import org.openhubframework.openhub.api.entity.ExternalCallStateEnum;
 import org.openhubframework.openhub.core.common.dao.ExternalCallDao;
@@ -55,8 +57,8 @@ public class RepairExternalCallDbImpl implements RepairExternalCallService {
     /**
      * How often to run repair process (in seconds).
      */
-    @Value("${asynch.repairRepeatTime}")
-    private int repeatInterval;
+    @ConfigurableValue(key = "ohf.asynch.repairRepeatTimeSec")
+    private ConfigurationItem<Seconds> repeatInterval;
 
     @Autowired
     public RepairExternalCallDbImpl(PlatformTransactionManager transactionManager) {
@@ -88,7 +90,7 @@ public class RepairExternalCallDbImpl implements RepairExternalCallService {
             @Override
             @SuppressWarnings("unchecked")
             public List<ExternalCall> doInTransaction(TransactionStatus status) {
-                return externalCallDao.findProcessingExternalCalls(repeatInterval);
+                return externalCallDao.findProcessingExternalCalls(repeatInterval.getValue());
             }
         });
     }

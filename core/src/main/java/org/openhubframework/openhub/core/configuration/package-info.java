@@ -17,7 +17,7 @@
 /**
  * Configuration enhancement capabilities which allows to dynamically work with the configuration.
  *
- * @author <a href="mailto:tomas.hanus@openwise.cz">Tomas Hanus</a>
+ * @author Tomas Hanus
  * @since 2.0
  */
 package org.openhubframework.openhub.core.configuration;

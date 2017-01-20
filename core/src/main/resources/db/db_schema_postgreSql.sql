@@ -1,10 +1,34 @@
 --
 -- DB script for creating necessary tables (PostgreSQL 9.x)
 --
+-- PREREQUISITE: there is "openhub" user role defined
+--
 
-drop sequence if exists hibernate_sequence;
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
 
-create sequence hibernate_sequence;
+--DROP SCHEMA IF EXISTS openhub CASCADE;
+--CREATE SCHEMA openhub;
+
+-- Note: Heroku runs the SQL below to create a user and database for you.
+-- You cannot create or modify databases and roles on Heroku Postgres.
+-- For simple use if we need upgrade database schema from command line, we uncomment privileges double lines which
+-- global configure privileges of created objects in schema for appropriate user
+
+--ALTER SCHEMA openhub OWNER TO openhub;
+
+--ALTER DEFAULT PRIVILEGES IN SCHEMA openhub;
+
+SET search_path = openhub, pg_catalog;
+
+
+drop sequence if exists openhub_sequence;
+
+create sequence openhub_sequence;
 
 --
 -- table: message
@@ -47,6 +71,8 @@ alter table message add column funnel_value varchar(50) null;
 drop index if exists funnel_value_idx;
 create index funnel_value_idx ON message (funnel_value);
 
+ALTER TABLE message OWNER TO openhub;
+
 
 --
 -- table: external_call
@@ -75,3 +101,5 @@ create index operation_name_idx ON external_call (operation_name);
 
 drop index if exists ext_state_idx;
 create index ext_state_idx ON external_call (state);
+
+ALTER TABLE external_call OWNER TO openhub;

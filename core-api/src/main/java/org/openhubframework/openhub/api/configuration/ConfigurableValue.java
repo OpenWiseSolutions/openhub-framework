@@ -14,13 +14,9 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.common.configuration;
+package org.openhubframework.openhub.api.configuration;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.AliasFor;
@@ -32,7 +28,7 @@ import org.springframework.core.annotation.AliasFor;
  * <p>
  * Example how to use:
  * <pre>
- *   {@link ConfigurableValue @ConfigurableValue}{@code ("ohf.asynch.confirmation.interval")
+ *   {@link ConfigurableValue @ConfigurableValue}{@code ("ohf.asynch.confirmation.intervalSec")
  *    private ConfigurationItem<Integer> interval;}
  * </pre>
  *

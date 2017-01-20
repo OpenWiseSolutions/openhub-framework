@@ -17,8 +17,9 @@
 package org.openhubframework.openhub.core.common.dao;
 
 import java.util.List;
-
 import javax.annotation.Nullable;
+
+import org.joda.time.Seconds;
 
 import org.openhubframework.openhub.api.entity.ExternalSystemExtEnum;
 import org.openhubframework.openhub.api.entity.Message;
@@ -97,7 +98,7 @@ public interface MessageDao {
      * @return message or null if there is no any message
      */
     @Nullable
-    Message findPartlyFailedMessage(int interval);
+    Message findPartlyFailedMessage(Seconds interval);
 
     /**
      * Finds ONE message in state {@link MsgStateEnum#POSTPONED}.
@@ -106,7 +107,7 @@ public interface MessageDao {
      * @return message or null if there is no any message
      */
     @Nullable
-    Message findPostponedMessage(int interval);
+    Message findPostponedMessage(Seconds interval);
 
     /**
      * Updates message (set start timestamp of processing) - gets lock for message.
@@ -122,7 +123,7 @@ public interface MessageDao {
      * @param interval Interval (in seconds) after that processing messages are probably in dead-lock
      * @return list of messages
      */
-    List<Message> findProcessingMessages(int interval);
+    List<Message> findProcessingMessages(Seconds interval);
 
     /**
      * Gets count of messages in specified state
@@ -132,7 +133,7 @@ public interface MessageDao {
      *                 of messages updated in specified interval
      * @return count
      */
-    int getCountMessages(MsgStateEnum state, @Nullable Integer interval);
+    int getCountMessages(MsgStateEnum state, @Nullable Seconds interval);
 
     /**
      * Gets count of processing messages (PROCESSING, WAITING, WAITING_FOR_RES) with same funnel value
@@ -143,7 +144,7 @@ public interface MessageDao {
      * @param funnelCompId the funnel component ID
      * @return count of messages
      */
-    int getCountProcessingMessagesForFunnel(String funnelValue, int idleInterval, String funnelCompId);
+    int getCountProcessingMessagesForFunnel(String funnelValue, Seconds idleInterval, String funnelCompId);
 
     /**
      * Gets list of messages with specified funnel value for guaranteed processing order of whole routes.
@@ -166,7 +167,7 @@ public interface MessageDao {
      * @param funnelCompId the funnel component ID
      * @return list of messages ordered by {@link Message#getMsgTimestamp() message timestamp}
      */
-    List<Message> getMessagesForGuaranteedOrderForFunnel(String funnelValue, int idleInterval,
+    List<Message> getMessagesForGuaranteedOrderForFunnel(String funnelValue, Seconds idleInterval,
                 boolean excludeFailedState, String funnelCompId);
 
     /**

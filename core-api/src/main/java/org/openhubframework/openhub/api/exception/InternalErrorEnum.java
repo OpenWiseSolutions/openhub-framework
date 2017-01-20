@@ -138,7 +138,13 @@ public enum InternalErrorEnum implements ErrorExtEnum {
     /**
      * Message changed to POSTPONED state repeatedly and max. limit for starting processing was exceeded.
      */
-    E121("message changed to POSTPONED state repeatedly and max. limit for starting processing was exceeded");
+    E121("message changed to POSTPONED state repeatedly and max. limit for starting processing was exceeded"),
+
+    /**
+     * the configuration error - error state of configuration item
+     */
+    E122("the configuration error - error state of configuration item");
+
 
 
     private String errDesc;

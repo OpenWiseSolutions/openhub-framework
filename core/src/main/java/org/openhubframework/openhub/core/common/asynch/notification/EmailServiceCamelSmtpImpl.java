@@ -22,11 +22,12 @@ import java.util.Map;
 import org.apache.camel.ProducerTemplate;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import org.openhubframework.openhub.api.common.EmailService;
+import org.openhubframework.openhub.api.configuration.ConfigurableValue;
+import org.openhubframework.openhub.api.configuration.ConfigurationItem;
 import org.openhubframework.openhub.common.Strings;
 
 
@@ -44,24 +45,24 @@ public class EmailServiceCamelSmtpImpl implements EmailService {
     /**
      * Administrator email address.
      */
-    @Value("${mail.admin}")
-    private String recipients;
+    @ConfigurableValue(key = "ohf.mail.admin")
+    private ConfigurationItem<String> recipients;
 
     /**
      * Email address FROM for sending emails.
      */
-    @Value("${mail.from}")
-    private String from;
+    @ConfigurableValue(key = "ohf.mail.from")
+    private ConfigurationItem<String> from;
 
     /**
      * SMTP server.
      */
-    @Value("${mail.smtp.server}")
-    private String smtp;
+    @ConfigurableValue(key = "ohf.mail.server")
+    private ConfigurationItem<String> smtp;
 
     @Override
     public void sendEmailToAdmins(String subject, String body) {
-        sendFormattedEmail(recipients, subject, body);
+        sendFormattedEmail(recipients.getValue(), subject, body);
     }
 
     @Override
@@ -72,10 +73,10 @@ public class EmailServiceCamelSmtpImpl implements EmailService {
         if (StringUtils.isNotEmpty(recipients)) {
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("To", recipients);
-            map.put("From", from);
+            map.put("From", from.getValue());
             map.put("Subject", subject);
 
-            producerTemplate.sendBodyAndHeaders("smtp://" + smtp, Strings.fm(body, values), map);
+            producerTemplate.sendBodyAndHeaders("smtp://" + smtp.getValue(), Strings.fm(body, values), map);
         }
     }
 }

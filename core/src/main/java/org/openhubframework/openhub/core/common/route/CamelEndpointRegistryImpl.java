@@ -41,7 +41,7 @@ public class CamelEndpointRegistryImpl implements EndpointRegistry, CamelContext
     private CamelContext camelContext;
 
     @Override
-    public Collection<String> getEndpointURIs(String includePattern) {
+    public Collection<String> getEndpointURIs(@Nullable String includePattern) {
         // gets endpoints
         Collection<Endpoint> endpoints = camelContext.getEndpoints();
 

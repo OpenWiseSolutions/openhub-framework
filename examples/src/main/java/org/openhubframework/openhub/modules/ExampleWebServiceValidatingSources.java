@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
-import org.openhubframework.openhub.api.configuration.WebServiceValidatingSources;
+import org.openhubframework.openhub.api.config.WebServiceValidatingSources;
 
 
 /**

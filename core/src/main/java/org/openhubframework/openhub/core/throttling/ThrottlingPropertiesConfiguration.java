@@ -23,7 +23,6 @@ import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -47,25 +46,22 @@ public class ThrottlingPropertiesConfiguration extends AbstractThrottlingConfigu
     static final String DEFAULT_LIMIT_PROP = PROPERTY_PREFIX + "defaultLimit";
 
     @Autowired
-    private ConfigurableEnvironment env;
+    private Environment env;
 
     /**
      * Creates new configuration with properties from {@link Environment environment}.
      *
-     * @param throttlingDisabled the properties
+     * @param env the environment
      */
-    //TODO PJUZA why this value is not overridden from application.properties?
-    public ThrottlingPropertiesConfiguration(@Value("${disable.throttling:false}") boolean throttlingDisabled) {
+    @Autowired
+    public ThrottlingPropertiesConfiguration(Environment env) {
+        this.env = env;
+
+        boolean throttlingDisabled = env.getProperty("ohf.disable.throttling", Boolean.class, false);
+
         LOG.debug("throttlingDisabled set to: " + throttlingDisabled);
 
         this.setThrottlingDisabled(throttlingDisabled);
-    }
-
-    /**
-     * Creates new configuration with properties from {@link Environment environment}.
-     */
-    public ThrottlingPropertiesConfiguration() {
-        this(false);
     }
 
     /**
@@ -81,7 +77,7 @@ public class ThrottlingPropertiesConfiguration extends AbstractThrottlingConfigu
 
         List<String> propNames = new ArrayList<String>();
 
-        for (String propName : Tools.getAllKnownPropertyNames(env)) {
+        for (String propName : Tools.getAllKnownPropertyNames((ConfigurableEnvironment)env)) {
             if (propName.startsWith(PROPERTY_PREFIX)) {
                 switch (propName) {
                     case DEFAULT_INTERVAL_PROP:

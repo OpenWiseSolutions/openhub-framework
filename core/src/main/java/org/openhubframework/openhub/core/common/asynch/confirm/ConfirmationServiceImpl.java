@@ -19,11 +19,12 @@ package org.openhubframework.openhub.core.common.asynch.confirm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import org.openhubframework.openhub.api.configuration.ConfigurableValue;
+import org.openhubframework.openhub.api.configuration.ConfigurationItem;
 import org.openhubframework.openhub.api.entity.ExternalCall;
 import org.openhubframework.openhub.api.entity.ExternalCallStateEnum;
 import org.openhubframework.openhub.api.entity.Message;
@@ -44,8 +45,8 @@ public class ConfirmationServiceImpl implements ConfirmationService {
     /**
      * Maximum count of confirmation fails when will finish further processing.
      */
-    @Value("${asynch.confirmation.failedLimit}")
-    private int failedCountLimit;
+    @ConfigurableValue(key = "ohf.asynch.confirmation.failedLimit")
+    private ConfigurationItem<Integer> failedCountLimit;
 
     @Autowired
     private ExternalCallDao extCallDao;
@@ -95,7 +96,7 @@ public class ConfirmationServiceImpl implements ConfirmationService {
         extCall.setFailedCount(failedCount);
 
         ExternalCallStateEnum state = ExternalCallStateEnum.FAILED;
-        if (failedCount > failedCountLimit) {
+        if (failedCount > failedCountLimit.getValue()) {
             state = ExternalCallStateEnum.FAILED_END;
         }
 

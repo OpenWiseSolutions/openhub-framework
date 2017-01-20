@@ -32,6 +32,9 @@ create table response (
 
 alter table response add constraint fk_response_request foreign key (req_id) references request;
 
+ALTER TABLE request OWNER TO openhub;
+ALTER TABLE response OWNER TO openhub;
+
 
 --
 -- table changes: message

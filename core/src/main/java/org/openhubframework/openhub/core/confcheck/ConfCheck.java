@@ -16,6 +16,9 @@
 
 package org.openhubframework.openhub.core.confcheck;
 
+import org.openhubframework.openhub.api.exception.ConfigurationException;
+
+
 /**
  * Contract for configuration checking.
  *

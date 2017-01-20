@@ -16,15 +16,15 @@
 
 package org.openhubframework.openhub.core.configuration;
 
-import org.openhubframework.openhub.api.configuration.ConfigurationService;
-import org.openhubframework.openhub.common.configuration.ConfigurationItem;
-import org.openhubframework.openhub.common.configuration.ConfigurationItemException;
+import org.openhubframework.openhub.api.configuration.ConfigurationItem;
+import org.openhubframework.openhub.api.exception.ConfigurationException;
+
 
 /**
  * Default implementation of {@link ConfigurationItem}.
  *
  * @param <T> represents type of a configuration item (allowed types are determined by configuration service)
- * @author <a href="mailto:tomas.hanus@openwise.cz">Tomas Hanus</a>
+ * @author Tomas Hanus
  * @since 2.0
  */
 public class ConfigurationItemImpl<T> implements ConfigurationItem<T> {
@@ -49,10 +49,10 @@ public class ConfigurationItemImpl<T> implements ConfigurationItem<T> {
     }
 
     @Override
-    public T getValue() throws ConfigurationItemException {
+    public T getValue() throws ConfigurationException {
         T value = configurationService.getValue(clazz, key);
         if (value == null) {
-            throw new ConfigurationItemException(String.format("Required configuration item with key [%s] not found.", key), key);
+            throw new ConfigurationException(String.format("Required configuration item with key [%s] not found.", key), key);
         }
 
         return value;
@@ -78,5 +78,4 @@ public class ConfigurationItemImpl<T> implements ConfigurationItem<T> {
         // value cannot be null because of internal behaviour of getValue() method
         return getValue().toString();
     }
-
 }

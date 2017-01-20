@@ -28,9 +28,11 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.api.configuration.ConfigurableValue;
+import org.openhubframework.openhub.api.configuration.ConfigurationItem;
 
 
 /**
@@ -45,8 +47,8 @@ public class DirectCallHttpImpl implements DirectCall {
     /**
      * URI of this localhost application, including port number.
      */
-    @Value("${contextCall.localhostUri}")
-    private String localhostUri;
+    @ConfigurableValue(key = "ohf.contextCall.localhostUri")
+    private ConfigurationItem<String> localhostUri;
 
     @Override
     public String makeCall(String callId) throws IOException {
@@ -55,7 +57,7 @@ public class DirectCallHttpImpl implements DirectCall {
         CloseableHttpClient httpClient = HttpClients.createDefault();
 
         try {
-            HttpGet httpGet = new HttpGet(localhostUri + HTTP_URI_PREFIX
+            HttpGet httpGet = new HttpGet(localhostUri.getValue() + HTTP_URI_PREFIX
                     + DirectCallWsRoute.SERVLET_URL + "?" + DirectCallWsRoute.CALL_ID_HEADER + "=" + callId);
 
             // Create a custom response handler

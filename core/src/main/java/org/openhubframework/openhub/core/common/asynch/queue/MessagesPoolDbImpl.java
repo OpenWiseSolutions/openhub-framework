@@ -18,10 +18,10 @@ package org.openhubframework.openhub.core.common.asynch.queue;
 
 import javax.annotation.Nullable;
 
+import org.joda.time.Seconds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -30,6 +30,8 @@ import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.Assert;
 
+import org.openhubframework.openhub.api.configuration.ConfigurableValue;
+import org.openhubframework.openhub.api.configuration.ConfigurationItem;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.exception.LockFailureException;
 import org.openhubframework.openhub.core.common.dao.MessageDao;
@@ -53,14 +55,14 @@ public class MessagesPoolDbImpl implements MessagesPool {
     /**
      * Interval (in seconds) between two tries of partly failed messages.
      */
-    @Value("${asynch.partlyFailedInterval}")
-    private int partlyFailedInterval;
+    @ConfigurableValue(key = "ohf.asynch.partlyFailedIntervalSec")
+    private ConfigurationItem<Seconds> partlyFailedInterval;
 
     /**
      * Interval (in seconds) after that can be postponed message processed again.
      */
-    @Value("${asynch.postponedInterval}")
-    private int postponedInterval;
+    @ConfigurableValue(key = "ohf.asynch.postponedIntervalSec")
+    private ConfigurationItem<Seconds> postponedInterval;
 
     @Autowired
     public MessagesPoolDbImpl(PlatformTransactionManager transactionManager) {
@@ -100,7 +102,7 @@ public class MessagesPoolDbImpl implements MessagesPool {
         return transactionTemplate.execute(new TransactionCallback<Message>() {
             @Override
             public Message doInTransaction(final TransactionStatus transactionStatus) {
-                return messageDao.findPostponedMessage(postponedInterval);
+                return messageDao.findPostponedMessage(postponedInterval.getValue());
             }
         });
     }
@@ -110,7 +112,7 @@ public class MessagesPoolDbImpl implements MessagesPool {
         return transactionTemplate.execute(new TransactionCallback<Message>() {
             @Override
             public Message doInTransaction(final TransactionStatus transactionStatus) {
-                return messageDao.findPartlyFailedMessage(partlyFailedInterval);
+                return messageDao.findPartlyFailedMessage(partlyFailedInterval.getValue());
             }
         });
     }

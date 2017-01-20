@@ -23,6 +23,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
+import org.openhubframework.openhub.api.configuration.DbConfigurationParam;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.core.common.dao.DbConst;
 
@@ -34,7 +35,7 @@ import org.openhubframework.openhub.core.common.dao.DbConst;
  * @since 2.0
  */
 @Configuration
-public class JpaConfiguration {
+public class JpaConfig {
 
     /**
      * Configures JPA entity manager.
@@ -44,7 +45,7 @@ public class JpaConfiguration {
             DataSource dataSource) {
         return builder
                 .dataSource(dataSource)
-                .packages(Message.class)
+                .packages(Message.class, DbConfigurationParam.class)
                 .persistenceUnit(DbConst.UNIT_NAME)
                 .build();
     }

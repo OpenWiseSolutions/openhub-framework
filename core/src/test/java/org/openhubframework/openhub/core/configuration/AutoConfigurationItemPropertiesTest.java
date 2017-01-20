@@ -25,13 +25,13 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import org.openhubframework.openhub.common.configuration.ConfigurableValue;
-import org.openhubframework.openhub.common.configuration.ConfigurationItem;
+import org.openhubframework.openhub.api.configuration.ConfigurableValue;
+import org.openhubframework.openhub.api.configuration.ConfigurationItem;
 
 /**
  * Test suites that validates capability injection of {@link ConfigurationItem}.
  *
- * @author <a href="mailto:tomas.hanus@openwise.cz">Tomas Hanus</a>
+ * @author Tomas Hanus
  * @since 2.0
  */
 //TODO (thanus, 18/12/2016, TASK: OHRJIRA-9) it is necessary to create internal test configurations for OHF tests

@@ -14,33 +14,24 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.api.configuration;
+package org.openhubframework.openhub.core.config;
 
-import org.springframework.core.io.Resource;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 
 /**
- * Contract for definition of XSD schemas for header and payload validation.
+ * Core configuration.
  *
  * @author Petr Juza
  * @since 2.0
  */
-public interface WebServiceValidatingSources {
+@Configuration
+public class CoreConfig {
 
-    /**
-     * Sets the schema resources to use for validation.
-     *
-     * @return array of schema resources
-     */
-    Resource[] getXsdSchemas();
-
-    /**
-     * Sets request root element names which will be ignored from validation checking.
-     * <p>
-     * Example: {@code {http://openhubframework.org/ws/HelloService-v1}syncHelloRequest}
-     *
-     * @return array of root element names
-     */
-    String[] getIgnoreRequests();
-
+    @Bean
+   	public PropertySourcesPlaceholderConfigurer propertyConfig() {
+   		return new PropertySourcesPlaceholderConfigurer();
+   	}
 }

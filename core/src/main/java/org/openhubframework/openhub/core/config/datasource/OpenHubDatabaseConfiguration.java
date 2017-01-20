@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.common.datasource;
+package org.openhubframework.openhub.core.config.datasource;
 
-import static org.openhubframework.openhub.common.datasource.OpenHubDataSourceProperties.JNDI_NAME;
-import static org.openhubframework.openhub.common.datasource.OpenHubDataSourceProperties.URL;
-import static org.openhubframework.openhub.common.datasource.OpenHubDatabaseProperties.DATASOURCE_PREFIX;
 import static org.springframework.util.StringUtils.hasText;
 
 import javax.naming.NamingException;
@@ -86,7 +83,7 @@ public class OpenHubDatabaseConfiguration extends AbstractDatabaseConfig {
     @ConditionalOnMissingBean(name = OpenHubDataSource.BEAN_NAME)
     // do not create if not specified in configuration (must use SPEL expression as ConditionalOnProperty has AND semantic)
     // '${openhub.datasource.jndi-name}' != '' or '${openhub.datasource.url}' != ''
-    @ConditionalOnExpression("'${" + DATASOURCE_PREFIX + "." + JNDI_NAME + ":}' != '' or '${" + DATASOURCE_PREFIX + "." + URL + ":}' != ''")
+    @ConditionalOnExpression("'${" + OpenHubDatabaseProperties.DATASOURCE_PREFIX + "." + OpenHubDataSourceProperties.JNDI_NAME + ":}' != '' or '${" + OpenHubDatabaseProperties.DATASOURCE_PREFIX + "." + OpenHubDataSourceProperties.URL + ":}' != ''")
     @Bean(destroyMethod = "", name = OpenHubDataSource.BEAN_NAME)
     @Primary // transactional datasource must be primary to be taken by spring boot always
     @Override

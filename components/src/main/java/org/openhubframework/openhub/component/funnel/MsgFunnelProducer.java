@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultProducer;
+import org.joda.time.Seconds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
@@ -71,8 +72,8 @@ public class MsgFunnelProducer extends DefaultProducer {
                 // and if it's necessary to guarantee processing order then also PARTLY_FAILED, POSTPONED [and FAILED]
                 // messages should be involved
                 List<Message> messages = endpoint.getMessageService().getMessagesForGuaranteedOrderForFunnel(
-                        msg.getFunnelValue(), endpoint.getIdleInterval(), endpoint.isExcludeFailedState(),
-                        funnelCompId);
+                        msg.getFunnelValue(), Seconds.seconds(endpoint.getIdleInterval()),
+                        endpoint.isExcludeFailedState(), funnelCompId);
 
                 if (messages.size() == 1) {
                     LOG.debug("There is only one processing message with funnel value: " + msg.getFunnelValue()
@@ -94,7 +95,7 @@ public class MsgFunnelProducer extends DefaultProducer {
             } else {
                 // is there processing message with same funnel value?
                 int count = endpoint.getMessageService().getCountProcessingMessagesForFunnel(msg.getFunnelValue(),
-                        endpoint.getIdleInterval(), funnelCompId);
+                        Seconds.seconds(endpoint.getIdleInterval()), funnelCompId);
 
                 if (count > 1) {
                     // note: one processing message is this message

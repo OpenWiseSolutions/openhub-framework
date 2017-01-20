@@ -65,7 +65,7 @@ public class ConfirmationPollExecutorTest extends AbstractCoreDbTest {
     /**
      * Interval (in seconds) between two tries of failed confirmations.
      */
-    @Value("${asynch.confirmation.interval}")
+    @Value("${ohf.asynch.confirmation.intervalSec}")
     private int interval;
 
     @Before

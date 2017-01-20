@@ -44,7 +44,7 @@ import org.springframework.ws.transport.http.WebServiceMessageReceiverHandlerAda
 import org.springframework.xml.xsd.SimpleXsdSchema;
 import org.springframework.xml.xsd.XsdSchema;
 
-import org.openhubframework.openhub.api.configuration.WebServiceValidatingSources;
+import org.openhubframework.openhub.api.config.WebServiceValidatingSources;
 import org.openhubframework.openhub.api.route.RouteConstants;
 import org.openhubframework.openhub.core.common.route.SpringWsUriBuilder;
 import org.openhubframework.openhub.core.common.ws.ErrorCodeAwareSoapExceptionResolver;

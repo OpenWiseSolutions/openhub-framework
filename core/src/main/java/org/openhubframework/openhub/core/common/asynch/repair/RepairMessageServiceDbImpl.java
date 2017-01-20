@@ -25,10 +25,10 @@ import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Processor;
 import org.apache.camel.ProducerTemplate;
+import org.joda.time.Seconds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
@@ -38,6 +38,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.Assert;
 
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
+import org.openhubframework.openhub.api.configuration.ConfigurableValue;
+import org.openhubframework.openhub.api.configuration.ConfigurationItem;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
 import org.openhubframework.openhub.api.exception.IntegrationException;
@@ -67,14 +69,14 @@ public class RepairMessageServiceDbImpl implements RepairMessageService {
     /**
      * How often to run repair process (in seconds).
      */
-    @Value("${asynch.repairRepeatTime}")
-    private int repeatInterval;
+    @ConfigurableValue(key = "ohf.asynch.repairRepeatTimeSec")
+    private ConfigurationItem<Seconds> repeatInterval;
 
     /**
      * Count of partly fails before message will be marked as completely FAILED.
      */
-    @Value("${asynch.countPartlyFailsBeforeFailed}")
-    private int countPartlyFailsBeforeFailed;
+    @ConfigurableValue(key = "ohf.asynch.countPartlyFailsBeforeFailed")
+    private ConfigurationItem<Integer> countPartlyFailsBeforeFailed;
 
     @Autowired
     public RepairMessageServiceDbImpl(PlatformTransactionManager transactionManager) {
@@ -105,7 +107,7 @@ public class RepairMessageServiceDbImpl implements RepairMessageService {
             @Override
             @SuppressWarnings("unchecked")
             public List<Message> doInTransaction(TransactionStatus status) {
-                return messageDao.findProcessingMessages(repeatInterval);
+                return messageDao.findProcessingMessages(repeatInterval.getValue());
             }
         });
     }
@@ -123,7 +125,7 @@ public class RepairMessageServiceDbImpl implements RepairMessageService {
             protected void doInTransactionWithoutResult(TransactionStatus status) {
                 for (final Message msg : messages) {
                     // checks if failed count exceeds limit for failing
-                    if (msg.getFailedCount() >= countPartlyFailsBeforeFailed) {
+                    if (msg.getFailedCount() >= countPartlyFailsBeforeFailed.getValue()) {
                         LOG.warn("The message " + msg.toHumanString() + " was in PROCESSING state and exceeded "
                                 + "max. count of failures. Message is redirected to processing of failed message.");
 

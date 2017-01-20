@@ -23,17 +23,17 @@ import static org.openhubframework.openhub.api.asynch.AsynchConstants.MSG_HEADER
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-
 import javax.annotation.Nullable;
 
 import org.apache.camel.ExchangeProperty;
+import org.apache.camel.Header;
+import org.apache.camel.Properties;
+import org.joda.time.Seconds;
+
 import org.openhubframework.openhub.api.entity.ExternalSystemExtEnum;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
 import org.openhubframework.openhub.api.exception.ErrorExtEnum;
-
-import org.apache.camel.Header;
-import org.apache.camel.Properties;
 
 
 /**
@@ -184,7 +184,7 @@ public interface MessageService {
      * @param interval searching messages updated after this interval (in seconds)
      * @return count of messages
      */
-    int getCountMessages(MsgStateEnum state, @Nullable Integer interval);
+    int getCountMessages(MsgStateEnum state, @Nullable Seconds interval);
 
     /**
      * Get count of processing messages for specified funnel value and funnel ID.
@@ -194,7 +194,7 @@ public interface MessageService {
      * @param funnelCompId the funnel component ID
      * @return count of processing messages
      */
-    int getCountProcessingMessagesForFunnel(String funnelValue, int idleInterval, String funnelCompId);
+    int getCountProcessingMessagesForFunnel(String funnelValue, Seconds idleInterval, String funnelCompId);
 
     /**
      * Gets list of messages with specified funnel value for guaranteed processing order of whole routes.
@@ -217,7 +217,7 @@ public interface MessageService {
      * @param funnelCompId the funnel component ID
      * @return list of messages ordered by {@link Message#getMsgTimestamp() message timestamp}
      */
-    List<Message> getMessagesForGuaranteedOrderForFunnel(String funnelValue, int idleInterval,
+    List<Message> getMessagesForGuaranteedOrderForFunnel(String funnelValue, Seconds idleInterval,
             boolean excludeFailedState, String funnelCompId);
 
     /**

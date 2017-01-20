@@ -17,10 +17,12 @@
 package org.openhubframework.openhub.core.common.asynch.repair;
 
 import org.apache.camel.spring.SpringRouteBuilder;
+import org.joda.time.Seconds;
 import org.quartz.SimpleTrigger;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 
+import org.openhubframework.openhub.api.configuration.ConfigurableValue;
+import org.openhubframework.openhub.api.configuration.ConfigurationItem;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
 import org.openhubframework.openhub.api.route.AbstractBasicRoute;
 import org.openhubframework.openhub.api.route.CamelConfiguration;
@@ -47,14 +49,14 @@ public class RepairProcessingMsgRoute extends SpringRouteBuilder {
     /**
      * How often to run repair process (in seconds).
      */
-    @Value("${asynch.repairRepeatTime}")
-    private int repeatInterval;
+    @ConfigurableValue(key = "ohf.asynch.repairRepeatTimeSec")
+    private ConfigurationItem<Seconds> repeatInterval;
 
     @Override
     public final void configure() throws Exception {
         // repair processing messages
         String uri = JOB_GROUP_NAME + "/" + JOB_NAME
-                + "?trigger.repeatInterval=" + (repeatInterval * 1000)
+                + "?trigger.repeatInterval=" + (repeatInterval.getValue().getSeconds() * 1000)
                 + "&trigger.repeatCount=" + SimpleTrigger.REPEAT_INDEFINITELY;
 
         from("quartz2://" + uri)

@@ -17,9 +17,10 @@
 package org.openhubframework.openhub.core.common.dao;
 
 import java.util.List;
-
 import javax.annotation.Nullable;
 import javax.persistence.PersistenceException;
+
+import org.joda.time.Seconds;
 
 import org.openhubframework.openhub.api.entity.ExternalCall;
 import org.openhubframework.openhub.api.entity.ExternalCallStateEnum;
@@ -73,7 +74,7 @@ public interface ExternalCallDao {
      * @return external call or {@code null} if there is no any confirmation
      */
     @Nullable
-    ExternalCall findConfirmation(int interval);
+    ExternalCall findConfirmation(Seconds interval);
 
     /**
      * Updates confirmation (set state to PROCESSING) - gets lock for this confirmation.
@@ -90,5 +91,5 @@ public interface ExternalCallDao {
      * @param interval the interval
      * @return list of calls
      */
-    List<ExternalCall> findProcessingExternalCalls(int interval);
+    List<ExternalCall> findProcessingExternalCalls(Seconds interval);
 }

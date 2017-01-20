@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.common.configuration;
+package org.openhubframework.openhub.api.configuration;
+
+import org.openhubframework.openhub.api.exception.ConfigurationException;
+
 
 /**
  * Contract of configuration holder, which is wrapping one config item allowing to manage that.
@@ -29,10 +32,10 @@ public interface ConfigurationItem<T> {
      * Gets required configuration item.
      *
      * @return Configuration item loaded from repository
-     * @throws ConfigurationItemException When configuration item is not found in the repository
+     * @throws ConfigurationException When configuration item is not found in the repository
      *                                    (i.e. application requires to have this configuration item)
      */
-    T getValue() throws ConfigurationItemException;
+    T getValue() throws ConfigurationException;
 
     /**
      * Gets configuration item and specifies a default value in case configuration item is not found.

@@ -17,25 +17,16 @@
 package org.openhubframework.openhub.api.entity;
 
 import java.util.Date;
-
 import javax.annotation.Nullable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.openhubframework.openhub.api.common.HumanReadable;
 import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.api.common.HumanReadable;
 
 
 /**
@@ -51,7 +42,8 @@ public class Response implements HumanReadable {
 
     @Id
     @Column(name = "res_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "openhub_id_sequence")
+    @SequenceGenerator(name="openhub_id_sequence", sequenceName="openhub_sequence", allocationSize=1)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -214,7 +206,7 @@ public class Response implements HumanReadable {
             Response en = (Response) obj;
 
             return new EqualsBuilder()
-                    .append(id, en.id)
+                    .append(getId(), en.getId())
                     .isEquals();
         } else {
             return false;
@@ -224,7 +216,7 @@ public class Response implements HumanReadable {
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
-                .append(id)
+                .append(getId())
                 .toHashCode();
     }
 

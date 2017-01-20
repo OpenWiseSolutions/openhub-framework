@@ -17,6 +17,7 @@
 package org.openhubframework.openhub.core.monitoring;
 
 
+import org.joda.time.Seconds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jmx.export.annotation.ManagedAttribute;
 import org.springframework.jmx.export.annotation.ManagedOperation;
@@ -92,48 +93,48 @@ public class MessagesStatus {
     }
 
     @ManagedOperation(description = "Count of messages in state FAILED and after interval")
-    public int getCountOfFailedAfterInterval(int interval) {
-        return messageService.getCountMessages(MsgStateEnum.FAILED, interval);
+    public int getCountOfFailedAfterInterval(int intervalSec) {
+        return messageService.getCountMessages(MsgStateEnum.FAILED, Seconds.seconds(intervalSec));
     }
 
     @ManagedOperation(description = "Count of messages in state PROCESSING and after interval")
-    public int getCountOfProcessingAfterInterval(int interval) {
-        return messageService.getCountMessages(MsgStateEnum.PROCESSING, interval);
+    public int getCountOfProcessingAfterInterval(int intervalSec) {
+        return messageService.getCountMessages(MsgStateEnum.PROCESSING, Seconds.seconds(intervalSec));
     }
 
     @ManagedOperation(description = "Count of messages in state WAITING and after interval")
-    public int getCountOfWaitingAfterInterval(int interval) {
-        return messageService.getCountMessages(MsgStateEnum.WAITING, interval);
+    public int getCountOfWaitingAfterInterval(int intervalSec) {
+        return messageService.getCountMessages(MsgStateEnum.WAITING, Seconds.seconds(intervalSec));
     }
 
     @ManagedOperation(description = "Count of messages in state OK and after interval")
-    public int getCountOfOkAfterInterval(int interval) {
-        return messageService.getCountMessages(MsgStateEnum.OK, interval);
+    public int getCountOfOkAfterInterval(int intervalSec) {
+        return messageService.getCountMessages(MsgStateEnum.OK, Seconds.seconds(intervalSec));
     }
 
     @ManagedOperation(description = "Count of messages in state NEW and after interval")
-    public int getCountOfNewAfterInterval(int interval) {
-        return messageService.getCountMessages(MsgStateEnum.NEW, interval);
+    public int getCountOfNewAfterInterval(int intervalSec) {
+        return messageService.getCountMessages(MsgStateEnum.NEW, Seconds.seconds(intervalSec));
     }
 
     @ManagedOperation(description = "Count of messages in state PARTLY_FAILED and after interval")
-    public int getCountOfPartlyFailedAfterInterval(int interval) {
-        return messageService.getCountMessages(MsgStateEnum.PARTLY_FAILED, interval);
+    public int getCountOfPartlyFailedAfterInterval(int intervalSec) {
+        return messageService.getCountMessages(MsgStateEnum.PARTLY_FAILED, Seconds.seconds(intervalSec));
     }
 
     @ManagedOperation(description = "Count of messages in state CANCEL and after interval")
-    public int getCountOfCancelAfterInterval(int interval) {
-        return messageService.getCountMessages(MsgStateEnum.CANCEL, interval);
+    public int getCountOfCancelAfterInterval(int intervalSec) {
+        return messageService.getCountMessages(MsgStateEnum.CANCEL, Seconds.seconds(intervalSec));
     }
 
     @ManagedOperation(description = "Count of messages in state WAITING_FOR_RES and after interval")
-    public int getCountOfWaitingForResponseAfterInterval(int interval) {
-        return messageService.getCountMessages(MsgStateEnum.WAITING_FOR_RES, interval);
+    public int getCountOfWaitingForResponseAfterInterval(int intervalSec) {
+        return messageService.getCountMessages(MsgStateEnum.WAITING_FOR_RES, Seconds.seconds(intervalSec));
     }
 
     @ManagedOperation(description = "Count of messages in state POSTPONED and after interval")
-    public int getCountOfPostponedAfterInterval(int interval) {
-        return messageService.getCountMessages(MsgStateEnum.POSTPONED, interval);
+    public int getCountOfPostponedAfterInterval(int intervalSec) {
+        return messageService.getCountMessages(MsgStateEnum.POSTPONED, Seconds.seconds(intervalSec));
     }
 
     public void setMessageService(MessageService messageService) {
