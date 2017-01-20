@@ -17,6 +17,7 @@
 package org.openhubframework.openhub.modules;
 
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.PropertySource;
 
 
 /**
@@ -26,6 +27,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @since 2.0
  */
 @ComponentScan(basePackages = {"org.openhubframework.openhub.modules"})
+@PropertySource(value = {"classpath:/config/application-test-default.properties"})
 public class ExampleTestConfig {
 
 }

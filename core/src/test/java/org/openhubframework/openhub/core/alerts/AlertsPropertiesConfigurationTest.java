@@ -66,8 +66,7 @@ public class AlertsPropertiesConfigurationTest extends AbstractCoreTest {
         env.getPropertySources().addFirst(new PropertiesPropertySource("alerts-test", props));
 
         // configure alerts
-        AlertsPropertiesConfiguration conf = new AlertsPropertiesConfiguration();
-        setPrivateField(conf, "env", env);
+        AlertsPropertiesConfiguration conf = new AlertsPropertiesConfiguration(env);
         conf.initProps();
 
         // verify
@@ -101,8 +100,7 @@ public class AlertsPropertiesConfigurationTest extends AbstractCoreTest {
 
         env.getPropertySources().addFirst(new PropertiesPropertySource("alerts-test", props));
 
-        AlertsPropertiesConfiguration conf = new AlertsPropertiesConfiguration();
-        setPrivateField(conf, "env", env);
+        AlertsPropertiesConfiguration conf = new AlertsPropertiesConfiguration(env);
         conf.initProps();
     }
 }

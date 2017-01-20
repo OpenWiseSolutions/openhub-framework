@@ -16,6 +16,8 @@
 
 package org.openhubframework.openhub.core.throttling;
 
+import static org.openhubframework.openhub.api.configuration.CoreProps.DISABLE_THROTTLING;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -45,8 +47,7 @@ public class ThrottlingPropertiesConfiguration extends AbstractThrottlingConfigu
     static final String DEFAULT_INTERVAL_PROP = PROPERTY_PREFIX + "defaultInterval";
     static final String DEFAULT_LIMIT_PROP = PROPERTY_PREFIX + "defaultLimit";
 
-    @Autowired
-    private Environment env;
+    private ConfigurableEnvironment env;
 
     /**
      * Creates new configuration with properties from {@link Environment environment}.
@@ -54,10 +55,10 @@ public class ThrottlingPropertiesConfiguration extends AbstractThrottlingConfigu
      * @param env the environment
      */
     @Autowired
-    public ThrottlingPropertiesConfiguration(Environment env) {
+    public ThrottlingPropertiesConfiguration(ConfigurableEnvironment env) {
         this.env = env;
 
-        boolean throttlingDisabled = env.getProperty("ohf.disable.throttling", Boolean.class, false);
+        boolean throttlingDisabled = env.getProperty(DISABLE_THROTTLING, Boolean.class, false);
 
         LOG.debug("throttlingDisabled set to: " + throttlingDisabled);
 
@@ -77,7 +78,7 @@ public class ThrottlingPropertiesConfiguration extends AbstractThrottlingConfigu
 
         List<String> propNames = new ArrayList<String>();
 
-        for (String propName : Tools.getAllKnownPropertyNames((ConfigurableEnvironment)env)) {
+        for (String propName : Tools.getAllKnownPropertyNames(env)) {
             if (propName.startsWith(PROPERTY_PREFIX)) {
                 switch (propName) {
                     case DEFAULT_INTERVAL_PROP:

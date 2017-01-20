@@ -16,6 +16,8 @@
 
 package org.openhubframework.openhub.core.common.asynch;
 
+import static org.openhubframework.openhub.api.configuration.CoreProps.ASYNCH_EXTERNAL_CALL_SKIP_URI_PATTERN;
+
 import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
 
@@ -51,7 +53,7 @@ public class ExternalCallServiceImpl implements ExternalCallService {
     // note: can't be used ConfigurationItem<Pattern> because property can be null/empty and then
     //  it's problem to create pattern, see PropertySourcesPropertyResolver.getProperty:
     //  java.lang.IllegalArgumentException: Cannot convert value [] from source type [String] to target type [Pattern]
-    @ConfigurableValue(key = "ohf.asynch.externalCall.skipUriPattern")
+    @ConfigurableValue(key = ASYNCH_EXTERNAL_CALL_SKIP_URI_PATTERN)
     private ConfigurationItem<String> skipOperationUriList;
 
     private Pattern uriPattern;
@@ -61,7 +63,7 @@ public class ExternalCallServiceImpl implements ExternalCallService {
 
     @PostConstruct
     public void initPattern() {
-        if (StringUtils.isNotEmpty(skipOperationUriList.getValue())) {
+        if (StringUtils.isNotEmpty(skipOperationUriList.getValue(null))) {
             uriPattern = Pattern.compile(skipOperationUriList.getValue());
         }
     }

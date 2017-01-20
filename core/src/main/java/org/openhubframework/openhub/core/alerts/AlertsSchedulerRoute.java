@@ -16,6 +16,8 @@
 
 package org.openhubframework.openhub.core.alerts;
 
+import static org.openhubframework.openhub.api.configuration.CoreProps.ALERTS_REPEAT_TIME_SEC;
+
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.joda.time.Seconds;
 import org.quartz.SimpleTrigger;
@@ -46,7 +48,7 @@ public class AlertsSchedulerRoute extends SpringRouteBuilder {
     /**
      * How often to run checking of alerts (in seconds).
      */
-    @ConfigurableValue(key = "ohf.alerts.repeatTimeSec")
+    @ConfigurableValue(key = ALERTS_REPEAT_TIME_SEC)
     private ConfigurationItem<Seconds> repeatInterval;
 
     @Override

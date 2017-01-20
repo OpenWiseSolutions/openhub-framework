@@ -16,6 +16,8 @@
 
 package org.openhubframework.openhub.core.common.asynch.repair;
 
+import static org.openhubframework.openhub.api.configuration.CoreProps.ASYNCH_REPAIR_REPEAT_TIME_SEC;
+
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.joda.time.Seconds;
 import org.quartz.SimpleTrigger;
@@ -47,7 +49,7 @@ public class RepairProcessingExtCallRoute extends SpringRouteBuilder {
     /**
      * How often to run repair process (in seconds).
      */
-    @ConfigurableValue(key = "ohf.asynch.repairRepeatTimeSec")
+    @ConfigurableValue(key = ASYNCH_REPAIR_REPEAT_TIME_SEC)
     private ConfigurationItem<Seconds> repeatInterval;
 
     @Override

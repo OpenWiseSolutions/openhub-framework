@@ -68,10 +68,8 @@ public class JmxThrottlingConfiguration implements DynamicMBean {
             attributes.add(new MBeanAttributeInfo(key, "java.lang.String", key, true, true, false));
         }
 
-        MBeanInfo mBeanInfo = new MBeanInfo(this.getClass().getName(), "Throttling Configuration",
+        return new MBeanInfo(this.getClass().getName(), "Throttling Configuration",
                 attributes.toArray(new MBeanAttributeInfo[] {}), null, null, null);
-
-        return mBeanInfo;
     }
 
     @Override

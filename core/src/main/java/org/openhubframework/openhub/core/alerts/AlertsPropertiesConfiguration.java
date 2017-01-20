@@ -56,13 +56,14 @@ public class AlertsPropertiesConfiguration extends AbstractAlertsConfiguration {
 
     public static final String MAIL_BODY_PROP = "mail.body";
 
-    @Autowired
     private ConfigurableEnvironment env;
 
     /**
      * Creates new configuration with properties from {@link Environment environment}.
      */
-    public AlertsPropertiesConfiguration() {
+    @Autowired
+    public AlertsPropertiesConfiguration(ConfigurableEnvironment env) {
+        this.env = env;
     }
 
     /**

@@ -48,7 +48,7 @@ public abstract class AbstractThrottlingConfiguration implements ThrottlingConfi
      */
     public static final int DEFAULT_LIMIT = 60;
 
-    private Map<ThrottleScope, ThrottleProps> props = new HashMap<ThrottleScope, ThrottleProps>();
+    private Map<ThrottleScope, ThrottleProps> props = new HashMap<>();
 
     /**
      * True for disabling throttling at all.

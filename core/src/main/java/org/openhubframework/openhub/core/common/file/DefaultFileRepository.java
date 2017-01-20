@@ -16,6 +16,9 @@
 
 package org.openhubframework.openhub.core.common.file;
 
+import static org.openhubframework.openhub.api.configuration.CoreProps.DIR_FILE_REPOSITORY;
+import static org.openhubframework.openhub.api.configuration.CoreProps.DIR_TEMP;
+
 import java.io.*;
 import java.util.List;
 import java.util.UUID;
@@ -53,7 +56,7 @@ public class DefaultFileRepository implements FileRepository {
     /**
      * Absolute path to temporary directory where new files are stored.
      */
-    @ConfigurableValue(key = "ohf.dir.temp")
+    @ConfigurableValue(key = DIR_TEMP)
     private ConfigurationItem<File> tempDirProperty;
 
     private File tempDir;
@@ -61,7 +64,7 @@ public class DefaultFileRepository implements FileRepository {
     /**
      * File repository directory where files will be stored.
      */
-    @ConfigurableValue(key = "ohf.dir.fileRepository")
+    @ConfigurableValue(key = DIR_FILE_REPOSITORY)
     private ConfigurationItem<File> fileRepoDirProperty;
 
     private File fileRepoDir;
@@ -71,8 +74,8 @@ public class DefaultFileRepository implements FileRepository {
         Constraints.notNull(tempDirProperty, "tempDirProperty must be defined");
         Constraints.notNull(fileRepoDirProperty, "fileRepoDirProperty must be defined");
 
-        tempDir = tempDirProperty.getValue();
-        fileRepoDir = fileRepoDirProperty.getValue();
+        tempDir = tempDirProperty.getValue(null);
+        fileRepoDir = fileRepoDirProperty.getValue(null);
 
         if (tempDir != null && !tempDir.getPath().isEmpty() && !tempDir.exists()) {
             throw new IllegalStateException("the temporary directory '" + tempDir + "' doesn't exist");

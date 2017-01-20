@@ -16,6 +16,8 @@
 
 package org.openhubframework.openhub.core.common.asynch.queue;
 
+import static org.openhubframework.openhub.api.configuration.CoreProps.ASYNCH_PARTLY_FAILED_REPEAT_TIME_SEC;
+
 import org.apache.camel.Handler;
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.joda.time.Seconds;
@@ -53,7 +55,7 @@ public class PartlyFailedMessagesPoolRoute extends SpringRouteBuilder {
     /**
      * How often to run process for polling partly failed messages (in seconds).
      */
-    @ConfigurableValue(key = "ohf.asynch.partlyFailedRepeatTimeSec")
+    @ConfigurableValue(key = ASYNCH_PARTLY_FAILED_REPEAT_TIME_SEC)
     private ConfigurationItem<Seconds> partlyFailedRepeatTime;
 
     @Override

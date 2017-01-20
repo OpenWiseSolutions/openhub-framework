@@ -16,13 +16,14 @@
 
 package org.openhubframework.openhub.core.common.directcall;
 
+import static org.openhubframework.openhub.api.configuration.CoreProps.SERVER_LOCALHOST_URI;
 import static org.openhubframework.openhub.api.route.RouteConstants.HTTP_URI_PREFIX;
 
 import java.io.IOException;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -47,25 +48,24 @@ public class DirectCallHttpImpl implements DirectCall {
     /**
      * URI of this localhost application, including port number.
      */
-    @ConfigurableValue(key = "ohf.contextCall.localhostUri")
+    @ConfigurableValue(key = SERVER_LOCALHOST_URI)
     private ConfigurationItem<String> localhostUri;
 
     @Override
     public String makeCall(String callId) throws IOException {
         Assert.hasText(callId, "callId must not be empty");
+        Assert.hasText(localhostUri.getValue(), "localhostUri must not be empty");
 
-        CloseableHttpClient httpClient = HttpClients.createDefault();
-
-        try {
+        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             HttpGet httpGet = new HttpGet(localhostUri.getValue() + HTTP_URI_PREFIX
                     + DirectCallWsRoute.SERVLET_URL + "?" + DirectCallWsRoute.CALL_ID_HEADER + "=" + callId);
 
             // Create a custom response handler
             ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
 
-                public String handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
+                public String handleResponse(HttpResponse response) throws IOException {
                     int status = response.getStatusLine().getStatusCode();
-                    if (status >= 200 && status < 300) {
+                    if (status >= HttpStatus.SC_OK && status < HttpStatus.SC_MULTIPLE_CHOICES) {
                         // successful response
                         HttpEntity entity = response.getEntity();
                         return entity != null ? EntityUtils.toString(entity) : null;
@@ -76,8 +76,6 @@ public class DirectCallHttpImpl implements DirectCall {
             };
 
             return httpClient.execute(httpGet, responseHandler);
-        } finally {
-            httpClient.close();
         }
     }
 }

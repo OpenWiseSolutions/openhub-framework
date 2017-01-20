@@ -16,6 +16,9 @@
 
 package org.openhubframework.openhub.core.reqres;
 
+import static org.openhubframework.openhub.api.configuration.CoreProps.REQUEST_SAVING_ENABLE;
+import static org.openhubframework.openhub.api.configuration.CoreProps.REQUEST_SAVING_ENDPOINT_FILTER;
+
 import java.io.StringWriter;
 import java.util.EventObject;
 import java.util.regex.Pattern;
@@ -62,13 +65,13 @@ public class ResponseReceiveEventNotifier extends EventNotifierBase<ExchangeSent
     /**
      * True for enabling saving requests/responses for filtered endpoints URI.
      */
-    @ConfigurableValue(key = "ohf.requestSaving.enable")
+    @ConfigurableValue(key = REQUEST_SAVING_ENABLE)
     private ConfigurationItem<Boolean> enable;
 
     /**
      * Pattern for filtering endpoints URI which requests/response should be saved.
      */
-    @ConfigurableValue(key = "ohf.requestSaving.endpointFilter")
+    @ConfigurableValue(key = REQUEST_SAVING_ENDPOINT_FILTER)
     private ConfigurationItem<Pattern> endpointFilterPattern;
 
     @Autowired

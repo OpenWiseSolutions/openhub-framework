@@ -16,6 +16,8 @@
 
 package org.openhubframework.openhub.core.common.asynch.queue;
 
+import static org.openhubframework.openhub.api.configuration.CoreProps.ASYNCH_POSTPONED_INTERVAL_WHEN_FAILED_SEC;
+
 import java.util.List;
 
 import org.apache.camel.Exchange;
@@ -70,7 +72,7 @@ public class MessagePollExecutor implements Runnable {
     /**
      * Interval (in seconds) after that postponed messages will fail.
      */
-    @ConfigurableValue(key = "ohf.asynch.postponedIntervalSecWhenFailedSec")
+    @ConfigurableValue(key = ASYNCH_POSTPONED_INTERVAL_WHEN_FAILED_SEC)
     private ConfigurationItem<Seconds> postponedIntervalWhenFailed;
 
     // note: this is because of setting different target URI for tests

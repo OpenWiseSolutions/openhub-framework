@@ -16,6 +16,9 @@
 
 package org.openhubframework.openhub.core.common.asynch.queue;
 
+import static org.openhubframework.openhub.api.configuration.CoreProps.ASYNCH_PARTLY_FAILED_INTERVAL_SEC;
+import static org.openhubframework.openhub.api.configuration.CoreProps.ASYNCH_POSTPONED_INTERVAL_SEC;
+
 import javax.annotation.Nullable;
 
 import org.joda.time.Seconds;
@@ -55,13 +58,13 @@ public class MessagesPoolDbImpl implements MessagesPool {
     /**
      * Interval (in seconds) between two tries of partly failed messages.
      */
-    @ConfigurableValue(key = "ohf.asynch.partlyFailedIntervalSec")
+    @ConfigurableValue(key = ASYNCH_PARTLY_FAILED_INTERVAL_SEC)
     private ConfigurationItem<Seconds> partlyFailedInterval;
 
     /**
      * Interval (in seconds) after that can be postponed message processed again.
      */
-    @ConfigurableValue(key = "ohf.asynch.postponedIntervalSec")
+    @ConfigurableValue(key = ASYNCH_POSTPONED_INTERVAL_SEC)
     private ConfigurationItem<Seconds> postponedInterval;
 
     @Autowired

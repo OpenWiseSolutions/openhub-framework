@@ -16,6 +16,8 @@
 
 package org.openhubframework.openhub.core.common.asynch.confirm;
 
+import static org.openhubframework.openhub.api.configuration.CoreProps.ASYNCH_CONFIRMATION_FAILED_LIMIT;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +47,7 @@ public class ConfirmationServiceImpl implements ConfirmationService {
     /**
      * Maximum count of confirmation fails when will finish further processing.
      */
-    @ConfigurableValue(key = "ohf.asynch.confirmation.failedLimit")
+    @ConfigurableValue(key = ASYNCH_CONFIRMATION_FAILED_LIMIT)
     private ConfigurationItem<Integer> failedCountLimit;
 
     @Autowired

@@ -22,6 +22,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
+import static org.openhubframework.openhub.api.configuration.CoreProps.ASYNCH_CONFIRMATION_INTERVAL_SEC;
 
 import java.util.Date;
 
@@ -96,7 +97,7 @@ public class AsynchMessageRouteConfirmTest extends AbstractCoreDbTest {
     /**
      * Interval (in seconds) between two tries of failed confirmations.
      */
-    @ConfigurableValue(key = "ohf.asynch.confirmation.intervalSec")
+    @ConfigurableValue(key = ASYNCH_CONFIRMATION_INTERVAL_SEC)
     private ConfigurationItem<Seconds> interval;
 
 

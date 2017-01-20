@@ -17,6 +17,7 @@
 package org.openhubframework.openhub.core.common.asynch;
 
 import static org.openhubframework.openhub.api.asynch.AsynchConstants.*;
+import static org.openhubframework.openhub.api.configuration.CoreProps.ASYNCH_COUNT_PARTLY_FAILS_BEFORE_FAILED;
 
 import java.util.Map;
 import javax.annotation.Nullable;
@@ -106,7 +107,7 @@ public class AsynchMessageRoute extends AbstractBasicRoute {
     /**
      * Count of partly fails before message will be marked as completely FAILED.
      */
-    @ConfigurableValue(key = "ohf.asynch.countPartlyFailsBeforeFailed")
+    @ConfigurableValue(key = ASYNCH_COUNT_PARTLY_FAILS_BEFORE_FAILED)
     private ConfigurationItem<Integer> countPartlyFailsBeforeFailed;
 
 
