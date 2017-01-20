@@ -5,11 +5,14 @@
 --
 
 SET statement_timeout = 0;
-SET lock_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
+
+--
+-- START: create schema (call once only)
+--
 
 --DROP SCHEMA IF EXISTS openhub CASCADE;
 --CREATE SCHEMA openhub;
@@ -21,10 +24,15 @@ SET client_min_messages = warning;
 
 --ALTER SCHEMA openhub OWNER TO openhub;
 
---ALTER DEFAULT PRIVILEGES IN SCHEMA openhub;
+--ALTER DEFAULT PRIVILEGES IN SCHEMA openhub GRANT SELECT, USAGE, UPDATE ON SEQUENCES TO openhub;
+--ALTER DEFAULT PRIVILEGES IN SCHEMA openhub GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO openhub;
+
+--
+-- END: create schema
+--
+
 
 SET search_path = openhub, pg_catalog;
-
 
 drop sequence if exists openhub_sequence;
 

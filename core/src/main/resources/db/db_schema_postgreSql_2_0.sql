@@ -32,6 +32,4 @@ CREATE INDEX configuration_item_cat_code_idx ON configuration_item (category_cod
 ALTER TABLE configuration_item OWNER TO openhub;
 
 
--- grant privileges to 'openhub' user
-GRANT SELECT, USAGE, UPDATE ON openhub_sequence TO openhub;
-GRANT SELECT, INSERT, UPDATE, DELETE ON message, external_call, request, response, configuration_item TO openhub
+-- Call db_init-configuration.sql for inserting default configuration items
