@@ -35,7 +35,7 @@ import org.springframework.context.annotation.*;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import org.openhubframework.openhub.admin.web.config.AdminConsoleContextConfiguration;
+import org.openhubframework.openhub.admin.web.config.AdminConsoleContextConfig;
 import org.openhubframework.openhub.api.route.CamelConfiguration;
 import org.openhubframework.openhub.common.AutoConfiguration;
 import org.openhubframework.openhub.common.log.LogContextFilter;
@@ -103,10 +103,12 @@ public class OpenHubApplication extends SpringBootServletInitializer {
         context.setParent(rootContext);
         context.setDisplayName("Admin Console Application Context");
         context.setId("AdminConsoleApplicationContext");
-        context.register(AdminConsoleContextConfiguration.class);
+        //TODO (thanus, 24/01/2017, TASK: OHFJIRA-4) remove this after new console will be ready
+        // set config location for parent (mainly for static resources)
+        context.setConfigLocation(OpenHubApplication.class.getName());
+        context.register(AdminConsoleContextConfig.class);
         dispatcherServlet.setApplicationContext(context);
         ServletRegistrationBean registration = new ServletRegistrationBean(dispatcherServlet, WEB_URI_PREFIX_MAPPING);
-        registration.addUrlMappings(WEB_URI_PREFIX_MAPPING);
         registration.setName("adminConsoleDispatcherServlet");
         registration.setLoadOnStartup(1);
 

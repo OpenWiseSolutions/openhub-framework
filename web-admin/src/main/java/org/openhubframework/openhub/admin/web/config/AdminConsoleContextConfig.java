@@ -32,6 +32,7 @@ import org.springframework.boot.context.web.ErrorPageFilter;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
@@ -47,7 +48,7 @@ import org.openhubframework.openhub.modules.ErrorEnum;
  * This class configures child context of {@link org.openhubframework.openhub.OpenHubApplication} as root context.
  *
  * @author Tomas Hanus
- * @see MvcConfig
+ * @see AdminConsoleConfig
  * @since 2.0
  */
 @EnableAutoConfiguration
@@ -55,11 +56,12 @@ import org.openhubframework.openhub.modules.ErrorEnum;
 @ComponentScan(basePackages = "org.openhubframework.openhub.admin",
         excludeFilters =
         @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = AutoConfiguration.class))
+@EnableWebMvc
 @Configuration
 @ImportResource({"classpath:net/bull/javamelody/monitoring-spring.xml", "classpath:sp_h2_server.xml"})
-public class AdminConsoleContextConfiguration extends WebMvcConfigurerAdapter {
+public class AdminConsoleContextConfig extends WebMvcConfigurerAdapter {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AdminConsoleContextConfiguration.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AdminConsoleContextConfig.class);
 
     private static final String JAVAMELODY_URL = "/monitoring/javamelody";
 
@@ -107,6 +109,7 @@ public class AdminConsoleContextConfiguration extends WebMvcConfigurerAdapter {
 
     @Bean
     public ServletListenerRegistrationBean<SessionListener> sessionListener() {
+        // add session listener for JavaMelody
         return new ServletListenerRegistrationBean<>(new SessionListener());
     }
 
@@ -137,21 +140,4 @@ public class AdminConsoleContextConfiguration extends WebMvcConfigurerAdapter {
         map.put("core", ErrorEnum.values());
         return map;
     }
-
-    // ----------------------------------------------
-    // reason of this code snippet: http://stackoverflow.com/questions/30170586/how-to-disable-errorpagefilter-in-spring-boot
-
-    @Bean
-    public ErrorPageFilter errorPageFilter() {
-        return new ErrorPageFilter();
-    }
-
-    @Bean
-    public FilterRegistrationBean disableSpringBootErrorFilter(ErrorPageFilter filter) {
-        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
-        filterRegistrationBean.setFilter(filter);
-        filterRegistrationBean.setEnabled(false);
-        return filterRegistrationBean;
-    }
-    // ----------------------------------------------    
 }

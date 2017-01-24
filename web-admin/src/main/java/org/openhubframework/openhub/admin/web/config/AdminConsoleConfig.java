@@ -39,9 +39,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 //note: If you want to take complete control of Spring MVC, you can add your own @Configuration annotated with @EnableWebMvc.
 // If you want to keep Spring Boot MVC features, and you just want to add additional MVC configuration (interceptors,
 // formatters, view controllers etc.) you can add your own @Bean of type WebMvcConfigurerAdapter, but without @EnableWebMvc.
-public class MvcConfig extends WebMvcConfigurerAdapter {
+public class AdminConsoleConfig extends WebMvcConfigurerAdapter {
 
-    private static final Logger logger = LoggerFactory.getLogger(MvcConfig.class);
+    private static final Logger logger = LoggerFactory.getLogger(AdminConsoleConfig.class);
 
     @Autowired
     private ResourceProperties resourceProperties = new ResourceProperties();
@@ -60,8 +60,9 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     }
 
     /**
-     * Gets welcome page path basically from {@link WebMvcProperties#getStaticPathPattern()} configuration when pattern expression {@code "*"} 
-     * is removed, for example static path pattern defines {@code /console/**} and welcome page path will be resolved as {@code /console/}.
+     * Gets welcome page path basically from {@link WebMvcProperties#getStaticPathPattern()} configuration 
+     * when pattern expression {@code "*"} is removed, for example static path pattern defines {@code /console/**} 
+     * and welcome page path will be resolved as {@code /console/}.
      * 
      * @param mvcProperties as configuration for 
      * @return welcome page path on which static resource {@code index.html} will be loaded
