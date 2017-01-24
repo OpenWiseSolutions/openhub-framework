@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2016 the original author or authors.
+ * Copyright 2014-2017 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,15 @@ import org.openhubframework.openhub.api.asynch.AsynchConstants;
  *
  * @author Petr Juza
  * @see AsynchConstants
+ * @see #MAPPING_SUFFIX
  * @since 2.0
  */
 public final class RouteConstants {
+
+    /**
+     * Mapping suffix: {@code *}.
+     */
+    public static final String MAPPING_SUFFIX = "*";
 
     /**
      * Bean name of authorization policy for web services.
@@ -44,20 +50,51 @@ public final class RouteConstants {
     public static final String CAMEL_SERVLET = "CamelServlet";
 
     /**
+     * Name of the servlet for incoming Web service communication.
+     */
+    public static final String WS_SERVLET = "MessageDispatcherServlet";
+    
+    /**
      * URI prefix for web services.
+     *
+     * @see #WS_URI_PREFIX_MAPPING
      */
     public static final String WS_URI_PREFIX = "/ws/";
 
     /**
-     * URI prefix for {@code CamelServlet}.
+     * URI prefix <strong>mapping</strong> for web services.
+     *
+     * @see #WS_URI_PREFIX
+     */
+    public static final String WS_URI_PREFIX_MAPPING = WS_URI_PREFIX + MAPPING_SUFFIX;
+
+    /**
+     * URI prefix for {@link #CAMEL_SERVLET CamelServlet}.
+     *
+     * @see #HTTP_URI_PREFIX_MAPPING
      */
     public static final String HTTP_URI_PREFIX = "/http/";
 
     /**
-     * URI prefix for web admin GUI.
+     * URI prefix <strong>mapping</strong> for {@link #CAMEL_SERVLET CamelServlet}.
+     * 
+     * @see #HTTP_URI_PREFIX
+     */
+    public static final String HTTP_URI_PREFIX_MAPPING = HTTP_URI_PREFIX + MAPPING_SUFFIX;
+
+    /**
+     * URI prefix for web admin console.
+     * 
+     * @see #WS_URI_PREFIX_MAPPING
      */
     public static final String WEB_URI_PREFIX = "/web/admin/";
 
+    /**
+     * URI prefix mapping for web admin console.
+     *
+     * @see #WS_URI_PREFIX
+     */
+    public static final String WEB_URI_PREFIX_MAPPING = WEB_URI_PREFIX + "*";
 
     private RouteConstants() {
     }
