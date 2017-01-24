@@ -52,6 +52,6 @@ public class VersionPrinter {
             versionStr = versions[0].getFullVersion() + " (" + versions[0].getDate() + ")";
         }
 
-        LOG.info("OpenHub version: " + versionStr);
+        LOG.info("\n\nOpenHub version: " + versionStr + "\n");
     }
 }
