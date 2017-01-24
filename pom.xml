@@ -80,9 +80,11 @@
             <!-- Profile which is used to build OHF with all modules (all-in-one) -->
             <id>full-build</id>
 
-            <!-- Activated by default -->
+            <!-- activated by default -->
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>!skipDefault</name>
+                </property>
             </activation>
 
             <modules>

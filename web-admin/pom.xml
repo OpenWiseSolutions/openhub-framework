@@ -98,6 +98,14 @@
         <profile>
             <!-- Profile which is used to build OHF with all modules (all-in-one) -->
             <id>full-build</id>
+
+            <!-- activated by default -->
+            <activation>
+                <property>
+                    <name>!skipDefault</name>
+                </property>
+            </activation>
+            
             <dependencies>
                 <!-- Admin console -->
                 <dependency>
