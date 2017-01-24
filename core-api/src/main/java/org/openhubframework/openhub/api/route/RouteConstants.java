@@ -49,12 +49,12 @@ public final class RouteConstants {
     public static final String WS_URI_PREFIX = "/ws/";
 
     /**
-     * URI prefix for CamelServlet (see web.xml).
+     * URI prefix for {@link #CAMEL_SERVLET CamelServlet}.
      */
     public static final String HTTP_URI_PREFIX = "/http/";
 
     /**
-     * URI prefix for web admin GUI - "spring-admin-mvc" in web.xml.
+     * URI prefix for web admin console.
      */
     public static final String WEB_URI_PREFIX = "/web/admin/";
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.admin.web.config;
+package org.openhubframework.openhub.config;
 
 import static org.openhubframework.openhub.api.route.RouteConstants.WEB_URI_PREFIX;
 import static org.openhubframework.openhub.api.route.RouteConstants.WS_AUTH_POLICY;
