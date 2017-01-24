@@ -26,9 +26,11 @@
             <!-- Profile which is used to clean all admin console libs -->
             <id>full-clean</id>
 
-            <!-- Activated by default -->
+            <!-- activated by default -->
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>!skipDefault</name>
+                </property>
             </activation>
             
             <build>
