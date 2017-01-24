@@ -17,6 +17,7 @@
 package org.openhubframework.openhub.core.common.asynch.repair;
 
 import static java.lang.Math.min;
+import static org.openhubframework.openhub.api.configuration.CoreProps.ASYNCH_REPAIR_REPEAT_TIME_SEC;
 
 import java.util.List;
 
@@ -57,7 +58,7 @@ public class RepairExternalCallDbImpl implements RepairExternalCallService {
     /**
      * How often to run repair process (in seconds).
      */
-    @ConfigurableValue(key = "ohf.asynch.repairRepeatTimeSec")
+    @ConfigurableValue(key = ASYNCH_REPAIR_REPEAT_TIME_SEC)
     private ConfigurationItem<Seconds> repeatInterval;
 
     @Autowired

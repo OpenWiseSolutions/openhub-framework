@@ -16,6 +16,8 @@
 
 package org.openhubframework.openhub.core.common.asynch.confirm;
 
+import static org.openhubframework.openhub.api.configuration.CoreProps.ASYNCH_CONFIRMATION_INTERVAL_SEC;
+
 import javax.annotation.Nullable;
 
 import org.joda.time.Seconds;
@@ -51,7 +53,7 @@ public class ConfirmationPoolDbImpl implements ConfirmationPool {
     /**
      * Interval (in seconds) between two tries of failed confirmations.
      */
-    @ConfigurableValue(key = "ohf.asynch.confirmation.intervalSec")
+    @ConfigurableValue(key = ASYNCH_CONFIRMATION_INTERVAL_SEC)
     private ConfigurationItem<Seconds> interval;
 
     @Nullable

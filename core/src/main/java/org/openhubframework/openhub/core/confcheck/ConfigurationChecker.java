@@ -16,6 +16,10 @@
 
 package org.openhubframework.openhub.core.confcheck;
 
+import static org.openhubframework.openhub.api.configuration.CoreProps.ENDPOINTS_INCLUDE_PATTERN;
+import static org.openhubframework.openhub.api.configuration.CoreProps.REQUEST_SAVING_ENDPOINT_FILTER;
+import static org.openhubframework.openhub.api.configuration.CoreProps.SERVER_LOCALHOST_URI;
+import static org.openhubframework.openhub.api.configuration.CoreProps.SERVER_LOCALHOST_URI_CHECK;
 import static org.openhubframework.openhub.api.route.RouteConstants.HTTP_URI_PREFIX;
 
 import java.io.IOException;
@@ -24,6 +28,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -33,20 +38,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import org.openhubframework.openhub.api.configuration.ConfigurableValue;
 import org.openhubframework.openhub.api.configuration.ConfigurationItem;
+import org.openhubframework.openhub.api.configuration.CoreProps;
 import org.openhubframework.openhub.api.exception.ConfigurationException;
+import org.openhubframework.openhub.common.Profiles;
 
 
 /**
  * Configuration checker that is called when application context is initialized.
  * There are some predefined checks or you can define your own checking via {@link ConfCheck} interface.
  * <p/>
- * Checking of {@link #checkLocalhostUri() localhost URI} must be explicitly enabled by calling
- * {@link #setCheckUrl(boolean)} because there were few problems on some platforms during testing.
+ * Checking of {@link #checkLocalhostUri() localhost URI} must be explicitly enabled by setting
+ * property "{@code ohf.server.localhostUri.check}".
  * <p/>
  * Initialized this listener in child "Spring WS" application context.
  *
@@ -56,15 +64,10 @@ import org.openhubframework.openhub.api.exception.ConfigurationException;
  * @see ConfCheck
  */
 @Component
+@Profile("!" + Profiles.TEST) // not init for tests
 public class ConfigurationChecker implements ApplicationListener<ContextRefreshedEvent> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConfigurationChecker.class);
-
-    private static final String ENDPOINTS_INCLUDE_PATTERN = "ohf.endpoints.includePattern";
-
-    private static final String LOCALHOST_URI = "ohf.contextCall.localhostUri";
-
-    private static final String ENDPOINT_FILTER = "ohf.requestSaving.endpointFilter";
 
     /**
      * Pattern for filtering endpoints URI - only whose URIs will match specified pattern will be returned.
@@ -75,16 +78,20 @@ public class ConfigurationChecker implements ApplicationListener<ContextRefreshe
     /**
      * URI of this localhost application, including port number.
      */
-    @ConfigurableValue(key = LOCALHOST_URI)
+    @ConfigurableValue(key = SERVER_LOCALHOST_URI)
     private ConfigurationItem<String> localhostUri;
 
     /**
      * Pattern for filtering endpoints URI which requests/response should be saved.
      */
-    @ConfigurableValue(key = ENDPOINT_FILTER)
+    @ConfigurableValue(key = REQUEST_SAVING_ENDPOINT_FILTER)
     private ConfigurationItem<String> endpointFilter;
 
-    private boolean checkUrl = false;
+    /**
+     * Enable/disable checking of localhostUri (because there were few problems on some platforms during testing).
+     */
+    @ConfigurableValue(key = SERVER_LOCALHOST_URI_CHECK)
+    private ConfigurationItem<Boolean> checkUrl;
 
     @Autowired(required = false)
     private List<ConfCheck> checks;
@@ -105,7 +112,7 @@ public class ConfigurationChecker implements ApplicationListener<ContextRefreshe
         LOG.debug("Checking configuration validity ...");
 
         try {
-            if (checkUrl) {
+            if (checkUrl.getValue()) {
                 checkLocalhostUri();
             }
 
@@ -130,9 +137,14 @@ public class ConfigurationChecker implements ApplicationListener<ContextRefreshe
     }
 
     /**
-     * Checks if configuration parameter "ohf.contextCall.localhostUri" is valid - calls PING service.
+     * Checks if configuration parameter "ohf.server.localhostUri" is valid - calls PING service.
      */
     private void checkLocalhostUri() {
+        if (StringUtils.isEmpty(localhostUri.getValue())) {
+            LOG.debug("Parameter '" + SERVER_LOCALHOST_URI + "' is skipped because it's empty");
+            return;
+        }
+
         CloseableHttpClient httpClient = HttpClients.createDefault();
 
         try {
@@ -141,25 +153,25 @@ public class ConfigurationChecker implements ApplicationListener<ContextRefreshe
 
             httpClient.execute(httpGet);
         } catch (IOException ex) {
-            throw new ConfigurationException("Configuration error - parameter '" + LOCALHOST_URI + "' with value '"
-                    + localhostUri + "' is probably wrong, URI isn't reachable.", ex, LOCALHOST_URI);
+            throw new ConfigurationException("Configuration error - parameter '" + SERVER_LOCALHOST_URI + "' with value '"
+                    + localhostUri + "' is probably wrong, URI isn't reachable.", ex, SERVER_LOCALHOST_URI);
         } finally {
             IOUtils.closeQuietly(httpClient);
         }
 
-        LOG.debug("Parameter '" + LOCALHOST_URI + "' is OK");
+        LOG.debug("Parameter '" + SERVER_LOCALHOST_URI + "' is OK");
     }
 
     /**
      * Checks the following configuration parameters if they can be compiled as {@link Pattern}:
      * <ul>
-     *     <li>{@value #ENDPOINTS_INCLUDE_PATTERN}
-     *     <li>{@value #ENDPOINT_FILTER}
+     *     <li>{@value CoreProps#ENDPOINTS_INCLUDE_PATTERN}
+     *     <li>{@value CoreProps#REQUEST_SAVING_ENDPOINT_FILTER}
      * </ul>
      */
     private void checkPatterns() {
         checkPattern(endpointsIncludePattern.getValue(), ENDPOINTS_INCLUDE_PATTERN);
-        checkPattern(endpointFilter.getValue(), ENDPOINT_FILTER);
+        checkPattern(endpointFilter.getValue(), REQUEST_SAVING_ENDPOINT_FILTER);
     }
 
     private void checkPattern(String pattern, String paramName) {
@@ -172,14 +184,5 @@ public class ConfigurationChecker implements ApplicationListener<ContextRefreshe
         }
 
         LOG.debug("Parameter '" + paramName + "' is OK");
-    }
-
-    /**
-     * Enables checking of localhost URI.
-     *
-     * @param checkUrl {@code true} to enable checking otherwise disable it
-     */
-    public void setCheckUrl(boolean checkUrl) {
-        this.checkUrl = checkUrl;
     }
 }

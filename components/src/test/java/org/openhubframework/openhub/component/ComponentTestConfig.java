@@ -16,12 +16,18 @@
 
 package org.openhubframework.openhub.component;
 
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.PropertySource;
+
+
 /**
  * Configuration for tests in "components" module.
  *
  * @author Petr Juza
  * @since 2.0
  */
+@ComponentScan(basePackages = {"org.openhubframework.openhub.component"})
+@PropertySource(value = {"classpath:/config/application-test-default.properties"})
 public class ComponentTestConfig {
 
 }

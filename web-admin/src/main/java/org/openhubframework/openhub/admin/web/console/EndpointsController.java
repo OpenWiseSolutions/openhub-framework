@@ -16,6 +16,8 @@
 
 package org.openhubframework.openhub.admin.web.console;
 
+import static org.openhubframework.openhub.api.configuration.CoreProps.ENDPOINTS_INCLUDE_PATTERN;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -49,7 +51,7 @@ public class EndpointsController {
     /**
      * Pattern for filtering endpoints URI - only whose URIs will match specified pattern will be returned.
      */
-    @ConfigurableValue(key = "ohf.endpoints.includePattern")
+    @ConfigurableValue(key = ENDPOINTS_INCLUDE_PATTERN)
     private ConfigurationItem<String> endpointsIncludePattern;
 
 

@@ -17,7 +17,7 @@
 package org.openhubframework.openhub.admin.web.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 
 /**
@@ -26,7 +26,7 @@ import org.springframework.context.annotation.Configuration;
  * @author Petr Juza
  * @since 2.0
  */
-@Configuration
+@Component
 @ConfigurationProperties(prefix = "security.user")
 public class DefaultSecurityUsers {
 

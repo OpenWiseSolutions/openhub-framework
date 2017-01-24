@@ -17,6 +17,8 @@
 package org.openhubframework.openhub.core.common.asynch.repair;
 
 import static java.lang.Math.min;
+import static org.openhubframework.openhub.api.configuration.CoreProps.ASYNCH_COUNT_PARTLY_FAILS_BEFORE_FAILED;
+import static org.openhubframework.openhub.api.configuration.CoreProps.ASYNCH_REPAIR_REPEAT_TIME_SEC;
 
 import java.util.Date;
 import java.util.List;
@@ -69,13 +71,13 @@ public class RepairMessageServiceDbImpl implements RepairMessageService {
     /**
      * How often to run repair process (in seconds).
      */
-    @ConfigurableValue(key = "ohf.asynch.repairRepeatTimeSec")
+    @ConfigurableValue(key = ASYNCH_REPAIR_REPEAT_TIME_SEC)
     private ConfigurationItem<Seconds> repeatInterval;
 
     /**
      * Count of partly fails before message will be marked as completely FAILED.
      */
-    @ConfigurableValue(key = "ohf.asynch.countPartlyFailsBeforeFailed")
+    @ConfigurableValue(key = ASYNCH_COUNT_PARTLY_FAILS_BEFORE_FAILED)
     private ConfigurationItem<Integer> countPartlyFailsBeforeFailed;
 
     @Autowired

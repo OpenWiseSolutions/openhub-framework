@@ -16,6 +16,8 @@
 
 package org.openhubframework.openhub.core.common.asynch.confirm;
 
+import static org.openhubframework.openhub.api.configuration.CoreProps.ASYNCH_CONFIRMATION_REPEAT_TIME_SEC;
+
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.joda.time.Seconds;
 import org.quartz.SimpleTrigger;
@@ -45,7 +47,7 @@ public class ConfirmationsPoolRoute extends SpringRouteBuilder {
     /**
      * How often to run process for pooling failed confirmations (in seconds).
      */
-    @ConfigurableValue(key = "ohf.asynch.confirmation.repeatTimeSec")
+    @ConfigurableValue(key = ASYNCH_CONFIRMATION_REPEAT_TIME_SEC)
     private ConfigurationItem<Seconds> repeatTime;
 
     @Override

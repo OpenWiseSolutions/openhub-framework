@@ -16,6 +16,10 @@
 
 package org.openhubframework.openhub.core.common.asynch.notification;
 
+import static org.openhubframework.openhub.api.configuration.CoreProps.MAIL_ADMIN;
+import static org.openhubframework.openhub.api.configuration.CoreProps.MAIL_FROM;
+import static org.openhubframework.openhub.api.configuration.CoreProps.MAIL_SMTP_SERVER;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,19 +49,19 @@ public class EmailServiceCamelSmtpImpl implements EmailService {
     /**
      * Administrator email address.
      */
-    @ConfigurableValue(key = "ohf.mail.admin")
+    @ConfigurableValue(key = MAIL_ADMIN)
     private ConfigurationItem<String> recipients;
 
     /**
      * Email address FROM for sending emails.
      */
-    @ConfigurableValue(key = "ohf.mail.from")
+    @ConfigurableValue(key = MAIL_FROM)
     private ConfigurationItem<String> from;
 
     /**
      * SMTP server.
      */
-    @ConfigurableValue(key = "ohf.mail.server")
+    @ConfigurableValue(key = MAIL_SMTP_SERVER)
     private ConfigurationItem<String> smtp;
 
     @Override

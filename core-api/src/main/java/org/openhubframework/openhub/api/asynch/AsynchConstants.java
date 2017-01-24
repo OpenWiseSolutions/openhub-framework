@@ -16,6 +16,8 @@
 
 package org.openhubframework.openhub.api.asynch;
 
+import static org.openhubframework.openhub.api.configuration.CoreProps.ASYNCH_CONCURRENT_CONSUMERS;
+
 import org.openhubframework.openhub.api.asynch.model.CallbackResponse;
 import org.openhubframework.openhub.api.entity.EntityTypeExtEnum;
 import org.openhubframework.openhub.api.entity.Message;
@@ -159,7 +161,7 @@ public final class AsynchConstants {
      * URI for asynchronous message processing (with SEDA).
      */
     public static final String URI_ASYNC_MSG = "seda:asynch_message_route"
-            + "?concurrentConsumers={{ohf.asynch.concurrentConsumers}}&waitForTaskToComplete=Never"
+            + "?concurrentConsumers={{" + ASYNCH_CONCURRENT_CONSUMERS + "}}&waitForTaskToComplete=Never"
             + "&blockWhenFull=true&queueFactory=#" + PRIORITY_QUEUE_FACTORY;
 
     /**

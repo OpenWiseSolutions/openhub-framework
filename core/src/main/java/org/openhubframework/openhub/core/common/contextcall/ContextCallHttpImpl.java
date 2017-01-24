@@ -16,6 +16,7 @@
 
 package org.openhubframework.openhub.core.common.contextcall;
 
+import static org.openhubframework.openhub.api.configuration.CoreProps.SERVER_LOCALHOST_URI;
 import static org.openhubframework.openhub.api.route.RouteConstants.HTTP_URI_PREFIX;
 
 import java.io.IOException;
@@ -25,6 +26,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import org.openhubframework.openhub.api.configuration.ConfigurableValue;
 import org.openhubframework.openhub.api.configuration.ConfigurationItem;
@@ -41,11 +43,16 @@ public class ContextCallHttpImpl extends AbstractContextCall {
     /**
      * URI of this localhost application, including port number.
      */
-    @ConfigurableValue(key = "ohf.contextCall.localhostUri")
+    @ConfigurableValue(key = SERVER_LOCALHOST_URI)
     private ConfigurationItem<String> localhostUri;
 
     @Override
     protected void callTargetMethod(String callId, Class<?> targetType, String methodName) {
+        Assert.hasText(callId, "callId must not be empty");
+        Assert.notNull(targetType, "targetType must not be null");
+        Assert.hasText(methodName, "methodName must not be empty");
+        Assert.hasText(localhostUri.getValue(), "localhostUri must not be empty");
+
         CloseableHttpClient httpClient = HttpClients.createDefault();
 
         try {

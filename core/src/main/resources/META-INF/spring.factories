@@ -1,3 +1,5 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 	org.openhubframework.openhub.core.configuration.AutoConfigurationItemProperties,\
     org.openhubframework.openhub.core.config.ConverterAutoConfiguration
+org.springframework.context.ApplicationListener=\
+    org.openhubframework.openhub.core.configuration.FileExternalPropertiesAutoConfiguration

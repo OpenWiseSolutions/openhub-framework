@@ -19,6 +19,7 @@ package org.openhubframework.openhub.core.throttling;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import static org.openhubframework.openhub.api.configuration.CoreProps.DISABLE_THROTTLING;
 
 import java.util.Properties;
 
@@ -29,6 +30,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.PropertiesPropertySource;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.util.Assert;
 
 import org.openhubframework.openhub.api.entity.Message;
@@ -45,6 +47,7 @@ import org.openhubframework.openhub.test.ExternalSystemTestEnum;
  *
  * @author Petr Juza
  */
+@TestPropertySource(properties = {DISABLE_THROTTLING + "=false"})
 public class ThrottleMsgProcessorTest extends AbstractCoreTest {
 
     private static final String THROTTLING_PROPS_NAME = "throttling-test";

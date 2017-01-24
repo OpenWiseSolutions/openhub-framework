@@ -48,7 +48,7 @@ INSERT INTO configuration_item (code, category_code, current_value, default_valu
 
 -- Interval (in seconds) after that postponed messages will fail
 INSERT INTO configuration_item (code, category_code, current_value, default_value, data_type, mandatory, validation)
-    VALUES('ohf.asynch.postponedIntervalSecWhenFailedSec', 'core.async', 300, 300, 'INT', true, null);
+    VALUES('ohf.asynch.postponedIntervalWhenFailedSec', 'core.async', 300, 300, 'INT', true, null);
 
 
 --
@@ -80,12 +80,16 @@ INSERT INTO configuration_item (code, category_code, current_value, default_valu
     VALUES('ohf.dir.fileRepository', 'core.dir', null, null, 'FILE', false, null);
 
 --
--- core.contextCall
+-- core.server
 --
 
 -- URI of this localhost application, including port number
 INSERT INTO configuration_item (code, category_code, current_value, default_value, data_type, mandatory, validation)
-    VALUES('ohf.contextCall.localhostUri', 'core.contextCall', 'http://localhost:8080', 'http://localhost:8080', 'STRING', true, null);
+    VALUES('ohf.server.localhostUri', 'core.server', 'http://localhost:8080', 'http://localhost:8080', 'STRING', false, null);
+
+-- enable/disable checking of localhostUri
+INSERT INTO configuration_item (code, category_code, current_value, default_value, data_type, mandatory, validation)
+    VALUES('ohf.server.localhostUri.check', 'core.server', 'true', 'true', 'BOOLEAN', true, null);
 
 --
 -- core.throttling

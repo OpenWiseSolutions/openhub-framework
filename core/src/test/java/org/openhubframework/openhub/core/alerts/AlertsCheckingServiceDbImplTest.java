@@ -23,12 +23,12 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 
+import org.junit.Test;
+
+import org.openhubframework.openhub.core.AbstractCoreTest;
 import org.openhubframework.openhub.spi.alerts.AlertInfo;
 import org.openhubframework.openhub.spi.alerts.AlertListener;
 import org.openhubframework.openhub.spi.alerts.AlertsConfiguration;
-import org.openhubframework.openhub.test.AbstractTest;
-
-import org.junit.Test;
 
 
 /**
@@ -37,7 +37,7 @@ import org.junit.Test;
  * @author Petr Juza
  * @since 0.4
  */
-public class AlertsCheckingServiceDbImplTest extends AbstractTest {
+public class AlertsCheckingServiceDbImplTest extends AbstractCoreTest {
 
     @Test
     public void testCheckAlerts() {

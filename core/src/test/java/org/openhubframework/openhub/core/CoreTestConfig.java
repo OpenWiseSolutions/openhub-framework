@@ -18,6 +18,7 @@ package org.openhubframework.openhub.core;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.PropertySource;
 
 import org.openhubframework.openhub.api.common.EmailService;
 import org.openhubframework.openhub.core.common.asynch.notification.DummyEmailServiceImpl;
@@ -29,6 +30,7 @@ import org.openhubframework.openhub.core.common.asynch.notification.DummyEmailSe
  * @author Petr Juza
  * @since 2.0
  */
+@PropertySource(value = {"classpath:/config/application-test-default.properties"})
 public class CoreTestConfig {
 
     @Bean
