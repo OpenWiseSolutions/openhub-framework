@@ -58,6 +58,10 @@ public final class RouteConstants {
      */
     public static final String WEB_URI_PREFIX = "/web/admin/";
 
+    /**
+     * URI prefix mapping for web admin console.
+     */
+    public static final String WEB_URI_PREFIX_MAPPING = WEB_URI_PREFIX + "*";
 
     private RouteConstants() {
     }

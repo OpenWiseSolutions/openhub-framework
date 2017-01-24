@@ -1,11 +1,11 @@
 /*
- * Copyright 2002-2016 the original author or authors.
+ *  Copyright 2017 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,10 +22,6 @@ import java.util.Map;
 
 import net.bull.javamelody.MonitoringFilter;
 import net.bull.javamelody.SessionListener;
-import org.openhubframework.openhub.admin.web.filter.RequestResponseLoggingFilter;
-import org.openhubframework.openhub.api.exception.ErrorExtEnum;
-import org.openhubframework.openhub.common.AutoConfiguration;
-import org.openhubframework.openhub.modules.ErrorEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -33,20 +29,26 @@ import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.boot.context.embedded.ServletListenerRegistrationBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.context.web.ErrorPageFilter;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
+import org.springframework.context.annotation.*;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
+import org.openhubframework.openhub.admin.web.filter.RequestResponseLoggingFilter;
+import org.openhubframework.openhub.api.exception.ErrorExtEnum;
+import org.openhubframework.openhub.common.AutoConfiguration;
+import org.openhubframework.openhub.modules.ErrorEnum;
+
 
 /**
+ * OpenHub admin console configuration.
+ * <p/>
+ * This class configures child context of {@link org.openhubframework.openhub.OpenHubApplication} as root context.
+ *
  * @author Tomas Hanus
+ * @see MvcConfig
+ * @since 2.0
  */
 @EnableAutoConfiguration
 @EnableConfigurationProperties
@@ -54,8 +56,7 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
         excludeFilters =
         @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = AutoConfiguration.class))
 @Configuration
-@EnableSpringConfigured
-@EnableWebMvc
+@ImportResource({"classpath:net/bull/javamelody/monitoring-spring.xml", "classpath:sp_h2_server.xml"})
 public class AdminConsoleContextConfiguration extends WebMvcConfigurerAdapter {
 
     private static final Logger LOG = LoggerFactory.getLogger(AdminConsoleContextConfiguration.class);
@@ -103,7 +104,7 @@ public class AdminConsoleContextConfiguration extends WebMvcConfigurerAdapter {
 
         return registration;
     }
-    
+
     @Bean
     public ServletListenerRegistrationBean<SessionListener> sessionListener() {
         return new ServletListenerRegistrationBean<>(new SessionListener());

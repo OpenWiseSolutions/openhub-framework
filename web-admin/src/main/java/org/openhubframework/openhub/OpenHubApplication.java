@@ -16,13 +16,26 @@
 
 package org.openhubframework.openhub;
 
-import static org.openhubframework.openhub.api.route.RouteConstants.WEB_URI_PREFIX;
+import static org.openhubframework.openhub.api.route.RouteConstants.WEB_URI_PREFIX_MAPPING;
 
 import javax.servlet.Filter;
 
-import net.bull.javamelody.SessionListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.web.DispatcherServletAutoConfiguration;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.embedded.ServletRegistrationBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.*;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.servlet.DispatcherServlet;
+
 import org.openhubframework.openhub.admin.web.config.AdminConsoleContextConfiguration;
-import org.openhubframework.openhub.admin.web.config.MvcConfig;
 import org.openhubframework.openhub.api.route.CamelConfiguration;
 import org.openhubframework.openhub.common.AutoConfiguration;
 import org.openhubframework.openhub.common.log.LogContextFilter;
@@ -31,36 +44,15 @@ import org.openhubframework.openhub.config.WebSecurityConfig;
 import org.openhubframework.openhub.core.config.CamelConfig;
 import org.openhubframework.openhub.core.config.JpaConfig;
 import org.openhubframework.openhub.core.config.WebServiceConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.PropertyPlaceholderAutoConfiguration;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.web.DispatcherServletAutoConfiguration;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.embedded.ServletRegistrationBean;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.context.web.SpringBootServletInitializer;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.context.annotation.ImportResource;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
-import org.springframework.web.servlet.DispatcherServlet;
 
 
 /**
  * OpenHub application configuration.
  * <p/>
- * This class configures root Spring context. One child context for Spring MVC is created.
+ * This class configures root Spring context.
  *
  * @author Petr Juza
  * @see CamelRoutesConfig
- * @see MvcConfig
  * @see WebSecurityConfig
  * @see CamelConfig
  * @see WebServiceConfig
@@ -82,7 +74,7 @@ import org.springframework.web.servlet.DispatcherServlet;
                 @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = CamelConfiguration.class)
         })
 @Configuration
-@ImportResource({"classpath:net/bull/javamelody/monitoring-spring.xml", "classpath:sp_h2_server.xml", "classpath:sp_camelContext.xml"})
+@ImportResource("classpath:sp_camelContext.xml")
 @PropertySource(value = {"classpath:/extensions.cfg"})
 public class OpenHubApplication extends SpringBootServletInitializer {
 
@@ -99,13 +91,6 @@ public class OpenHubApplication extends SpringBootServletInitializer {
         return new LogContextFilter();
     }
 
-/*    @Bean
-    public DispatcherServlet adminConsoleDispatcherServlet() {
-        DispatcherServlet servlet = new DispatcherServlet();
-        servlet.getServletContext().addListener(new SessionListener());
-        return servlet;
-    }*/
-    
     /**
      * Create admin console dispatcher servlet.
      *
@@ -120,13 +105,14 @@ public class OpenHubApplication extends SpringBootServletInitializer {
         context.setId("AdminConsoleApplicationContext");
         context.register(AdminConsoleContextConfiguration.class);
         dispatcherServlet.setApplicationContext(context);
-        ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean(dispatcherServlet, WEB_URI_PREFIX + "*");
-        servletRegistrationBean.setName("adminConsoleDispatcherServlet");
-        servletRegistrationBean.setLoadOnStartup(1);
+        ServletRegistrationBean registration = new ServletRegistrationBean(dispatcherServlet, WEB_URI_PREFIX_MAPPING);
+        registration.addUrlMappings(WEB_URI_PREFIX_MAPPING);
+        registration.setName("adminConsoleDispatcherServlet");
+        registration.setLoadOnStartup(1);
 
         LOG.info("Child {}: initialization completed", context.getId());
 
-        return servletRegistrationBean;
+        return registration;
     }
 
     public static void main(String[] args) throws Exception {
