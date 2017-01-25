@@ -17,6 +17,7 @@
 package org.openhubframework.openhub.core.reqres;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.junit.Assert.assertThat;
@@ -35,6 +36,7 @@ import org.apache.camel.*;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.custommonkey.xmlunit.Diff;
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,8 +54,8 @@ import org.openhubframework.openhub.api.entity.Request;
 import org.openhubframework.openhub.api.entity.Response;
 import org.openhubframework.openhub.core.AbstractCoreDbTest;
 import org.openhubframework.openhub.core.configuration.FixedConfigurationItem;
-import org.openhubframework.openhub.test.ExternalSystemTestEnum;
-import org.openhubframework.openhub.test.ServiceTestEnum;
+import org.openhubframework.openhub.test.data.ExternalSystemTestEnum;
+import org.openhubframework.openhub.test.data.ServiceTestEnum;
 
 
 /**
@@ -84,6 +86,9 @@ public class RequestResponseTest extends AbstractCoreDbTest {
 
     @Autowired
     private ResponseReceiveEventNotifier resReceiveEventNotifier;
+
+    @Autowired
+    private RequestResponseService reqResService;
 
 
     @Before
@@ -159,7 +164,20 @@ public class RequestResponseTest extends AbstractCoreDbTest {
         assertThat(responses.size(), is(1));
 
         // identical response
-        assertThat(responses.get(0), is(requests.get(0).getResponse()));
+        Request req = requests.get(0);
+        assertThat(responses.get(0), is(req.getResponse()));
+
+
+        // test searching requests
+        Request lastRequest = reqResService.findLastRequest(req.getUri(), req.getResponseJoinId());
+        assertThat(lastRequest, notNullValue());
+        assertThat(lastRequest, is(req));
+
+        DateTime from = DateTime.now().minusHours(1);
+        DateTime to = DateTime.now().plusDays(1);
+        List<Request> requestList = reqResService.findByCriteria(from.toDate(), to.toDate(), null, null);
+        assertThat(requestList.size(), is(1));
+        assertThat(requestList.get(0), is(req));
     }
 
     /**

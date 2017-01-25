@@ -75,10 +75,8 @@ public class AlertsJmxConfiguration implements DynamicMBean {
                     true, true, false));
         }
 
-        MBeanInfo mBeanInfo = new MBeanInfo(this.getClass().getName(), "Alerts Configuration",
+        return new MBeanInfo(this.getClass().getName(), "Alerts Configuration",
                 attributes.toArray(new MBeanAttributeInfo[] {}), null, null, null);
-
-        return mBeanInfo;
     }
 
     @Override

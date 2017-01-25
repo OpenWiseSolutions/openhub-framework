@@ -16,18 +16,27 @@
 
 package org.openhubframework.openhub.common;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.openhubframework.openhub.common.Tools.fm;
+import static org.openhubframework.openhub.common.Tools.joinNonEmpty;
 
+import javax.xml.namespace.QName;
+
+import org.hamcrest.CoreMatchers;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 
 /**
- * Tests for Tools class.
+ * Test suite for {@link Tools} class.
  * 
- * @author Pavel Hora
+ * @author Petr Juza
  */
 @RunWith(JUnit4.class)
 public class ToolsTest{
@@ -57,21 +66,72 @@ public class ToolsTest{
     @Test
     public void testJoinNonEmpty() {
         assertEquals("Separate this character",
-                Tools.joinNonEmpty(new String[]{"", "Separate", "this", null, "character", "", null}, ' '));
+                joinNonEmpty(new String[]{"", "Separate", "this", null, "character", "", null}, ' '));
 
         assertEquals("",
-                Tools.joinNonEmpty(new String[]{}, 'x'));
+                joinNonEmpty(new String[]{}, 'x'));
 
         assertEquals("//",
-                Tools.joinNonEmpty(new String[]{"//"}, 'x'));
+                joinNonEmpty(new String[]{"//"}, 'x'));
 
         assertEquals("//",
-                Tools.joinNonEmpty(new String[]{null, "//", null}, 'x'));
+                joinNonEmpty(new String[]{null, "//", null}, 'x'));
 
         assertEquals("///",
-                Tools.joinNonEmpty(new String[]{"/", "", "/", null}, '/'));
+                joinNonEmpty(new String[]{"/", "", "/", null}, '/'));
 
         assertEquals("/,2",
-                Tools.joinNonEmpty(new String[]{"/", "   ", "2", null}, ','));
+                joinNonEmpty(new String[]{"/", "   ", "2", null}, ','));
+    }
+
+    @Test
+    public void testFm() {
+        assertThat(fm(""), is(""));
+        assertThat(fm("empty"), is("empty"));
+        assertThat(fm("{} > {}", 2, 1), is("2 > 1"));
+    }
+
+    @Test
+    public void testUtc() {
+        DateTime localDate = new DateTime(2013, 10, 5, 23, 0,
+                DateTimeZone.getDefault());
+        DateTime utcDate = Tools.toUTC(localDate); // 2012-10-05 21:00 (UTC time zone)
+
+        // converts back to local time
+        DateTime localDt = Tools.fromUTC(utcDate);
+        // utcDate: 2013-10-04T20:00:00.000Z, localDate: 2013-10-05T00:00:00.000+02:00, localDt: 2013-10-05T00:00:00.000+02:00
+        assertThat(localDt.isEqual(localDate), is(true));
+        assertThat(localDt.toInstant(), is(localDate.toInstant()));
+
+        localDt = Tools.fromUTC(utcDate.getMillis());
+        assertThat(localDt.isEqual(localDate), is(true));
+    }
+
+    @Test
+    public void testMarshalFromXml() {
+        HelloRequest req = new HelloRequest();
+        req.setName("Peter");
+
+        String xml = Tools.marshalToXml(req, HelloRequest.class);
+        assertThat(xml, CoreMatchers.containsString("<helloRequest>"));
+        assertThat(xml, CoreMatchers.containsString("</helloRequest>"));
+        assertThat(xml, CoreMatchers.containsString("<name>"));
+        assertThat(xml, CoreMatchers.containsString("Peter"));
+
+        xml = Tools.marshalToXml(req, QName.valueOf("hello"));
+        assertThat(xml, CoreMatchers.containsString("<hello>"));
+        assertThat(xml, CoreMatchers.containsString("</hello>"));
+        assertThat(xml, CoreMatchers.containsString("<name>"));
+        assertThat(xml, CoreMatchers.containsString("Peter"));
+    }
+
+    @Test
+    public void testUnmarshalFromXml() {
+        String xml = "<helloRequest>"
+                + "    <name>Mr. Parker</name>"
+                + "</helloRequest>";
+
+        HelloRequest req = Tools.unmarshalFromXml(xml, HelloRequest.class);
+        assertThat(req.getName(), is("Mr. Parker"));
     }
 }

@@ -31,14 +31,17 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.camel.converter.jaxp.XmlConverter;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.slf4j.helpers.MessageFormatter;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.PropertySource;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import org.springframework.util.Assert;
 
 
 /**
@@ -158,6 +161,8 @@ public final class Tools {
      * @return the UTC time
      */
     public static DateTime toUTC(DateTime localDateTime) {
+        Assert.notNull(localDateTime, "localDateTime must not be null");
+
         DateTimeZone dateTimeZone = localDateTime.getZone();
         long utcTime = dateTimeZone.convertLocalToUTC(localDateTime.getMillis(), false);
         return new DateTime(utcTime, DateTimeZone.UTC);
@@ -170,6 +175,8 @@ public final class Tools {
      * @return the local time
      */
     public static DateTime fromUTC(DateTime utcTime) {
+        Assert.notNull(utcTime, "utcTime must not be null");
+
         DateTimeZone dateTimeZone = DateTimeZone.getDefault();
         long localTime = dateTimeZone.convertUTCToLocal(utcTime.getMillis());
         return new DateTime(localTime, dateTimeZone);
@@ -203,5 +210,19 @@ public final class Tools {
         }
 
         return names;
+    }
+
+    /**
+     * Substitutes all places of the message using a values. See {@link MessageFormatter} for more detail.
+     *
+     * @param message the message with places defined as {}
+     * @param values an array of values that are used to substitute formatting places of the message
+     * @return the final string
+     */
+    public static String fm(String message, Object... values) {
+        if (StringUtils.isBlank(message) || ArrayUtils.isEmpty(values)) {
+            return message;
+        }
+        return MessageFormatter.arrayFormat(message, values).getMessage();
     }
 }

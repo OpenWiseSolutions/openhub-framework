@@ -27,7 +27,7 @@ import org.joda.time.format.ISODateTimeFormat;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.util.Assert;
 
-import org.openhubframework.openhub.common.Strings;
+import org.openhubframework.openhub.common.Tools;
 
 
 /**
@@ -48,7 +48,7 @@ public enum TypeConverterEnum implements DataTypeConverter {
                 return null;
             }
 
-            Assert.isTrue(String.class.isInstance(obj), Strings.fm("input object's type '{}' doesn't "
+            Assert.isTrue(String.class.isInstance(obj), Tools.fm("input object's type '{}' doesn't "
                     + "corresponds to declared type '{}'", obj.getClass().getSimpleName(), String.class.getSimpleName()));
 
             return (String)obj;
@@ -70,7 +70,7 @@ public enum TypeConverterEnum implements DataTypeConverter {
                 return null;
             }
 
-            Assert.isTrue(Integer.class.isInstance(obj), Strings.fm("input object's type '{}' doesn't "
+            Assert.isTrue(Integer.class.isInstance(obj), Tools.fm("input object's type '{}' doesn't "
                     + "corresponds to declared type '{}'", obj.getClass().getSimpleName(), Integer.class.getSimpleName()));
 
             NumberFormat nf = NumberFormat.getInstance(LocaleContextHolder.getLocale());
@@ -98,7 +98,7 @@ public enum TypeConverterEnum implements DataTypeConverter {
                 return null;
             }
 
-            Assert.isTrue(Float.class.isInstance(obj), Strings.fm("input object's type '{}' doesn't "
+            Assert.isTrue(Float.class.isInstance(obj), Tools.fm("input object's type '{}' doesn't "
                     + "corresponds to declared type '{}'", obj.getClass().getSimpleName(), Float.class.getSimpleName()));
 
             NumberFormat nf = NumberFormat.getInstance(LocaleContextHolder.getLocale());
@@ -126,7 +126,7 @@ public enum TypeConverterEnum implements DataTypeConverter {
                 return null;
             }
 
-            Assert.isTrue(LocalDate.class.isInstance(obj), Strings.fm("input object's type '{}' doesn't "
+            Assert.isTrue(LocalDate.class.isInstance(obj), Tools.fm("input object's type '{}' doesn't "
                     + "corresponds to declared type '{}'", obj.getClass().getSimpleName(), LocalDate.class.getSimpleName()));
 
             return obj.toString(); // output will be in the ISO-8601 format
@@ -158,7 +158,7 @@ public enum TypeConverterEnum implements DataTypeConverter {
                 return null;
             }
 
-            Assert.isTrue(Boolean.class.isInstance(obj), Strings.fm("input object's type '{}' doesn't "
+            Assert.isTrue(Boolean.class.isInstance(obj), Tools.fm("input object's type '{}' doesn't "
                     + "corresponds to declared type '{}'", obj.getClass().getSimpleName(), Boolean.class.getSimpleName()));
 
             return obj.toString();
@@ -184,7 +184,7 @@ public enum TypeConverterEnum implements DataTypeConverter {
                 return null;
             }
 
-            Assert.isTrue(File.class.isInstance(obj), Strings.fm("input object's type '{}' doesn't "
+            Assert.isTrue(File.class.isInstance(obj), Tools.fm("input object's type '{}' doesn't "
                     + "corresponds to declared type '{}'", obj.getClass().getSimpleName(), File.class.getSimpleName()));
 
             return ((File)obj).getPath();
@@ -210,7 +210,7 @@ public enum TypeConverterEnum implements DataTypeConverter {
                 return null;
             }
 
-            Assert.isTrue(Pattern.class.isInstance(obj), Strings.fm("input object's type '{}' doesn't "
+            Assert.isTrue(Pattern.class.isInstance(obj), Tools.fm("input object's type '{}' doesn't "
                     + "corresponds to declared type '{}'", obj.getClass().getSimpleName(), Pattern.class.getSimpleName()));
 
             return ((Pattern)obj).pattern();

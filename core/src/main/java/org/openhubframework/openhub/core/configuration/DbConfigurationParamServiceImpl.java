@@ -30,7 +30,7 @@ import org.openhubframework.openhub.api.common.Constraints;
 import org.openhubframework.openhub.api.configuration.DbConfigurationParam;
 import org.openhubframework.openhub.api.configuration.DbConfigurationParamService;
 import org.openhubframework.openhub.api.exception.ConfigurationException;
-import org.openhubframework.openhub.common.Strings;
+import org.openhubframework.openhub.common.Tools;
 
 
 /**
@@ -68,7 +68,7 @@ public class DbConfigurationParamServiceImpl implements DbConfigurationParamServ
     public DbConfigurationParam getParameter(String code) {
         DbConfigurationParam param = paramDao.findParameter(code);
         if (param == null) {
-            throw new ConfigurationException(Strings.fm("there is no conf. parameter with code = {}", code));
+            throw new ConfigurationException(Tools.fm("there is no conf. parameter with code = {}", code));
         }
         return param;
     }

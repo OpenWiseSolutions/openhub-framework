@@ -57,7 +57,11 @@ import org.openhubframework.openhub.core.AbstractCoreDbTest;
 import org.openhubframework.openhub.core.common.asynch.msg.MessageSplitterImpl;
 import org.openhubframework.openhub.core.configuration.FixedConfigurationItem;
 import org.openhubframework.openhub.spi.msg.MessageService;
-import org.openhubframework.openhub.test.*;
+import org.openhubframework.openhub.test.AbstractTest;
+import org.openhubframework.openhub.test.data.EntityTypeTestEnum;
+import org.openhubframework.openhub.test.data.ErrorTestEnum;
+import org.openhubframework.openhub.test.data.ExternalSystemTestEnum;
+import org.openhubframework.openhub.test.data.ServiceTestEnum;
 import org.openhubframework.openhub.test.route.ActiveRoutes;
 
 

@@ -39,7 +39,7 @@ import org.openhubframework.openhub.api.exception.InternalErrorEnum;
 import org.openhubframework.openhub.core.AbstractCoreTest;
 import org.openhubframework.openhub.spi.throttling.ThrottleScope;
 import org.openhubframework.openhub.spi.throttling.ThrottlingProcessor;
-import org.openhubframework.openhub.test.ExternalSystemTestEnum;
+import org.openhubframework.openhub.test.data.ExternalSystemTestEnum;
 
 
 /**

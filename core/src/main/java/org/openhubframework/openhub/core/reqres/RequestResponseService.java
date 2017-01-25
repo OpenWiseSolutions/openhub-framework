@@ -18,7 +18,6 @@ package org.openhubframework.openhub.core.reqres;
 
 import java.util.Date;
 import java.util.List;
-
 import javax.annotation.Nullable;
 
 import org.openhubframework.openhub.api.entity.Request;
@@ -64,7 +63,7 @@ public interface RequestResponseService {
 
 
     /**
-     * Finds request which matches the criteria filter.
+     * Finds requests which matches the criteria filter.
      *
      * @param from       the timestamp from
      * @param to         the timestamp to
@@ -72,5 +71,5 @@ public interface RequestResponseService {
      * @param subRequest the substring of request content
      * @return list of {@link Request}
      */
-    List<Request> findByCriteria(Date from, Date to, String subUri, String subRequest);
+    List<Request> findByCriteria(Date from, Date to, @Nullable String subUri, @Nullable String subRequest);
 }

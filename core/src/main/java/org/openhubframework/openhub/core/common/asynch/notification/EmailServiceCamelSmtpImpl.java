@@ -32,7 +32,7 @@ import org.springframework.util.Assert;
 import org.openhubframework.openhub.api.common.EmailService;
 import org.openhubframework.openhub.api.configuration.ConfigurableValue;
 import org.openhubframework.openhub.api.configuration.ConfigurationItem;
-import org.openhubframework.openhub.common.Strings;
+import org.openhubframework.openhub.common.Tools;
 
 
 /**
@@ -80,7 +80,7 @@ public class EmailServiceCamelSmtpImpl implements EmailService {
             map.put("From", from.getValue());
             map.put("Subject", subject);
 
-            producerTemplate.sendBodyAndHeaders("smtp://" + smtp.getValue(), Strings.fm(body, values), map);
+            producerTemplate.sendBodyAndHeaders("smtp://" + smtp.getValue(), Tools.fm(body, values), map);
         }
     }
 }
