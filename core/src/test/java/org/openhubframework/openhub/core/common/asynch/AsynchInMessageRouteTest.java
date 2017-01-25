@@ -47,8 +47,8 @@ import org.openhubframework.openhub.api.entity.MsgStateEnum;
 import org.openhubframework.openhub.api.exception.StoppingException;
 import org.openhubframework.openhub.api.exception.ThrottlingExceededException;
 import org.openhubframework.openhub.core.AbstractCoreDbTest;
-import org.openhubframework.openhub.test.ExternalSystemTestEnum;
-import org.openhubframework.openhub.test.ServiceTestEnum;
+import org.openhubframework.openhub.test.data.ExternalSystemTestEnum;
+import org.openhubframework.openhub.test.data.ServiceTestEnum;
 import org.openhubframework.openhub.test.route.ActiveRoutes;
 
 

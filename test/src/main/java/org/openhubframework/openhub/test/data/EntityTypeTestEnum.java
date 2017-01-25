@@ -14,25 +14,22 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.test;
+package org.openhubframework.openhub.test.data;
 
-import org.openhubframework.openhub.api.entity.ExternalSystemExtEnum;
+import org.openhubframework.openhub.api.entity.EntityTypeExtEnum;
 
 
 /**
- * Enumeration of possible external systems - for test purposes only.
+ * Enumeration of possible entity types - for test purposes only.
  *
  * @author Petr Juza
  */
-//TODO PJUZA is here this class at the right place?
-public enum ExternalSystemTestEnum implements ExternalSystemExtEnum {
+public enum EntityTypeTestEnum implements EntityTypeExtEnum {
 
-    CRM,
-
-    BILLING;
+    ACCOUNT;
 
     @Override
-    public String getSystemName() {
+    public String getEntityType() {
         return name();
     }
 }

@@ -19,11 +19,11 @@ package org.openhubframework.openhub.core.common.exception;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import org.junit.Test;
+
 import org.openhubframework.openhub.api.exception.IllegalDataException;
 import org.openhubframework.openhub.api.exception.InternalErrorEnum;
-import org.openhubframework.openhub.test.ErrorTestEnum;
-
-import org.junit.Test;
+import org.openhubframework.openhub.test.data.ErrorTestEnum;
 
 
 /**

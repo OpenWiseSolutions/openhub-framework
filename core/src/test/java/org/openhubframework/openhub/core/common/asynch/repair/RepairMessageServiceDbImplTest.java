@@ -88,9 +88,9 @@ public class RepairMessageServiceDbImplTest extends AbstractCoreDbTest {
         MockEndpoint failedMock = getCamelContext().getEndpoint("mock:test", MockEndpoint.class);
         failedMock.expectedMessageCount(1);
 
-        Message message = createAndSaveMessages(1, new MessageProcessor() {
+        Message message = createAndSaveMessages(1, new MessageCallback() {
             @Override
-            public void process(Message message) {
+            public void beforeInsert(Message message, int order) {
                 message.setState(MsgStateEnum.PROCESSING);
                 message.setFailedCount(2);
                 message.setMsgTimestamp(DateTime.now().minusHours(1).toDate());
@@ -127,9 +127,9 @@ public class RepairMessageServiceDbImplTest extends AbstractCoreDbTest {
     }
 
     private Message[] createAndSaveMessages(int messageCount, final MsgStateEnum state) {
-        return createAndSaveMessages(messageCount, new MessageProcessor() {
+        return createAndSaveMessages(messageCount, new MessageCallback() {
             @Override
-            public void process(Message message) {
+            public void beforeInsert(Message message, int order) {
                 message.setState(state);
                 message.setMsgTimestamp(DateTime.now().minusHours(1).toDate());
                 message.setStartProcessTimestamp(DateTime.now().minusHours(1).toDate());

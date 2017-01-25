@@ -28,7 +28,7 @@ import org.junit.Test;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.route.AbstractBasicRoute;
 import org.openhubframework.openhub.component.AbstractComponentsTest;
-import org.openhubframework.openhub.test.ExternalSystemTestEnum;
+import org.openhubframework.openhub.test.data.ExternalSystemTestEnum;
 
 
 /**

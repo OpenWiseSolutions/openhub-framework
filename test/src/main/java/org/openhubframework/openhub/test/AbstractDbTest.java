@@ -37,6 +37,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import org.openhubframework.openhub.api.entity.*;
 import org.openhubframework.openhub.common.Profiles;
+import org.openhubframework.openhub.test.data.ExternalSystemTestEnum;
+import org.openhubframework.openhub.test.data.ServiceTestEnum;
 
 
 /**
@@ -98,7 +100,7 @@ public abstract class AbstractDbTest extends AbstractTest {
     }
 
     /**
-     * Creates new message.
+     * Creates new message (without saving into database).
      *
      * @param sourceSystem the source system
      * @param service the service
@@ -127,11 +129,30 @@ public abstract class AbstractDbTest extends AbstractTest {
         return msg;
     }
 
+    /**
+     * Creates and saves new message.
+     *
+     * @param sourceSystem the source system
+     * @param service the service
+     * @param operationName the operation name
+     * @param payload the payload
+     * @return message
+     */
     protected Message createAndSaveMessage(ExternalSystemExtEnum sourceSystem, ServiceExtEnum service,
             String operationName, String payload) {
         return createAndSaveMessages(1, sourceSystem, service, operationName, payload)[0];
     }
 
+    /**
+     * Creates and saves new messages.
+     *
+     * @param messageCount How many messages will be created
+     * @param sourceSystem the source system
+     * @param service the service
+     * @param operationName the operation name
+     * @param payload the payload
+     * @return messages
+     */
     protected Message[] createAndSaveMessages(final int messageCount, final ExternalSystemExtEnum sourceSystem,
             final ServiceExtEnum service, final String operationName, final String payload) {
         TransactionTemplate tx = new TransactionTemplate(transactionManager);
@@ -150,7 +171,14 @@ public abstract class AbstractDbTest extends AbstractTest {
         });
     }
 
-    protected Message[] createAndSaveMessages(final int messageCount, final MessageProcessor initializer) {
+    /**
+     * Creates and saves new messages.
+     *
+     * @param messageCount How many messages will be created
+     * @param messageCallback Callback handler that can adjust {@link Message}
+     * @return messages
+     */
+    protected Message[] createAndSaveMessages(final int messageCount, final MessageCallback messageCallback) {
         TransactionTemplate tx = new TransactionTemplate(transactionManager);
         return tx.execute(new TransactionCallback<Message[]>() {
             @Override
@@ -161,7 +189,7 @@ public abstract class AbstractDbTest extends AbstractTest {
                             "testOperation", "test payload");
 
                     try {
-                        initializer.process(messages[i]);
+                        messageCallback.beforeInsert(messages[i], i+1);
                     } catch (Exception exc) {
                         throw new RuntimeException(exc);
                     }
@@ -174,10 +202,16 @@ public abstract class AbstractDbTest extends AbstractTest {
     }
 
     /**
-     * Interface for defining processors that can affect {@link Message} in one way or another.
-     * Used for initializing the message before it's finally sent to its destination (async OUT route).
+     * Contract for defining callback handler that can adjust {@link Message} before inserting into database.
      */
-    public interface MessageProcessor {
-        void process(Message message) throws Exception;
+    public interface MessageCallback {
+
+        /**
+         * Do whatever you want before the message will be inserted into database
+         *
+         * @param message The message
+         * @param order The order of the message (if there is only one message, then always order is one)
+         */
+        void beforeInsert(Message message, int order) throws Exception;
     }
 }

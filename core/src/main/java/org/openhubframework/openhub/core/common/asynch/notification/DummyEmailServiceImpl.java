@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
 import org.openhubframework.openhub.api.common.EmailService;
-import org.openhubframework.openhub.common.Strings;
+import org.openhubframework.openhub.common.Tools;
 
 
 /**
@@ -52,6 +52,6 @@ public class DummyEmailServiceImpl implements EmailService {
         LOG.debug("Sending email:"
                 + "\nrecipients: " + recipients
                 + "\nsubject: " + subject
-                + "\nbody: " + Strings.fm(body, values));
+                + "\nbody: " + Tools.fm(body, values));
     }
 }

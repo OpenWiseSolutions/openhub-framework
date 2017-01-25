@@ -52,6 +52,8 @@ public class PartlyFailedMessagesPoolRoute extends SpringRouteBuilder {
 
     private static final String JOB_NAME = "partlyFailedPool";
 
+    static final String ROUTE_ID = "partlyFailedMessageProcess" + AbstractBasicRoute.ROUTE_SUFFIX;
+
     /**
      * How often to run process for polling partly failed messages (in seconds).
      */
@@ -67,7 +69,7 @@ public class PartlyFailedMessagesPoolRoute extends SpringRouteBuilder {
 
 
         from("quartz2://" + uri)
-                .routeId("partlyFailedMessageProcess" + AbstractBasicRoute.ROUTE_SUFFIX)
+                .routeId(ROUTE_ID)
 
                 // allow only if ESB not stopping
                 .choice().when().method(ROUTE_BEAN, "isNotInStoppingMode")
