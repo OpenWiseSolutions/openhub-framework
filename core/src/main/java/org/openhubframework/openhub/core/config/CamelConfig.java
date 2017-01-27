@@ -84,20 +84,6 @@ public class CamelConfig {
 //    }
 
     /**
-     * Configures servlet for HTTP communication.
-     */
-    @Bean
-   	public ServletRegistrationBean camelHttpServlet() {
-        CamelHttpTransportServlet servlet = new CamelHttpTransportServlet();
-        servlet.setServletName(RouteConstants.CAMEL_SERVLET);
-
-        ServletRegistrationBean bean = new ServletRegistrationBean(servlet,
-                RouteConstants.HTTP_URI_PREFIX + "*");
-        bean.setName(servlet.getServletName());
-        return bean;
-   	}
-
-    /**
      * Configures JPA component.
      */
     @Bean

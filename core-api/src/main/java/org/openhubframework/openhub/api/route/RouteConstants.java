@@ -44,7 +44,7 @@ public final class RouteConstants {
     public static final String CAMEL_SERVLET = "CamelServlet";
 
     /**
-     * URI prefix for web services - "spring-ws" in web.xml.
+     * URI prefix for web services.
      */
     public static final String WS_URI_PREFIX = "/ws/";
 

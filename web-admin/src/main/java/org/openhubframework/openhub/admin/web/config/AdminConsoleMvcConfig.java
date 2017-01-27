@@ -25,23 +25,26 @@ import org.springframework.boot.autoconfigure.web.ResourceProperties;
 import org.springframework.boot.autoconfigure.web.WebMvcProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 
 /**
- * Web MVC configuration.
+ * Admin console web configuration.
  *
  * @author Petr Juza
  * @since 2.0
  */
 @Configuration
-//note: If you want to take complete control of Spring MVC, you can add your own @Configuration annotated with @EnableWebMvc.
+//note: If you want to take complete control of Spring MVC, you can add your own @Configuration annotated with 
+// @EnableWebMvc.
 // If you want to keep Spring Boot MVC features, and you just want to add additional MVC configuration (interceptors,
-// formatters, view controllers etc.) you can add your own @Bean of type WebMvcConfigurerAdapter, but without @EnableWebMvc.
-public class AdminConsoleConfig extends WebMvcConfigurerAdapter {
+// formatters, view controllers etc.) you can add your own @Bean of type WebMvcConfigurerAdapter, but without 
+// @EnableWebMvc.
+public class AdminConsoleMvcConfig extends WebMvcConfigurerAdapter {
 
-    private static final Logger logger = LoggerFactory.getLogger(AdminConsoleConfig.class);
+    private static final Logger logger = LoggerFactory.getLogger(AdminConsoleMvcConfig.class);
 
     @Autowired
     private ResourceProperties resourceProperties = new ResourceProperties();
@@ -50,28 +53,36 @@ public class AdminConsoleConfig extends WebMvcConfigurerAdapter {
     private WebMvcProperties mvcProperties = new WebMvcProperties();
 
     @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        //TODO (thanus, 27/01/2017, TASK: OHFJIRA=4) can be removed after new admin console will be developed 
+        registry.addResourceHandler("/**")
+                .addResourceLocations("/")
+                .setCachePeriod(0);
+    }
+
+    @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         Resource page = this.resourceProperties.getWelcomePage();
         if (page != null) {
             final String welcomePagePath = getWelcomePagePath(mvcProperties);
-            logger.info("Adding welcome page ({}): {}" + page, welcomePagePath);
+            logger.info("Adding welcome page ({}): {}", page, welcomePagePath);
             registry.addViewController(welcomePagePath).setViewName("forward:index.html");
         }
     }
 
     /**
-     * Gets welcome page path basically from {@link WebMvcProperties#getStaticPathPattern()} configuration 
-     * when pattern expression {@code "*"} is removed, for example static path pattern defines {@code /console/**} 
+     * Gets welcome page path basically from {@link WebMvcProperties#getStaticPathPattern()} configuration
+     * when pattern expression {@code "*"} is removed, for example static path pattern defines {@code /console/**}
      * and welcome page path will be resolved as {@code /console/}.
-     * 
-     * @param mvcProperties as configuration for 
+     *
+     * @param mvcProperties as configuration for
      * @return welcome page path on which static resource {@code index.html} will be loaded
      */
     protected String getWelcomePagePath(WebMvcProperties mvcProperties) {
         if (hasText(mvcProperties.getStaticPathPattern())) {
-            return mvcProperties.getStaticPathPattern().replace("*", "");   
+            return mvcProperties.getStaticPathPattern().replace("*", "");
         }
-        
+
         // default fallback
         return "/";
     }

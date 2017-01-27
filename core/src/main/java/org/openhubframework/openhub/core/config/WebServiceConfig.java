@@ -23,8 +23,6 @@ import java.util.List;
 import org.apache.camel.component.spring.ws.bean.CamelEndpointMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.context.embedded.ServletRegistrationBean;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -39,8 +37,6 @@ import org.springframework.ws.soap.SoapMessageFactory;
 import org.springframework.ws.soap.SoapVersion;
 import org.springframework.ws.soap.saaj.SaajSoapMessageFactory;
 import org.springframework.ws.soap.server.endpoint.interceptor.SoapEnvelopeLoggingInterceptor;
-import org.springframework.ws.transport.http.MessageDispatcherServlet;
-import org.springframework.ws.transport.http.WebServiceMessageReceiverHandlerAdapter;
 import org.springframework.xml.xsd.SimpleXsdSchema;
 import org.springframework.xml.xsd.XsdSchema;
 
@@ -48,7 +44,6 @@ import org.openhubframework.openhub.api.config.WebServiceValidatingSources;
 import org.openhubframework.openhub.api.route.RouteConstants;
 import org.openhubframework.openhub.core.common.route.SpringWsUriBuilder;
 import org.openhubframework.openhub.core.common.ws.ErrorCodeAwareSoapExceptionResolver;
-import org.openhubframework.openhub.core.common.ws.ErrorCodeAwareWebServiceMessageReceiverHandlerAdapter;
 import org.openhubframework.openhub.core.common.ws.HeaderAndPayloadValidatingInterceptor;
 
 
@@ -68,13 +63,6 @@ public class WebServiceConfig extends WsConfigurerAdapter {
 
     @Autowired(required = false)
     private List<WebServiceValidatingSources> xsdSources;
-
-    @Bean
-   	public ServletRegistrationBean dispatcherWsRegistration(ApplicationContext applicationContext) {
-   		MessageDispatcherServlet servlet = new MessageDispatcherServlet();
-   		servlet.setApplicationContext(applicationContext);
-   		return new ServletRegistrationBean(servlet, RouteConstants.WS_URI_PREFIX + "*");
-   	}
 
     @Bean
     //http://stackoverflow.com/questions/31048389/no-adapter-for-endpoint-exception-apache-camel-with-spring-boot-spring-ws
@@ -122,11 +110,6 @@ public class WebServiceConfig extends WsConfigurerAdapter {
    	@Bean
     public ErrorCodeAwareSoapExceptionResolver endpointExceptionResolver() {
         return new ErrorCodeAwareSoapExceptionResolver();
-    }
-
-   	@Bean(name = MessageDispatcherServlet.DEFAULT_MESSAGE_RECEIVER_HANDLER_ADAPTER_BEAN_NAME)
-    public WebServiceMessageReceiverHandlerAdapter messageReceiverHandlerAdapter() {
-        return new ErrorCodeAwareWebServiceMessageReceiverHandlerAdapter();
     }
 
    	@Bean(name = SpringWsUriBuilder.MESSAGE_FACTORY_SOAP11)

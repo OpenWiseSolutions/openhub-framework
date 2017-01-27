@@ -16,24 +16,15 @@
 
 package org.openhubframework.openhub;
 
-import static org.openhubframework.openhub.api.route.RouteConstants.WEB_URI_PREFIX_MAPPING;
-
 import javax.servlet.Filter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.web.DispatcherServletAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.embedded.ServletRegistrationBean;
+import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.context.web.ErrorPageFilter;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.*;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
-import org.springframework.web.servlet.DispatcherServlet;
 
 import org.openhubframework.openhub.admin.web.config.AdminConsoleContextConfig;
 import org.openhubframework.openhub.api.route.CamelConfiguration;
@@ -52,6 +43,7 @@ import org.openhubframework.openhub.core.config.WebServiceConfig;
  * This class configures root Spring context.
  *
  * @author Petr Juza
+ * @see AdminConsoleContextConfig
  * @see CamelRoutesConfig
  * @see WebSecurityConfig
  * @see CamelConfig
@@ -61,7 +53,6 @@ import org.openhubframework.openhub.core.config.WebServiceConfig;
  */
 @EnableAutoConfiguration
 @EnableConfigurationProperties
-@SpringBootApplication(exclude = DispatcherServletAutoConfiguration.class)
 // note: all routes with @CamelConfiguration are configured in CamelRoutesConfig
 @ComponentScan(basePackages = {
         "org.openhubframework.openhub.common",
@@ -77,12 +68,7 @@ import org.openhubframework.openhub.core.config.WebServiceConfig;
 @ImportResource("classpath:sp_camelContext.xml")
 @PropertySource(value = {"classpath:/extensions.cfg"})
 public class OpenHubApplication extends SpringBootServletInitializer {
-
-    private static final Logger LOG = LoggerFactory.getLogger(OpenHubApplication.class);
-
-    @Autowired
-    private ApplicationContext rootContext;
-
+    
     /**
      * Sets up filter for adding context information to logging.
      */
@@ -91,34 +77,38 @@ public class OpenHubApplication extends SpringBootServletInitializer {
         return new LogContextFilter();
     }
 
-    /**
-     * Create admin console dispatcher servlet.
-     *
-     * @return {@link ServletRegistrationBean} for admin console.
-     */
+    // ----------------------------------------------
+    // reason of this code snippet: http://stackoverflow
+    // .com/questions/30170586/how-to-disable-errorpagefilter-in-spring-boot
+    
     @Bean
-    public ServletRegistrationBean adminConsoleServletRegistrationBean() {
-        DispatcherServlet dispatcherServlet = new DispatcherServlet();
-        AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
-        context.setParent(rootContext);
-        context.setDisplayName("Admin Console Application Context");
-        context.setId("AdminConsoleApplicationContext");
-        //TODO (thanus, 24/01/2017, TASK: OHFJIRA-4) remove this after new console will be ready
-        // set config location for parent (mainly for static resources)
-        context.setConfigLocation(OpenHubApplication.class.getName());
-        context.register(AdminConsoleContextConfig.class);
-        dispatcherServlet.setApplicationContext(context);
-        ServletRegistrationBean registration = new ServletRegistrationBean(dispatcherServlet, WEB_URI_PREFIX_MAPPING);
-        registration.setName("adminConsoleDispatcherServlet");
-        registration.setLoadOnStartup(1);
+    public ErrorPageFilter errorPageFilter() {
+        return new ErrorPageFilter();
+    }
 
-        LOG.info("Child {}: initialization completed", context.getId());
+    @Bean
+    public FilterRegistrationBean disableSpringBootErrorFilter(ErrorPageFilter filter) {
+        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
+        filterRegistrationBean.setFilter(filter);
+        filterRegistrationBean.setEnabled(false);
+        return filterRegistrationBean;
+    }
+    // ----------------------------------------------    
 
-        return registration;
+
+    @Override
+    protected SpringApplicationBuilder createSpringApplicationBuilder() {
+        return createOpenHubApplicationBuilder();
     }
 
     public static void main(String[] args) throws Exception {
-        new SpringApplicationBuilder(OpenHubApplication.class)
+        createOpenHubApplicationBuilder()
                 .run(args);
     }
+
+    private static SpringApplicationBuilder createOpenHubApplicationBuilder() {
+        return new SpringApplicationBuilder(OpenHubApplication.class)
+               .child(AdminConsoleContextConfig.class);
+    }
+    
 }
