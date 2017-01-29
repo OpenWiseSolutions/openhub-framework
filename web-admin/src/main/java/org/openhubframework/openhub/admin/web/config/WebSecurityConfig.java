@@ -18,6 +18,7 @@ package org.openhubframework.openhub.admin.web.config;
 
 import static org.openhubframework.openhub.api.route.RouteConstants.WEB_URI_PREFIX;
 import static org.openhubframework.openhub.api.route.RouteConstants.WS_AUTH_POLICY;
+import static org.openhubframework.openhub.api.route.RouteConstants.WS_URI_PREFIX;
 
 import java.util.Collections;
 
@@ -27,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.vote.AffirmativeBased;
@@ -35,10 +37,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 
+import org.openhubframework.openhub.api.route.RouteConstants;
 import org.openhubframework.openhub.core.config.CamelConfig;
 
 
@@ -48,7 +51,6 @@ import org.openhubframework.openhub.core.config.CamelConfig;
  * @author Petr Juza
  * @since 2.0
  */
-@Configuration
 @EnableGlobalMethodSecurity // allows AOP @PreAuthorize and some other annotations to be applied to methods
 @EnableWebSecurity
 @AutoConfigureBefore(value = CamelConfig.class)
@@ -61,63 +63,94 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DefaultSecurityUsers defaultUsers;
 
-    @Override
-    @SuppressWarnings("unchecked")
-    protected void configure(HttpSecurity http) throws Exception {
-        ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry urlRegistry
-                = http.authorizeRequests();
+    /**
+     * Basic configuration for web services, handled by {@link RouteConstants#WS_URI_PREFIX}. 
+     */
+    @Configuration
+    @Order(WsWebSecurityConfig.ORDER)
+    public static class WsWebSecurityConfig extends WebSecurityConfig {
 
-        // permit all static resources
-        urlRegistry.antMatchers("/webjars/**").permitAll();
-        urlRegistry.antMatchers("/js/**").permitAll();
-        urlRegistry.antMatchers("/img/**").permitAll();
-        urlRegistry.antMatchers("/css/**").permitAll();
-
-        // web services
-        urlRegistry.antMatchers("/ws/**").hasRole(AuthRole.WS.name())
-                .and()
-                .httpBasic();
-
-        // web admin
-        urlRegistry
-                .antMatchers(WEB_URI_PREFIX + "homepage/**").permitAll()
-                .antMatchers(WEB_URI_PREFIX + "login/**").permitAll()
-                .antMatchers(WEB_URI_PREFIX + "**").hasRole(AuthRole.WEB.name())
-                .antMatchers(WEB_URI_PREFIX + "**/*").hasRole(AuthRole.WEB.name())
-                .antMatchers("/monitoring/**").hasRole(AuthRole.MONITORING.name())
-                .and()
-                .formLogin()
-                    .loginPage(LOGIN_PAGE_URL)
-                    .loginProcessingUrl("/login")
-                    .defaultSuccessUrl(WEB_URI_PREFIX + "console")
-                    .failureUrl(WEB_URI_PREFIX + "login?error")
-                    .permitAll()
-                    .and()
-                .logout()
-                    .permitAll()
-                    .invalidateHttpSession(true)
-                    .deleteCookies(COOKIES_TO_DELETE)
-                    .logoutSuccessUrl(WEB_URI_PREFIX + "homepage")
-                    .and()
-                .sessionManagement()
-                    .maximumSessions(1)
-                    .expiredUrl(LOGIN_PAGE_URL + "?expired");
-
-        // deactivate CSRF
-        urlRegistry.and().csrf().disable();
-
-        // activate remember me functionality
-        urlRegistry.and().rememberMe();
+        /**
+         * Order of this {@link WsWebSecurityConfig}. Must be processed before standard 
+         * {@link WebSecurityConfigurerAdapter}.
+         */
+        public static final int ORDER = 1;
+        
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            // @formatter:off
+            http.csrf().disable() // HTTP with disabled CSRF
+                    .antMatcher(WS_URI_PREFIX + "**")
+                    .authorizeRequests()
+                        .anyRequest().hasAnyRole(AuthRole.WS.name())
+                        .and()
+                    .httpBasic();
+            // @formatter:on
+        }
     }
 
+    /**
+     * Basic configuration for admin GUI, handled by {@link RouteConstants#WEB_URI_PREFIX}. 
+     */
+    @Configuration
+    @Order(AdminGuiSecurityConfig.ORDER)
+    public static class AdminGuiSecurityConfig extends WebSecurityConfig {
+
+        /**
+         * Order of this {@link AdminGuiSecurityConfig}. Must be processed after {@link WsWebSecurityConfig}.
+         */
+        public static final int ORDER = WsWebSecurityConfig.ORDER + 1;
+
+        @Override
+        public void configure(WebSecurity web) throws Exception {
+            // ignore security check for static resources
+            web.ignoring().antMatchers("/webjars/**", "/js/**", "/img/**", "/css/**");
+        }
+
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            // @formatter:off
+            http.csrf().disable() // HTTP with disabled CSRF
+                    .authorizeRequests() //Authorize Request Configuration
+                        .antMatchers(WEB_URI_PREFIX + "homepage/**").permitAll()
+                        .antMatchers(WEB_URI_PREFIX + "login/**").permitAll()
+                        .antMatchers(WEB_URI_PREFIX + "**").hasRole(AuthRole.WEB.name())
+                        .antMatchers(WEB_URI_PREFIX + "**/*").hasRole(AuthRole.WEB.name())
+                        .antMatchers("/monitoring/**").hasRole(AuthRole.MONITORING.name())
+                        .and()
+                    .formLogin()
+                        .loginPage(LOGIN_PAGE_URL)
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl(WEB_URI_PREFIX + "console")
+                        .failureUrl(WEB_URI_PREFIX + "login?error")
+                        .permitAll()
+                        .and()
+                    .logout()
+                        .permitAll()
+                        .invalidateHttpSession(true)
+                        .deleteCookies(COOKIES_TO_DELETE)
+                        .logoutSuccessUrl(WEB_URI_PREFIX + "homepage")
+                        .and()
+                    .sessionManagement()
+                        .maximumSessions(1)
+                        .expiredUrl(LOGIN_PAGE_URL + "?expired");
+            // @formatter:on
+        }
+    }
+    
     @Override
    	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-   		auth.inMemoryAuthentication().withUser(defaultUsers.getWsUser())
-                .password(defaultUsers.getWsPassword()).roles(AuthRole.WS.name());
-   		auth.inMemoryAuthentication().withUser(defaultUsers.getWebUser())
-                .password(defaultUsers.getWebPassword()).roles(AuthRole.WEB.name(), AuthRole.WS.name(), AuthRole.MONITORING.name());
-   		auth.inMemoryAuthentication().withUser(defaultUsers.getMonitoringUser())
-                .password(defaultUsers.getMonitoringPassword()).roles(AuthRole.MONITORING.name());
+        // @formatter:off
+   		auth.inMemoryAuthentication()
+                .withUser(defaultUsers.getWsUser()).password(defaultUsers.getWsPassword())
+                    .roles(AuthRole.WS.name());
+   		auth.inMemoryAuthentication()
+                .withUser(defaultUsers.getWebUser()).password(defaultUsers.getWebPassword())
+                    .roles(AuthRole.WEB.name(), AuthRole.WS.name(), AuthRole.MONITORING.name());
+   		auth.inMemoryAuthentication()
+                .withUser(defaultUsers.getMonitoringUser()).password(defaultUsers.getMonitoringPassword())
+                    .roles(AuthRole.MONITORING.name());
+        // @formatter:on
    	}
 
     /**
@@ -148,10 +181,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     private enum AuthRole {
-        USER,
         WS,
         WEB,
-        MONITORING;
+        MONITORING
     }
 }
 
