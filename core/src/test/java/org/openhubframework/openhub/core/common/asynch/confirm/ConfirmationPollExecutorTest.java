@@ -42,8 +42,8 @@ import org.openhubframework.openhub.api.entity.ExternalCallStateEnum;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
 import org.openhubframework.openhub.core.AbstractCoreDbTest;
-import org.openhubframework.openhub.test.ExternalSystemTestEnum;
-import org.openhubframework.openhub.test.ServiceTestEnum;
+import org.openhubframework.openhub.test.data.ExternalSystemTestEnum;
+import org.openhubframework.openhub.test.data.ServiceTestEnum;
 
 
 /**

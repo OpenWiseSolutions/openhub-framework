@@ -238,7 +238,7 @@ public abstract class AbstractOperationRouteTest extends AbstractCoreDbTest {
      * @return the response parsed from XML as the specified responseClass
      * @throws AssertionError if the message state doesn't match the specified state
      */
-    protected <T> T sendAsyncInMessage(String requestXML, MessageProcessor messageVerifier, Class<T> responseClass) throws Exception {
+    protected <T> T sendAsyncInMessage(String requestXML, MessageCallback messageVerifier, Class<T> responseClass) throws Exception {
         String correlationID = UUID.randomUUID().toString();
         return sendAsyncInMessage(correlationID, DateTime.now(), requestXML, messageVerifier, responseClass);
     }
@@ -255,7 +255,7 @@ public abstract class AbstractOperationRouteTest extends AbstractCoreDbTest {
      * @throws AssertionError if the message state doesn't match the specified state
      */
     protected <T> T sendAsyncInMessage(String correlationID, DateTime msgTimestamp, String requestXML,
-                                       MessageProcessor messageVerifier, Class<T> responseClass) throws Exception {
+                                       MessageCallback messageVerifier, Class<T> responseClass) throws Exception {
         Exchange result = sendAsyncInMessage(correlationID, msgTimestamp, requestXML);
         Exception exception = result.getException();
         if (exception != null) {
@@ -278,7 +278,7 @@ public abstract class AbstractOperationRouteTest extends AbstractCoreDbTest {
      * @return the response parsed from XML as the specified responseClass
      */
     protected <T> T sendAsyncInMessage(String requestXML, Class<T> responseClass) throws Exception {
-        return sendAsyncInMessage(requestXML, (MessageProcessor) null, responseClass);
+        return sendAsyncInMessage(requestXML, (MessageCallback) null, responseClass);
     }
 
     /**
@@ -340,9 +340,9 @@ public abstract class AbstractOperationRouteTest extends AbstractCoreDbTest {
      */
     protected Message sendAsyncOutMessage(final String correlationID, final DateTime msgTimestamp,
             final String requestXML, MsgStateEnum finalState) throws Exception {
-        return sendAsyncOutMessage(new MessageProcessor() {
+        return sendAsyncOutMessage(new MessageCallback() {
             @Override
-            public void process(Message message) {
+            public void beforeInsert(Message message, int order) {
                 message.setMsgTimestamp(msgTimestamp.toDate());
                 message.setCorrelationId(correlationID);
                 message.setPayload(requestXML);
@@ -359,7 +359,7 @@ public abstract class AbstractOperationRouteTest extends AbstractCoreDbTest {
      * @return the {@link Message} that was sent and processed
      * @throws AssertionError if the message state doesn't match the specified state
      */
-    protected Message sendAsyncOutMessage(MessageProcessor initializer) throws Exception {
+    protected Message sendAsyncOutMessage(MessageCallback initializer) throws Exception {
         return sendAsyncOutMessage(initializer, null);
     }
 
@@ -372,17 +372,18 @@ public abstract class AbstractOperationRouteTest extends AbstractCoreDbTest {
      * @return the {@link Message} that was sent and processed
      * @throws AssertionError if the message state doesn't match the specified state
      */
-    protected Message sendAsyncOutMessage(final MessageProcessor initializer, MsgStateEnum finalState) throws Exception {
-        lastMessage = createAndSaveMessage(new MessageProcessor() {
+    protected Message sendAsyncOutMessage(final MessageCallback initializer, MsgStateEnum finalState) throws Exception {
+        lastMessage = createAndSaveMessage(new MessageCallback() {
             @Override
-            public void process(Message message) throws Exception {
+            public void beforeInsert(Message message, int order) throws Exception {
                 message.setSourceSystem(getSourceSystem());
                 message.setService(getService());
                 message.setOperationName(getOperationName());
                 message.setMsgTimestamp(DateTime.now().toDate());
                 message.setReceiveTimestamp(DateTime.now().toDate());
                 message.setCorrelationId(UUID.randomUUID().toString());
-                initializer.process(message); // let the provided initializer init the other fields
+
+                initializer.beforeInsert(message, 0); // let the provided initializer init the other fields
             }
         });
         producer.requestBody(AsynchMessageRoute.URI_SYNC_MSG, lastMessage);
@@ -454,10 +455,10 @@ public abstract class AbstractOperationRouteTest extends AbstractCoreDbTest {
     }
 
     @Nullable
-    protected MessageProcessor getMessageStateVerifier(@Nullable final MsgStateEnum finalState) {
-        return finalState == null ? null : new MessageProcessor() {
+    protected MessageCallback getMessageStateVerifier(@Nullable final MsgStateEnum finalState) {
+        return finalState == null ? null : new MessageCallback() {
             @Override
-            public void process(Message message) throws Exception {
+            public void beforeInsert(Message message, int order) throws Exception {
                 String stateFailReason = String.format(
                         "Message doesn't have the expected state. failedErrorCode=%s, failedErrorDesc=%s, businessError=%s",
                         message.getFailedErrorCode(), message.getFailedDesc(), message.getBusinessError());
@@ -466,7 +467,7 @@ public abstract class AbstractOperationRouteTest extends AbstractCoreDbTest {
         };
     }
 
-    private void verifyMessage(ExternalSystemExtEnum sourceSystem, String correlationID, MessageProcessor msgVerifier) throws Exception {
+    private void verifyMessage(ExternalSystemExtEnum sourceSystem, String correlationID, MessageCallback msgVerifier) throws Exception {
         if (msgVerifier != null) {
             Message message = msgDao.findByCorrelationId(correlationID, sourceSystem);
 
@@ -474,7 +475,7 @@ public abstract class AbstractOperationRouteTest extends AbstractCoreDbTest {
                     "No message found for sourceSystem=%s and correlationID=%s", sourceSystem, correlationID);
 
             assertThat(msgMissingReason, message, notNullValue());
-            msgVerifier.process(message);
+            msgVerifier.beforeInsert(message, 0);
         }
     }
 
@@ -496,7 +497,7 @@ public abstract class AbstractOperationRouteTest extends AbstractCoreDbTest {
         return createAndSaveMessage(getSourceSystem(), getService(), getOperationName(), requestXML);
     }
 
-    protected Message createAndSaveMessage(MessageProcessor initializer) throws Exception {
+    protected Message createAndSaveMessage(MessageCallback initializer) throws Exception {
         return createAndSaveMessages(1, initializer)[0];
     }
 

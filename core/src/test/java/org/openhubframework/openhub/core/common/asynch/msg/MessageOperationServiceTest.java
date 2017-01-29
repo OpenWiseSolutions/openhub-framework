@@ -43,9 +43,9 @@ public class MessageOperationServiceTest extends AbstractCoreDbTest {
     @Test
     public void testRestartForFailedMessage() {
         // prepare message in FAILED state
-        Message[] messages = createAndSaveMessages(1, new MessageProcessor() {
+        Message[] messages = createAndSaveMessages(1, new MessageCallback() {
             @Override
-            public void process(Message message) {
+            public void beforeInsert(Message message, int order) {
                 message.setState(MsgStateEnum.FAILED);
             }
         });
@@ -62,9 +62,9 @@ public class MessageOperationServiceTest extends AbstractCoreDbTest {
     @Test
     public void testRestartForFailedMessage_multiThreaded() throws Exception {
         // prepare message in FAILED state
-        final Message[] messages = createAndSaveMessages(1, new MessageProcessor() {
+        final Message[] messages = createAndSaveMessages(1, new MessageCallback() {
             @Override
-            public void process(Message message) {
+            public void beforeInsert(Message message, int order) {
                 message.setState(MsgStateEnum.FAILED);
             }
         });
@@ -101,9 +101,9 @@ public class MessageOperationServiceTest extends AbstractCoreDbTest {
     @Test
     public void testRestartForCancelMessage() {
         // prepare message in FAILED state
-        Message[] messages = createAndSaveMessages(1, new MessageProcessor() {
+        Message[] messages = createAndSaveMessages(1, new MessageCallback() {
             @Override
-            public void process(Message message) {
+            public void beforeInsert(Message message, int order) {
                 message.setState(MsgStateEnum.CANCEL);
             }
         });
@@ -120,9 +120,9 @@ public class MessageOperationServiceTest extends AbstractCoreDbTest {
     @Test
     public void testCancelForNEW() {
         // prepare message in NEW state
-        Message[] messages = createAndSaveMessages(1, new MessageProcessor() {
+        Message[] messages = createAndSaveMessages(1, new MessageCallback() {
             @Override
-            public void process(Message message) {
+            public void beforeInsert(Message message, int order) {
                 message.setState(MsgStateEnum.NEW);
             }
         });
@@ -139,9 +139,9 @@ public class MessageOperationServiceTest extends AbstractCoreDbTest {
     @Test
     public void testCancelForPARTLY_FAILED() {
         // prepare message in PARTLY_FAILED state
-        Message[] messages = createAndSaveMessages(1, new MessageProcessor() {
+        Message[] messages = createAndSaveMessages(1, new MessageCallback() {
             @Override
-            public void process(Message message) {
+            public void beforeInsert(Message message, int order) {
                 message.setState(MsgStateEnum.PARTLY_FAILED);
             }
         });
@@ -158,9 +158,9 @@ public class MessageOperationServiceTest extends AbstractCoreDbTest {
     @Test
     public void testCancelForPOSTPONED() {
         // prepare message in POSTPONED state
-        Message[] messages = createAndSaveMessages(1, new MessageProcessor() {
+        Message[] messages = createAndSaveMessages(1, new MessageCallback() {
             @Override
-            public void process(Message message) {
+            public void beforeInsert(Message message, int order) {
                 message.setState(MsgStateEnum.POSTPONED);
             }
         });
@@ -177,9 +177,9 @@ public class MessageOperationServiceTest extends AbstractCoreDbTest {
     @Test(expected = IllegalStateException.class)
     public void testWrongCancel() {
         // prepare message in NEW state
-        Message[] messages = createAndSaveMessages(1, new MessageProcessor() {
+        Message[] messages = createAndSaveMessages(1, new MessageCallback() {
             @Override
-            public void process(Message message) {
+            public void beforeInsert(Message message, int order) {
                 message.setState(MsgStateEnum.PROCESSING);
             }
         });

@@ -14,35 +14,25 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.test;
+package org.openhubframework.openhub.test.data;
 
-import org.openhubframework.openhub.api.exception.ErrorExtEnum;
+import org.openhubframework.openhub.api.entity.ServiceExtEnum;
 
 
 /**
- * Catalog of error codes for tests.
+ * Enumeration of possible services (aka modules) - for test purposes only.
  *
  * @author Petr Juza
  */
-public enum ErrorTestEnum implements ErrorExtEnum {
+public enum ServiceTestEnum implements ServiceExtEnum {
 
-    E200("error in billing"),
+    ACCOUNT,
 
-    E300("error in ERP");
-
-    private String errDesc;
-
-    private ErrorTestEnum(String errDesc) {
-        this.errDesc = errDesc;
-    }
+    CUSTOMER;
 
     @Override
-    public String getErrorCode() {
+    public String getServiceName() {
         return name();
     }
-
-    @Override
-    public String getErrDesc() {
-        return errDesc;
-    }
 }
+

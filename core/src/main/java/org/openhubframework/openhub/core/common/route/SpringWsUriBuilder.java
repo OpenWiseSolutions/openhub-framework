@@ -43,30 +43,25 @@ public class SpringWsUriBuilder implements WebServiceUriBuilder {
         Assert.hasText(connectionUri, "the connectionUri must not be empty");
         Assert.hasText(messageSenderRef, "the messageSenderRef must not be empty");
 
+        return getOutUri(connectionUri, messageSenderRef, soapAction, MESSAGE_FACTORY_SOAP11);
+    }
+
+    private String getOutUri(String connectionUri, String messageSenderRef, String soapAction, String messageFactory) {
         String wsUri = "spring-ws:" + connectionUri + "?messageSender=#" + messageSenderRef
-                + "&messageFactory=#" + MESSAGE_FACTORY_SOAP11;
+                + "&messageFactory=#" + messageFactory;
 
         if (StringUtils.isNotEmpty(soapAction)) {
             wsUri += "&soapAction=" + soapAction;
         }
-
         return wsUri;
     }
-
 
     @Override
     public String getOutWsSoap12Uri(String connectionUri, String messageSenderRef, String soapAction) {
         Assert.hasText(connectionUri, "the connectionUri must not be empty");
         Assert.hasText(messageSenderRef, "the messageSenderRef must not be empty");
 
-        String wsUri = "spring-ws:" + connectionUri + "?messageSender=#" + messageSenderRef
-                + "&messageFactory=#" + MESSAGE_FACTORY_SOAP12;
-
-        if (StringUtils.isNotEmpty(soapAction)) {
-            wsUri += "&soapAction=" + soapAction;
-        }
-
-        return wsUri;
+        return getOutUri(connectionUri, messageSenderRef, soapAction, MESSAGE_FACTORY_SOAP12);
     }
 
 

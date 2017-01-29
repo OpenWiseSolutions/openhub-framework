@@ -350,6 +350,8 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public int getCountProcessingMessagesForFunnel(String funnelValue, Seconds idleInterval, String funnelCompId) {
         Assert.hasText(funnelValue, "the funnelValue must not be empty");
+        Assert.notNull(idleInterval, "the idleInterval must not be null");
+        Assert.hasText(funnelCompId, "the funnelCompId must not be empty");
 
         return messageDao.getCountProcessingMessagesForFunnel(funnelValue, idleInterval, funnelCompId);
     }

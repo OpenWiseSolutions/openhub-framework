@@ -59,7 +59,7 @@ public class EmailAlertListenerSupport implements AlertListener {
 
     /**
      * Default implementation is to send email notification.
-     * If you need to implement whatever else then override {@link #onAlert(AlertInfo)} with custom actions.
+     * If you need to implement whatever else then override {@link #doOnAlert(AlertInfo)} with custom actions.
      *
      * @param alert the activated alert
      * @param actualCount the actual count of items
@@ -89,7 +89,7 @@ public class EmailAlertListenerSupport implements AlertListener {
 
         // do whatever else
         try {
-            onAlert(alert);
+            doOnAlert(alert);
         } catch (Exception ex) {
             LOG.error("Error occurred during final action for alert id=" + alert.getId(), ex);
         }
@@ -100,7 +100,7 @@ public class EmailAlertListenerSupport implements AlertListener {
      *
      * @param alert the activated alert
      */
-    protected void onAlert(AlertInfo alert) {
+    protected void doOnAlert(AlertInfo alert) {
         // no action by default
     }
 

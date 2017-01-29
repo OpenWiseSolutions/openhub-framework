@@ -30,7 +30,7 @@ import org.springframework.core.convert.ConversionService;
 import org.openhubframework.openhub.api.common.Constraints;
 import org.openhubframework.openhub.api.common.HumanReadable;
 import org.openhubframework.openhub.api.exception.ConfigurationException;
-import org.openhubframework.openhub.common.Strings;
+import org.openhubframework.openhub.common.Tools;
 
 
 /**
@@ -185,14 +185,14 @@ public class DbConfigurationParam implements HumanReadable {
             try {
                 if (!conversionService.canConvert(String.class, getDataType().getTypeClass())) {
                     throw new ConfigurationException(
-                            Strings.fm("Current value {} can't be converted to target type {}",
+                            Tools.fm("Current value {} can't be converted to target type {}",
                                     getCurrentValue(), getDataType().name()), getCode());
                 }
 
                 conversionService.convert(getCurrentValue(), getDataType().getTypeClass());
             } catch (ConversionException ex) {
                 throw new ConfigurationException(
-                        Strings.fm("Current value {} can't be converted to target type {}",
+                        Tools.fm("Current value {} can't be converted to target type {}",
                                 getCurrentValue(), getDataType().name()), ex, getCode());
             }
         }
@@ -200,14 +200,14 @@ public class DbConfigurationParam implements HumanReadable {
             try {
                 if (!conversionService.canConvert(String.class, getDataType().getTypeClass())) {
                     throw new ConfigurationException(
-                            Strings.fm("Default value {} can't be converted to target type {}",
+                            Tools.fm("Default value {} can't be converted to target type {}",
                                     getDefaultValue(), getDataType().name()), getCode());
                 }
 
                 conversionService.convert(getDefaultValue(), getDataType().getTypeClass());
             } catch (ConversionException ex) {
                 throw new ConfigurationException(
-                        Strings.fm("Default value {} can't be converted to target type {}",
+                        Tools.fm("Default value {} can't be converted to target type {}",
                                 getDefaultValue(), getDataType().name()), ex, getCode());
             }
         }

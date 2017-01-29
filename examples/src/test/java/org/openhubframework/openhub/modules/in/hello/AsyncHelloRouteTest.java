@@ -32,9 +32,9 @@ import org.openhubframework.openhub.api.asynch.model.ConfirmationTypes;
 import org.openhubframework.openhub.common.Tools;
 import org.openhubframework.openhub.modules.AbstractExampleModulesDbTest;
 import org.openhubframework.openhub.modules.in.hello.model.AsyncHelloResponse;
-import org.openhubframework.openhub.test.ExternalSystemTestEnum;
-import org.openhubframework.openhub.test.ServiceTestEnum;
 import org.openhubframework.openhub.test.TestUtils;
+import org.openhubframework.openhub.test.data.ExternalSystemTestEnum;
+import org.openhubframework.openhub.test.data.ServiceTestEnum;
 import org.openhubframework.openhub.test.route.ActiveRoutes;
 import org.openhubframework.openhub.test.route.TestWsUriBuilder;
 

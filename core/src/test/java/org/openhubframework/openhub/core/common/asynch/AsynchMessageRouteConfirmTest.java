@@ -52,8 +52,8 @@ import org.openhubframework.openhub.api.exception.ValidationIntegrationException
 import org.openhubframework.openhub.api.route.AbstractBasicRoute;
 import org.openhubframework.openhub.core.AbstractCoreDbTest;
 import org.openhubframework.openhub.core.common.asynch.confirm.ConfirmationPollExecutor;
-import org.openhubframework.openhub.test.ExternalSystemTestEnum;
-import org.openhubframework.openhub.test.ServiceTestEnum;
+import org.openhubframework.openhub.test.data.ExternalSystemTestEnum;
+import org.openhubframework.openhub.test.data.ServiceTestEnum;
 import org.openhubframework.openhub.test.route.ActiveRoutes;
 
 

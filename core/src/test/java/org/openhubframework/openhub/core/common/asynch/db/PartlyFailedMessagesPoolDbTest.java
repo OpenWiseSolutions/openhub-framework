@@ -35,8 +35,8 @@ import org.openhubframework.openhub.core.AbstractCoreDbTest;
 import org.openhubframework.openhub.core.common.asynch.queue.MessagesPool;
 import org.openhubframework.openhub.core.common.asynch.queue.MessagesPoolDbImpl;
 import org.openhubframework.openhub.core.configuration.FixedConfigurationItem;
-import org.openhubframework.openhub.test.ExternalSystemTestEnum;
-import org.openhubframework.openhub.test.ServiceTestEnum;
+import org.openhubframework.openhub.test.data.ExternalSystemTestEnum;
+import org.openhubframework.openhub.test.data.ServiceTestEnum;
 
 
 /**

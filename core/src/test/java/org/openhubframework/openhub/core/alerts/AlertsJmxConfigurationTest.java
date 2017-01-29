@@ -1,11 +1,11 @@
 /*
- * Copyright 2014 the original author or authors.
+ * Copyright 2002-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,33 +18,36 @@ package org.openhubframework.openhub.core.alerts;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 import java.util.Properties;
+import javax.management.*;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.PropertiesPropertySource;
 
 import org.openhubframework.openhub.core.AbstractCoreTest;
-import org.openhubframework.openhub.spi.alerts.AlertInfo;
 
 
 /**
- * Test suite for {@link AlertsPropertiesConfiguration}.
+ * Test suite for {@link AlertsJmxConfiguration}.
  *
  * @author Petr Juza
- * @since 0.4
+ * @since 2.0
  */
-public class AlertsPropertiesConfigurationTest extends AbstractCoreTest {
+public class AlertsJmxConfigurationTest extends AbstractCoreTest {
 
     @Autowired
     private ConfigurableEnvironment env;
 
-    @Test
-    public void testConf() {
+    private AlertsJmxConfiguration jmx;
+
+    @Before
+    public void prepareAlertsConf() {
         // prepare properties
         Properties props = new Properties();
 
@@ -69,38 +72,56 @@ public class AlertsPropertiesConfigurationTest extends AbstractCoreTest {
         AlertsPropertiesConfiguration conf = new AlertsPropertiesConfiguration(env);
         conf.initProps();
 
-        // verify
-        assertThat(conf.getAlert("ID"), notNullValue());
-        assertThat(conf.getAlert("ID2"), notNullValue());
-
-        AlertInfo alert1 = conf.getAlert("ID");
-        assertThat(alert1.isEnabled(), is(true));
-        assertThat(alert1.getSql(), is("select COUNT()"));
-        assertThat(alert1.getLimit(), is(11L));
-        assertThat(alert1.getNotificationSubject(), nullValue());
-        assertThat(alert1.getNotificationBody(), nullValue());
-
-        AlertInfo alert2 = conf.getAlert("ID2");
-        assertThat(alert2.isEnabled(), is(true));
-        assertThat(alert2.getSql(), is("select COUNT()"));
-        assertThat(alert2.getLimit(), is(11L));
-        assertThat(alert2.getNotificationSubject(), is("subject"));
-        assertThat(alert2.getNotificationBody(), is("body"));
+        jmx = new AlertsJmxConfiguration(conf);
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void testDuplicateId() {
-        // prepare properties
-        Properties props = new Properties();
+    @Test
+    public void testMBeanInfo() {
+        MBeanInfo mBeanInfo = jmx.getMBeanInfo();
 
-        // add alert (min. version)
-        String prefix = AlertsPropertiesConfiguration.ALERT_PROP_PREFIX + "1.";
-        props.put(prefix + AlertsPropertiesConfiguration.ID_PROP, "ID");
-        props.put(prefix + AlertsPropertiesConfiguration.ID_PROP, "ID");
+        assertThat(mBeanInfo, notNullValue());
+        MBeanAttributeInfo[] attributes = mBeanInfo.getAttributes();
+        assertThat(attributes.length, is(4));
+        assertThat(attributes[0].getName(), is("ID2.enabled"));
+        assertThat(attributes[1].getName(), is("ID2.limit"));
+        assertThat(attributes[2].getName(), is("ID.enabled"));
+        assertThat(attributes[3].getName(), is("ID.limit"));
+    }
 
-        env.getPropertySources().addFirst(new PropertiesPropertySource("alerts-test", props));
+    @Test
+    public void testGetAttribute() throws MBeanException, AttributeNotFoundException, ReflectionException {
+        Object attribute = jmx.getAttribute("ID.enabled");
+        assertThat(attribute, notNullValue());
+        assertThat(attribute.toString(), is("true"));
 
-        AlertsPropertiesConfiguration conf = new AlertsPropertiesConfiguration(env);
-        conf.initProps();
+        attribute = jmx.getAttribute("ID.limit");
+        assertThat(attribute, notNullValue());
+        assertThat(attribute.toString(), is("11"));
+
+        try {
+            jmx.getAttribute("something");
+            fail("there is no attribute with specified key");
+        } catch (AttributeNotFoundException ex) {
+            // it's OK
+        }
+    }
+
+    @Test
+    public void testSetAttribute() throws Exception {
+        Attribute attribute = new Attribute("ID.enabled", "false");
+        jmx.setAttribute(attribute);
+        assertThat(jmx.getAttribute("ID.enabled").toString(), is("false"));
+
+        attribute = new Attribute("ID.limit", "8");
+        jmx.setAttribute(attribute);
+        assertThat(jmx.getAttribute("ID.limit").toString(), is("8"));
+
+        try {
+            attribute = new Attribute("something", "enable");
+            jmx.setAttribute(attribute);
+            fail("there is no attribute with specified key");
+        } catch (AttributeNotFoundException ex) {
+            // it's OK
+        }
     }
 }
