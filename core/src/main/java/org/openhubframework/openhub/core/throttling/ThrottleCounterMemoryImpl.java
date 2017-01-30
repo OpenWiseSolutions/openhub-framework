@@ -16,19 +16,22 @@
 
 package org.openhubframework.openhub.core.throttling;
 
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.locks.ReentrantLock;
-
 import org.apache.commons.lang3.time.DateUtils;
 import org.joda.time.DateTime;
+import org.openhubframework.openhub.common.synchronization.SynchronizationBlock;
+import org.openhubframework.openhub.common.synchronization.SynchronizationExecutor;
+import org.openhubframework.openhub.spi.throttling.ThrottleCounter;
+import org.openhubframework.openhub.spi.throttling.ThrottleScope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import org.openhubframework.openhub.spi.throttling.ThrottleCounter;
-import org.openhubframework.openhub.spi.throttling.ThrottleScope;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Stack;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -45,6 +48,8 @@ public class ThrottleCounterMemoryImpl implements ThrottleCounter {
 
     private static final int DUMP_PERIOD = 60;
 
+    private static final String SYNC_THROTTLING_TYPE = "SYNCHRONIZATION_THROTTLING";
+
     /**
      * List of timestamps of incoming requests for specified interval per throttling scope.
      */
@@ -52,74 +57,51 @@ public class ThrottleCounterMemoryImpl implements ThrottleCounter {
 
     private volatile Date lastDumpTimestamp = new Date();
 
-    private final ReentrantLock lock = new ReentrantLock();
-
-    private final Set<ThrottleScope> scopesInProgress = new HashSet<ThrottleScope>();
-
-    private static final Object OBJ_LOCK = new Object();
-
     @Override
-    public int count(ThrottleScope throttleScope, int interval) {
+    public int count(final ThrottleScope throttleScope, final int interval) {
         Assert.notNull(throttleScope, "the throttleScope must not be null");
         Assert.isTrue(interval > 0, "the interval must be positive value");
 
-        int counter = 0;
-        boolean toLock = false;
+        Integer result = SynchronizationExecutor.getInstance().execute(new SynchronizationBlock() {
 
-        // is it necessary to lock thread? Only if two same throttle scopes are processed at the same time
-        synchronized (OBJ_LOCK) {
-            if (scopesInProgress.contains(throttleScope)) {
-                toLock = true;
-            } else {
-                scopesInProgress.add(throttleScope);
-            }
-        }
+            @Override
+            @SuppressWarnings("unchecked")
+            public <T> T syncBlock() {
+                Integer counter = 0;
 
-        if (toLock) {
-            lock.lock();
-        }
-
-        try {
-            if (requests.get(throttleScope) == null) {
-                requests.put(throttleScope, new Stack<Long>());
-            }
-
-            long now = DateTime.now().getMillis();
-            long from = now - (interval * 1000);
-
-            // get timestamps for specified throttling scope
-            List<Long> timestamps = requests.get(throttleScope);
-            timestamps.add(now);
-
-            // count requests for specified interval
-            int lastIndex = -1;
-            for (int i = timestamps.size() - 1; i >= 0; i--) {
-                long timestamp = timestamps.get(i);
-
-                if (timestamp >= from) {
-                    counter++;
-                } else {
-                    lastIndex = i;
-                    break;
+                if (requests.get(throttleScope) == null) {
+                    requests.put(throttleScope, new Stack<Long>());
                 }
-            }
 
-            // remove old timestamps
-            if (lastIndex > 0) {
-                for (int i = 0; i <= lastIndex; i++) {
-                    timestamps.remove(0);
+                long now = DateTime.now().getMillis();
+                long from = now - (interval * 1000);
+
+                // get timestamps for specified throttling scope
+                List<Long> timestamps = requests.get(throttleScope);
+                timestamps.add(now);
+
+                // count requests for specified interval
+                int lastIndex = -1;
+                for (int i = timestamps.size() - 1; i >= 0; i--) {
+                    long timestamp = timestamps.get(i);
+
+                    if (timestamp >= from) {
+                        counter++;
+                    } else {
+                        lastIndex = i;
+                        break;
+                    }
                 }
-            }
-        } finally {
-            synchronized (OBJ_LOCK) {
-                scopesInProgress.remove(throttleScope);
-            }
 
-            if (toLock) {
-                lock.unlock();
+                // remove old timestamps
+                if (lastIndex > 0) {
+                    for (int i = 0; i <= lastIndex; i++) {
+                        timestamps.remove(0);
+                    }
+                }
+                return (T) counter;
             }
-        }
-
+        }, SYNC_THROTTLING_TYPE, throttleScope);
 
         // make dump only once in the specified interval
         if (LOG.isDebugEnabled() && (DateUtils.addSeconds(new Date(), -DUMP_PERIOD).after(lastDumpTimestamp))) {
@@ -128,7 +110,7 @@ public class ThrottleCounterMemoryImpl implements ThrottleCounter {
             lastDumpTimestamp = new Date();
         }
 
-        return counter;
+        return result;
     }
 
     /**
