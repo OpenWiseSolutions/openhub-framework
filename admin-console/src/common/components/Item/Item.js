@@ -24,7 +24,7 @@ class Item extends Component {
   }
 
   render () {
-    const { children, label, size, icon, style = {} } = this.props
+    const { children, label, size, icon, style = {}, expandedStyle = {} } = this.props
     const { expanded } = this.state
 
     const computedStyle = [
@@ -33,11 +33,18 @@ class Item extends Component {
       style
     ]
 
+    const labelStyle = [
+      styles.label,
+      expanded && expandedStyle
+    ]
+
     return (
       <div className='item' onClick={this.handleClick} style={computedStyle}>
-        { icon && <span style={styles.icon}>{icon}</span> }
-        <span>{label}</span>
-        { children && <div style={styles.arrow}><ArrowDown /></div> }
+        <div style={labelStyle}>
+          { icon && <span style={styles.icon}>{icon}</span> }
+          <span>{label}</span>
+          { children && <div style={styles.arrow}><ArrowDown /></div> }
+        </div>
         { children && expanded && <div style={styles.children}>{children}</div> }
       </div>
     )
@@ -51,7 +58,8 @@ Item.propTypes = {
   size: PropTypes.number,
   link: PropTypes.string,
   onClick: PropTypes.func,
-  style: PropTypes.object
+  style: PropTypes.object,
+  expandedStyle: PropTypes.object
 }
 
 export default Item

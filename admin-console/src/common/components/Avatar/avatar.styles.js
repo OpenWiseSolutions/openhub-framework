@@ -1,5 +1,5 @@
-import { secondaryColor } from '../../styles/colors'
-import { gap, itemSize } from '../../styles/constants'
+import { secondaryColor } from '../../../styles/colors'
+import { gap, itemSize } from '../../../styles/constants'
 
 export const avatarSize = itemSize * 0.8
 

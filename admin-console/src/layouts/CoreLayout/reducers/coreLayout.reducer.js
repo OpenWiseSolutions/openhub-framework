@@ -1,21 +1,32 @@
 import { SIDEBAR_TOGGLE, NAVBAR_USER_TOGGLE } from '../actions/coreLayout.actions'
+import { LOGOUT } from '../../../common/actions/auth.actions'
 
-const defaultUiState = {
-  sidebarExtended: false,
+const defaultState = {
+  sidebarExtended: true,
   navbarUserExpanded: false
 }
 
-export default function (state = defaultUiState, action) {
-  const ui = { ...state }
-
+export default function (state = defaultState, action) {
   switch (action.type) {
+
+    case LOGOUT:
+      return {
+        ...state,
+        navbarUserExpanded: false
+      }
+
     case SIDEBAR_TOGGLE:
-      ui.sidebarExtended = !ui.sidebarExtended
-      return ui
+
+      return {
+        ...state,
+        sidebarExtended: !state.sidebarExtended
+      }
 
     case NAVBAR_USER_TOGGLE:
-      ui.navbarUserExpanded = !ui.navbarUserExpanded
-      return ui
+      return {
+        ...state,
+        navbarUserExpanded: !state.navbarUserExpanded
+      }
 
     default:
       return state

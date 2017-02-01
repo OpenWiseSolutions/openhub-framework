@@ -1,32 +1,39 @@
 import React, { Component } from 'react'
-import Radium from 'radium'
-import Navbar from '../../../components/Navbar/Navbar'
-import Sidebar from '../../../components/Sidebar/Sidebar'
+import Radium, { StyleRoot } from 'radium'
+import Navbar from '../../../common/components/Navbar/Navbar'
+import Sidebar from '../../../common/components/Sidebar/Sidebar'
 import styles from './coreLayout.styles'
+import LoginModal from '../../../common/containers/loginModal.container'
 
 @Radium
 class CoreLayout extends Component {
 
   render () {
-    const { children, sidebarExtended, navbarUserExpanded, actions } = this.props
+    const { isAuth, children, sidebarExtended, navbarUserExpanded, actions, authActions } = this.props
     const bodyStyles = [
       styles.body,
       sidebarExtended && styles.body.extended
     ]
 
     return (
-      <div style={styles.main}>
-        <Sidebar extended={sidebarExtended} />
-        <div style={bodyStyles}>
-          <Navbar
-            navbarUserExpanded={navbarUserExpanded}
-            toggleUser={actions.toggleNavbarUser}
-            toggleSidebar={actions.toggleSidebar} />
-          <div className='core-layout-contents'>
-            {children}
+      <StyleRoot>
+        <div style={styles.main}>
+          <Sidebar extended={sidebarExtended} />
+          <LoginModal />
+          <div style={bodyStyles}>
+            <Navbar
+              isAuth={isAuth}
+              logout={authActions.logout}
+              navbarUserExpanded={navbarUserExpanded}
+              toggleUser={actions.toggleNavbarUser}
+              toggleLoginModal={authActions.toggleLoginModal}
+              toggleSidebar={actions.toggleSidebar} />
+            <div className='core-layout-contents'>
+              {children}
+            </div>
           </div>
         </div>
-      </div>
+      </StyleRoot>
     )
   }
 }
@@ -35,7 +42,9 @@ CoreLayout.propTypes = {
   children: React.PropTypes.element.isRequired,
   sidebarExtended: React.PropTypes.bool,
   actions: React.PropTypes.object,
-  navbarUserExpanded: React.PropTypes.bool
+  authActions: React.PropTypes.object,
+  navbarUserExpanded: React.PropTypes.bool,
+  isAuth: React.PropTypes.bool
 }
 
 export default CoreLayout

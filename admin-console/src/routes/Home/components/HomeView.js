@@ -5,9 +5,7 @@ import Radium from 'radium'
 class HomeView extends Component {
   render () {
     return (
-      <div>
-        <h2>DASHBOARD...</h2>
-      </div>
+      <div />
     )
   }
 }
