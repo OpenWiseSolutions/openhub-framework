@@ -160,6 +160,14 @@
                     <groupId>org.apache.tomcat.embed</groupId>
                     <artifactId>tomcat-embed-el</artifactId>
                 </dependency>
+
+                <!-- For embedded container it is necessary to include JSP API for correct freemarker behaviour -->
+                <!-- Class not found issue: missing package javax.servlet.jsp.tagext -->
+                <dependency>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>jsp-api</artifactId>
+                    <version>2.0</version>
+                </dependency>
             </dependencies>
 
             <build>
