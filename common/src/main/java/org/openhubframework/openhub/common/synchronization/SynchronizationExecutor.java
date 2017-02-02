@@ -1,3 +1,19 @@
+/*
+ * Copyright 2017 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.openhubframework.openhub.common.synchronization;
 
 import org.springframework.util.Assert;
@@ -17,10 +33,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * </p>
  * <p>
  * Attribute syncValueType must be unique for domain which will be by value (syncValue) synchronized
- * (like THROTTLING, or ALLERT_COUNT).
+ * (like THROTTLING, or ALERT_COUNT).
  * </p>
  * <p>
- * <b>Exammple:</b><br/>
+ * <b>Example:</b><br/>
  * In this example increment for property count is synchronized by value SYNCHRONIZATION_VALUE in domain ALERT.
  * Method has no result.
  * <pre>
@@ -28,7 +44,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * String synchronizationValue = "SYNCHRONIZATION_VALUE";
  * SynchronizationExecutor.getInstance().execute(new SynchronizationNoResultBlock() {
  *
- *      {@code@Override}
+ *      {@code @Override}
  *      protected void syncBlockNoResult() {
  *          count++;
  *      }
