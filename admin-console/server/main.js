@@ -35,8 +35,8 @@ if (project.env === 'development') {
   app.use(require('webpack-hot-middleware')(compiler))
 
   // Mock server & proxy
-  app.post('/login', (req, res) => { res.send('OK') })
-  app.get('/logout', (req, res) => { res.send('OK') })
+  app.post('/web/admin/login', (req, res) => { res.send('OK') })
+  app.get('/web/admin/logout', (req, res) => { res.send('OK') })
   app.use(project.mock_server_prefix, proxy(project.mock_server_host))
 
   // Serve static assets from ~/public since Webpack is unaware of
