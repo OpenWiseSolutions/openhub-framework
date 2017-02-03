@@ -106,6 +106,9 @@ public class Message implements HumanReadable {
     @Column(name = "start_process_timestamp", nullable = true)
     private Date startProcessTimestamp;
 
+    @Column(name = "start_in_queue_timestamp", nullable = true)
+    private Date startInQueueTimestamp;
+
     @Column(name = "failed_count", nullable = false)
     private int failedCount;
 
@@ -438,6 +441,22 @@ public class Message implements HumanReadable {
         Assert.notNull(startProcessTimestamp, "the processTimestamp must not be null");
 
         this.startProcessTimestamp = startProcessTimestamp != null ? new Date(startProcessTimestamp.getTime()) : null;
+    }
+
+    /**
+     * Gets timestamp when the message was added into queue for processing.
+     *
+     * @return time when the message was added into queue for processing
+     */
+    @Nullable
+    public Date getStartInQueueTimestamp() {
+        return startInQueueTimestamp != null ? new Date(startInQueueTimestamp.getTime()) : null;
+    }
+
+    public void setStartInQueueTimestamp(Date startInQueueTimestamp){
+        Assert.notNull(startInQueueTimestamp, "startInQueueTimestamp must not be null");
+
+        this.startInQueueTimestamp = startInQueueTimestamp;
     }
 
     /**

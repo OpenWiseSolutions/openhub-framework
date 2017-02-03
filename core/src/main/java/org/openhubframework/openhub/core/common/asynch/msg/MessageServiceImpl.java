@@ -25,8 +25,13 @@ import org.joda.time.Seconds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.Assert;
 
 import org.openhubframework.openhub.api.entity.ExternalSystemExtEnum;
@@ -48,15 +53,23 @@ public class MessageServiceImpl implements MessageService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MessageServiceImpl.class);
 
+    private final TransactionTemplate transactionTemplate;
+
     @Autowired
     private MessageDao messageDao;
+
+    @Autowired
+    public MessageServiceImpl(PlatformTransactionManager transactionManager) {
+        Assert.notNull(transactionManager, "the transactionManager must not be null");
+
+        this.transactionTemplate = new TransactionTemplate(transactionManager);
+    }
 
     @Transactional
     @Override
     public void insertMessage(Message message) {
         Assert.notNull(message, "the message must not be null");
-        Assert.state(message.getState() == MsgStateEnum.NEW || message.getState() == MsgStateEnum.PROCESSING,
-                "new message can be in NEW or PROCESSING state only");
+        Assert.state(message.getState() == MsgStateEnum.NEW, "new message can be in NEW state only");
 
         message.setLastUpdateTimestamp(new Date());
 
@@ -282,6 +295,64 @@ public class MessageServiceImpl implements MessageService {
         }
     }
 
+    @Override
+    public boolean setStateInQueueForLock(final Message message) {
+        Assert.notNull(message, "message must not be null");
+        Assert.state(message.getState().equals(MsgStateEnum.NEW)
+                        || message.getState().equals(MsgStateEnum.POSTPONED)
+                        || message.getState().equals(MsgStateEnum.PARTLY_FAILED)
+                        || message.getState().equals(MsgStateEnum.WAITING_FOR_RES),
+                "the message must be in NEW, POSTPONED, PARTLY_FAILED or WAITING_FOR_RES state, but state is "
+                        + message.getState());
+
+        boolean result;
+        try {
+            result = transactionTemplate.execute(new TransactionCallback<Boolean>() {
+                @Override
+                public Boolean doInTransaction(final TransactionStatus transactionStatus) {
+                    return messageDao.updateMessageInQueueUnderLock(message);
+                }
+            });
+        } catch (DataAccessException ex) {
+            result = false;
+        }
+
+        if (result) {
+            LOG.debug("Successfully locked message: {} for changed state: {}", message.toHumanString(),
+                    MsgStateEnum.IN_QUEUE);
+        } else {
+            LOG.debug("Failed to lock message: {} for change state: {}", message.getMsgId(), MsgStateEnum.IN_QUEUE);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean setStateProcessingForLock(final Message message) {
+        Assert.notNull(message, "message must not be null");
+        Assert.state(message.getState().equals(MsgStateEnum.IN_QUEUE),
+                "the message must be in IN_QUEUE state, but state is " + message.getState());
+
+        boolean result;
+        try {
+            result = transactionTemplate.execute(new TransactionCallback<Boolean>() {
+                @Override
+                public Boolean doInTransaction(final TransactionStatus transactionStatus) {
+                    return messageDao.updateMessageProcessingUnderLock(message);
+                }
+            });
+        } catch (DataAccessException ex) {
+            result = false;
+        }
+
+        if (result) {
+            LOG.debug("Successfully locked message: {} for changed state: {}", message.toHumanString(),
+                    MsgStateEnum.PROCESSING);
+        } else {
+            LOG.debug("Failed to lock message: {} for change state: {}", message.getMsgId(), MsgStateEnum.PROCESSING);
+        }
+        return result;
+    }
+
     @Nullable
     @Override
     public Message findMessageById(Long msgId) {
@@ -372,9 +443,10 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public void setStatePostponed(Message msg) {
         Assert.notNull(msg, "the msg must not be null");
-
-        Assert.isTrue(msg.getState() == MsgStateEnum.PROCESSING,
-                "the message must be in PROCESSING state, but state is " + msg.getState());
+        Assert.isTrue(msg.getState().equals(MsgStateEnum.PROCESSING)
+                        || msg.getState().equals(MsgStateEnum.NEW)
+                        || msg.getState().equals(MsgStateEnum.IN_QUEUE),
+                "the message must be in PROCESSING, NEW or IN_QUEUE state, but state is " + msg.getState());
 
         msg.setState(MsgStateEnum.POSTPONED);
         msg.setLastUpdateTimestamp(new Date());
@@ -390,8 +462,9 @@ public class MessageServiceImpl implements MessageService {
         Assert.notNull(msg, "the msg must not be null");
         Assert.hasText(funnelCompId, "the funnelCompId must not be empty");
 
-        Assert.isTrue(msg.getState() == MsgStateEnum.PROCESSING,
-                "the message must be in PROCESSING state, but state is " + msg.getState());
+        Assert.isTrue(msg.getState().equals(MsgStateEnum.PROCESSING)
+                || msg.getState().equals(MsgStateEnum.IN_QUEUE),
+                "the message must be in PROCESSING or IN_QUEUE state, but state is " + msg.getState());
 
         msg.setFunnelComponentId(funnelCompId);
         msg.setLastUpdateTimestamp(new Date());
@@ -399,5 +472,23 @@ public class MessageServiceImpl implements MessageService {
         messageDao.update(msg);
 
         LOG.debug("Sets funnel ID of the message " + msg.toHumanString() + " to value: " + funnelCompId);
+    }
+
+    @Nullable
+    @Override
+    @Transactional
+    public Message findPostponedMessage(Seconds interval) {
+        Assert.notNull(interval, "interval must not be null");
+
+        return messageDao.findPostponedMessage(interval);
+    }
+
+    @Nullable
+    @Override
+    @Transactional
+    public Message findPartlyFailedMessage(Seconds interval) {
+        Assert.notNull(interval, "interval must not be null");
+
+        return messageDao.findPartlyFailedMessage(interval);
     }
 }

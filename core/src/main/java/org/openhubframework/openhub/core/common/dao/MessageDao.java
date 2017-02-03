@@ -110,15 +110,25 @@ public interface MessageDao {
     Message findPostponedMessage(Seconds interval);
 
     /**
-     * Updates message (set start timestamp of processing) - gets lock for message.
+     * Updates {@link Message} into state {@link MsgStateEnum#PROCESSING} (set start timestamp of processing)
+     * - gets lock for message.
      *
      * @param msg the message
-     * @return true when update was successful otherwise false
+     * @return {@code true} when update was successful otherwise {@code false}
      */
-    Boolean updateMessageForLock(Message msg);
+    boolean updateMessageProcessingUnderLock(Message msg);
 
     /**
-     * Finds processing messages.
+     * Updates {@link Message} into state {@link MsgStateEnum#IN_QUEUE} (set start timestamp in queue)
+     * - gets lock for message.
+     *
+     * @param msg the message
+     * @return {@code true} when update was successful otherwise {@code false}
+     */
+    boolean updateMessageInQueueUnderLock(Message msg);
+
+    /**
+     * Finds processing messages to repair process.
      *
      * @param interval Interval (in seconds) after that processing messages are probably in dead-lock
      * @return list of messages

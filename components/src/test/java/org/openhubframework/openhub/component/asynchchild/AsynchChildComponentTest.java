@@ -16,10 +16,7 @@
 
 package org.openhubframework.openhub.component.asynchchild;
 
-import static org.hamcrest.CoreMatchers.endsWith;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 import java.util.Date;
@@ -141,7 +138,7 @@ public class AsynchChildComponentTest extends AbstractComponentsDbTest {
 
         Message msgDB = em.find(Message.class, asynchMsg.getMsgId());
         assertThat(msgDB, notNullValue());
-        assertThat(msgDB.getState(), is(MsgStateEnum.PROCESSING));
+        assertThat(msgDB.getState(), is(MsgStateEnum.NEW));
     }
 
     @Test
@@ -167,7 +164,7 @@ public class AsynchChildComponentTest extends AbstractComponentsDbTest {
 
         Message msgDB = em.find(Message.class, asynchMsg.getMsgId());
         assertThat(msgDB, notNullValue());
-        assertThat(msgDB.getState(), is(MsgStateEnum.PROCESSING));
+        assertThat(msgDB.getState(), is(MsgStateEnum.NEW));
     }
 
     @Test
@@ -204,7 +201,7 @@ public class AsynchChildComponentTest extends AbstractComponentsDbTest {
 
         Message msgDB = em.find(Message.class, asynchMsg.getMsgId());
         assertThat(msgDB, notNullValue());
-        assertThat(msgDB.getState(), is(MsgStateEnum.PROCESSING));
+        assertThat(msgDB.getState(), is(MsgStateEnum.NEW));
     }
 
     private void createAsynchRoute() throws Exception {

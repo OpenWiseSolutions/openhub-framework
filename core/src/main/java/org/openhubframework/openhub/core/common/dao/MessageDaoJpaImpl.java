@@ -17,6 +17,8 @@
 package org.openhubframework.openhub.core.common.dao;
 
 import java.sql.Timestamp;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -25,6 +27,7 @@ import javax.persistence.LockModeType;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.joda.time.LocalDateTime;
 import org.joda.time.Seconds;
 import org.springframework.stereotype.Repository;
@@ -185,22 +188,12 @@ public class MessageDaoJpaImpl implements MessageDao {
     }
 
     @Override
-    public Boolean updateMessageForLock(final Message msg) {
+    public boolean updateMessageProcessingUnderLock(final Message msg) {
         Assert.notNull(msg, "the msg must not be null");
 
-        // acquire pessimistic lock firstly
-        String jSql = "SELECT m "
-                + "FROM " + Message.class.getName() + " m "
-                + "WHERE m.msgId = :msgId"
-                + "     AND (m.state = '" + MsgStateEnum.PARTLY_FAILED + "' "
-                + "     OR m.state = '" + MsgStateEnum.POSTPONED + "')";
+        Message dbMsg = findMessageWithStates(msg.getMsgId(), true, MsgStateEnum.IN_QUEUE);
 
-        TypedQuery<Message> q = em.createQuery(jSql, Message.class);
-        q.setParameter("msgId", msg.getMsgId());
-        // note: https://blogs.oracle.com/carolmcdonald/entry/jpa_2_0_concurrency_and
-        q.setLockMode(LockModeType.PESSIMISTIC_WRITE);
-        Message dbMsg = q.getSingleResult();
-
+        boolean result = false;
         if (dbMsg != null) {
             // change message's state to PROCESSING
             msg.setState(MsgStateEnum.PROCESSING);
@@ -209,9 +202,65 @@ public class MessageDaoJpaImpl implements MessageDao {
             msg.setLastUpdateTimestamp(currDate);
 
             update(msg);
+            result = true;
+        }
+        return result;
+    }
+
+    @Override
+    public boolean updateMessageInQueueUnderLock(Message msg) {
+        Assert.notNull(msg, "msg must not be null");
+
+        Message dbMsg = findMessageWithStates(msg.getMsgId(), true, MsgStateEnum.NEW, MsgStateEnum.PARTLY_FAILED,
+                MsgStateEnum.POSTPONED, MsgStateEnum.WAITING_FOR_RES);
+        boolean result = false;
+        if (dbMsg != null) {
+            // change message's state to IN QUEUE
+            msg.setState(MsgStateEnum.IN_QUEUE);
+            Date currDate = new Date();
+            msg.setStartInQueueTimestamp(currDate);
+            msg.setLastUpdateTimestamp(currDate);
+
+            update(msg);
+            result = true;
+        }
+        return result;
+    }
+
+    /**
+     * Finds message by id and states under database lock.
+     *
+     * @param msgId  message id
+     * @param lock   {@code true} - database lock, {@code false} - no lock for result
+     * @param states states
+     * @return found message, {@code NULL} - no message found
+     */
+    @Nullable
+    @SuppressWarnings("unchecked")
+    private Message findMessageWithStates(Long msgId, boolean lock, @Nullable MsgStateEnum... states) {
+        Assert.notNull(msgId, "msgId must not be null");
+
+        List<MsgStateEnum> statesInList = states == null ? Collections.EMPTY_LIST : Arrays.asList(states);
+
+        String jSql = "SELECT m "
+                + "FROM " + Message.class.getName() + " m "
+                + "WHERE m.msgId = :msgId";
+        if (!CollectionUtils.isEmpty(statesInList)) {
+            jSql += " AND m.state in (:states)";
         }
 
-        return true;
+        TypedQuery<Message> q = em.createQuery(jSql, Message.class);
+        q.setParameter("msgId", msgId);
+        if (!CollectionUtils.isEmpty(statesInList)) {
+            q.setParameter("states", statesInList);
+        }
+        if (lock) {
+            // note: https://blogs.oracle.com/carolmcdonald/entry/jpa_2_0_concurrency_and
+            q.setLockMode(LockModeType.PESSIMISTIC_WRITE);
+        }
+
+        List<Message> result = q.getResultList();
+        return CollectionUtils.isEmpty(result) ? null : result.get(0);
     }
 
     @Override
@@ -220,7 +269,9 @@ public class MessageDaoJpaImpl implements MessageDao {
 
         String jSql = "SELECT m "
                 + "FROM " + Message.class.getName() + " m "
-                + "WHERE m.state = '" + MsgStateEnum.PROCESSING + "'"
+                + "WHERE (m.state = '" + MsgStateEnum.PROCESSING
+                + "' OR m.state = '" + MsgStateEnum.NEW
+                + "' OR m.state = '" + MsgStateEnum.IN_QUEUE + "')"
                 + "     AND m.startProcessTimestamp < :startTime";
 
         TypedQuery<Message> q = em.createQuery(jSql, Message.class);
@@ -255,6 +306,8 @@ public class MessageDaoJpaImpl implements MessageDao {
         String jSql = "SELECT COUNT(m) "
                 + "FROM " + Message.class.getName() + " m "
                 + "WHERE (m.state = '" + MsgStateEnum.PROCESSING + "' "
+                + "         OR m.state = '" + MsgStateEnum.IN_QUEUE + "'"
+                + "         OR m.state = '" + MsgStateEnum.NEW + "'"
                 + "         OR m.state = '" + MsgStateEnum.WAITING + "'"
                 + "         OR m.state = '" + MsgStateEnum.WAITING_FOR_RES + "')"
                 + "      AND m.funnelValue = '" + funnelValue + "'"
@@ -272,6 +325,8 @@ public class MessageDaoJpaImpl implements MessageDao {
         String jSql = "SELECT m "
                 + "FROM " + Message.class.getName() + " m "
                 + "WHERE (m.state = '" + MsgStateEnum.PROCESSING + "' "
+                + "         OR m.state = '" + MsgStateEnum.IN_QUEUE + "'"
+                + "         OR m.state = '" + MsgStateEnum.NEW + "'"
                 + "         OR m.state = '" + MsgStateEnum.WAITING + "'"
                 + "         OR m.state = '" + MsgStateEnum.PARTLY_FAILED + "'"
                 + "         OR m.state = '" + MsgStateEnum.POSTPONED + "'";
@@ -297,6 +352,8 @@ public class MessageDaoJpaImpl implements MessageDao {
         String jSql = "SELECT m "
                 + "FROM " + Message.class.getName() + " m "
                 + "WHERE (m.state = '" + MsgStateEnum.PROCESSING + "' "
+                + "         OR m.state = '" + MsgStateEnum.IN_QUEUE + "'"
+                + "         OR m.state = '" + MsgStateEnum.NEW + "'"
                 + "         OR m.state = '" + MsgStateEnum.WAITING + "'"
                 + "         OR m.state = '" + MsgStateEnum.PARTLY_FAILED + "'"
                 + "         OR m.state = '" + MsgStateEnum.POSTPONED + "'";

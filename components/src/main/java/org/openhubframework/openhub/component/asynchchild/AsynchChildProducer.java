@@ -71,7 +71,7 @@ public class AsynchChildProducer extends DefaultProducer {
         final AsynchChildEndpoint endpoint = (AsynchChildEndpoint) getEndpoint();
 
         String correlationId = (StringUtils.isNotEmpty(endpoint.getCorrelationId())
-                                ? endpoint.getCorrelationId() : generateCorrelationId());
+                ? endpoint.getCorrelationId() : generateCorrelationId());
 
         LOG.debug("Creates child message from " + (parentMsg != null ? "synchronous" : "asynchronous") + " message.");
 
@@ -86,7 +86,7 @@ public class AsynchChildProducer extends DefaultProducer {
             @Override
             public String getSystemName() {
                 return StringUtils.isNotEmpty(endpoint.getSourceSystem())
-                       ? endpoint.getSourceSystem() : DEFAULT_EXTERNAL_SYSTEM;
+                        ? endpoint.getSourceSystem() : DEFAULT_EXTERNAL_SYSTEM;
             }
         };
 
@@ -128,20 +128,20 @@ public class AsynchChildProducer extends DefaultProducer {
     /**
      * Creates the {@link Message} object that represents asynchronous message to next step processing.
      *
-     * @param service       the calling service
+     * @param service        the calling service
      * @param externalSystem the external system
-     * @param operationName the name of operation
-     * @param payload       the original payload
-     * @param objectId      the object ID
+     * @param operationName  the name of operation
+     * @param payload        the original payload
+     * @param objectId       the object ID
      * @return the {@link Message} object that represents asynchronous message to next step processing
      */
     private Message createNewMessage(ServiceExtEnum service, ExternalSystemExtEnum externalSystem,
-            String operationName, String payload, String objectId) {
+                                     String operationName, String payload, String objectId) {
 
         Date currDate = DateTime.now().toDate();
 
         Message msg = new Message();
-        msg.setState(MsgStateEnum.PROCESSING);
+        msg.setState(MsgStateEnum.NEW);
         msg.setStartProcessTimestamp(currDate);
         msg.setCorrelationId(""); // will be set later
         msg.setLastUpdateTimestamp(currDate);

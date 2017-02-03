@@ -16,9 +16,7 @@
 
 package org.openhubframework.openhub.core.common.asynch.db;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 import java.util.Date;
@@ -33,14 +31,14 @@ import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
 import org.openhubframework.openhub.core.AbstractCoreDbTest;
 import org.openhubframework.openhub.core.common.asynch.queue.MessagesPool;
-import org.openhubframework.openhub.core.common.asynch.queue.MessagesPoolDbImpl;
+import org.openhubframework.openhub.core.common.asynch.queue.MessagesPoolImpl;
 import org.openhubframework.openhub.core.configuration.FixedConfigurationItem;
 import org.openhubframework.openhub.test.data.ExternalSystemTestEnum;
 import org.openhubframework.openhub.test.data.ServiceTestEnum;
 
 
 /**
- * Test suite for {@link MessagesPoolDbImpl}.
+ * Test suite for {@link MessagesPoolImpl}.
  *
  * @author Petr Juza
  */
@@ -63,8 +61,9 @@ public class PartlyFailedMessagesPoolDbTest extends AbstractCoreDbTest {
 
         Message nextMsg = messagesPool.getNextMessage();
         assertThat(nextMsg, notNullValue());
-        assertThat(nextMsg.getState(), is(MsgStateEnum.PROCESSING));
-        assertThat(nextMsg.getStartProcessTimestamp(), notNullValue());
+        assertThat(nextMsg.getState(), is(MsgStateEnum.IN_QUEUE));
+        assertThat(nextMsg.getStartProcessTimestamp(), nullValue());
+        assertThat(nextMsg.getStartInQueueTimestamp(), notNullValue());
         assertThat(nextMsg.getLastUpdateTimestamp(), notNullValue());
 
         // try again

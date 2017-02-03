@@ -88,8 +88,11 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
 
     private static final String SEDA_URI = "seda:test_seda?queueFactory=#" + AsynchConstants.PRIORITY_QUEUE_FACTORY;
 
+    @Produce(uri = AsynchConstants.URI_ASYNC_MSG)
+    private ProducerTemplate producerAsyncIn;
+
     @Produce(uri = AsynchMessageRoute.URI_SYNC_MSG)
-    private ProducerTemplate producer;
+    private ProducerTemplate producerSyncMsg;
 
     @Produce(uri = SEDA_URI)
     private ProducerTemplate producerSeda;
@@ -121,7 +124,7 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
         Date currDate = new Date();
 
         msg = new Message();
-        msg.setState(MsgStateEnum.PROCESSING);
+        msg.setState(MsgStateEnum.IN_QUEUE);
         msg.setMsgTimestamp(currDate);
         msg.setReceiveTimestamp(currDate);
         msg.setSourceSystem(ExternalSystemTestEnum.CRM);
@@ -154,10 +157,10 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
     }
 
     /**
-     * Successful processing.
+     * Successful processing {@link Message} with input into {@link AsynchMessageRoute#URI_SYNC_MSG}.
      */
     @Test
-    public void testOk() throws Exception {
+    public void testSyncOutOk() throws Exception {
         // setCustomer route definition
         RouteBuilder setCustomerRoute = new AbstractBasicRoute() {
             @Override
@@ -190,7 +193,7 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
         em.flush();
 
         // send message
-        producer.sendBodyAndHeader(msg, AsynchConstants.MSG_HEADER, msg);
+        producerSyncMsg.sendBodyAndHeader(msg, AsynchConstants.MSG_HEADER, msg);
 
         // verify message
         Message msgDB = em.find(Message.class, msg.getMsgId());
@@ -198,6 +201,29 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
         assertThat(msgDB.getState(), is(MsgStateEnum.OK));
         assertThat(msgDB.getBusinessError(), containsString(ErrorTestEnum.E300.getErrDesc()));
         assertThat(eventListener.getEvent(), instanceOf(CompletedMsgAsynchEvent.class));
+    }
+
+    /**
+     * Successful processing {@link Message} with input into {@link AsynchConstants#URI_ASYNC_MSG}.
+     */
+    @Test
+    public void testAsyncInOk() throws Exception {
+        msg.setState(MsgStateEnum.NEW);
+        // save message into DB
+        em.persist(msg);
+        em.flush();
+
+        // send message
+        producerAsyncIn.sendBodyAndHeader(msg, AsynchConstants.MSG_HEADER, msg);
+
+        // verify message
+        Message msgDB = em.find(Message.class, msg.getMsgId());
+        assertThat(msgDB, notNullValue());
+        assertThat(msgDB.getState(), is(MsgStateEnum.IN_QUEUE));
+        assertThat(msgDB.getStartInQueueTimestamp(), notNullValue());
+        assertThat(msgDB.getStartProcessTimestamp(), nullValue());
+        assertThat(msgDB.getBusinessError(), nullValue());
+        assertThat(eventListener.getEvent(), nullValue());
     }
 
     /**
@@ -237,7 +263,7 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
         em.flush();
 
         // send message
-        producer.sendBodyAndHeader(msg, AsynchConstants.MSG_HEADER, msg);
+        producerSyncMsg.sendBodyAndHeader(msg, AsynchConstants.MSG_HEADER, msg);
 
         // verify message
         Message msgDB = em.find(Message.class, msg.getMsgId());
@@ -287,21 +313,21 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
 
         // send message
         mock.expectedMessageCount(0);
-        producer.sendBodyAndHeader(msg, AsynchConstants.MSG_HEADER, msg);
+        producerSyncMsg.sendBodyAndHeader(msg, AsynchConstants.MSG_HEADER, msg);
         mock.assertIsSatisfied();
 
         Message msgDB = em.find(Message.class, msg.getMsgId());
-        msgDB.setState(MsgStateEnum.PROCESSING);
+        msgDB.setState(MsgStateEnum.IN_QUEUE);
 
         mock.expectedMessageCount(0);
-        producer.sendBodyAndHeader(msgDB, AsynchConstants.MSG_HEADER, msgDB);
+        producerSyncMsg.sendBodyAndHeader(msgDB, AsynchConstants.MSG_HEADER, msgDB);
         mock.assertIsSatisfied();
 
         msgDB = em.find(Message.class, msg.getMsgId());
-        msgDB.setState(MsgStateEnum.PROCESSING);
+        msgDB.setState(MsgStateEnum.IN_QUEUE);
 
         mock.expectedMessageCount(1);
-        producer.sendBodyAndHeader(msgDB, AsynchConstants.MSG_HEADER, msgDB);
+        producerSyncMsg.sendBodyAndHeader(msgDB, AsynchConstants.MSG_HEADER, msgDB);
         mock.assertIsSatisfied();
 
         // verify message
@@ -337,7 +363,7 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
         em.flush();
 
         // send message
-        producer.sendBodyAndHeader(msg, AsynchConstants.MSG_HEADER, msg);
+        producerSyncMsg.sendBodyAndHeader(msg, AsynchConstants.MSG_HEADER, msg);
 
         // verify message
         Message msgDB = em.find(Message.class, msg.getMsgId());
@@ -373,7 +399,7 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
         em.flush();
 
         // send message
-        producer.sendBodyAndHeader(msg, AsynchConstants.MSG_HEADER, msg);
+        producerSyncMsg.sendBodyAndHeader(msg, AsynchConstants.MSG_HEADER, msg);
 
         // verify message
         Message msgDB = em.find(Message.class, msg.getMsgId());
@@ -449,7 +475,7 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
         em.flush();
 
         // send message
-        producer.sendBodyAndHeader(msg, AsynchConstants.MSG_HEADER, msg);
+        producerSyncMsg.sendBodyAndHeader(msg, AsynchConstants.MSG_HEADER, msg);
 
         // verify message
         Message msgDB = em.find(Message.class, msg.getMsgId());
@@ -520,7 +546,7 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
         em.flush();
 
         // send message
-        producer.sendBodyAndHeader(msg, AsynchConstants.MSG_HEADER, msg);
+        producerSyncMsg.sendBodyAndHeader(msg, AsynchConstants.MSG_HEADER, msg);
 
         // verify message
         Message msgDB = em.find(Message.class, msg.getMsgId());
@@ -555,9 +581,9 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
         em.clear();
 
         // send message
-        msg.setState(MsgStateEnum.PROCESSING);
+        msg.setState(MsgStateEnum.IN_QUEUE);
         msg.setLastUpdateTimestamp(new Date());
-        producer.sendBodyAndHeader(msg, AsynchConstants.MSG_HEADER, msg);
+        producerSyncMsg.sendBodyAndHeader(msg, AsynchConstants.MSG_HEADER, msg);
 
         // check there is no processing event
         assertThat(eventListener.getEvent(), nullValue());

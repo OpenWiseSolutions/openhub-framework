@@ -17,7 +17,6 @@
 package org.openhubframework.openhub.core.common.asynch.msg;
 
 import java.util.Date;
-
 import javax.annotation.Nullable;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -30,19 +29,16 @@ import org.apache.camel.Header;
 import org.apache.camel.component.spring.ws.SpringWebserviceMessage;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.openhubframework.openhub.api.asynch.AsynchConstants;
-import org.openhubframework.openhub.api.asynch.model.TraceHeader;
-import org.openhubframework.openhub.api.asynch.model.TraceIdentifier;
-import org.openhubframework.openhub.api.entity.EntityTypeExtEnum;
-import org.openhubframework.openhub.api.entity.ExternalSystemExtEnum;
-import org.openhubframework.openhub.api.entity.Message;
-import org.openhubframework.openhub.api.entity.MsgStateEnum;
-import org.openhubframework.openhub.api.entity.ServiceExtEnum;
-import org.openhubframework.openhub.core.common.asynch.AsynchInMessageRoute;
-import org.openhubframework.openhub.core.common.asynch.TraceHeaderProcessor;
 import org.springframework.util.Assert;
 import org.springframework.ws.soap.saaj.SaajSoapMessage;
 import org.springframework.xml.transform.StringResult;
+
+import org.openhubframework.openhub.api.asynch.AsynchConstants;
+import org.openhubframework.openhub.api.asynch.model.TraceHeader;
+import org.openhubframework.openhub.api.asynch.model.TraceIdentifier;
+import org.openhubframework.openhub.api.entity.*;
+import org.openhubframework.openhub.core.common.asynch.AsynchInMessageRoute;
+import org.openhubframework.openhub.core.common.asynch.TraceHeaderProcessor;
 
 
 /**
@@ -106,7 +102,7 @@ public final class MessageTransformer {
         Date currDate = new Date();
 
         Message msg = new Message();
-        msg.setState(MsgStateEnum.PROCESSING);
+        msg.setState(MsgStateEnum.NEW);
         msg.setStartProcessTimestamp(currDate);
 
         // params from trace header

@@ -25,35 +25,27 @@ import org.joda.time.Seconds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
-import org.springframework.transaction.support.TransactionTemplate;
-import org.springframework.util.Assert;
 
 import org.openhubframework.openhub.api.configuration.ConfigurableValue;
 import org.openhubframework.openhub.api.configuration.ConfigurationItem;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.exception.LockFailureException;
-import org.openhubframework.openhub.core.common.dao.MessageDao;
+import org.openhubframework.openhub.spi.msg.MessageService;
 
 
 /**
- * DB implementation of {@link MessagesPool} interface.
+ * Default implementation of {@link MessagesPool} interface.
  *
  * @author Petr Juza
  */
 @Service
-public class MessagesPoolDbImpl implements MessagesPool {
+public class MessagesPoolImpl implements MessagesPool {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MessagesPoolDbImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MessagesPoolImpl.class);
 
     @Autowired
-    private MessageDao messageDao;
-
-    private TransactionTemplate transactionTemplate;
+    private MessageService messageService;
 
     /**
      * Interval (in seconds) between two tries of partly failed messages.
@@ -66,13 +58,6 @@ public class MessagesPoolDbImpl implements MessagesPool {
      */
     @ConfigurableValue(key = ASYNCH_POSTPONED_INTERVAL_SEC)
     private ConfigurationItem<Seconds> postponedInterval;
-
-    @Autowired
-    public MessagesPoolDbImpl(PlatformTransactionManager transactionManager) {
-        Assert.notNull(transactionManager, "the transactionManager must not be null");
-
-        this.transactionTemplate = new TransactionTemplate(transactionManager);
-    }
 
     @Nullable
     public Message getNextMessage() {
@@ -92,7 +77,7 @@ public class MessagesPoolDbImpl implements MessagesPool {
         }
 
         // try to get lock for the message
-        boolean isLock = lockMessage(msg);
+        boolean isLock = messageService.setStateInQueueForLock(msg);
         if (!isLock) {
             throw new LockFailureException("Failed to lock message for re-processing: " + msg.toHumanString());
         }
@@ -102,45 +87,11 @@ public class MessagesPoolDbImpl implements MessagesPool {
 
     @Nullable
     private Message findPostponedMessage() {
-        return transactionTemplate.execute(new TransactionCallback<Message>() {
-            @Override
-            public Message doInTransaction(final TransactionStatus transactionStatus) {
-                return messageDao.findPostponedMessage(postponedInterval.getValue());
-            }
-        });
+        return messageService.findPostponedMessage(postponedInterval.getValue());
     }
 
     @Nullable
     private Message findPartlyFailedMessage() {
-        return transactionTemplate.execute(new TransactionCallback<Message>() {
-            @Override
-            public Message doInTransaction(final TransactionStatus transactionStatus) {
-                return messageDao.findPartlyFailedMessage(partlyFailedInterval.getValue());
-            }
-        });
-    }
-
-    private boolean lockMessage(final Message msg) {
-        Assert.notNull(msg, "the msg must not be null");
-
-        boolean isLock;
-        try {
-            isLock = transactionTemplate.execute(new TransactionCallback<Boolean>() {
-                @Override
-                public Boolean doInTransaction(final TransactionStatus transactionStatus) {
-                    return messageDao.updateMessageForLock(msg);
-                }
-            });
-        } catch (DataAccessException ex) {
-            isLock = false;
-        }
-
-        if (isLock) {
-            LOG.debug("Successfully locked message for re-processing: {}", msg.toHumanString());
-            return true;
-        } else {
-            LOG.debug("Failed to lock message for re-processing: {}", msg.getMsgId());
-            return false;
-        }
+        return messageService.findPartlyFailedMessage(partlyFailedInterval.getValue());
     }
 }

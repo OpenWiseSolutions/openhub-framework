@@ -147,15 +147,15 @@ public class MessagePollExecutorTest extends AbstractCoreDbTest {
         // verify messages
         Message msg = findMessage("1234_4567");
         assertThat(msg, notNullValue());
-        assertThat(msg.getState(), is(MsgStateEnum.PROCESSING));
+        assertThat(msg.getState(), is(MsgStateEnum.IN_QUEUE));
 
         msg = findMessage("1234_4567_8");
         assertThat(msg, notNullValue());
-        assertThat(msg.getState(), is(MsgStateEnum.PROCESSING));
+        assertThat(msg.getState(), is(MsgStateEnum.IN_QUEUE));
 
         msg = findMessage("1234_4567_9");
         assertThat(msg, notNullValue());
-        assertThat(msg.getState(), is(MsgStateEnum.PROCESSING));
+        assertThat(msg.getState(), is(MsgStateEnum.IN_QUEUE));
     }
 
     @SuppressWarnings("unchecked")

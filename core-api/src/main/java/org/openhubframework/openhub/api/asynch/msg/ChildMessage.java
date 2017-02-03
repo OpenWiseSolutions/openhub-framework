@@ -18,17 +18,13 @@ package org.openhubframework.openhub.api.asynch.msg;
 
 import java.util.Date;
 import java.util.UUID;
-
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.openhubframework.openhub.api.entity.BindingTypeEnum;
-import org.openhubframework.openhub.api.entity.EntityTypeExtEnum;
-import org.openhubframework.openhub.api.entity.Message;
-import org.openhubframework.openhub.api.entity.MsgStateEnum;
-import org.openhubframework.openhub.api.entity.ServiceExtEnum;
 import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.api.entity.*;
 
 
 /**
@@ -123,7 +119,7 @@ public final class ChildMessage {
         Message msg = new Message();
 
         // new fields
-        msg.setState(MsgStateEnum.PROCESSING);
+        msg.setState(MsgStateEnum.NEW);
         msg.setStartProcessTimestamp(currDate);
         msg.setCorrelationId(UUID.randomUUID().toString());
         msg.setLastUpdateTimestamp(currDate);

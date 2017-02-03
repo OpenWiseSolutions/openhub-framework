@@ -40,6 +40,7 @@ import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.exception.IntegrationException;
 import org.openhubframework.openhub.api.exception.InternalErrorEnum;
 import org.openhubframework.openhub.api.exception.LockFailureException;
+import org.openhubframework.openhub.core.common.asynch.AsynchMessageRoute;
 import org.openhubframework.openhub.core.common.asynch.LogContextHelper;
 import org.openhubframework.openhub.core.common.event.AsynchEventHelper;
 import org.openhubframework.openhub.spi.msg.MessageService;
@@ -76,7 +77,7 @@ public class MessagePollExecutor implements Runnable {
     private ConfigurationItem<Seconds> postponedIntervalWhenFailed;
 
     // note: this is because of setting different target URI for tests
-    private String targetURI = AsynchConstants.URI_ASYNC_MSG;
+    private String targetURI = AsynchMessageRoute.URI_ASYNC_PROCESSING_MSG;
 
     @Override
     public void run() {
