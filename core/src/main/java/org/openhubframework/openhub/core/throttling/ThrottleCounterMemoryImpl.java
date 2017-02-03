@@ -16,22 +16,18 @@
 
 package org.openhubframework.openhub.core.throttling;
 
-import org.apache.commons.lang3.time.DateUtils;
-import org.joda.time.DateTime;
-import org.openhubframework.openhub.common.synchronization.SynchronizationBlock;
-import org.openhubframework.openhub.common.synchronization.SynchronizationExecutor;
-import org.openhubframework.openhub.spi.throttling.ThrottleCounter;
-import org.openhubframework.openhub.spi.throttling.ThrottleScope;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
-
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
+import javax.annotation.Nullable;
+
+import org.joda.time.DateTime;
+
+import org.openhubframework.openhub.common.synchronization.SynchronizationBlock;
+import org.openhubframework.openhub.common.synchronization.SynchronizationExecutor;
+import org.openhubframework.openhub.spi.throttling.ThrottleCounter;
+import org.openhubframework.openhub.spi.throttling.ThrottleScope;
 
 
 /**
@@ -41,28 +37,18 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author Petr Juza
  */
-@Service
-public class ThrottleCounterMemoryImpl implements ThrottleCounter {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ThrottleCounterMemoryImpl.class);
-
-    private static final int DUMP_PERIOD = 60;
+public class ThrottleCounterMemoryImpl extends AbstractThrottleCounter {
 
     private static final String SYNC_THROTTLING_TYPE = "SYNCHRONIZATION_THROTTLING";
 
     /**
      * List of timestamps of incoming requests for specified interval per throttling scope.
      */
-    private Map<ThrottleScope, List<Long>> requests = new ConcurrentHashMap<ThrottleScope, List<Long>>();
-
-    private volatile Date lastDumpTimestamp = new Date();
+    private Map<ThrottleScope, List<Long>> requests = new ConcurrentHashMap<>();
 
     @Override
-    public int count(final ThrottleScope throttleScope, final int interval) {
-        Assert.notNull(throttleScope, "the throttleScope must not be null");
-        Assert.isTrue(interval > 0, "the interval must be positive value");
-
-        Integer result = SynchronizationExecutor.getInstance().execute(new SynchronizationBlock() {
+    protected int doCount(final ThrottleScope throttleScope, final int intervalSec) {
+        return SynchronizationExecutor.getInstance().execute(new SynchronizationBlock() {
 
             @Override
             @SuppressWarnings("unchecked")
@@ -74,7 +60,7 @@ public class ThrottleCounterMemoryImpl implements ThrottleCounter {
                 }
 
                 long now = DateTime.now().getMillis();
-                long from = now - (interval * 1000);
+                long from = now - (intervalSec * 1000);
 
                 // get timestamps for specified throttling scope
                 List<Long> timestamps = requests.get(throttleScope);
@@ -102,21 +88,11 @@ public class ThrottleCounterMemoryImpl implements ThrottleCounter {
                 return (T) counter;
             }
         }, SYNC_THROTTLING_TYPE, throttleScope);
-
-        // make dump only once in the specified interval
-        if (LOG.isDebugEnabled() && (DateUtils.addSeconds(new Date(), -DUMP_PERIOD).after(lastDumpTimestamp))) {
-            dumpMemory();
-
-            lastDumpTimestamp = new Date();
-        }
-
-        return result;
     }
 
-    /**
-     * Dumps throttling memory to log on "debug" level.
-     */
-    void dumpMemory() {
+    @Override
+    @Nullable
+    String getCacheInfo() {
         StringBuilder dump = new StringBuilder();
         dump.append("Throttling in-memory dump:\n");
 
@@ -130,6 +106,6 @@ public class ThrottleCounterMemoryImpl implements ThrottleCounter {
             dump.append("\n");
         }
 
-        LOG.debug(dump.toString());
+        return dump.toString();
     }
 }

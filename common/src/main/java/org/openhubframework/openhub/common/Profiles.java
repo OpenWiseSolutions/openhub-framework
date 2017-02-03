@@ -40,6 +40,11 @@ public final class Profiles {
     public static final String PROD = "prod";
 
     /**
+     * Spring profile for running OpenHub in the cluster.
+     */
+    public static final String CLUSTER = "cluster";
+
+    /**
      * Spring profile for running H2 DB.
      */
     public static final String H2 = "h2";

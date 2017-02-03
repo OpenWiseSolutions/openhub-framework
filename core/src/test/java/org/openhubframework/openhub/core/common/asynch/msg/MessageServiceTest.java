@@ -80,6 +80,20 @@ public class MessageServiceTest extends AbstractCoreDbTest {
     }
 
     @Test
+    public void testSetStateInQueueForLock() throws Exception {
+        MessageCallback processor = new MessageCallback() {
+            @Override
+            public void beforeInsert(Message msg, int order) throws Exception {
+                messageService.setStateInQueueForLock(msg);
+            }
+        };
+
+        assertSetWrongState(MsgStateEnum.FAILED, processor);
+        assertSetWrongState(MsgStateEnum.PROCESSING, processor);
+        assertSetState(MsgStateEnum.NEW, processor, MsgStateEnum.IN_QUEUE);
+    }
+
+    @Test
     public void testSetStateWaitingForResponse() throws Exception {
         MessageCallback processor = new MessageCallback() {
             @Override
