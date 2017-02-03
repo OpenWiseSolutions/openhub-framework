@@ -30,7 +30,7 @@
                                                                            alt="OpenHub"/></a></span>
         <span class="headline"><@spring.message "index.integrationFramework"/></span>
         <@sec.authorize access="isAuthenticated()">
-            <span class="logout"><a href="${rootContext}/logout"
+            <span class="logout"><a href="${rootContext}/web/admin/logout"
                     ><@spring.message "login.text.logout"/> | <@sec.authentication property="principal.username"/></a>
             </span>
         </@sec.authorize>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2016 the original author or authors.
+ * Copyright 2016-2017 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import org.springframework.boot.autoconfigure.web.ResourceProperties;
 import org.springframework.boot.autoconfigure.web.WebMvcProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -36,12 +37,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * @since 2.0
  */
 @Configuration
-//note: If you want to take complete control of Spring MVC, you can add your own @Configuration annotated with @EnableWebMvc.
-// If you want to keep Spring Boot MVC features, and you just want to add additional MVC configuration (interceptors,
-// formatters, view controllers etc.) you can add your own @Bean of type WebMvcConfigurerAdapter, but without @EnableWebMvc.
-public class MvcConfig extends WebMvcConfigurerAdapter {
+// note: If you want to keep Spring Boot MVC features, and you just want to add additional MVC configuration 
+// (interceptors, formatters, view controllers etc.) you can add your own @Bean of type WebMvcConfigurerAdapter, 
+// but without @EnableWebMvc.
+public class AdminMvcConfig extends WebMvcConfigurerAdapter {
 
-    private static final Logger logger = LoggerFactory.getLogger(MvcConfig.class);
+    private static final Logger logger = LoggerFactory.getLogger(AdminMvcConfig.class);
 
     @Autowired
     private ResourceProperties resourceProperties = new ResourceProperties();
@@ -50,27 +51,36 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     private WebMvcProperties mvcProperties = new WebMvcProperties();
 
     @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        //TODO (thanus, 27/01/2017, TASK: OHFJIRA-4) can be removed after new admin console will be developed 
+        registry.addResourceHandler("/**")
+                .addResourceLocations("/")
+                .setCachePeriod(0);
+    }
+
+    @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         Resource page = this.resourceProperties.getWelcomePage();
         if (page != null) {
             final String welcomePagePath = getWelcomePagePath(mvcProperties);
-            logger.info("Adding welcome page ({}): {}" + page, welcomePagePath);
+            logger.info("Adding welcome page ({}): {}", page, welcomePagePath);
             registry.addViewController(welcomePagePath).setViewName("forward:index.html");
         }
     }
 
     /**
-     * Gets welcome page path basically from {@link WebMvcProperties#getStaticPathPattern()} configuration when pattern expression {@code "*"} 
-     * is removed, for example static path pattern defines {@code /console/**} and welcome page path will be resolved as {@code /console/}.
-     * 
-     * @param mvcProperties as configuration for 
+     * Gets welcome page path basically from {@link WebMvcProperties#getStaticPathPattern()} configuration
+     * when pattern expression {@code "*"} is removed, for example static path pattern defines {@code /console/**}
+     * and welcome page path will be resolved as {@code /console/}.
+     *
+     * @param mvcProperties as configuration for
      * @return welcome page path on which static resource {@code index.html} will be loaded
      */
     protected String getWelcomePagePath(WebMvcProperties mvcProperties) {
         if (hasText(mvcProperties.getStaticPathPattern())) {
-            return mvcProperties.getStaticPathPattern().replace("*", "");   
+            return mvcProperties.getStaticPathPattern().replace("*", "");
         }
-        
+
         // default fallback
         return "/";
     }

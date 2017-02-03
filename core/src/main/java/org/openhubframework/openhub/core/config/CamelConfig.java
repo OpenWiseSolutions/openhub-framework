@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2016 the original author or authors.
+ * Copyright 20016-2017 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,17 +23,14 @@ import org.apache.camel.Exchange;
 import org.apache.camel.component.jpa.JpaComponent;
 import org.apache.camel.component.quartz2.QuartzComponent;
 import org.apache.camel.component.seda.PriorityBlockingQueueFactory;
-import org.apache.camel.component.servlet.CamelHttpTransportServlet;
 import org.apache.camel.processor.interceptor.DefaultTraceFormatter;
 import org.apache.camel.processor.interceptor.Tracer;
-import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
-import org.openhubframework.openhub.api.route.RouteConstants;
 import org.openhubframework.openhub.common.Profiles;
 import org.openhubframework.openhub.core.common.asynch.confirm.DelegateConfirmationCallback;
 import org.openhubframework.openhub.core.common.asynch.msg.MsgPriorityComparator;
@@ -82,20 +79,6 @@ public class CamelConfig {
 //          }
 //      };
 //    }
-
-    /**
-     * Configures servlet for HTTP communication.
-     */
-    @Bean
-   	public ServletRegistrationBean camelHttpServlet() {
-        CamelHttpTransportServlet servlet = new CamelHttpTransportServlet();
-        servlet.setServletName(RouteConstants.CAMEL_SERVLET);
-
-        ServletRegistrationBean bean = new ServletRegistrationBean(servlet,
-                RouteConstants.HTTP_URI_PREFIX + "*");
-        bean.setName(servlet.getServletName());
-        return bean;
-   	}
 
     /**
      * Configures JPA component.

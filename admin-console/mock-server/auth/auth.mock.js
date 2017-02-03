@@ -2,7 +2,7 @@ module.exports = [
   {
     request: {
       method: 'POST',
-      path: '/login',
+      path: '/web/admin/login',
     },
     response: () => {
       return {

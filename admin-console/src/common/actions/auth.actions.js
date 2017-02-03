@@ -20,7 +20,7 @@ export function toggleLoginModal () {
 
 export function logout () {
   sessionStorage.removeItem(AUTH_SESSION)
-  const payload = axios.get('/logout')
+  const payload = axios.get('/web/admin/logout')
   return {
     type: LOGOUT,
     payload
@@ -48,7 +48,7 @@ export function submitLogin ({ username, password }) {
     const params = new URLSearchParams()
     params.append('username', username)
     params.append('password', password)
-    return axios.post('/login', params)
+    return axios.post('/web/admin/login', params)
       .then((res) => dispatch(login()))
       .catch((res) => dispatch(loginError()))
   }
