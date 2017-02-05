@@ -37,7 +37,15 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <!-- Exclude embedded tomcat -->
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+        <!-- default logger ability - logback implementation -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-logging</artifactId>
@@ -113,6 +121,64 @@
                     <artifactId>openhub-admin-console</artifactId>
                 </dependency>
             </dependencies>
+        </profile>
+
+        <profile>
+            <!-- Standalone running -->
+            <!-- See: https://openhubframework.atlassian.net/wiki/display/OHF/Standalone+running -->
+            <id>esb.executable</id>
+            <properties>
+                <packaging.type>executable</packaging.type>
+            </properties>
+            
+            <dependencies>
+                <!-- we include H2 to support full standalone mode without not embedded database -->
+                <dependency>
+                    <groupId>com.h2database</groupId>
+                    <artifactId>h2</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.postgresql</groupId>
+                    <artifactId>postgresql</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>com.zaxxer</groupId>
+                    <artifactId>HikariCP</artifactId>
+                    <scope>runtime</scope>
+                </dependency>
+
+                <!-- include embedded tomcat and libraries -->
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.tomcat</groupId>
+                    <artifactId>tomcat-jdbc</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.tomcat.embed</groupId>
+                    <artifactId>tomcat-embed-el</artifactId>
+                </dependency>
+
+                <!-- For embedded container it is necessary to include JSP API for correct freemarker behaviour -->
+                <!-- Class not found issue: missing package javax.servlet.jsp.tagext -->
+                <dependency>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>jsp-api</artifactId>
+                    <version>2.0</version>
+                </dependency>
+            </dependencies>
+
+            <build>
+                <plugins>
+                    <!-- package as an executable war -->
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
         
         <profile>

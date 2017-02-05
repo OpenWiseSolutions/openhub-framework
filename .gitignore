@@ -13,3 +13,5 @@
 
 # working directories
 target/
+ohf-app.pid
+ohf-app.port

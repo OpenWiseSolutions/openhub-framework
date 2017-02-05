@@ -20,7 +20,7 @@
         </encoder>
     </appender>
 
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="FILE" class="org.openhubframework.openhub.common.log.LazyRollingFileLogbackAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
             <fileNamePattern>@log.folder@logFile_%d{yyyy-MM-dd}_%i.log</fileNamePattern>

@@ -18,6 +18,8 @@ package org.openhubframework.openhub;
 
 import javax.servlet.Filter;
 
+import org.springframework.boot.actuate.system.ApplicationPidFileWriter;
+import org.springframework.boot.actuate.system.EmbeddedServerPortFileWriter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
@@ -111,8 +113,11 @@ public class OpenHubApplication extends SpringBootServletInitializer {
      * @see #createOpenHubApplicationBuilder()
      */
     public static void main(String[] args) throws Exception {
-        createOpenHubApplicationBuilder()
-                .run(args);
+        final SpringApplicationBuilder ohf = createOpenHubApplicationBuilder();
+        ohf.listeners(
+                new ApplicationPidFileWriter("ohf-app.pid"),
+                new EmbeddedServerPortFileWriter("ohf-app.port"));
+        ohf.run(args);
     }
 
     private static SpringApplicationBuilder createOpenHubApplicationBuilder() {

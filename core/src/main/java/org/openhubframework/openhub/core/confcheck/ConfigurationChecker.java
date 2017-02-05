@@ -39,7 +39,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Profile;
-import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.ContextStartedEvent;
 import org.springframework.stereotype.Component;
 
 import org.openhubframework.openhub.api.configuration.ConfigurableValue;
@@ -65,7 +65,7 @@ import org.openhubframework.openhub.common.Profiles;
  */
 @Component
 @Profile("!" + Profiles.TEST) // not init for tests
-public class ConfigurationChecker implements ApplicationListener<ContextRefreshedEvent> {
+public class ConfigurationChecker implements ApplicationListener<ContextStartedEvent> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConfigurationChecker.class);
 
@@ -98,7 +98,7 @@ public class ConfigurationChecker implements ApplicationListener<ContextRefreshe
 
 
     @Override
-    public void onApplicationEvent(ContextRefreshedEvent event) {
+    public void onApplicationEvent(ContextStartedEvent event) {
         checkConfiguration(event.getApplicationContext());
     }
 

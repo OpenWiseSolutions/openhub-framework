@@ -136,7 +136,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- OpenHub Spring Boot application -->
-        <start-class>org.openhubframework.openhub.admin.OpenHubApplication</start-class>
+        <start-class>org.openhubframework.openhub.OpenHubApplication</start-class>
 
         <camel-version>2.17.3</camel-version>
         <junit-version>4.12</junit-version>
