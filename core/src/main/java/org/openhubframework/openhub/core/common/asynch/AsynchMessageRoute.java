@@ -17,6 +17,7 @@
 package org.openhubframework.openhub.core.common.asynch;
 
 import static org.openhubframework.openhub.api.asynch.AsynchConstants.*;
+import static org.openhubframework.openhub.api.configuration.CoreProps.ASYNCH_CONCURRENT_CONSUMERS;
 import static org.openhubframework.openhub.api.configuration.CoreProps.ASYNCH_COUNT_PARTLY_FAILS_BEFORE_FAILED;
 
 import java.util.Map;
@@ -36,6 +37,7 @@ import org.openhubframework.openhub.api.configuration.ConfigurationItem;
 import org.openhubframework.openhub.api.entity.ExternalCall;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
+import org.openhubframework.openhub.api.exception.LockFailureException;
 import org.openhubframework.openhub.api.extcall.ExtCallComponentParams;
 import org.openhubframework.openhub.api.route.AbstractBasicRoute;
 import org.openhubframework.openhub.api.route.CamelConfiguration;
@@ -43,7 +45,6 @@ import org.openhubframework.openhub.common.log.LogContextFilter;
 import org.openhubframework.openhub.core.common.asynch.confirm.ConfirmationService;
 import org.openhubframework.openhub.core.common.event.AsynchEventHelper;
 import org.openhubframework.openhub.spi.msg.MessageService;
-
 
 /**
  * Route definition that processes asynchronous message taken from message queue.
@@ -72,7 +73,12 @@ public class AsynchMessageRoute extends AbstractBasicRoute {
     /**
      * The route that polls the message queue for processing a new message.
      */
-    public static final String ROUTE_ID_ASYNC = "asyncProcessOut" + ROUTE_SUFFIX;
+    public static final String ROUTE_ID_ASYNC = "asyncProcess" + ROUTE_SUFFIX;
+
+    /**
+     * The route that gets message from SEDA and processing it.
+     */
+    private static final String ROUTE_ID_ASYNC_OUT = "asyncProcessOut" + ROUTE_SUFFIX;
 
     /**
      * Route for error handling.
@@ -98,6 +104,13 @@ public class AsynchMessageRoute extends AbstractBasicRoute {
      * Route for ensuring the provided message status confirmation to the source system.
      */
     public static final String ROUTE_ID_CONFIRM_MESSAGE = "asynchConfirm" + ROUTE_SUFFIX;
+
+    /**
+     * URI for asynchronous message processing (with SEDA).
+     */
+    public static final String URI_ASYNC_PROCESSING_MSG = "seda:asynch_message_route"
+            + "?concurrentConsumers={{" + ASYNCH_CONCURRENT_CONSUMERS + "}}&waitForTaskToComplete=Never"
+            + "&blockWhenFull=true&queueFactory=#" + PRIORITY_QUEUE_FACTORY;
 
     /**
      * URI for synchronous message processing.
@@ -137,10 +150,15 @@ public class AsynchMessageRoute extends AbstractBasicRoute {
             .setProperty(ExtCallComponentParams.EXTERNAL_CALL_SUCCESS, constant(false))
             .to(URI_ERROR_HANDLING);
 
-
-        // route for asynchronous processing
+        // route for input asynchronous processing
         from(AsynchConstants.URI_ASYNC_MSG)
                 .routeId(ROUTE_ID_ASYNC)
+                .bean(ROUTE_BEAN, "changeStateMessageToInQueue")
+                .to(URI_ASYNC_PROCESSING_MSG);
+
+        // route for output asynchronous processing from SEDA
+        from(URI_ASYNC_PROCESSING_MSG)
+                .routeId(ROUTE_ID_ASYNC_OUT)
                 .bean(ROUTE_BEAN, "setLogContextParams")
                 .to(URI_SYNC_MSG);
 
@@ -154,7 +172,8 @@ public class AsynchMessageRoute extends AbstractBasicRoute {
 
                 // check Message
                 .validate(body().isInstanceOf(Message.class))
-                .validate((Predicate) simple("${body.state} == 'PROCESSING'"))
+                .validate((Predicate) simple(
+                        "${body.state} == ${type:org.openhubframework.openhub.api.entity.MsgStateEnum.IN_QUEUE}"))
 
                 .bean(this, "logStartProcessing")
 
@@ -352,24 +371,19 @@ public class AsynchMessageRoute extends AbstractBasicRoute {
     }
 
     /**
-     * Checks if current message wasn't converted to other state or is being processed more times.
+     * Checks if current message wasn't converted to other state.
      * It can happen when message is long time in queue that repairing process converts message back
      * to PARTLY_FAILED state and evenly message can start with duplicate processing.
      *
      * @param msg the message
-     * @return {@code true} when message is obsolete otherwise {@code false}
+     * @return {@code true} when message is in wrong state {@code false} otherwise
      */
     @Handler
     public boolean isMessageObsolete(@Body Message msg) {
         Assert.notNull(msg, "the msg must not be null");
         MessageService messageService = getBean(MessageService.class);
 
-        Message dbMsg = messageService.findMessageById(msg.getMsgId());
-
-        Assert.notNull(dbMsg, "there must be message with ID=" + msg.getMsgId());
-
-        return dbMsg.getState() != MsgStateEnum.PROCESSING
-                && dbMsg.getLastUpdateTimestamp().before(msg.getLastUpdateTimestamp());
+        return !messageService.setStateProcessingForLock(msg);
     }
 
     @Handler
@@ -445,5 +459,23 @@ public class AsynchMessageRoute extends AbstractBasicRoute {
         Assert.notNull(msg, "the msg must not be null");
 
         return "direct:" + msg.getService().getServiceName() + "_" + msg.getOperationName() + OUT_ROUTE_SUFFIX;
+    }
+
+    /**
+     * Change state of message into {@link MsgStateEnum#IN_QUEUE}.
+     *
+     * @param msg message in which will be changed state
+     * @throws LockFailureException if change state into {@link MsgStateEnum#IN_QUEUE} fails
+     */
+    @Handler
+    public void changeStateMessageToInQueue(@Body Message msg) throws LockFailureException {
+        Assert.notNull(msg, "msg must not be null");
+
+        LOG.debug("Change state of message '{}' into '{}.'", msg.toHumanString(), MsgStateEnum.IN_QUEUE);
+
+        if (!getBean(MessageService.class).setStateInQueueForLock(msg)) {
+            throw new LockFailureException("Failed to lock message for change state to '" + MsgStateEnum.IN_QUEUE
+                    + "': " + msg.toHumanString());
+        }
     }
 }

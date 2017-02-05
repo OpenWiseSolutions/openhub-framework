@@ -48,7 +48,7 @@ import org.openhubframework.openhub.test.route.ActiveRoutes;
  *
  * @author Petr Juza
  */
-@ActiveRoutes(classes = AsynchInMessageRoute.class)
+@ActiveRoutes(classes = {AsynchInMessageRoute.class, AsynchMessageRoute.class})
 @Transactional
 public class AsynchInMessageRouteGuaranteedOrderTest extends AbstractCoreDbTest {
 
@@ -110,7 +110,7 @@ public class AsynchInMessageRouteGuaranteedOrderTest extends AbstractCoreDbTest 
 
         Message msg = createMessage(FUNNEL_VALUE);
         msg.setMsgTimestamp(DateUtils.addSeconds(firstMsg.getMsgTimestamp(), 100)); // be after "first" message
-        msg.setState(MsgStateEnum.PROCESSING);
+        msg.setState(MsgStateEnum.NEW);
         em.persist(msg);
         em.flush();
 
@@ -119,12 +119,16 @@ public class AsynchInMessageRouteGuaranteedOrderTest extends AbstractCoreDbTest 
 
         assertIsSatisfied(mock);
 
-        Assert.assertThat(em.find(Message.class, msg.getMsgId()).getState(), CoreMatchers.is(MsgStateEnum.PROCESSING));
+        Assert.assertThat(em.find(Message.class, msg.getMsgId()).getState(), CoreMatchers.is(MsgStateEnum.IN_QUEUE));
         Assert.assertThat(msg.getProcessingPriority(), CoreMatchers.is(AsynchInMessageRoute.NEW_MSG_PRIORITY));
     }
 
     @Test
     public void testGuaranteedOrder_onlyCurrentMessage() throws Exception {
+        //set new state of message (message is new)
+        firstMsg.setState(MsgStateEnum.NEW);
+        em.merge(firstMsg);
+
         mock.setExpectedMessageCount(1);
 
         // send one message only
@@ -133,7 +137,7 @@ public class AsynchInMessageRouteGuaranteedOrderTest extends AbstractCoreDbTest 
         assertIsSatisfied(mock);
 
         Assert.assertThat(em.find(Message.class, firstMsg.getMsgId()).getState(),
-                CoreMatchers.is(MsgStateEnum.PROCESSING));
+                CoreMatchers.is(MsgStateEnum.IN_QUEUE));
     }
 
     @Test
@@ -142,7 +146,7 @@ public class AsynchInMessageRouteGuaranteedOrderTest extends AbstractCoreDbTest 
 
         Message msg = createMessage(FUNNEL_VALUE);
         msg.setMsgTimestamp(DateUtils.addSeconds(firstMsg.getMsgTimestamp(), -100)); // be before "first" message
-        msg.setState(MsgStateEnum.PROCESSING);
+        msg.setState(MsgStateEnum.NEW);
         msg.setGuaranteedOrder(true);
         em.persist(msg);
         em.flush();
@@ -152,7 +156,7 @@ public class AsynchInMessageRouteGuaranteedOrderTest extends AbstractCoreDbTest 
 
         assertIsSatisfied(mock);
 
-        Assert.assertThat(em.find(Message.class, msg.getMsgId()).getState(), CoreMatchers.is(MsgStateEnum.PROCESSING));
+        Assert.assertThat(em.find(Message.class, msg.getMsgId()).getState(), CoreMatchers.is(MsgStateEnum.IN_QUEUE));
     }
 
     @Test
@@ -161,7 +165,7 @@ public class AsynchInMessageRouteGuaranteedOrderTest extends AbstractCoreDbTest 
 
         Message msg = createMessage(FUNNEL_VALUE);
         msg.setMsgTimestamp(DateUtils.addSeconds(firstMsg.getMsgTimestamp(), 100)); // be after "first" message
-        msg.setState(MsgStateEnum.PROCESSING);
+        msg.setState(MsgStateEnum.NEW);
         msg.setGuaranteedOrder(true);
         em.persist(msg);
         em.flush();

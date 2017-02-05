@@ -16,9 +16,7 @@
 
 package org.openhubframework.openhub.common.converter;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
@@ -87,7 +85,8 @@ public class DataTypeConverterTest {
     @Test
     public void testFile() throws ParseException {
         assertConvertFrom(TypeConverterEnum.FILE, "", new File(""));
-        String fileStr = "/Volumes/Obelix/projects";
+        String fileStr = File.pathSeparator + "Volumes" + File.pathSeparator + "Obelix" + File.pathSeparator
+                + "projects";
         assertConvertFrom(TypeConverterEnum.FILE, fileStr, new File(fileStr));
         assertConvertToString(TypeConverterEnum.FILE, new File(fileStr), fileStr);
     }

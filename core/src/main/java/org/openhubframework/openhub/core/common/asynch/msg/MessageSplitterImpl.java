@@ -35,6 +35,7 @@ import org.openhubframework.openhub.api.asynch.msg.MessageSplitterCallback;
 import org.openhubframework.openhub.api.asynch.msg.MsgSplitter;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
+import org.openhubframework.openhub.api.exception.LockFailureException;
 import org.openhubframework.openhub.core.common.asynch.AsynchMessageRoute;
 import org.openhubframework.openhub.spi.msg.MessageService;
 
@@ -115,6 +116,11 @@ public final class MessageSplitterImpl implements MsgSplitter {
                 public void run() {
                     for (Message msg : messages) {
                         LOG.debug("Message " + msg.toHumanString() + " will be processed ...");
+
+                        if (!messageService.setStateInQueueForLock(msg)) {
+                            throw new LockFailureException("Failed to lock message for change state to '"
+                                    + MsgStateEnum.IN_QUEUE + "': " + msg.toHumanString());
+                        }
 
                         // send to process (wait for reply and then process next child message); it's new exchange
                         msgProducer.requestBody(AsynchMessageRoute.URI_SYNC_MSG, msg);

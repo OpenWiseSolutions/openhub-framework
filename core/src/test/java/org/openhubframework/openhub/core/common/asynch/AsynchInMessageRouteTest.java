@@ -46,6 +46,7 @@ import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
 import org.openhubframework.openhub.api.exception.StoppingException;
 import org.openhubframework.openhub.api.exception.ThrottlingExceededException;
+import org.openhubframework.openhub.api.route.AbstractBasicRoute;
 import org.openhubframework.openhub.core.AbstractCoreDbTest;
 import org.openhubframework.openhub.test.data.ExternalSystemTestEnum;
 import org.openhubframework.openhub.test.data.ServiceTestEnum;
@@ -72,10 +73,22 @@ public class AsynchInMessageRouteTest extends AbstractCoreDbTest {
     private MockEndpoint mock;
 
     @Before
-    public void prepareData() {
+    public void prepareData() throws Exception {
         getHeaders().put(AsynchConstants.SERVICE_HEADER, ServiceTestEnum.CUSTOMER);
         getHeaders().put(AsynchConstants.OPERATION_HEADER, "setCustomer");
         getHeaders().put(AsynchConstants.OBJECT_ID_HEADER, "567");
+
+        getCamelContext().addRoutes(new AbstractBasicRoute() {
+            @Override
+            public void doConfigure() throws Exception {
+                from(AsynchConstants.URI_ASYNC_MSG)
+                        .process(new Processor() {
+                            @Override
+                            public void process(Exchange exchange) throws Exception {
+                            }
+                        });
+            }
+        });
     }
 
     @Test
@@ -124,7 +137,7 @@ public class AsynchInMessageRouteTest extends AbstractCoreDbTest {
                 assertThat(rs.getTimestamp("receive_timestamp"), notNullValue());
                 assertThat(rs.getString("service"), is(ServiceTestEnum.CUSTOMER.getServiceName()));
                 assertThat(rs.getString("source_system"), is(ExternalSystemTestEnum.CRM.getSystemName()));
-                assertThat(MsgStateEnum.valueOf(rs.getString("state")), is(MsgStateEnum.PROCESSING));
+                assertThat(MsgStateEnum.valueOf(rs.getString("state")), is(MsgStateEnum.NEW));
                 assertThat(rs.getString("funnel_value"), nullValue());
                 assertThat(rs.getString("parent_binding_type"), nullValue());
                 assertThat(rs.getString("funnel_component_id"), nullValue());

@@ -117,7 +117,7 @@ public class AsynchMessageRouteConfirmTest extends AbstractCoreDbTest {
         Date currDate = new Date();
 
         msg = new Message();
-        msg.setState(MsgStateEnum.PROCESSING);
+        msg.setState(MsgStateEnum.IN_QUEUE);
         msg.setMsgTimestamp(currDate);
         msg.setReceiveTimestamp(currDate);
         msg.setSourceSystem(ExternalSystemTestEnum.CRM);

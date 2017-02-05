@@ -16,10 +16,7 @@
 
 package org.openhubframework.openhub.core.common.asynch;
 
-import static org.openhubframework.openhub.api.asynch.AsynchConstants.ERR_CALLBACK_RES_PROP;
-import static org.openhubframework.openhub.api.asynch.AsynchConstants.OPERATION_HEADER;
-import static org.openhubframework.openhub.api.asynch.AsynchConstants.SERVICE_HEADER;
-import static org.openhubframework.openhub.api.asynch.AsynchConstants.URI_ASYNCH_IN_MSG;
+import static org.openhubframework.openhub.api.asynch.AsynchConstants.*;
 
 import java.sql.SQLException;
 import java.util.List;

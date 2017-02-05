@@ -16,11 +16,12 @@
 
 package org.openhubframework.openhub.core.common.asynch.repair;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
+
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
@@ -40,7 +41,6 @@ import org.openhubframework.openhub.core.AbstractCoreDbTest;
 import org.openhubframework.openhub.core.common.dao.MessageDao;
 import org.openhubframework.openhub.core.configuration.FixedConfigurationItem;
 
-
 /**
  * Tests {@link RepairMessageServiceDbImpl}
  */
@@ -57,7 +57,10 @@ public class RepairMessageServiceDbImplTest extends AbstractCoreDbTest {
 
     @Test
     public void testRepairProcessingMessagesMany() throws Exception {
-        Message[] messages = createAndSaveMessages(119, MsgStateEnum.PROCESSING);
+        List<Message> messages = new LinkedList<>();
+        messages.addAll(Arrays.asList(createAndSaveMessages(70, MsgStateEnum.PROCESSING)));
+        messages.addAll(Arrays.asList(createAndSaveMessages(30, MsgStateEnum.NEW)));
+        messages.addAll(Arrays.asList(createAndSaveMessages(28, MsgStateEnum.IN_QUEUE)));
 
         // 3 times because MAX_MESSAGES_IN_ONE_QUERY=50
         messageService.repairProcessingMessages();

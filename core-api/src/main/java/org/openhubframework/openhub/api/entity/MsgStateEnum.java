@@ -34,6 +34,11 @@ public enum MsgStateEnum {
     OK,
 
     /**
+     * Message is in queue and waiting for free thread for processing.
+     */
+    IN_QUEUE,
+
+    /**
      * Message is just processing.
      */
     PROCESSING,

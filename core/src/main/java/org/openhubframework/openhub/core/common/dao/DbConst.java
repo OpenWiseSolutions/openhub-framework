@@ -24,11 +24,16 @@ package org.openhubframework.openhub.core.common.dao;
  */
 public final class DbConst {
 
-    private DbConst() {
-    }
-
     /**
      * Default database unit name of Hibernate.
      */
     public static final String UNIT_NAME = "OpenHub";
+
+    /**
+     * Default transaction manager name.
+     */
+    public static final String TRANSACTION_MANAGER_NAME = "jpaTxManager";
+
+    private DbConst() {
+    }
 }

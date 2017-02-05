@@ -16,9 +16,7 @@
 
 package org.openhubframework.openhub.spi.msg;
 
-import static org.openhubframework.openhub.api.asynch.AsynchConstants.CUSTOM_DATA_PROP;
-import static org.openhubframework.openhub.api.asynch.AsynchConstants.EXCEPTION_ERROR_CODE;
-import static org.openhubframework.openhub.api.asynch.AsynchConstants.MSG_HEADER;
+import static org.openhubframework.openhub.api.asynch.AsynchConstants.*;
 
 import java.util.Collection;
 import java.util.List;
@@ -141,6 +139,22 @@ public interface MessageService {
     void setStateFailed(Message msg, ErrorExtEnum errCode, String errDesc);
 
     /**
+     * Set state {@link MsgStateEnum#IN_QUEUE} on {@link Message} under database lock.
+     *
+     * @param message message on which will be state changed
+     * @return {@code true} - state was successfully changed, {@code false} - otherwise
+     */
+    boolean setStateInQueueForLock(Message message);
+
+    /**
+     * Set state {@link MsgStateEnum#PROCESSING} on {@link Message} under database lock.
+     *
+     * @param message message on which will be state changed
+     * @return {@code true} - state was successfully changed, {@code false} - otherwise
+     */
+    boolean setStateProcessingForLock(Message message);
+
+    /**
      * Finds message by message ID.
      *
      * @param msgId the message ID
@@ -234,4 +248,22 @@ public interface MessageService {
      * @param funnelCompId the funnel component ID
      */
     void setFunnelComponentId(Message msg, String funnelCompId);
+
+    /**
+     * Finds ONE message in state {@link MsgStateEnum#POSTPONED}.
+     *
+     * @param interval Interval (in seconds) after that can be postponed message processed again
+     * @return message or null if there is no any message
+     */
+    @Nullable
+    Message findPostponedMessage(Seconds interval);
+
+    /**
+     * Finds ONE message in state {@link MsgStateEnum#PARTLY_FAILED}.
+     *
+     * @param interval Interval (in seconds) between two tries of partly failed messages.
+     * @return message or null if there is no any message
+     */
+    @Nullable
+    Message findPartlyFailedMessage(Seconds interval);
 }
