@@ -23,6 +23,7 @@ import javax.annotation.Nullable;
 import org.openhubframework.openhub.api.entity.ExternalSystemExtEnum;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
+import org.openhubframework.openhub.api.entity.Node;
 
 
 /**
@@ -112,19 +113,21 @@ public interface MessageDao {
      * Updates {@link Message} into state {@link MsgStateEnum#PROCESSING} (set start timestamp of processing)
      * - gets lock for message.
      *
-     * @param msg the message
+     * @param msg            the message
+     * @param processingNode node that process message from parameter
      * @return {@code true} when update was successful otherwise {@code false}
      */
-    boolean updateMessageProcessingUnderLock(Message msg);
+    boolean updateMessageProcessingUnderLock(Message msg, Node processingNode);
 
     /**
      * Updates {@link Message} into state {@link MsgStateEnum#IN_QUEUE} (set start timestamp in queue)
      * - gets lock for message.
      *
-     * @param msg the message
+     * @param msg            the message
+     * @param processingNode node that process message from parameter
      * @return {@code true} when update was successful otherwise {@code false}
      */
-    boolean updateMessageInQueueUnderLock(Message msg);
+    boolean updateMessageInQueueUnderLock(Message msg, Node processingNode);
 
     /**
      * Finds processing messages to repair process.

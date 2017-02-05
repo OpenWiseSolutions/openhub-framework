@@ -16,6 +16,7 @@
 
 package org.openhubframework.openhub.core.common.asynch.queue;
 
+import static org.apache.camel.component.mock.MockEndpoint.assertIsSatisfied;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -24,6 +25,7 @@ import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.AdviceWithRouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
+import org.apache.camel.model.BeanDefinition;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +33,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
+import org.openhubframework.openhub.api.entity.MutableNode;
 import org.openhubframework.openhub.core.AbstractCoreTest;
-import org.openhubframework.openhub.core.common.asynch.stop.StopService;
+import org.openhubframework.openhub.spi.node.ChangeNodeCallback;
+import org.openhubframework.openhub.spi.node.NodeService;
 import org.openhubframework.openhub.test.route.ActiveRoutes;
 
 
@@ -46,13 +50,16 @@ import org.openhubframework.openhub.test.route.ActiveRoutes;
 public class PartlyFailedMessagesPoolRouteTest extends AbstractCoreTest {
 
     @Autowired
-    private StopService stopService;
+    private NodeService nodeService;
 
     @Produce(uri = "direct:test")
     private ProducerTemplate producer;
 
     @EndpointInject(uri = "mock:test")
     private MockEndpoint mock;
+
+    @EndpointInject(uri = "mock:starterPooling")
+    private MockEndpoint mockStarterPooling;
 
     @Configuration
     public static class TestContextConfig {
@@ -72,32 +79,65 @@ public class PartlyFailedMessagesPoolRouteTest extends AbstractCoreTest {
                     @Override
                     public void configure() throws Exception {
                         replaceFromWith("direct:test");
-
                         weaveAddLast().to("mock:test");
+                        weaveByType(BeanDefinition.class).replace().to(mockStarterPooling);
                     }
                 });
     }
 
     @Test
-    public void testStoppingMode() throws Exception {
-        assertThat(stopService.isStopping(), is(false));
+    public void testRunningMode() throws Exception {
+        assertThat(nodeService.getActualNode().isAbleToHandleNewMessages(), is(true));
+        assertThat(nodeService.getActualNode().isAbleToHandleExistingMessages(), is(true));
+        assertThat(nodeService.getActualNode().isStopped(), is(false));
 
         mock.expectedMessageCount(1);
+        mockStarterPooling.expectedMessageCount(1);
 
         producer.sendBody("bodyContent");
 
-        mock.assertIsSatisfied();
+        assertIsSatisfied(mock, mockStarterPooling);
     }
 
     @Test
-    public void testNotStoppingMode() throws Exception {
-        stopService.stop();
-        assertThat(stopService.isStopping(), is(true));
+    public void testProcessExistingMessage() throws Exception {
+        nodeService.update(nodeService.getActualNode(), new ChangeNodeCallback() {
+            @Override
+            public void updateNode(MutableNode node) {
+                node.setHandleOnlyExistingMessageState();
+            }
+        });
+
+        assertThat(nodeService.getActualNode().isAbleToHandleNewMessages(), is(false));
+        assertThat(nodeService.getActualNode().isAbleToHandleExistingMessages(), is(true));
+        assertThat(nodeService.getActualNode().isStopped(), is(false));
 
         mock.expectedMessageCount(1);
+        mockStarterPooling.expectedMessageCount(1);
 
         producer.sendBody("bodyContent");
 
-        mock.assertIsSatisfied();
+        assertIsSatisfied(mock, mockStarterPooling);
+    }
+
+    @Test
+    public void testStopped() throws Exception {
+        nodeService.update(nodeService.getActualNode(), new ChangeNodeCallback() {
+            @Override
+            public void updateNode(MutableNode node) {
+                node.setStoppedState();
+            }
+        });
+
+        assertThat(nodeService.getActualNode().isAbleToHandleNewMessages(), is(false));
+        assertThat(nodeService.getActualNode().isAbleToHandleExistingMessages(), is(false));
+        assertThat(nodeService.getActualNode().isStopped(), is(true));
+
+        mock.expectedMessageCount(1);
+        mockStarterPooling.expectedMessageCount(0);
+
+        producer.sendBody("bodyContent");
+
+        assertIsSatisfied(mock, mockStarterPooling);
     }
 }

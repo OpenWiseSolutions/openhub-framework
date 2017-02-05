@@ -43,11 +43,11 @@ import org.openhubframework.openhub.api.route.AbstractBasicRoute;
 import org.openhubframework.openhub.api.route.CamelConfiguration;
 import org.openhubframework.openhub.common.log.LogContextFilter;
 import org.openhubframework.openhub.core.common.asynch.msg.MessageTransformer;
-import org.openhubframework.openhub.core.common.asynch.stop.StopService;
 import org.openhubframework.openhub.core.common.event.AsynchEventHelper;
 import org.openhubframework.openhub.core.common.exception.ExceptionTranslator;
 import org.openhubframework.openhub.core.common.validator.TraceIdentifierValidator;
 import org.openhubframework.openhub.spi.msg.MessageService;
+import org.openhubframework.openhub.spi.node.NodeService;
 import org.openhubframework.openhub.spi.throttling.ThrottleScope;
 import org.openhubframework.openhub.spi.throttling.ThrottlingProcessor;
 
@@ -311,13 +311,13 @@ public class AsynchInMessageRoute extends AbstractBasicRoute {
     }
 
     /**
-     * Checks if ESB goes down or not. If yes then {@link StopService} is thrown.
+     * Checks if ESB goes down or not. If yes then {@link StoppingException} is thrown.
      */
     @Handler
     public void checkStopping() {
-        StopService stopService = getApplicationContext().getBean(StopService.class);
+        NodeService nodeService = getApplicationContext().getBean(NodeService.class);
 
-        if (stopService.isStopping()) {
+        if (!nodeService.getActualNode().isAbleToHandleNewMessages()) {
             throw new StoppingException("ESB is stopping ...");
         }
     }

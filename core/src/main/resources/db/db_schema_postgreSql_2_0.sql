@@ -33,3 +33,37 @@ ALTER TABLE configuration_item OWNER TO openhub;
 
 
 -- Call db_init-configuration.sql for inserting default configuration items
+
+--
+-- tables: node
+--
+
+drop table if exists node cascade;
+
+create table node (
+    node_id         int8            not null,
+    code            varchar(64)     not null unique,
+    name            varchar(256)    not null unique,
+    description     varchar(2056)   null,
+    state           varchar(64)     not null,
+    primary key (node_id)
+);
+
+alter table node add constraint uq_node_code unique (code);
+alter table node add constraint uq_node_name unique (name);
+
+drop index if exists node_code_idx;
+create index node_code_idx ON node (code);
+
+ALTER TABLE node OWNER TO openhub;
+
+--
+-- Update in table message
+--
+
+alter table message add column node_id int8 null;
+alter table message add constraint fk_message_node foreign key (node_id) references node;
+alter table message add column start_in_queue_timestamp timestamp null;
+
+drop index if exists msg_node_id_idx;
+create index msg_node_id_idx ON message (node_id);

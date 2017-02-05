@@ -161,6 +161,8 @@ public class Message extends SuperEntity<Long> {
     @Transient
     private int processingPriority;
 
+    @Column(name = "node_id", nullable = true, insertable = false, updatable = false)
+    private Long nodeId;
 
     /**
      * Empty (default) constructor.
@@ -777,6 +779,25 @@ public class Message extends SuperEntity<Long> {
         this.processingPriority = processingPriority;
     }
 
+    /**
+     * Gets identifier of node that process this message.
+     *
+     * @return node identifier, {@code NULL} no node process this message
+     */
+    @Nullable
+    public Long getNodeId() {
+        return nodeId;
+    }
+
+    /**
+     * Sets identifier of node that process this message.
+     *
+     * @param nodeId node identifier, {@code NULL} no node process this message
+     */
+    public void setNodeId(@Nullable Long nodeId) {
+        this.nodeId = nodeId;
+    }
+
     @Override
     public boolean equals(Object obj) {
         return obj == this || obj instanceof Message && super.equals(obj);
@@ -811,6 +832,7 @@ public class Message extends SuperEntity<Long> {
             .append("guaranteedOrder", guaranteedOrder)
             .append("excludeFailedState", excludeFailedState)
             .append("processingPriority", processingPriority)
+            .append("nodeId", nodeId)
             .toString();
     }
 
