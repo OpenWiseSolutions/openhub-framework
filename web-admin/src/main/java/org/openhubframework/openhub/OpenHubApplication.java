@@ -27,6 +27,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.context.web.ErrorPageFilter;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.*;
+import org.springframework.web.WebApplicationInitializer;
 
 import org.openhubframework.openhub.api.route.CamelConfiguration;
 import org.openhubframework.openhub.common.AutoConfiguration;
@@ -72,7 +73,9 @@ import org.openhubframework.openhub.core.config.WebServiceConfig;
 @Configuration
 @ImportResource("classpath:sp_camelContext.xml")
 @PropertySource(value = {"classpath:/extensions.cfg"})
-public class OpenHubApplication extends SpringBootServletInitializer {
+// WebApplicationInitializer must be implemented directly because of Weblogic support
+// see https://docs.spring.io/spring-boot/docs/current/reference/html/howto-traditional-deployment.html#howto-weblogic
+public class OpenHubApplication extends SpringBootServletInitializer implements WebApplicationInitializer {
     
     /**
      * Sets up filter for adding context information to logging.
