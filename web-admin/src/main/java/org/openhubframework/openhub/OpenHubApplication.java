@@ -26,6 +26,7 @@ import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.context.web.ErrorPageFilter;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.*;
 import org.springframework.web.WebApplicationInitializer;
 
@@ -57,6 +58,7 @@ import org.openhubframework.openhub.core.config.WebServiceConfig;
  * @since 2.0
  */
 @EnableAutoConfiguration
+@EnableCaching
 @EnableConfigurationProperties
 // note: all routes with @CamelConfiguration are configured in CamelRoutesConfig
 @ComponentScan(basePackages = {

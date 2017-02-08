@@ -33,7 +33,7 @@ public class OpenHubPropertyConstants {
      * OpenHub property prefix name used for custom properties created for OpenHub.
      * These property names should have the same prefix.
      */
-    public static final String PREFIX = "ohf";
+    public static final String PREFIX = "ohf.";
 
     private OpenHubPropertyConstants() {
         // avoid instantiation

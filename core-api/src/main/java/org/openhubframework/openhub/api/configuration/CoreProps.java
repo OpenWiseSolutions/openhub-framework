@@ -16,6 +16,9 @@
 
 package org.openhubframework.openhub.api.configuration;
 
+import static org.openhubframework.openhub.common.OpenHubPropertyConstants.PREFIX;
+
+
 /**
  * Constants of core property names.
  *
@@ -23,8 +26,6 @@ package org.openhubframework.openhub.api.configuration;
  * @since 2.0
  */
 public class CoreProps {
-
-    public static final String PREFIX = "ohf.";
 
     /**
      * Failed count of partly fails before message will be marked as completely FAILED.
