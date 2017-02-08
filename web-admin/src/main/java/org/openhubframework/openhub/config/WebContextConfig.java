@@ -87,9 +87,12 @@ public class WebContextConfig {
         LOG.info("REQ/RES logging initialization");
 
         RequestResponseLoggingFilter filter = new RequestResponseLoggingFilter();
-        filter.setLogUnsupportedContentType(true);
-
-        return new FilterRegistrationBean(filter);
+        filter.setLogUnsupportedContentType(false);
+        final FilterRegistrationBean bean = new FilterRegistrationBean(filter);
+        // we use logging filter only for administration endpoints to avoid duplication log events
+        bean.addUrlPatterns(WEB_URI_PREFIX_MAPPING);
+        
+        return bean;
     }
 
     /**
