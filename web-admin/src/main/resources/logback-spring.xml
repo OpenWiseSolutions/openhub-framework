@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Base logback configuration provided by OpenHub.
+    
+    If logback configuration is loaded from external location (not from build) it is recommended to configure scanning:
+    See: https://logback.qos.ch/manual/configuration.html#autoScan
+-->
+
+<configuration debug="true">
+    <include resource="ohf-logback.xml" />
+</configuration>
