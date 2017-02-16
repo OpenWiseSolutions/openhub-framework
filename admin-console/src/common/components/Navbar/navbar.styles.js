@@ -1,6 +1,6 @@
 import tc from 'tinycolor2'
 import { primaryColor, secondaryColor, darkColor } from '../../../styles/colors'
-import { itemSize } from '../../../styles/constants'
+import { itemSize, gap } from '../../../styles/constants'
 
 export default {
   main: {
@@ -25,6 +25,7 @@ export default {
     float: 'right',
     height: `${itemSize}px`,
     lineHeight: `${itemSize}px`,
+    paddingRight: gap,
     maxWidth: '50%',
     minWidth: `${itemSize}px`
   },

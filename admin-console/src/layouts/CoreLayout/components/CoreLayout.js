@@ -12,13 +12,13 @@ class CoreLayout extends Component {
     const { isAuth, children, sidebarExtended, navbarUserExpanded, actions, authActions } = this.props
     const bodyStyles = [
       styles.body,
-      sidebarExtended && styles.body.extended
+      sidebarExtended && isAuth && styles.body.extended
     ]
 
     return (
       <StyleRoot>
         <div style={styles.main}>
-          <Sidebar extended={sidebarExtended} />
+          <Sidebar extended={sidebarExtended && isAuth} />
           <LoginModal />
           <div style={bodyStyles}>
             <Navbar
