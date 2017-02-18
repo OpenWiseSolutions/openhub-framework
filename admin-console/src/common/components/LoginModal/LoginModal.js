@@ -22,6 +22,7 @@ class LoginModal extends Component {
         <ValidStyles>
           <ValidForm style={styles.form} onSubmit={actions.submitLogin} autoComplete='off'>
             <Field label='Username'
+              autoFocus
               required
               placeholder='Enter your username'
               name='username' />

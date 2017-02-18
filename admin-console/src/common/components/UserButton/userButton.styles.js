@@ -1,5 +1,5 @@
 import { primaryColor, secondaryColor } from '../../../styles/colors'
-import { itemSize, gap, userMenuWidth } from '../../../styles/constants'
+import { depth1, itemSize, gap, userMenuWidth } from '../../../styles/constants'
 import { fadeIn } from 'react-animations'
 import Radium from 'radium'
 
@@ -28,6 +28,7 @@ export default {
     width: userMenuWidth,
     height: 'auto',
     backgroundColor: primaryColor,
-    boxShadow: '0 0 5px 0 silver'
+    boxShadow: '0 0 5px 0 silver',
+    zIndex: depth1
   }
 }

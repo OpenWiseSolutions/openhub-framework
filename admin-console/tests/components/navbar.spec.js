@@ -22,12 +22,17 @@ describe('Navbar Component', () => {
 
   it('should render', () => {
     expect(wrapper.find('.navbar-wrapper')).to.have.length(1)
-    expect(wrapper.find('.navbar-wrapper')).to.have.descendants(MenuIcon)
+    expect(wrapper.find('.navbar-wrapper')).to.not.have.descendants(MenuIcon)
   })
 
   it('should trigger sidebar open', () => {
     expect(toggleSidebar).to.have.property('callCount', 0)
     wrapper.find('.sidebar-toggle').simulate('click')
     expect(toggleSidebar).to.have.property('callCount', 1)
+  })
+
+  it('should have menu icon if isAuth', () => {
+    const wrp = getWrapper({ isAuth: true, toggleSidebar })
+    expect(wrp.find('.navbar-wrapper')).to.have.descendants(MenuIcon)
   })
 })

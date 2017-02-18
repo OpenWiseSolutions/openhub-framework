@@ -1,5 +1,5 @@
 import tc from 'tinycolor2'
-import { transition, itemSize, gap, bigGap, logo } from '../../../styles/constants'
+import { transition, itemSize, gap, bigGap, logo, depth1 } from '../../../styles/constants'
 import { primaryColor, secondaryColor, lightColor, darkColor } from '../../../styles/colors'
 
 export const sidebarWidth = 200
@@ -14,6 +14,7 @@ export default {
     overflow: 'hidden',
     backgroundColor: secondaryColor,
     boxShadow: 'inset -10px 0px 15px -5px rgba(0,0,0,0.5)',
+    zIndex: depth1,
     ...transition()
   },
   logo: {
