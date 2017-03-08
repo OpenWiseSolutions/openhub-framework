@@ -34,7 +34,6 @@ import org.openhubframework.openhub.api.configuration.ConfigurationItem;
  * @author Tomas Hanus
  * @since 2.0
  */
-//TODO (thanus, 18/12/2016, TASK: OHRJIRA-9) it is necessary to create internal test configurations for OHF tests
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestPropertySource(properties = {
         "ohf.test.key=5"

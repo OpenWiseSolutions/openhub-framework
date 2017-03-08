@@ -142,6 +142,10 @@ public class CoreProps {
      */
     public static final String ALERTS_REPEAT_TIME_SEC = PREFIX + "alerts.repeatTimeSec";
 
+    /**
+     * Pattern that defines which property names should be loaded from DB.
+     */
+    public static final String PROPERTY_INCLUDE_PATTERN = PREFIX + "dbProperty.includePattern";
 
     private CoreProps() {
     }

@@ -79,7 +79,7 @@ public class ResponseReceiveEventNotifier extends EventNotifierBase<ExchangeSent
 
     @Override
     public boolean isEnabled(EventObject event) {
-        return enable.getValue() && super.isEnabled(event);
+        return super.isEnabled(event) && enable.getValue();
     }
 
     @Override

@@ -38,15 +38,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Profile;
-import org.springframework.context.event.ContextStartedEvent;
-import org.springframework.stereotype.Component;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.util.Assert;
+import org.springframework.web.context.WebApplicationContext;
 
 import org.openhubframework.openhub.api.configuration.ConfigurableValue;
 import org.openhubframework.openhub.api.configuration.ConfigurationItem;
 import org.openhubframework.openhub.api.configuration.CoreProps;
 import org.openhubframework.openhub.api.exception.ConfigurationException;
-import org.openhubframework.openhub.common.Profiles;
 
 
 /**
@@ -56,16 +55,13 @@ import org.openhubframework.openhub.common.Profiles;
  * Checking of {@link #checkLocalhostUri() localhost URI} must be explicitly enabled by setting
  * property "{@code ohf.server.localhostUri.check}".
  * <p/>
- * Initialized this listener in child "Spring WS" application context.
+ * Initialize this listener in child web application context only.
  *
  * @author Petr Juza
  * @since 0.4
- * @see CheckingConfMessageDispatcherServlet
  * @see ConfCheck
  */
-@Component
-@Profile("!" + Profiles.TEST) // not init for tests
-public class ConfigurationChecker implements ApplicationListener<ContextStartedEvent> {
+public class ConfigurationChecker implements ApplicationListener<ContextRefreshedEvent> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConfigurationChecker.class);
 
@@ -96,10 +92,12 @@ public class ConfigurationChecker implements ApplicationListener<ContextStartedE
     @Autowired(required = false)
     private List<ConfCheck> checks;
 
-
     @Override
-    public void onApplicationEvent(ContextStartedEvent event) {
-        checkConfiguration(event.getApplicationContext());
+    public void onApplicationEvent(ContextRefreshedEvent event) {
+        ApplicationContext ctx = event.getApplicationContext();
+        if (ctx instanceof WebApplicationContext) {
+            checkConfiguration(ctx);
+        }
     }
 
     /**
@@ -110,6 +108,9 @@ public class ConfigurationChecker implements ApplicationListener<ContextStartedE
      */
     void checkConfiguration(ApplicationContext context) {
         LOG.debug("Checking configuration validity ...");
+
+        Assert.state(context instanceof WebApplicationContext && context.getParent() != null,
+                "configuration checking is enabled for web context only");
 
         try {
             if (checkUrl.getValue()) {

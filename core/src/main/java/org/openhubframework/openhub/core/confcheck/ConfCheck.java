@@ -21,9 +21,13 @@ import org.openhubframework.openhub.api.exception.ConfigurationException;
 
 /**
  * Contract for configuration checking.
+ * <p>
+ * Implement this interface to check configuration during application start-up.
+ * Implementation (aka bean) has to be in root or web child application context.
  *
  * @author Petr Juza
  * @since 1.0
+ * @see ConfigurationChecker
  */
 public interface ConfCheck {
 

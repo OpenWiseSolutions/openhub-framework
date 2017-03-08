@@ -1,5 +1,5 @@
 /**
- * Modules which serves for requesting third party systems (billing, CRM, ...).
- * "Out" modules are clients of the communication.
+ * Module that serves for requesting third party systems.
+ * "Out" modules represent clients from the point of the communication.
  */
 package org.openhubframework.openhub.modules.out;
