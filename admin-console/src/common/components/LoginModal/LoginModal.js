@@ -43,7 +43,6 @@ class LoginModal extends Component {
 
 LoginModal.propTypes = {
   loginModalOpen: PropTypes.bool,
-  loginErrors: PropTypes.bool,
   actions: PropTypes.object
 }
 
