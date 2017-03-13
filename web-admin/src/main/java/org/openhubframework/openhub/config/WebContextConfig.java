@@ -44,6 +44,8 @@ import org.openhubframework.openhub.admin.web.filter.RequestResponseLoggingFilte
 import org.openhubframework.openhub.api.exception.ErrorExtEnum;
 import org.openhubframework.openhub.api.route.RouteConstants;
 import org.openhubframework.openhub.common.AutoConfiguration;
+import org.openhubframework.openhub.common.Profiles;
+import org.openhubframework.openhub.core.confcheck.ConfigurationChecker;
 import org.openhubframework.openhub.modules.ErrorEnum;
 import org.openhubframework.openhub.web.WebConfigurer;
 
@@ -169,5 +171,15 @@ public class WebContextConfig {
         bean.addUrlMappings(WEB_URI_PREFIX_MAPPING);
 
         return bean;
+    }
+
+    /**
+     * Configures {@link ConfigurationChecker}.
+     */
+    @Bean
+    @Profile("!" + Profiles.TEST) // not init for tests
+    @ConditionalOnMissingBean
+    public ConfigurationChecker configurationChecker() {
+        return new ConfigurationChecker();
     }
 }

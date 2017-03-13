@@ -28,6 +28,7 @@ import com.hazelcast.map.EntryProcessor;
 import org.joda.time.DateTime;
 import org.springframework.util.Assert;
 
+import org.openhubframework.openhub.core.config.CacheNames;
 import org.openhubframework.openhub.spi.throttling.ThrottleCounter;
 import org.openhubframework.openhub.spi.throttling.ThrottleScope;
 
@@ -45,8 +46,6 @@ import org.openhubframework.openhub.spi.throttling.ThrottleScope;
  */
 public class ThrottleCounterHazelcastImpl extends AbstractThrottleCounter {
 
-    private static final String MAP_THROTTLING = "throttling";
-
     private final HazelcastInstance hazelcast;
 
     public ThrottleCounterHazelcastImpl(HazelcastInstance hazelcast) {
@@ -57,7 +56,7 @@ public class ThrottleCounterHazelcastImpl extends AbstractThrottleCounter {
 
     @Override
     protected int doCount(ThrottleScope throttleScope, int intervalSec) {
-        IMap<HazelcastThrottleScope, List<Long>> map = hazelcast.getMap(MAP_THROTTLING);
+        IMap<HazelcastThrottleScope, List<Long>> map = hazelcast.getMap(CacheNames.THROTTLING);
 
         Assert.notNull(map, "shared map must not be null");
 
@@ -68,7 +67,7 @@ public class ThrottleCounterHazelcastImpl extends AbstractThrottleCounter {
     @Override
     @Nullable
     String getCacheInfo() {
-        IMap<Object, Object> map = hazelcast.getMap(MAP_THROTTLING);
+        IMap<Object, Object> map = hazelcast.getMap(CacheNames.THROTTLING);
         return "Throttling Hazelcast statistics dump:\n" + map.getLocalMapStats().toString();
     }
 

@@ -18,6 +18,7 @@ package org.openhubframework.openhub.core.configuration;
 
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.env.Environment;
@@ -25,6 +26,8 @@ import org.springframework.core.env.Environment;
 import org.openhubframework.openhub.api.configuration.ConfigurableValue;
 import org.openhubframework.openhub.api.configuration.ConfigurationItem;
 import org.openhubframework.openhub.common.AutoConfiguration;
+import org.openhubframework.openhub.core.config.CacheNames;
+
 
 /**
  * Auto-configuration of configuration item properties via parameters. This configuration registers 
@@ -65,6 +68,7 @@ public class AutoConfigurationItemProperties {
         return new ConfigurationService() {
 
             @Override
+            @Cacheable(CacheNames.CONFIG_PARAMS)
             public <T> T getValue(Class<T> clazz, String key) {
                 return environment.getProperty(key, clazz);
             }

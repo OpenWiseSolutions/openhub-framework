@@ -16,9 +16,12 @@
 
 package org.openhubframework.openhub.core.configuration;
 
+import static org.openhubframework.openhub.api.configuration.CoreProps.PROPERTY_INCLUDE_PATTERN;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.config.ConfigFileApplicationListener;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -28,12 +31,18 @@ import org.springframework.core.env.PropertySource;
 import org.springframework.stereotype.Component;
 
 import org.openhubframework.openhub.api.common.Constraints;
+import org.openhubframework.openhub.api.configuration.CoreProps;
 import org.openhubframework.openhub.api.configuration.DbConfigurationParamService;
+import org.openhubframework.openhub.common.OpenHubPropertyConstants;
 
 
 /**
  * Configure and hook {@link PropertySource} from database table "configuration" that represents default application
  * configuration.
+ * <p>
+ * Use '{@value CoreProps#PROPERTY_INCLUDE_PATTERN}' property to define pattern for which property names should
+ * be loaded from DB. If there is no defined then all property names which starts with
+ * '{@value OpenHubPropertyConstants#PREFIX}' will be loaded from DB.
  *
  * @author Petr Juza
  * @since 2.0
@@ -52,6 +61,9 @@ public class DbExternalPropertiesAutoConfiguration
 
     public static final String DB_CONF_PROPERTY_SOURCE_NAME = "dbConfiguration";
 
+    @Value("${" + PROPERTY_INCLUDE_PATTERN + ":#{null}}")
+    private String includePatternStr;
+
     @Autowired
     private DbConfigurationParamService paramService;
 
@@ -64,7 +76,7 @@ public class DbExternalPropertiesAutoConfiguration
     public void onApplicationEvent(ContextRefreshedEvent event) {
         Constraints.notNull(event, "event must not be null");
 
-        final PropertySource source = new DbPropertySource(DB_CONF_PROPERTY_SOURCE_NAME, paramService);
+        final PropertySource source = new DbPropertySource(DB_CONF_PROPERTY_SOURCE_NAME, paramService, includePatternStr);
 
         ConfigurableEnvironment env = (ConfigurableEnvironment) event.getApplicationContext().getEnvironment();
         env.getPropertySources().addLast(source);

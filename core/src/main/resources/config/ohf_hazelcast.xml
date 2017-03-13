@@ -29,7 +29,7 @@
         <name>dev</name>
         <password>dev-pass</password>
     </group>
-    <management-center enabled="false">http://localhost:8080/mancenter</management-center>
+    <management-center enabled="false" update-interval="10">http://localhost:8080/mancenter</management-center>
     <network>
         <port auto-increment="true" port-count="100">5701</port>
         <outbound-ports>
@@ -51,7 +51,8 @@
         Distributed map for counting throttling.
         Configuration has several interesting points - we need computation as fast as possible, accuracy is not crucial:
             - no backups
-            - eviction-policy = Least Recently Used)
+            - in-memory-format = OBJECT (we use entry processing)
+            - eviction-policy = Least Recently Used
             - merge policy = entry with the latest update wins
     -->
     <map name="throttling">
@@ -132,7 +133,66 @@
             com.hazelcast.map.merge.LatestUpdateMapMergePolicy ; entry with the latest update wins.
         -->
         <merge-policy>com.hazelcast.map.merge.LatestUpdateMapMergePolicy</merge-policy>
+    </map>
 
+
+    <!--
+        Distributed map for caching configuration parameters.
+        Main parameters:
+            - no backups
+            - eviction-policy = Least Recently Used
+            - time-to-live-seconds = 600 seconds (10 minutes)
+            - max-idle-seconds = 3600 (1 hour)
+    -->
+    <map name="config_params">
+        <!--
+           Data type that will be used for storing recordMap.
+           Possible values:
+           BINARY (default): keys and values will be stored as binary data
+           OBJECT : values will be stored in their object forms
+           NATIVE : values will be stored in non-heap region of JVM
+        -->
+        <in-memory-format>BINARY</in-memory-format>
+
+        <!--
+            Number of backups. If 1 is set as the backup-count for example,
+            then all entries of the map will be copied to another JVM for
+            fail-safety. 0 means no backup.
+        -->
+        <backup-count>0</backup-count>
+        <!--
+            Number of async backups. 0 means no backup.
+        -->
+        <async-backup-count>0</async-backup-count>
+        <!--
+			Maximum number of seconds for each entry to stay in the map. Entries that are
+			older than <time-to-live-seconds> and not updated for <time-to-live-seconds>
+			will get automatically evicted from the map.
+			Any integer between 0 and Integer.MAX_VALUE. 0 means infinite. Default is 0.
+		-->
+        <time-to-live-seconds>600</time-to-live-seconds>
+        <!--
+			Maximum number of seconds for each entry to stay idle in the map. Entries that are
+			idle(not touched) for more than <max-idle-seconds> will get
+			automatically evicted from the map. Entry is touched if get, put or containsKey is called.
+			Any integer between 0 and Integer.MAX_VALUE. 0 means infinite. Default is 0.
+		-->
+        <max-idle-seconds>3600</max-idle-seconds>
+        <!--
+            Valid values are:
+            NONE (no eviction),
+            LRU (Least Recently Used),
+            LFU (Least Frequently Used).
+            NONE is the default.
+        -->
+        <eviction-policy>LRU</eviction-policy>
+        <!--
+            Maximum size of the map. When max size is reached,
+            map is evicted based on the policy defined.
+            Any integer between 0 and Integer.MAX_VALUE. 0 means
+            Integer.MAX_VALUE. Default is 0.
+        -->
+        <max-size policy="PER_NODE">0</max-size>
     </map>
 
     <serialization>
