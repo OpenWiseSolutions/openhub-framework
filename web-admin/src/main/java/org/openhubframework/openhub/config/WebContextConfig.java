@@ -26,6 +26,7 @@ import net.bull.javamelody.MonitoringFilter;
 import net.bull.javamelody.SessionListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
@@ -35,6 +36,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
@@ -48,6 +50,8 @@ import org.openhubframework.openhub.common.Profiles;
 import org.openhubframework.openhub.core.confcheck.ConfigurationChecker;
 import org.openhubframework.openhub.modules.ErrorEnum;
 import org.openhubframework.openhub.web.WebConfigurer;
+
+import javax.servlet.DispatcherType;
 
 
 /**
@@ -73,8 +77,9 @@ import org.openhubframework.openhub.web.WebConfigurer;
 public class WebContextConfig {
 
     private static final Logger LOG = LoggerFactory.getLogger(WebContextConfig.class);
-
-    private static final String JAVAMELODY_URL = "/monitoring/javamelody";
+    
+    @Autowired
+    private JavaMelodyConfigurationProperties javaMelodyProps;
 
     /**
      * The ID of web context.
@@ -102,14 +107,22 @@ public class WebContextConfig {
      */
     @Bean
     public FilterRegistrationBean monitoringJavaMelody() {
-        LOG.info("JavaMelody initialization: " + JAVAMELODY_URL);
+        LOG.info("JavaMelody initialization: " + javaMelodyProps.getInitParameters());
 
-        FilterRegistrationBean registration = new FilterRegistrationBean(new MonitoringFilter());
-        Map<String, String> initParams = new HashMap<>();
-        initParams.put("monitoring-path", JAVAMELODY_URL);
-        initParams.put("disabled", "true");
-        registration.setInitParameters(initParams);
+        final MonitoringFilter filter = new MonitoringFilter();
+        filter.setApplicationType("OpenHub");
+        FilterRegistrationBean registration = new FilterRegistrationBean(filter);
+        registration.setAsyncSupported(true);
+        registration.setName("javamelody");
+        registration.setDispatcherTypes(DispatcherType.REQUEST, DispatcherType.ASYNC);
 
+        // Set the initialization parameter for the monitoring filter.
+        for (final Map.Entry<String, String> parameter : javaMelodyProps.getInitParameters().entrySet()) {
+            registration.addInitParameter(parameter.getKey(), parameter.getValue());
+        }
+
+        // Set the URL patterns to activate the monitoring filter for.
+        registration.addUrlPatterns("/*");
         return registration;
     }
 
