@@ -17,10 +17,16 @@
 package org.openhubframework.openhub.admin.web.changes;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,28 +34,63 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 /**
- * Controller for displaying changes.txt (aka release notes).
+ * Controller for displaying changes.MD (aka release notes/change log).
  *
  * @author Petr Juza
+ * @author Tomas Hanus
+ * @see ChangelogProvider
  */
 @Controller
+@Configuration
 public class ChangesController {
 
     public static final String CHANGES_URI = "/changes";
+    private static final String CHANGE_LOG_PATH = "changes.MD";
+    
+    @Autowired
+    private ChangelogProvider changelogProvider;
 
     @RequestMapping(value = CHANGES_URI, method = RequestMethod.GET)
     @ResponseBody
     public String getChangesContent() throws IOException {
-        ClassPathResource resource = new ClassPathResource("changes.txt");
-
         // add end of lines
         String resStr = "";
-        List<String> lines = IOUtils.readLines(resource.getInputStream(), "utf-8");
+        List<String> lines = IOUtils.readLines(changelogProvider.getChangelog().getInputStream(), StandardCharsets.UTF_8);
         for (String line : lines) {
             resStr += line;
             resStr += "<br/>\n";
         }
 
         return resStr;
+    }
+
+    /**
+     * Registers default implementation of {@link ChangelogProvider}.
+     * 
+     * @return default changelog provider
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public ChangelogProvider defaultChangelogProvider() {
+        return new ChangelogProvider() {
+            @Override
+            public Resource getChangelog() {
+                return new ClassPathResource(CHANGE_LOG_PATH);
+            }
+        };
+    }
+
+    /**
+     * Provider of {@link Resource} as change log of platform.
+     */
+    public interface ChangelogProvider {
+
+        /**
+         * Returns resource that represents changelog.
+         * 
+         * @return changelog resource
+         */
+        Resource getChangelog();
+        
     }
 }

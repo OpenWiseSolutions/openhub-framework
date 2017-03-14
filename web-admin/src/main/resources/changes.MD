@@ -1,0 +1,14 @@
+CHANGES - API changes history
+------
+
+> Syntax description:
+* `+`: adding (new attribute, method, parameter ...)
+* `-`: deleting
+* `*`: change of the existing attribute, method, parameter
+
+> Example:
+### #1304
+Service: [customer.wsdl](/customer.wsdl)
+* `+` added attribute `passportNo` in operation `getCustomer`
+* `*` operation `getCustomer` requires at least one element
+
