@@ -78,7 +78,7 @@
     <logger name="org.apache.camel.converter.jaxb.JaxbDataFormat" level="${logging.level.org.apache.camel.converter.jaxb.JaxbDataFormat:-WARN}"/>
     <logger name="org.apache.camel.processor.interceptor.Tracer" level="${logging.level.org.apache.camel.processor.interceptor.Tracer:-WARN}"/>
     <!-- Hibernate namespaces -->
-    <logger name="org.hibernate.SQL" level="INFO"/>
+    <logger name="org.hibernate.SQL" level="${logging.level.org.hibernate.SQL:-WARN}"/>
     <logger name="org.hibernate.engine.internal.StatisticalLoggingSessionEventListener" level="${logging.level.org.hibernate.engine.internal.StatisticalLoggingSessionEventListener:-ERROR}"/>
     <!-- HTTP client logging -->
     <logger name="org.apache.http" level="${logging.level.org.apache.http:-INFO}"/>

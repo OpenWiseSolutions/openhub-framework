@@ -16,9 +16,10 @@
 
 package org.openhubframework.openhub.admin.web.console;
 
+import org.openhubframework.openhub.config.JavaMelodyConfigurationProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -29,19 +30,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 public class ConsoleController {
-
-    public static final String JAVAMELODY_DISABLED = "javamelody.disabled";
+    
+    @Autowired
+    private JavaMelodyConfigurationProperties javaMelodyProps;
 
     public static final String VIEW_NAME = "console";
 
     @RequestMapping("/console")
     public String showConsole(@ModelAttribute("model") ModelMap model) {
-
-        // this variable is set only if monitoring is switched on
-        final String state = System.getProperty(JAVAMELODY_DISABLED);
-
-        final Boolean monitoring = StringUtils.isEmpty(state) || Boolean.valueOf(state).equals(Boolean.TRUE);
-        model.addAttribute("javamelody", monitoring);
+        model.addAttribute("javamelody", javaMelodyProps.isEnabled());
 
         return VIEW_NAME;
     }
