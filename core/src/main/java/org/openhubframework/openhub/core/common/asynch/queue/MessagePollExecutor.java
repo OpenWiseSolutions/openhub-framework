@@ -18,6 +18,7 @@ package org.openhubframework.openhub.core.common.asynch.queue;
 
 import static org.openhubframework.openhub.api.configuration.CoreProps.ASYNCH_POSTPONED_INTERVAL_WHEN_FAILED_SEC;
 
+import java.time.Instant;
 import java.util.List;
 
 import org.apache.camel.Exchange;
@@ -25,8 +26,6 @@ import org.apache.camel.ExchangePattern;
 import org.apache.camel.Processor;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.ExchangeBuilder;
-import org.joda.time.LocalDateTime;
-import org.joda.time.Seconds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +39,7 @@ import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.exception.IntegrationException;
 import org.openhubframework.openhub.api.exception.InternalErrorEnum;
 import org.openhubframework.openhub.api.exception.LockFailureException;
+import org.openhubframework.openhub.common.time.Seconds;
 import org.openhubframework.openhub.core.common.asynch.AsynchMessageRoute;
 import org.openhubframework.openhub.core.common.asynch.LogContextHelper;
 import org.openhubframework.openhub.core.common.event.AsynchEventHelper;
@@ -49,7 +49,7 @@ import org.openhubframework.openhub.spi.msg.MessageService;
 /**
  * Reads messages from DB and sends them for next processing.
  * Execution will stop when there is no further message for processing.
- * <p/>
+ * <p>
  * This executor is invoked by {@link JobStarterForMessagePooling}.
  *
  * @author Petr Juza
@@ -126,12 +126,11 @@ public class MessagePollExecutor implements Runnable {
                     AsynchConstants.MSG_QUEUE_INSERT_HEADER, System.currentTimeMillis());
 
         } else {
-            LocalDateTime failedDate = LocalDateTime.now().minus(postponedIntervalWhenFailed.getValue());
+            Instant failedDate = Instant.now().minusSeconds(postponedIntervalWhenFailed.getValue().getSeconds());
 
             final Message paramMsg = msg;
 
-            if (msg.getReceiveTimestamp().before(failedDate.toDate())) {
-
+            if (msg.getReceiveTimestamp().isBefore(failedDate)) {
                 // change to failed message => redirect to "FAILED" route
                 producerTemplate.send(AsynchConstants.URI_ERROR_FATAL, ExchangePattern.InOnly,
                         new Processor() {

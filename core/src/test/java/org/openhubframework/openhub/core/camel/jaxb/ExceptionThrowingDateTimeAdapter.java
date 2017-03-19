@@ -17,21 +17,19 @@
 
 package org.openhubframework.openhub.core.camel.jaxb;
 
+import java.time.OffsetDateTime;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-import org.joda.time.DateTime;
 
-public class ExceptionThrowingDateTimeAdapter
-    extends XmlAdapter<String, DateTime>
-{
-    public DateTime unmarshal(String value) {
+public class ExceptionThrowingDateTimeAdapter extends XmlAdapter<String, OffsetDateTime> {
+
+    public OffsetDateTime unmarshal(String value) {
         throw new NumberFormatException(
                 String.format("Mock exception while unmarshalling String value %s as DateTime", value));
     }
 
-    public String marshal(DateTime value) {
+    public String marshal(OffsetDateTime value) {
         throw new NumberFormatException(
                 String.format("Mock exception while marshalling DateTime value %s as String", value));
     }
-
 }

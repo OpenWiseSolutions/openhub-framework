@@ -31,7 +31,7 @@ public interface EndpointRegistry {
 
     /**
      * Gets endpoint URIs which match specified pattern.
-     * <p/>
+     * <p>
      * Example: method with the following pattern {@code ^(spring-ws|servlet).*$} will return URIs which starts
      * by spring-ws or servlet.
      *

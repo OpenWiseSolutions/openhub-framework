@@ -38,7 +38,7 @@ public final class TestUtils {
 
     /**
      * Replaces calling TO {@link AsynchConstants#URI_ASYNCH_IN_MSG} with processor that creates OK response.
-     * <p/>
+     * <p>
      * Useful when you want to test input (IN) route of asynchronous process.
      *
      * @param builder the advice builder

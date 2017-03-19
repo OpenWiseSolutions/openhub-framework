@@ -30,9 +30,9 @@ import org.openhubframework.openhub.api.route.WebServiceUriBuilder;
  * Implementation of {@link WebServiceUriBuilder} for using in tests.
  * "direct" component is used instead of specific web service implementation, e.g. "spring-ws".
  * Advantage is that it's no further needed to use "advice" for changing input route URI.
- * <p/>
+ * <p>
  * Direct URI has the following format: {@value #URI_WS_IN}/{@value #URI_WS_OUT} + local part of the request qName.
- * <p/>
+ * <p>
  * Example of using in test:
  * <pre>
  *  Produce(uri = TestWsUriBuilder.URI_WS_IN + "syncHelloRequest")

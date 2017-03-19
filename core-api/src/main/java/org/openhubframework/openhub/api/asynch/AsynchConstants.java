@@ -50,7 +50,7 @@ public final class AsynchConstants {
 
     /**
      * Property name that holds the custom data (string).
-     * <p/>
+     * <p>
      * Custom data can be used for saving arbitrary data for transferring state between more processing calls
      * of the asynchronous message.
      */
@@ -59,7 +59,7 @@ public final class AsynchConstants {
     /**
      * Suffix of the property name that holds the business {@link Exception},
      * i.e. exception that means that target system throws expected (business) exception.
-     * <p/>
+     * <p>
      * Each target system call can generate different exceptions
      * therefore use this constant as suffix for property names.
      */
@@ -77,7 +77,7 @@ public final class AsynchConstants {
 
     /**
      * Header value that holds ID of the object in the message.
-     * <p/>
+     * <p>
      * Object ID with {@link #ENTITY_TYPE_HEADER entity type} and {@link #OPERATION_HEADER operation name}
      * are used for identification of "obsolete" messages.
      */
@@ -85,7 +85,7 @@ public final class AsynchConstants {
 
     /**
      * Header value that holds funnel value of the message.
-     * <p/>
+     * <p>
      * Funnel value serves for filtering messages in the route where should be only one processing message
      * with same funnel value.
      */
@@ -108,7 +108,7 @@ public final class AsynchConstants {
 
     /**
      * Header value that holds {@link EntityTypeExtEnum entity type} of the object in the message.
-     * <p/>
+     * <p>
      * Entity type with {@link #OBJECT_ID_HEADER object ID} and {@link #OPERATION_HEADER operation name}
      * are used for identification of "obsolete" messages.
      * Entity type isn't mandatory, if combination object ID - operation name is enough.

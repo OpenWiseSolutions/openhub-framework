@@ -16,10 +16,10 @@
 
 package org.openhubframework.openhub.core.throttling;
 
+import java.time.Instant;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
@@ -40,7 +40,7 @@ public abstract class AbstractThrottleCounter implements ThrottleCounter {
 
     private static final int DUMP_PERIOD_SEC = 60;
 
-    private volatile LocalDateTime lastDumpTimestamp = LocalDateTime.now();
+    private volatile Instant lastDumpTimestamp = Instant.now();
 
     @Override
     public final int count(ThrottleScope throttleScope, int intervalSec) {
@@ -50,14 +50,14 @@ public abstract class AbstractThrottleCounter implements ThrottleCounter {
         Integer count = doCount(throttleScope, intervalSec);
 
         // make dump only once in the specified intervalSec
-        if (LOG.isDebugEnabled() && (LocalDateTime.now().minusSeconds(DUMP_PERIOD_SEC).isAfter(lastDumpTimestamp))) {
+        if (LOG.isDebugEnabled() && (Instant.now().minusSeconds(DUMP_PERIOD_SEC).isAfter(lastDumpTimestamp))) {
             String cacheInfo = getCacheInfo();
 
             if (StringUtils.isNotEmpty(cacheInfo)) {
                 LOG.debug(cacheInfo);
             }
 
-            lastDumpTimestamp = LocalDateTime.now();
+            lastDumpTimestamp = Instant.now();
         }
 
         return count;

@@ -67,7 +67,7 @@ public class LogContextFilter implements Filter {
 
     /**
      * The identifier of asynchronous message.
-     * <p/>
+     * <p>
      * Note: unique is combination source system and correlationID but there is low probability that
      * there will be two same correlationIDs.
      */
@@ -75,14 +75,14 @@ public class LogContextFilter implements Filter {
 
     /**
      * The identifier of source system.
-     * <p/>
+     * <p>
      * Note: source system that calls Integration Platform
      */
     public static final String CTX_SOURCE_SYSTEM = "SOURCE_SYSTEM";
 
     /**
      * The identifier of process.
-     * <p/>
+     * <p>
      * Note: process ID serves for pairing more requests with one process.
      */
     public static final String CTX_PROCESS_ID = "PROCESS_ID";

@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * Starts new job for pooling confirmations from the queue.
- * <p/>
+ * <p>
  * If previous job has still been running then skips this execution and try it next time.
  *
  * @author Petr Juza

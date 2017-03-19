@@ -21,9 +21,11 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
 import java.util.Properties;
 import javax.management.*;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,10 +76,12 @@ public class JmxThrottlingConfigurationTest extends AbstractCoreTest {
         assertThat(mBeanInfo, notNullValue());
         MBeanAttributeInfo[] attributes = mBeanInfo.getAttributes();
         assertThat(attributes.length, is(4));
-        assertThat(attributes[0].getName(), is("crm.op1"));
-        assertThat(attributes[1].getName(), is("billing.*"));
-        assertThat(attributes[2].getName(), is("crm.op2"));
-        assertThat(attributes[3].getName(), is("*.*"));
+
+        String[] attrNames = Arrays.stream(attributes).map(MBeanFeatureInfo::getName).toArray(String[]::new);
+        assertThat(ArrayUtils.contains(attrNames, "crm.op1"), is(true));
+        assertThat(ArrayUtils.contains(attrNames, "billing.*"), is(true));
+        assertThat(ArrayUtils.contains(attrNames, "crm.op2"), is(true));
+        assertThat(ArrayUtils.contains(attrNames, "*.*"), is(true));
     }
 
     @Test

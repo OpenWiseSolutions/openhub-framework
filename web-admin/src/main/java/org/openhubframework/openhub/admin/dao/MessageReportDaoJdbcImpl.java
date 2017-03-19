@@ -18,12 +18,9 @@ package org.openhubframework.openhub.admin.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
-
 import javax.sql.DataSource;
-
-import org.openhubframework.openhub.admin.dao.dto.MessageReportDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -31,6 +28,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.admin.dao.dto.MessageReportDto;
 
 
 /**
@@ -52,7 +51,7 @@ public class MessageReportDaoJdbcImpl implements MessageReportDao {
     }
 
     @Override
-    public List<MessageReportDto> getMessageStateSummary(Date startDate, Date endDate) {
+    public List<MessageReportDto> getMessageStateSummary(Instant startDate, Instant endDate) {
 
         String sql = "SELECT service, operation_name, source_system, state, COUNT(*) as state_count " +
                 "FROM message m " +

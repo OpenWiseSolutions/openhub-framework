@@ -18,7 +18,6 @@ package org.openhubframework.openhub.test;
 
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import static org.hamcrest.CoreMatchers.anyOf;
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.springframework.test.context.TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS;
@@ -35,20 +34,17 @@ import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.test.spring.CamelSpringTestContextLoaderTestExecutionListener;
 import org.custommonkey.xmlunit.*;
 import org.hamcrest.CoreMatchers;
-import org.hamcrest.Matcher;
-import org.hamcrest.core.IsEqual;
-import org.joda.time.ReadableInstant;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 import org.w3c.dom.Node;
@@ -63,8 +59,8 @@ import org.openhubframework.openhub.common.Profiles;
  *
  * @author Petr Juza
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(TestConfig.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = TestConfig.class, webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @ActiveProfiles(profiles = Profiles.TEST)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @TestExecutionListeners(
@@ -169,41 +165,6 @@ public abstract class AbstractTest {
     }
 
     /**
-     * Shorthand for {@link CoreMatchers#is(org.hamcrest.Matcher) is}
-     * ({@link #equalDateTime(org.joda.time.ReadableInstant) equalDateTime}(expected)).
-     */
-    public static <T extends ReadableInstant> Matcher<T> isDateTime(final T expected) {
-        return is(equalDateTime(expected));
-    }
-
-    /**
-     * Creates a matcher that compares JodaTime {@link ReadableInstant} objects based on their millis only,
-     * not Chronology as the default equals() does.
-     * This comparison uses {@link ReadableInstant#isEqual(org.joda.time.ReadableInstant)}
-     * instead of default {@link ReadableInstant#equals(Object)}.
-     *
-     * @param expected the expected ReadableInstant
-     * @param <T>      any class implementing ReadableInstant
-     * @return matcher for the usual Hamcrest matcher chaining
-     * @see CoreMatchers#equalTo(Object)
-     * @see ReadableInstant#equals(Object)
-     * @see ReadableInstant#isEqual(org.joda.time.ReadableInstant)
-     */
-    public static <T extends ReadableInstant> Matcher<T> equalDateTime(final T expected) {
-        return new IsEqual<T>(expected) {
-            @Override
-            public boolean matches(Object actualValue) {
-                if (expected == null) {
-                    return actualValue == null;
-                } else {
-                    return actualValue instanceof ReadableInstant
-                            && expected.isEqual((ReadableInstant) actualValue);
-                }
-            }
-        };
-    }
-
-    /**
      * Returns processor that throws specified exception.
      *
      * @param exc the exception
@@ -223,11 +184,12 @@ public abstract class AbstractTest {
     /**
      * Mocks a hand-over-type endpoint (direct, direct-vm, seda or vm)
      * by simply providing the other (consumer=From) side connected to a mock.
-     * <p/>
+     * <p>
      * There should be no consumer existing, i.e., the consumer route should not be started.
      *
      * @param uri the URI a new mock should consume from
      * @return the mock that is newly consuming from the URI
+     * @throws Exception if error occurs during mocking required route
      */
     protected MockEndpoint mockDirect(final String uri) throws Exception {
         return mockDirect(uri, null);
@@ -240,6 +202,7 @@ public abstract class AbstractTest {
      * @param routeId the route ID for the new mock route
      *                (existing route with this ID will be overridden by this new route)
      * @return the mock that is newly consuming from the URI
+     * @throws Exception if error occurs during mocking required route
      */
     protected MockEndpoint mockDirect(final String uri, final String routeId) throws Exception {
         // precaution: check that URI can be mocked by just providing the other side:

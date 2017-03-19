@@ -16,13 +16,12 @@
 
 package org.openhubframework.openhub.core.common.dao;
 
-import java.sql.Timestamp;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 import javax.annotation.Nullable;
 import javax.persistence.*;
 
-import org.joda.time.LocalDateTime;
-import org.joda.time.Seconds;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -100,9 +99,9 @@ public class ExternalCallDaoJpaImpl implements ExternalCallDao {
     @Override
     @Nullable
     @SuppressWarnings("unchecked")
-    public ExternalCall findConfirmation(Seconds interval) {
+    public ExternalCall findConfirmation(Duration interval) {
         // find confirmation that was lastly processed before specified interval
-        LocalDateTime lastUpdateLimit = LocalDateTime.now().minus(interval);
+        Instant lastUpdateLimit = Instant.now().minus(interval);
 
         String jSql = "SELECT c "
                 + "FROM " + ExternalCall.class.getName() + " c "
@@ -114,7 +113,7 @@ public class ExternalCallDaoJpaImpl implements ExternalCallDao {
         TypedQuery<ExternalCall> q = em.createQuery(jSql, ExternalCall.class);
         q.setParameter("operationName", ExternalCall.CONFIRM_OPERATION);
         q.setParameter("state", ExternalCallStateEnum.FAILED);
-        q.setParameter("lastUpdateTimestamp", new Timestamp(lastUpdateLimit.toDate().getTime()));
+        q.setParameter("lastUpdateTimestamp", lastUpdateLimit);
         q.setMaxResults(1);
         List<ExternalCall> extCalls = q.getResultList();
 
@@ -139,8 +138,8 @@ public class ExternalCallDaoJpaImpl implements ExternalCallDao {
     }
 
     @Override
-    public List<ExternalCall> findProcessingExternalCalls(Seconds interval) {
-        LocalDateTime startProcessLimit = LocalDateTime.now().minus(interval);
+    public List<ExternalCall> findProcessingExternalCalls(Duration interval) {
+        Instant startProcessLimit = Instant.now().minus(interval);
 
         String jSql = "SELECT c "
                 + "FROM " + ExternalCall.class.getName() + " c "
@@ -148,7 +147,7 @@ public class ExternalCallDaoJpaImpl implements ExternalCallDao {
                 + "     AND c.lastUpdateTimestamp < :time";
 
         TypedQuery<ExternalCall> q = em.createQuery(jSql, ExternalCall.class);
-        q.setParameter("time", new Timestamp(startProcessLimit.toDate().getTime()));
+        q.setParameter("time", startProcessLimit);
         q.setMaxResults(MAX_MESSAGES_IN_ONE_QUERY);
         return q.getResultList();
     }

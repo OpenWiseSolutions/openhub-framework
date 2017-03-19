@@ -16,11 +16,10 @@
 
 package org.openhubframework.openhub.common.converter;
 
-import org.joda.time.Duration;
-import org.joda.time.Seconds;
+import java.time.Duration;
+
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.ConverterRegistry;
-import org.springframework.util.NumberUtils;
 
 
 /**
@@ -43,59 +42,51 @@ public final class DurationConverters {
     public static void registerConverters(ConverterRegistry registry) {
         registry.addConverter(new StringToDurationConverter());
         registry.addConverter(new LongToDurationConverter());
-        registry.addConverter(new SecondsToStringConverter());
+        registry.addConverter(new DurationToStringConverter());
         registry.addConverter(new DurationToLongConverter());
     }
 
     /**
-     * Convert {@link String} to {@link Duration}.
-     *
-     * First try if string argument is not a number, then {@link Duration#millis(long)} is used. If the string argument is not a number, it is
-     * expect to be ISO format and {@link Duration#parse(String)} is used.
+     * Convert {@link String} in format defined by ISO-8601 to {@link Duration}.
      */
     static class StringToDurationConverter implements Converter<String, Duration> {
 
         @Override
         public Duration convert(String source) {
-            try {
-                return Duration.millis(NumberUtils.parseNumber(source, Long.class));
-            } catch (NumberFormatException e) {
-                return Duration.parse(source);
-            }
+            return Duration.parse(source);
         }
-
     }
 
     /**
-     * Convert {@link Integer} to {@link Seconds} using {@link Seconds#seconds(int)} method.
+     * Convert {@link Long} to {@link Duration}.
      */
     static class LongToDurationConverter implements Converter<Long, Duration> {
 
         @Override
         public Duration convert(Long source) {
-            return Duration.millis(source);
+            return Duration.ofMillis(source);
         }
     }
 
     /**
-     * Convert {@link Duration} to number of milliseconds as plain numeric string.
+     * Convert {@link Duration} to string representation (ISO-8601).
      */
-    static class SecondsToStringConverter implements Converter<Duration, String> {
+    static class DurationToStringConverter implements Converter<Duration, String> {
 
         @Override
         public String convert(Duration source) {
-            return String.valueOf(source.getMillis());
+            return source.toString();
         }
     }
 
     /**
-     * Convert {@link Duration} to simple number.
+     * Convert {@link Duration} to simple number (number of millis).
      */
     static class DurationToLongConverter implements Converter<Duration, Long> {
 
         @Override
         public Long convert(Duration source) {
-            return source.getMillis();
+            return source.toMillis();
         }
 
     }

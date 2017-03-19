@@ -120,6 +120,7 @@
                     <bindingDirectory>${modules.import.directory}</bindingDirectory>
                     <bindingFiles>
                         <bindingFile>jaxb_global_bindings.xjb</bindingFile>
+                        <bindingFile>jaxb_common_bindings.xjb</bindingFile>
                     </bindingFiles>
                 </configuration>
                 <executions>
@@ -134,10 +135,6 @@
                             <wsdlFiles>
                                 <wsdlFile>hello-v1.0.wsdl</wsdlFile>
                             </wsdlFiles>
-                            <bindingFiles>
-                                <bindingFile>jaxb_global_bindings.xjb</bindingFile>
-                                <bindingFile>jaxb_common_bindings.xjb</bindingFile>
-                            </bindingFiles>
                         </configuration>
                     </execution>
                 </executions>

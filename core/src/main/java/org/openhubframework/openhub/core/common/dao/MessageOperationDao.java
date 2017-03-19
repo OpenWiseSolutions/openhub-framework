@@ -28,8 +28,8 @@ import org.openhubframework.openhub.api.entity.MsgStateEnum;
 public interface MessageOperationDao {
 
     /**
-     * Restarts message = change the message state from FAILED -> PARTLY_FAILED.
-     * <p/>
+     * Restarts message = change the message state from FAILED -&gt; PARTLY_FAILED.
+     * <p>
      * Only messages in FAILED state can be changed, otherwise exception will be thrown.
      *
      * @param msg the message

@@ -34,7 +34,7 @@ import org.openhubframework.openhub.api.route.AbstractExtRoute;
  * Parent class for loading OpenHub extensions.
  * There is collection of Spring XML configurations and each XML configuration represents root configuration
  * for each extension. New child Spring context will be created for each extension - see {@link #loadExtensions(String...)}.
- * <p/>
+ * <p>
  * If {@link #isAutoRouteAdding()} is true then route definitions which extends {@link AbstractExtRoute})
  * will be automatically added to {@link CamelContext}.
  *
@@ -163,10 +163,10 @@ public abstract class AbstractExtensionConfigurationLoader implements Applicatio
     /**
      * Sets whether automatically detect Camel routes (those which extends {@link AbstractExtRoute}) and add them
      * to Camel context.
-     * <p/>
+     * <p>
      * There is possibility to create own Camel context for specific extension and then it's not suitable
      * to add routes automatically.
-     * <p/>Default value is {@code true}.
+     * <p>Default value is {@code true}.
      *
      * @param autoRouteAdding {@code true} for automatic adding routes, otherwise {@code false}
      */

@@ -21,12 +21,13 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import org.openhubframework.openhub.api.configuration.ConfigurableValue;
 import org.openhubframework.openhub.api.configuration.ConfigurationItem;
+
 
 /**
  * Test suites that validates capability injection of {@link ConfigurationItem}.
@@ -34,12 +35,11 @@ import org.openhubframework.openhub.api.configuration.ConfigurationItem;
  * @author Tomas Hanus
  * @since 2.0
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+//TODO (thanus, 18/12/2016, TASK: OHRJIRA-9) it is necessary to create internal test configurations for OHF tests
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = AutoConfigurationItemProperties.class, webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @TestPropertySource(properties = {
         "ohf.test.key=5"
-})
-@SpringApplicationConfiguration(classes = {
-        AutoConfigurationItemProperties.class
 })
 public class AutoConfigurationItemPropertiesTest {
 

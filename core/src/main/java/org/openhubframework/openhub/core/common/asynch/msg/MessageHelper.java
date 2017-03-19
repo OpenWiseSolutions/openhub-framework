@@ -43,7 +43,7 @@ public final class MessageHelper {
     /**
      * Checks the properties for those that end with {@link AsynchConstants#BUSINESS_ERROR_PROP_SUFFIX}
      * and moves the found exceptions to the Message's business error list, subsequently returning it.
-     * <p/>
+     * <p>
      * After this operation succeeds, there will be no more properties with the specified suffix,
      * and the Message will contain all the exception messages that were previously in these properties.
      *

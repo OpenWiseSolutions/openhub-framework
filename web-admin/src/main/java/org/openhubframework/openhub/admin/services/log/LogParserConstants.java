@@ -16,17 +16,20 @@
 
 package org.openhubframework.openhub.admin.services.log;
 
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_TIME;
+
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.DateTimeFormatterBuilder;
-import org.joda.time.format.DateTimeParser;
-import org.joda.time.format.ISODateTimeFormat;
 
 public class LogParserConstants {
+
     public static final String VIEW_REQUEST_PARAMETER = "view";
     public static final String GROUP_BY_REQUEST_PARAMETER = "groupBy";
     public static final String GROUP_SIZE_REQUEST_PARAMETER = "groupSize";
@@ -42,52 +45,50 @@ public class LogParserConstants {
      */
     public static final Pattern LOG_LINE_DATE_PATTERN = Pattern.compile(
             "^(\\d{4}-\\d{2}-\\d{2}[ T]\\d{2}:\\d{2}:\\d{2}[,.]\\d{3})");
+
     /**
      * Matches the log line with each value being in a separate matching group.
      * See the logback.xml config for up-to-date log appender pattern:
-     * <p/>
+     * <p>
      * %d{ISO8601} [${MACHINE}, %thread, %X{REQUEST_URI}, %X{REQUEST_ID}, %X{SESSION_ID}, %X{SOURCE_SYSTEM}, %X{CORRELATION_ID}] %-5level %logger{36} - %msg%n
      */
     public static final Pattern LOG_LINE_PROPERTIES_PATTERN = Pattern.compile(
             // [serverId, MACHINE, thread, REQUEST_URI, REQUEST_ID, SESSION_ID, SOURCE_SYSTEM, CORRELATION_ID] level logger -
             "\\s+\\[(.*?), (.*?), (.*?), (.*?), (.*?), (.*?), (.*?), (.*?)\\]\\s+(\\S+)\\s+(\\S+)\\s+-\\s+");
+
     /**
      * Group names in the same order they are present in {@link #LOG_LINE_PROPERTIES_PATTERN}.
      */
     public static final List<String> LOG_LINE_PROPERTIES = Collections.unmodifiableList(Arrays.asList("serverId",
             "MACHINE", "thread", "REQUEST_URI", "REQUEST_ID", "SESSION_ID", "SOURCE_SYSTEM", "CORRELATION_ID", "level", "logger"));
+
     /**
      * Printer that can print logback ISO8601 "yyyy-MM-dd HH:mm:ss,SSS" (with space)
      * as opposed to printing standard ISO8601 "yyyy-MM-dd'T'HH:mm:ss,SSS" (with T).
-     * <p/>
-     * Time zones are neither printed, nor parsed.
+     * <p>
+     * Time zones are neither printed, nor parsed - system default zone is used.
      */
-    public static final DateTimeFormatter LOGBACK_ISO8601_FORMAT = new DateTimeFormatterBuilder()
-            .append(ISODateTimeFormat.date())
+    public static final DateTimeFormatter LOGBACK_ISO8601_FORMATTER = new DateTimeFormatterBuilder()
+            .parseCaseInsensitive()
+            .append(ISO_LOCAL_DATE)
             .appendLiteral(' ')
-            .append(ISODateTimeFormat.hourMinuteSecondFraction())
-            .toFormatter();
+            .append(ISO_LOCAL_TIME)
+            // use default zone is not quite correct because server can be in another zone then user
+            //  => to correct it then zone information from user is necessary
+            .toFormatter().withZone(ZoneId.systemDefault());
+
     /**
-     * Parser that can parse logback ISO8601 "yyyy-MM-dd HH:mm:ss,SSS" (with space)
-     * as opposed to parsing standard ISO8601 "yyyy-MM-dd'T'HH:mm:ss,SSS" (with T)
+     * Formatter that can parse logback ISO8601 "yyyy-MM-dd HH:mm:ss,SSS" (with space, with optional time part)
+     * as opposed to parsing standard ISO8601 "yyyy-MM-dd'T'HH:mm:ss,SSS" (with T).
+     * <p>
+     * Time zones are neither printed, nor parsed - system default zone is used.
      */
-    private static final DateTimeParser LOGBACK_ISO8601_OPTIONAL_TIME_PARSER = new DateTimeFormatterBuilder()
-            .append(ISODateTimeFormat.dateElementParser())
+    public static final DateTimeFormatter LOGBACK_ISO8601_OPTIONAL_TIME_FORMATTER = new DateTimeFormatterBuilder()
+            .parseCaseInsensitive()
+            .append(ISO_LOCAL_DATE)
             .appendOptional(new DateTimeFormatterBuilder()
                     .appendLiteral(' ')
-                    .append(ISODateTimeFormat.timeElementParser())
-                    .toParser()
-            ).toParser();
-    /**
-     * Formatter that prints full ISO8601 date with 'T',
-     * but can parse full date and time with either 'T' or space as separator,
-     * and time being optionally only partial (such as just hours, hours and minutes, etc.).
-     * <p/>
-     * Time zones are neither printed, nor parsed.
-     */
-    public static final DateTimeFormatter LOGBACK_ISO8601_OPTIONAL_TIME_FORMAT = new DateTimeFormatterBuilder()
-            .append(LOGBACK_ISO8601_FORMAT.getPrinter(), new DateTimeParser[]{
-                    LOGBACK_ISO8601_OPTIONAL_TIME_PARSER,
-                    ISODateTimeFormat.dateOptionalTimeParser().getParser()
-            }).toFormatter();
+                    .append(ISO_LOCAL_TIME)
+                    .toFormatter()
+            ).toFormatter().withZone(ZoneId.systemDefault());
 }

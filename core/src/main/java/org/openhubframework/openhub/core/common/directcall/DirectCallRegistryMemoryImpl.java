@@ -16,12 +16,12 @@
 
 package org.openhubframework.openhub.core.common.directcall;
 
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -38,7 +38,7 @@ public class DirectCallRegistryMemoryImpl implements DirectCallRegistry {
 
     private static final Logger LOG = LoggerFactory.getLogger(DirectCallRegistryMemoryImpl.class);
 
-    private static final int OLD_PARAMS_INTERVAL = 60 * 1000;
+    private static final int OLD_PARAMS_INTERVAL_MS = 60 * 1000;
 
     private Map<String, DirectCallParams> registry = new ConcurrentHashMap<String, DirectCallParams>();
 
@@ -80,7 +80,7 @@ public class DirectCallRegistryMemoryImpl implements DirectCallRegistry {
      * Removes old params.
      */
     private void removeOldParams() {
-        DateTime threshold = DateTime.now().minus(OLD_PARAMS_INTERVAL);
+        Instant threshold = Instant.now().minusMillis(OLD_PARAMS_INTERVAL_MS);
 
         Set<String> removes = new HashSet<String>();
 

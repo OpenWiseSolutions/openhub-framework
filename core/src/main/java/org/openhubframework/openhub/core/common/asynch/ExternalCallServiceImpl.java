@@ -88,7 +88,9 @@ public class ExternalCallServiceImpl implements ExternalCallService {
             return extCall;
         }
 
-        long extCallAge = message.getMsgTimestamp().getTime() - extCall.getMsgTimestamp().getTime();
+        Assert.state(message.getMsgTimestamp() != null);
+
+        long extCallAge = message.getMsgTimestamp().minusMillis(extCall.getMsgTimestamp().toEpochMilli()).toEpochMilli();
 
         switch (extCall.getState()) {
             case PROCESSING:

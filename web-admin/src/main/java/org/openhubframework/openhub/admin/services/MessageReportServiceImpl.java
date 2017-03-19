@@ -16,16 +16,16 @@
 
 package org.openhubframework.openhub.admin.services;
 
-import java.util.Date;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-import org.openhubframework.openhub.admin.dao.MessageReportDao;
-import org.openhubframework.openhub.admin.dao.dto.MessageReportDto;
-
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.admin.dao.MessageReportDao;
+import org.openhubframework.openhub.admin.dao.dto.MessageReportDto;
 
 
 /**
@@ -40,14 +40,14 @@ public class MessageReportServiceImpl implements MessageReportService {
     private MessageReportDao dao;
 
     @Override
-    public List<MessageReportDto> getMessageStateSummary(Date startDate, Date endDate) {
+    public List<MessageReportDto> getMessageStateSummary(Instant startDate, Instant endDate) {
         Assert.notNull(startDate, "startDate mustn't be null");
         Assert.notNull(endDate, "startDate mustn't be null");
 
         // adjust dates to start from 0.00 and end 23.59
-        DateTime from = new DateTime(startDate).withTimeAtStartOfDay();
-        DateTime to = new DateTime(endDate).plusDays(1).withTimeAtStartOfDay();
+        Instant from = startDate.truncatedTo(ChronoUnit.DAYS);
+        Instant to = from.plus(1, ChronoUnit.DAYS);
 
-        return dao.getMessageStateSummary(from.toDate(), to.toDate());
+        return dao.getMessageStateSummary(from, to);
     }
 }

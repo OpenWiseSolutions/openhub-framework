@@ -18,22 +18,20 @@ package org.openhubframework.openhub.core.common.dao;
 
 import static org.springframework.util.StringUtils.hasText;
 
-import java.sql.Timestamp;
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
-
 import javax.annotation.Nullable;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.openhubframework.openhub.api.entity.Request;
-import org.openhubframework.openhub.api.entity.Response;
-
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.api.entity.Request;
+import org.openhubframework.openhub.api.entity.Response;
 
 
 /**
@@ -86,7 +84,7 @@ public class RequestResponseDaoJpaImpl implements RequestResponseDao {
     }
 
     @Override
-    public List<Request> findByCriteria(Date from, Date to, String subUri, String subRequest) {
+    public List<Request> findByCriteria(Instant from, Instant to, String subUri, String subRequest) {
         Assert.notNull(from, "the from must not be null");
         Assert.notNull(to, "the to must not be null");
 
@@ -105,8 +103,8 @@ public class RequestResponseDaoJpaImpl implements RequestResponseDao {
         jSql += "           ORDER BY r.reqTimestamp";
 
         TypedQuery<Request> q = em.createQuery(jSql, Request.class);
-        q.setParameter("from", new Timestamp(from.getTime()));
-        q.setParameter("to", new Timestamp(to.getTime()));
+        q.setParameter("from", from);
+        q.setParameter("to", to);
         if (hasText(subUri)) {
             q.setParameter("subUri", "%" + subUri + "%");
         }

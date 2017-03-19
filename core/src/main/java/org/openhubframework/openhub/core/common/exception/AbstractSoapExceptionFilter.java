@@ -37,20 +37,20 @@ import org.openhubframework.openhub.api.exception.IntegrationException;
 
 /**
  * Filters exception thrown by the external system via web services.
- * <p/>
+ * <p>
  *
  * If {@link SoapFaultClientException SOAP exception} occurs and there is fault detail defined
  * then new exception is thrown by {@link #createException(QName, Node)} - if {@link #isAsynchMessage()} returns true.
  * Otherwise (for synchronous messages) is changed exception in the exchange {@link Exchange#EXCEPTION_CAUGHT}
  * and processing is redirected to {@link ExceptionTranslator}.
- * <p/>
+ * <p>
  *
  * If there is no fault detail defined or new exception wasn't thrown then exchange property
  * {@link AsynchConstants#EXCEPTION_ERROR_CODE} would contain error code
  * that is defined by {@link #getErrorCodeForException(Exception)}
  * and processing is redirected to {@link ExceptionTranslator} for synchronous messages
  * ({@link #isAsynchMessage()} returns false).
- * <p/>
+ * <p>
  *
  * Filter accepts SOAP standards 1.1 and 1.2.
  *
@@ -152,36 +152,38 @@ public abstract class AbstractSoapExceptionFilter implements Processor {
 
     /**
      * Creates exception from SOAP detail node (= element detail/Detail).
-     * <p/>
+     * <p>
      * Example of the generated SOAP fault response for SOAP 1.1:
      * <pre>
-        &lt;SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
-        &lt;SOAP-ENV:Header/>
-        &lt;SOAP-ENV:Body>
-           &lt;SOAP-ENV:Fault>
-              &lt;faultcode>SOAP-ENV:Server</faultcode>
-              &lt;faultstring xml:lang="en">E102: the validation error</faultstring>
-              &lt;detail>
-                &lt;errorCode xmlns="http://openhubframework.org">E102&lt;/errorCode>
-              &lt;/detail>
-           &lt;/SOAP-ENV:Fault>
-        &lt;/SOAP-ENV:Body>
-        &lt;/SOAP-ENV:Envelope>
-     * <p/>
+        &lt;SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"&gt;
+        &lt;SOAP-ENV:Header/&gt;
+        &lt;SOAP-ENV:Body&gt;
+           &lt;SOAP-ENV:Fault&gt;
+              &lt;faultcode&gt;SOAP-ENV:Server&lt;/faultcode&gt;
+              &lt;faultstring xml:lang="en"&gt;E102: the validation error&lt;/faultstring&gt;
+              &lt;detail&gt;
+                &lt;errorCode xmlns="http://openhubframework.org"&gt;E102&lt;/errorCode&gt;
+              &lt;/detail&gt;
+           &lt;/SOAP-ENV:Fault&gt;
+        &lt;/SOAP-ENV:Body&gt;
+        &lt;/SOAP-ENV:Envelope&gt;
+        </pre>
+     * <p>
      * Example of the generated SOAP fault response for SOAP 1.2:
      * <pre>
-        &lt;SOAP-ENV:Envelope xmlns:SOAP-ENV="http://www.w3.org/2003/05/soap-envelope">
-        &lt;SOAP-ENV:Header/>
-        &lt;SOAP-ENV:Body>
-           &lt;SOAP-ENV:Fault>
-              &lt;SOAP-ENV:Code>&lt;SOAP-ENV:Value><SOAP-ENV:Server</SOAP-ENV:Value>&lt;/SOAP-ENV:Code>
-              &lt;SOAP-ENV:Reason xml:lang="en">E102: the validation error</SOAP-ENV:Reason>
-              &lt;SOAP-ENV:Detail>
-                &lt;errorCode xmlns="http://openhubframework.org">E102&lt;/errorCode>
-              &lt;/SOAP-ENV:Detail>
-           &lt;/SOAP-ENV:Fault>
-        &lt;/SOAP-ENV:Body>
-        &lt;/SOAP-ENV:Envelope>
+        &lt;SOAP-ENV:Envelope xmlns:SOAP-ENV="http://www.w3.org/2003/05/soap-envelope"&gt;
+        &lt;SOAP-ENV:Header/&gt;
+        &lt;SOAP-ENV:Body&gt;
+           &lt;SOAP-ENV:Fault&gt;
+              &lt;SOAP-ENV:Code&gt;&lt;SOAP-ENV:Value&gt;&lt;SOAP-ENV:Server&lt;/SOAP-ENV:Value&gt;&lt;/SOAP-ENV:Code&gt;
+              &lt;SOAP-ENV:Reason xml:lang="en"&gt;E102: the validation error&lt;/SOAP-ENV:Reason&gt;
+              &lt;SOAP-ENV:Detail&gt;
+                &lt;errorCode xmlns="http://openhubframework.org"&gt;E102&lt;/errorCode&gt;
+              &lt;/SOAP-ENV:Detail&gt;
+           &lt;/SOAP-ENV:Fault&gt;
+        &lt;/SOAP-ENV:Body&gt;
+        &lt;/SOAP-ENV:Envelope&gt;
+        </pre>
      *
      * @param exName the fully qualified exception name (e.g.: ValidityMismatch)
      * @param detailNode the XML node that represents fault detail

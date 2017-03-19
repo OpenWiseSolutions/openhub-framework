@@ -16,24 +16,20 @@
 
 package org.openhubframework.openhub.admin.web.reqresp;
 
+import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-import org.openhubframework.openhub.admin.services.log.LogParserConstants;
-import org.openhubframework.openhub.admin.web.common.editor.DateTimeEditor;
-import org.openhubframework.openhub.api.entity.Request;
-import org.openhubframework.openhub.core.reqres.RequestResponseService;
-
-import org.joda.time.DateMidnight;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import org.openhubframework.openhub.admin.services.log.LogParserConstants;
+import org.openhubframework.openhub.admin.web.common.editor.LogbackIso8601DateTimeEditor;
+import org.openhubframework.openhub.api.entity.Request;
+import org.openhubframework.openhub.core.reqres.RequestResponseService;
 
 /**
  * Controller that encapsulates actions around request/response tracking.
@@ -45,27 +41,31 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/reqResp")
 public class RequestResponseController {
 
+    private static final String ATTR_FROM_DATE = "fromDate";
+
+    private static final String ATTR_TO_DATE = "toDate";
+
+    private final RequestResponseService requestResponseService;
+
     @Autowired
-    private RequestResponseService requestResponseService;
+    public RequestResponseController(RequestResponseService requestResponseService) {
+        this.requestResponseService = requestResponseService;
+    }
 
     @RequestMapping(value = "/search", method = { RequestMethod.GET, RequestMethod.POST })
     public String searchRequests(
-                @RequestParam(value = "fromDate", required = false) DateTime fromDate,
-                @RequestParam(value = "toDate", required = false) DateTime toDate,
+                @RequestParam(value = ATTR_FROM_DATE, required = false) OffsetDateTime fromDate,
+                @RequestParam(value = ATTR_TO_DATE, required = false) OffsetDateTime toDate,
                 @RequestParam(value = "uri", required = false) String uri,
                 @RequestParam(value = "content", required = false) String content,
                 @ModelAttribute("model") ModelMap model) {
 
         if (fromDate != null && toDate != null) {
             List<Request> requestList =
-                    requestResponseService.findByCriteria(fromDate.toDate(), toDate.toDate(), uri, content);
+                    requestResponseService.findByCriteria(fromDate.toInstant(), toDate.toInstant(), uri, content);
 
-            model.addAttribute("fromDate",
-                    LogParserConstants.LOGBACK_ISO8601_FORMAT.print(
-                            fromDate));
-            model.addAttribute("toDate",
-                    LogParserConstants.LOGBACK_ISO8601_FORMAT.print(
-                            toDate));
+            model.addAttribute(ATTR_FROM_DATE, fromDate.format(LogParserConstants.LOGBACK_ISO8601_FORMATTER));
+            model.addAttribute(ATTR_TO_DATE, toDate.format(LogParserConstants.LOGBACK_ISO8601_FORMATTER));
 
             if (!requestList.isEmpty()) {
                 model.addAttribute("requestList", requestList);
@@ -73,19 +73,13 @@ public class RequestResponseController {
                 model.addAttribute("emptyList", Boolean.TRUE);
             }
         } else {
+            // set current date/time - from is minus 1 hour
+            OffsetDateTime now = OffsetDateTime.now();
+            OffsetDateTime from = now.minusHours(1).truncatedTo(ChronoUnit.HOURS);
+            OffsetDateTime to = now.truncatedTo(ChronoUnit.SECONDS);
 
-            model.addAttribute("fromDate",
-                    LogParserConstants.LOGBACK_ISO8601_FORMAT.print(
-                            DateTime.now()
-                                    .minusHours(1)
-                                    .withMinuteOfHour(0)
-                                    .withSecondOfMinute(0)
-                                    .withMillisOfSecond(0)));
-            model.addAttribute("toDate",
-                    LogParserConstants.LOGBACK_ISO8601_FORMAT.print(
-                            DateTime.now()
-                                    .withSecondOfMinute(0)
-                                    .withMillisOfSecond(0)));
+            model.addAttribute(ATTR_FROM_DATE, from.format(LogParserConstants.LOGBACK_ISO8601_FORMATTER));
+            model.addAttribute(ATTR_TO_DATE, to.format(LogParserConstants.LOGBACK_ISO8601_FORMATTER));
         }
 
         model.addAttribute("uri", uri);
@@ -96,8 +90,6 @@ public class RequestResponseController {
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(DateTime.class, new DateTimeEditor());
-        binder.registerCustomEditor(DateMidnight.class, new DateTimeEditor());
+        binder.registerCustomEditor(OffsetDateTime.class, new LogbackIso8601DateTimeEditor());
     }
-
 }

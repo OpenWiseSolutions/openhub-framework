@@ -21,7 +21,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import javax.annotation.Nullable;
@@ -165,7 +165,7 @@ public class ConfirmationPollExecutorTest extends AbstractCoreDbTest {
     }
 
     private Message insertNewMessage(String correlationId) {
-        Date currDate = new Date();
+        Instant currDate = Instant.now();
 
         Message msg = new Message();
         msg.setState(MsgStateEnum.OK);

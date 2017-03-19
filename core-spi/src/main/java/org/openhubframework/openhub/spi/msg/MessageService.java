@@ -16,8 +16,11 @@
 
 package org.openhubframework.openhub.spi.msg;
 
-import static org.openhubframework.openhub.api.asynch.AsynchConstants.*;
+import static org.openhubframework.openhub.api.asynch.AsynchConstants.CUSTOM_DATA_PROP;
+import static org.openhubframework.openhub.api.asynch.AsynchConstants.EXCEPTION_ERROR_CODE;
+import static org.openhubframework.openhub.api.asynch.AsynchConstants.MSG_HEADER;
 
+import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +29,6 @@ import javax.annotation.Nullable;
 import org.apache.camel.ExchangeProperty;
 import org.apache.camel.Header;
 import org.apache.camel.Properties;
-import org.joda.time.Seconds;
 
 import org.openhubframework.openhub.api.entity.ExternalSystemExtEnum;
 import org.openhubframework.openhub.api.entity.Message;
@@ -59,7 +61,7 @@ public interface MessageService {
 
     /**
      * Changes state of the message to {@link MsgStateEnum#OK}.
-     * <p/>
+     * <p>
      * If message is child message then method checks if all child messages of the parent message aren't processed.
      *
      * @param msg the message
@@ -112,7 +114,7 @@ public interface MessageService {
 
     /**
      * Changes state of the message to {@link MsgStateEnum#FAILED}.
-     * <p/>
+     * <p>
      * If message is child message then parent message will be marked as failed too.
      *
      * @param msg the message
@@ -129,7 +131,7 @@ public interface MessageService {
 
     /**
      * Changes state of the message to {@link MsgStateEnum#FAILED}.
-     * <p/>
+     * <p>
      * If message is child message then parent message will be marked as failed too.
      *
      * @param msg the message
@@ -198,7 +200,7 @@ public interface MessageService {
      * @param interval searching messages updated after this interval (in seconds)
      * @return count of messages
      */
-    int getCountMessages(MsgStateEnum state, @Nullable Seconds interval);
+    int getCountMessages(MsgStateEnum state, @Nullable Duration interval);
 
     /**
      * Get count of processing messages for specified funnel value and funnel ID.
@@ -208,7 +210,7 @@ public interface MessageService {
      * @param funnelCompId the funnel component ID
      * @return count of processing messages
      */
-    int getCountProcessingMessagesForFunnel(String funnelValue, Seconds idleInterval, String funnelCompId);
+    int getCountProcessingMessagesForFunnel(String funnelValue, Duration idleInterval, String funnelCompId);
 
     /**
      * Gets list of messages with specified funnel value for guaranteed processing order of whole routes.
@@ -231,7 +233,7 @@ public interface MessageService {
      * @param funnelCompId the funnel component ID
      * @return list of messages ordered by {@link Message#getMsgTimestamp() message timestamp}
      */
-    List<Message> getMessagesForGuaranteedOrderForFunnel(String funnelValue, Seconds idleInterval,
+    List<Message> getMessagesForGuaranteedOrderForFunnel(String funnelValue, Duration idleInterval,
             boolean excludeFailedState, String funnelCompId);
 
     /**
@@ -256,7 +258,7 @@ public interface MessageService {
      * @return message or null if there is no any message
      */
     @Nullable
-    Message findPostponedMessage(Seconds interval);
+    Message findPostponedMessage(Duration interval);
 
     /**
      * Finds ONE message in state {@link MsgStateEnum#PARTLY_FAILED}.
@@ -265,5 +267,5 @@ public interface MessageService {
      * @return message or null if there is no any message
      */
     @Nullable
-    Message findPartlyFailedMessage(Seconds interval);
+    Message findPartlyFailedMessage(Duration interval);
 }

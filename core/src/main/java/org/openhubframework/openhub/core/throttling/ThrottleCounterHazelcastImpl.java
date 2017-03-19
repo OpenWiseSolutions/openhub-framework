@@ -16,6 +16,7 @@
 
 package org.openhubframework.openhub.core.throttling;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -25,7 +26,6 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.map.AbstractEntryProcessor;
 import com.hazelcast.map.EntryProcessor;
-import org.joda.time.DateTime;
 import org.springframework.util.Assert;
 
 import org.openhubframework.openhub.core.config.CacheNames;
@@ -102,7 +102,7 @@ public class ThrottleCounterHazelcastImpl extends AbstractThrottleCounter {
                 timestamps = entry.getValue();
             }
 
-            long now = DateTime.now().getMillis();
+            long now = Instant.now().toEpochMilli();
             long from = now - (intervalSec * 1000);
 
             // get timestamps for specified throttling scope

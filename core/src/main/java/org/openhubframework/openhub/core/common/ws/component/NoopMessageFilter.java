@@ -26,7 +26,7 @@ import org.springframework.ws.WebServiceMessage;
 /**
  * Does no message filtering (post-processing). Picked up by {@link SpringWebserviceComponent} to skip setting camel
  * headers/attachments to outbound SOAP message.
- * <p/>
+ * <p>
  * Used instead of the default {@link BasicMessageFilter}, which adds Camel Message headers to Soap Message headers,
  * and Camel Message attachments to Soap Message attachments.
  */

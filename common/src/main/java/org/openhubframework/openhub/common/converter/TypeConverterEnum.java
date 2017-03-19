@@ -20,10 +20,10 @@ import java.io.File;
 import java.io.Serializable;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.regex.Pattern;
 
-import org.joda.time.LocalDate;
-import org.joda.time.format.ISODateTimeFormat;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.util.Assert;
 
@@ -143,7 +143,7 @@ public enum TypeConverterEnum implements DataTypeConverter {
                 return LocalDate.parse(str);
             } catch (IllegalArgumentException | UnsupportedOperationException e) {
                 // try again with time
-                return LocalDate.parse(str, ISODateTimeFormat.dateTime());
+                return LocalDate.parse(str, DateTimeFormatter.ISO_DATE_TIME);
             }
         }
     },

@@ -20,8 +20,8 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.EventObject;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -121,7 +121,7 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
     @Before
     public void prepareData() throws Exception {
         // message
-        Date currDate = new Date();
+        Instant currDate = Instant.now();
 
         msg = new Message();
         msg.setState(MsgStateEnum.IN_QUEUE);
@@ -582,7 +582,7 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
 
         // send message
         msg.setState(MsgStateEnum.IN_QUEUE);
-        msg.setLastUpdateTimestamp(new Date());
+        msg.setLastUpdateTimestamp(Instant.now());
         producerSyncMsg.sendBodyAndHeader(msg, AsynchConstants.MSG_HEADER, msg);
 
         // check there is no processing event

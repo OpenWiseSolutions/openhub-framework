@@ -33,7 +33,7 @@ import org.springframework.util.Assert;
  * This component ensures that there is only one processing message with same
  * {@link Message#getFunnelValue() funnel value}.
  *
- * <p/>
+ * <p>
  * Syntax: {@code msg-funnel:default[?options]} where options are
  * <ul>
  *     <li>idleInterval - Interval (in seconds) that determines how long can be message processing.
@@ -42,7 +42,7 @@ import org.springframework.util.Assert;
  *     <li>id - funnel component identifier
  * </ul>
  *
- * <p/>
+ * <p>
  * Valid for asynchronous messages only.
  *
  * @author Petr Juza

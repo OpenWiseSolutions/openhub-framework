@@ -20,7 +20,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import javax.annotation.Nullable;
@@ -28,9 +28,7 @@ import javax.persistence.Query;
 
 import org.apache.camel.EndpointInject;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.commons.lang3.time.DateUtils;
 import org.hamcrest.CoreMatchers;
-import org.joda.time.Seconds;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,6 +40,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
+import org.openhubframework.openhub.common.time.Seconds;
 import org.openhubframework.openhub.core.AbstractCoreDbTest;
 import org.openhubframework.openhub.core.common.asynch.AsynchMessageRoute;
 import org.openhubframework.openhub.core.configuration.FixedConfigurationItem;
@@ -91,7 +90,7 @@ public class MessagePollExecutorTest extends AbstractCoreDbTest {
 
     private Message insertNewMessage(String correlationId, MsgStateEnum state, @Nullable String funnelValue,
             boolean guaranteedOrder) {
-        Date currDate = new Date();
+        Instant currDate = Instant.now();
 
         Message msg = new Message();
         msg.setState(state);
@@ -183,7 +182,7 @@ public class MessagePollExecutorTest extends AbstractCoreDbTest {
         // prepare message that should be postponed
         insertNewMessage("id1", MsgStateEnum.PROCESSING, FUNNEL_VALUE, true);
         Message msg = insertNewMessage("id2", MsgStateEnum.PROCESSING, FUNNEL_VALUE, true);
-        msg.setReceiveTimestamp(DateUtils.addSeconds(new Date(), 10));  //postponedIntervalWhenFailed=0
+        msg.setReceiveTimestamp(Instant.now().plusSeconds(10));  //postponedIntervalWhenFailed=0
 
         // action
         messagePollExecutor.startMessageProcessing(msg);
@@ -235,7 +234,7 @@ public class MessagePollExecutorTest extends AbstractCoreDbTest {
         // prepare message that should fail
         insertNewMessage("id1", MsgStateEnum.PROCESSING, FUNNEL_VALUE, true);
         Message msg = insertNewMessage("id2", MsgStateEnum.PROCESSING, FUNNEL_VALUE, true);
-        msg.setReceiveTimestamp(DateUtils.addSeconds(new Date(), -10)); //postponedIntervalWhenFailed=0
+        msg.setReceiveTimestamp(Instant.now().minusSeconds(10)); //postponedIntervalWhenFailed=0
 
         // action
         messagePollExecutor.startMessageProcessing(msg);

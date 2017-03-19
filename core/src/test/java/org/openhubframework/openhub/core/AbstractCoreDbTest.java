@@ -16,10 +16,10 @@
 
 package org.openhubframework.openhub.core;
 
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.joda.time.DateTime;
 import org.junit.Before;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -56,7 +56,7 @@ public abstract class AbstractCoreDbTest extends AbstractDbTest {
         TraceIdentifier traceId = new TraceIdentifier();
         traceId.setCorrelationID("123-456-789");
         traceId.setApplicationID("crm");
-        traceId.setTimestamp(DateTime.now());
+        traceId.setTimestamp(OffsetDateTime.now());
 
         getTraceHeader().setTraceIdentifier(traceId);
 

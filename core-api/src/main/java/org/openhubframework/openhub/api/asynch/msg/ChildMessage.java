@@ -16,7 +16,7 @@
 
 package org.openhubframework.openhub.api.asynch.msg;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
@@ -114,7 +114,7 @@ public final class ChildMessage {
             parentMsg.setParentMessage(true);
         }
 
-        Date currDate = new Date();
+        Instant currDate = Instant.now();
 
         Message msg = new Message();
 

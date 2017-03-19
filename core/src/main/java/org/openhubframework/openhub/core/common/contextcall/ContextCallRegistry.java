@@ -24,10 +24,10 @@ import org.openhubframework.openhub.api.exception.NoDataFoundException;
 /**
  * Contract of registry calls for transferring calls' parameters and response between sibling Spring application
  * contexts, specifically from web application context to Spring WS (Camel) application context.
- * <p/>
+ * <p>
  * This registry serves for saving call parameters and response. Registry is initialized in root application context
  * and therefore it's accessible from both child (sibling) application contexts.
- * <p/>
+ * <p>
  * Basic workflow:
  * <ol>
  *     <li>client: add params
@@ -68,6 +68,8 @@ public interface ContextCallRegistry {
      * Gets response of the specified call.
      *
      * @param callId the call identifier
+     * @param requiredType the required type
+     * @param <T> data type                    
      * @return response of the call
      * @throws NoDataFoundException if there is no response with specified call ID
      */

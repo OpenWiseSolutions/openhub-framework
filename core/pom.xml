@@ -34,7 +34,7 @@
         <!-- Spring web services -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-ws</artifactId>
+            <artifactId>spring-boot-starter-web-services</artifactId>
         </dependency>
 
         <!-- Spring security -->
@@ -63,8 +63,13 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-java8</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP-java7</artifactId>
+            <artifactId>HikariCP</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -167,19 +172,6 @@
 
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
-                <artifactId>jaxb2-maven-plugin</artifactId>
-                <configuration>
-                    <clearOutputDir>false</clearOutputDir>
-                    <outputDirectory>${modules.output.directory}</outputDirectory>
-                    <schemaDirectory>${modules.import.directory}</schemaDirectory>
-                    <bindingDirectory>${modules.import.directory}</bindingDirectory>
-                </configuration>
-                <executions>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jaxws-maven-plugin</artifactId>
                 <configuration>
                     <sourceDestDir>${modules.output.directory}</sourceDestDir>
@@ -190,7 +182,6 @@
                     </bindingFiles>
                 </configuration>
                 <executions>
-
                     <execution>
                         <id>WSDL-import-out-asynch-confirmation</id>
                         <goals>
@@ -202,12 +193,8 @@
                             <wsdlFiles>
                                 <wsdlFile>asynchConfirmation-v1.0.wsdl</wsdlFile>
                             </wsdlFiles>
-                            <bindingFiles>
-                                <bindingFile>jaxb_global_bindings.xjb</bindingFile>
-                            </bindingFiles>
                         </configuration>
                     </execution>
-
                 </executions>
             </plugin>
         </plugins>

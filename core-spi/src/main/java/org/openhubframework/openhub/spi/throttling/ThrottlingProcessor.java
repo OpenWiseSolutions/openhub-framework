@@ -22,7 +22,7 @@ import org.openhubframework.openhub.api.exception.InternalErrorEnum;
 
 /**
  * Contract for throttling processor - throttles input messages.
- * <p/>
+ * <p>
  * Throttling is defined for:
  * <ul>
  *     <li>count of requests for specified time interval

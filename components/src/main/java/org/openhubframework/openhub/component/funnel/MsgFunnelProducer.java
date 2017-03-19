@@ -20,7 +20,6 @@ import java.util.List;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultProducer;
-import org.joda.time.Seconds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
@@ -28,6 +27,7 @@ import org.springframework.util.StringUtils;
 
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
 import org.openhubframework.openhub.api.entity.Message;
+import org.openhubframework.openhub.common.time.Seconds;
 
 
 /**
@@ -72,7 +72,7 @@ public class MsgFunnelProducer extends DefaultProducer {
                 // and if it's necessary to guarantee processing order then also PARTLY_FAILED, POSTPONED [and FAILED]
                 // messages should be involved
                 List<Message> messages = endpoint.getMessageService().getMessagesForGuaranteedOrderForFunnel(
-                        msg.getFunnelValue(), Seconds.seconds(endpoint.getIdleInterval()),
+                        msg.getFunnelValue(), Seconds.of(endpoint.getIdleInterval()).toDuration(),
                         endpoint.isExcludeFailedState(), funnelCompId);
 
                 if (messages.size() == 1) {
@@ -95,7 +95,7 @@ public class MsgFunnelProducer extends DefaultProducer {
             } else {
                 // is there processing message with same funnel value?
                 int count = endpoint.getMessageService().getCountProcessingMessagesForFunnel(msg.getFunnelValue(),
-                        Seconds.seconds(endpoint.getIdleInterval()), funnelCompId);
+                        Seconds.of(endpoint.getIdleInterval()).toDuration(), funnelCompId);
 
                 if (count > 1) {
                     // note: one processing message is this message

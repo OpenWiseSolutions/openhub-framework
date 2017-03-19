@@ -20,15 +20,14 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 
 import org.apache.commons.io.comparator.LastModifiedFileComparator;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,7 +43,7 @@ public class LogParser {
     private static final Logger LOG = LoggerFactory.getLogger(LogParser.class);
 
     // log file format: logFile_%d{yyyy-MM-dd}_%i.log
-    public static final DateTimeFormatter FILE_DATE_FORMAT = DateTimeFormat.forPattern("yyyy-MM-dd");
+    public static final DateTimeFormatter FILE_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static final String FILE_EXTENSION = "log";
 
     /**
@@ -53,14 +52,14 @@ public class LogParser {
     @Value("${log.folder.path}")
     private String logFolderPath;
 
-    public File[] getLogFiles(final DateTime date) throws FileNotFoundException {
+    public File[] getLogFiles(final OffsetDateTime date) throws FileNotFoundException {
         File logFolder = new File(logFolderPath);
         if (!logFolder.exists() || !logFolder.canRead()) {
             throw new FileNotFoundException("there is no readable log folder - " + logFolderPath);
         }
 
-        final String logDateFormatted = FILE_DATE_FORMAT.print(date);
-        final long dateMillis = date.getMillis();
+        final String logDateFormatted = date.format(FILE_DATE_FORMAT);
+        final long dateMillis = date.toInstant().toEpochMilli();
 
         File[] files = logFolder.listFiles(new FileFilter() {
             @Override
@@ -88,7 +87,6 @@ public class LogParser {
         return new LogEventParsingIterator(this, config, files);
     }
 
-
     /**
      * Processes the next log line by either appending it to the last log event,
      * if it's not a valid log line and last log event wasn't ignored (appendTo != null);
@@ -107,7 +105,7 @@ public class LogParser {
             return parseFailed(line, appendTo);
         }
 
-        DateTime eventDate = getDate(dateMatcher.group(1), config);
+        OffsetDateTime eventDate = getDate(dateMatcher.group(1), config);
         if (eventDate == null) {
             return parseFailed(line, appendTo);
         }
@@ -119,7 +117,7 @@ public class LogParser {
             return null; // no point continuing, since this line wouldn't be appended anyway
         }
 
-        parseTo.setDate(eventDate);
+        parseTo.setDate(eventDate.toInstant());
         String unmatched = line.substring(0, dateMatcher.start())
                 + line.substring(dateMatcher.end(), line.length());
 
@@ -170,9 +168,9 @@ public class LogParser {
         return true;
     }
 
-    private DateTime getDate(String dateString, LogParserConfig config) {
+    private OffsetDateTime getDate(String dateString, LogParserConfig config) {
         try {
-            return config.getDateFormat().parseDateTime(dateString);
+            return OffsetDateTime.parse(dateString, config.getDateFormat());
         } catch (IllegalArgumentException exc) {
             // the date is not in the correct format - ignore
             return null;

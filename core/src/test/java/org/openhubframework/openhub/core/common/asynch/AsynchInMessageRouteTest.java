@@ -22,14 +22,14 @@ import static org.junit.Assert.fail;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 import javax.annotation.Nullable;
 
 import org.apache.camel.*;
 import org.apache.camel.builder.AdviceWithRouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.commons.lang3.time.DateUtils;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
@@ -130,7 +130,8 @@ public class AsynchInMessageRouteTest extends AbstractCoreDbTest {
                 assertThat(rs.getString("failed_error_code"), nullValue());
                 assertThat(rs.getTimestamp("last_update_timestamp"), notNullValue());
                 assertThat(rs.getTimestamp("start_process_timestamp"), notNullValue());
-                assertThat(rs.getTimestamp("msg_timestamp").compareTo(traceIdentifier.getTimestamp().toDate()), is(0));
+                assertThat(rs.getTimestamp("msg_timestamp")
+                        .compareTo(Timestamp.from(traceIdentifier.getTimestamp().toInstant())), is(0));
                 assertThat(rs.getString("object_id"), is(getHeaders().get(AsynchConstants.OBJECT_ID_HEADER)));
                 assertThat(rs.getString("operation_name"), is(getHeaders().get(AsynchConstants.OPERATION_HEADER)));
                 assertThat(rs.getString("payload"), is("bodyContent"));
@@ -190,8 +191,9 @@ public class AsynchInMessageRouteTest extends AbstractCoreDbTest {
                 + "     guaranteed_order, exclude_failed_state)"
                 + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         getJdbcTemplate().update(sql, getTraceHeader().getTraceIdentifier().getCorrelationID(), 0, "", "", null,
-                new Date(), "", "opName", "payload", new Date(), ServiceTestEnum.CUSTOMER.toString(),
-                ExternalSystemTestEnum.CRM.toString(), MsgStateEnum.NEW.toString(), 1, false, false);
+                Timestamp.from(Instant.now()), "", "opName", "payload", Timestamp.from(Instant.now()),
+                ServiceTestEnum.CUSTOMER.toString(), ExternalSystemTestEnum.CRM.toString(), MsgStateEnum.NEW.toString(),
+                1, false, false);
 
         producer.sendBodyAndHeaders("bodyContent", getHeaders());
 
@@ -305,7 +307,7 @@ public class AsynchInMessageRouteTest extends AbstractCoreDbTest {
         insertNewMessage("id1", MsgStateEnum.PROCESSING, FUNNEL_VALUE, true);
 
         Message msg = insertNewMessage("id2", MsgStateEnum.PROCESSING, FUNNEL_VALUE, true);
-        msg.setReceiveTimestamp(DateUtils.addSeconds(new Date(), 10));
+        msg.setReceiveTimestamp(Instant.now().plusSeconds(10));
 
         // action
         guaranteedProducer.sendBody(msg);
@@ -315,7 +317,7 @@ public class AsynchInMessageRouteTest extends AbstractCoreDbTest {
 
     private Message insertNewMessage(String correlationId, MsgStateEnum state, @Nullable String funnelValue,
             boolean guaranteedOrder) {
-        Date currDate = new Date();
+        Instant currDate = Instant.now();
 
         Message msg = new Message();
         msg.setState(state);

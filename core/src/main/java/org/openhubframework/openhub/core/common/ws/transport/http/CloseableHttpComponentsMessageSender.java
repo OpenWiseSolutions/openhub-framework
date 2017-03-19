@@ -54,7 +54,7 @@ import org.springframework.ws.transport.http.HttpComponentsMessageSender;
 /**
  * {@code WebServiceMessageSender} implementation that uses <a href="http://hc.apache.org/httpcomponents-client">Apache
  * HttpClient</a> ({@link CloseableHttpClient}) to execute POST requests.
- * <p/>
+ * <p>
  * Allows to use a pre-configured HttpClient instance, potentially with authentication, HTTP connection pooling, etc.
  * Authentication can also be set by injecting a {@link Credentials} instance (such as the {@link
  * UsernamePasswordCredentials}). Out of box contains {@link RemoveSoapHeadersInterceptor}.
@@ -110,6 +110,8 @@ public class CloseableHttpComponentsMessageSender extends HttpComponentsMessageS
     /**
      * Create a new instance of the {@code HttpClientMessageSender} with a default {@link HttpClient}
      * that uses a default {@link PoolingHttpClientConnectionManager}.
+     * 
+     * @param usePreemptiveAuth as flag whether preemptive authentication should be used
      */
     public CloseableHttpComponentsMessageSender(boolean usePreemptiveAuth) {
         this();
@@ -215,13 +217,12 @@ public class CloseableHttpComponentsMessageSender extends HttpComponentsMessageS
     /**
      * Sets the maximum number of connections per host for the underlying HttpClient. The maximum number of connections
      * per host can be set in a form accepted by the {@code java.util.Properties} class, like as follows:
-     * <p/>
      * <pre>
      * https://esb.openhubframework.org/esb/=1
      * http://esb.openhubframework.org:8080/esb/=7
      * http://esb.openhubframework.org/esb/=10
      * </pre>
-     * <p/>
+     * <p>
      * The host can be specified as a URI (with scheme and port).
      *
      * @param maxConnectionsPerHost a properties object specifying the maximum number of connection
@@ -246,7 +247,7 @@ public class CloseableHttpComponentsMessageSender extends HttpComponentsMessageS
 
     /**
      * Sets the authentication scope to be used. Only used when the {@code credentials} property has been set.
-     * <p/>
+     * <p>
      * By default, the {@link AuthScope#ANY} is used.
      *
      * @see #setCredentials(Credentials)

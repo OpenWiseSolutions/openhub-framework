@@ -19,10 +19,10 @@ package org.openhubframework.openhub.core.common.directcall;
 /**
  * Contract of registry calls between sibling Spring application contexts, specifically from web application context
  * to Spring WS (Camel) application context.
- * <p/>
+ * <p>
  * This registry serves for saving call parameters. Registry is initialized in root application context
  * and therefore it's accessible from both child (sibling) application contexts.
- * <p/>
+ * <p>
  * There is the following procedure:
  * <ol>
  *     <li>client (web controller) generates unique call identifier

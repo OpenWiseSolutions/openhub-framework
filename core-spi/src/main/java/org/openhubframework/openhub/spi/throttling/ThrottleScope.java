@@ -85,6 +85,7 @@ public final class ThrottleScope implements HumanReadable {
     /**
      * Tests if the throttling scopes match.
      *
+     * @param that represents object of matching
      * @return the match factor. Negative value signifies no match.
      *    Non-negative signifies a match. The greater the returned value
      *    the closer the match.

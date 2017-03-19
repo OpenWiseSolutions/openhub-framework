@@ -16,13 +16,14 @@
 
 package org.openhubframework.openhub.admin.web.msg;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,23 +50,25 @@ public class MessageReportController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MessageReportController.class);
 
-    private final SimpleDateFormat inputDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+    private static final int DEFAULT_INTERVAL_DAYS = 7;
 
     @Autowired
     private MessageReportService msgReportService;
 
     /**
      * Initial controller method, when the user lands on the page /admin/messageReport.
-     * By default is loaded the messageReportList based on the current date - 7 days> and the current date
+     * By default is loaded the messageReportList based on the current date - 7 days&gt; and the current date
      *
      * @param model controller object for binding variables into the view template
-     * @return renders the msgRep view -> /freemarker/msgRep.ftl
+     * @return renders the msgRep view -&gt; /freemarker/msgRep.ftl
      */
     @RequestMapping(value = "/messageReport", method = RequestMethod.GET)
     public String showMessageReport(@ModelAttribute("model") ModelMap model) {
 
-        List<TransformedMessageDto> messageReportList = transformToView(
-                msgReportService.getMessageStateSummary(getDateForQuery(7), getDateForQuery(0)));
+        Instant to = Instant.now();
+        Instant from = Instant.now().minus(DEFAULT_INTERVAL_DAYS, ChronoUnit.DAYS);
+
+        List<TransformedMessageDto> messageReportList = transformToView(msgReportService.getMessageStateSummary(from, to));
 
         model.addAttribute("msgreplist", messageReportList);
         return "msgRep";
@@ -77,7 +80,7 @@ public class MessageReportController {
      * @param startDate user-input from the web form
      * @param endDate   user-input from the web form
      * @param model     controller object for binding variables into the view template
-     * @return renders the updated msgRep view -> /freemarker/msgRep.ftl
+     * @return renders the updated msgRep view -&gt; /freemarker/msgRep.ftl
      */
     @RequestMapping(value = "/updatereport", method = RequestMethod.POST)
     public String updateMessageReport(@RequestParam("formStartDate") String startDate,
@@ -87,8 +90,10 @@ public class MessageReportController {
         Assert.notNull(startDate, "startDate on updateReport must be defined");
         Assert.notNull(endDate, "endDate on updateReport must be defined");
 
-        List<TransformedMessageDto> messageReportList = transformToView(
-                msgReportService.getMessageStateSummary(formatDateForQuery(startDate), formatDateForQuery(endDate)));
+        Instant from = Instant.from(formatDateForQuery(startDate));
+        Instant to = Instant.from(formatDateForQuery(endDate));
+
+        List<TransformedMessageDto> messageReportList = transformToView(msgReportService.getMessageStateSummary(from, to));
 
         model.addAttribute("reqStartDate", startDate);
         model.addAttribute("reqEndDate", endDate);
@@ -97,31 +102,17 @@ public class MessageReportController {
     }
 
     /**
-     * Method generates a date object base on the daysShift param.
-     *
-     * @param daysShift 0 means now, 7 means (now, -7 days)
-     * @return date object
-     */
-    private Date getDateForQuery(int daysShift) {
-        Date queryDate = new Date();
-        if (daysShift > 0) {
-            queryDate = DateUtils.addDays(queryDate, -daysShift);
-        }
-        return queryDate;
-    }
-
-    /**
      * Date formatting method, JS function and GET method transfer a String object, that needs to be parsed.
      *
      * @param paramFromWeb user-friendly web-form String object
      * @return date object for the DB query method of the DAO impl
      */
-    private Date formatDateForQuery(String paramFromWeb) {
-        Date myDate = null;
+    private LocalDate formatDateForQuery(String paramFromWeb) {
+        LocalDate myDate = null;
         try {
-            myDate = inputDateFormat.parse(paramFromWeb);
-        } catch (ParseException e) {
-            LOG.error("Parse exception occurred in MessageDaoImpl.dateHandler", e);
+            myDate = LocalDate.parse(paramFromWeb, DateTimeFormatter.ISO_LOCAL_DATE);
+        } catch (DateTimeParseException e) {
+            LOG.error("Parse exception occurred during parsing '{}'", e, paramFromWeb);
         }
         return myDate;
     }

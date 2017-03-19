@@ -32,7 +32,7 @@ public interface OutputStreamWriterCallback {
      * Don't close the output stream.
      *
      * @param os the output stream
-     * @throws IOException
+     * @throws IOException if error occurs during writing file to output stream
      */
     void writeTo(OutputStream os) throws IOException;
 

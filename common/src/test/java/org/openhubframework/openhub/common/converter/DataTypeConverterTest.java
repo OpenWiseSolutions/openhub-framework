@@ -16,14 +16,16 @@
 
 package org.openhubframework.openhub.common.converter;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.regex.Pattern;
 
-import org.joda.time.LocalDate;
 import org.junit.Test;
 
 
@@ -72,8 +74,8 @@ public class DataTypeConverterTest {
 
     @Test
     public void testDate() throws ParseException {
-        assertConvertFrom(TypeConverterEnum.DATE, "2016-01-13", new LocalDate(2016, 1, 13));
-        assertConvertToString(TypeConverterEnum.DATE, new LocalDate(2016, 1, 13), "2016-01-13");
+        assertConvertFrom(TypeConverterEnum.DATE, "2016-01-13", LocalDate.of(2016, 1, 13));
+        assertConvertToString(TypeConverterEnum.DATE, LocalDate.of(2016, 1, 13), "2016-01-13");
     }
 
     @Test

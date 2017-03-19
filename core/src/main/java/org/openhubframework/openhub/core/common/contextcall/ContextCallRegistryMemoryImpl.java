@@ -16,13 +16,13 @@
 
 package org.openhubframework.openhub.core.common.contextcall;
 
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nullable;
 
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -41,7 +41,7 @@ public class ContextCallRegistryMemoryImpl implements ContextCallRegistry {
 
     private static final Logger LOG = LoggerFactory.getLogger(ContextCallRegistryMemoryImpl.class);
 
-    private static final int OLD_PARAMS_INTERVAL = 60 * 1000;
+    private static final int OLD_PARAMS_INTERVAL_MS = 60 * 1000;
 
     private Map<String, ContextCallParams> paramsRegistry = new ConcurrentHashMap<String, ContextCallParams>();
 
@@ -123,7 +123,7 @@ public class ContextCallRegistryMemoryImpl implements ContextCallRegistry {
      * Removes old params.
      */
     private void removeOldParams() {
-        DateTime threshold = DateTime.now().minus(OLD_PARAMS_INTERVAL);
+        Instant threshold = Instant.now().minusMillis(OLD_PARAMS_INTERVAL_MS);
 
         Set<String> removes = new HashSet<String>();
 

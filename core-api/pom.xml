@@ -32,10 +32,6 @@
             <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
-        	<groupId>joda-time</groupId>
-        	<artifactId>joda-time</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>jsr305</artifactId>
         </dependency>
@@ -144,14 +140,39 @@
                 </executions>
             </plugin>
 
+            <!-- adding generated sources to the compilation -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${modules.output.directory}</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jaxb2-maven-plugin</artifactId>
                 <configuration>
                     <clearOutputDir>false</clearOutputDir>
                     <outputDirectory>${modules.output.directory}</outputDirectory>
-                    <schemaDirectory>${modules.import.directory}</schemaDirectory>
-                    <bindingDirectory>${modules.import.directory}</bindingDirectory>
+                    <xjbSources>
+                        <xjbSource>${modules.import.directory}/jaxb_common_bindings.xjb</xjbSource>
+                        <xjbSource>${modules.import.directory}/jaxb_global_bindings.xjb</xjbSource>
+                    </xjbSources>
+                    <sources>
+                        <source>${modules.import.directory}/commonTypes-v1.0.xsd</source>
+                    </sources>
                 </configuration>
                 <executions>
                     <execution>
@@ -160,9 +181,7 @@
                             <goal>xjc</goal>
                         </goals>
                         <configuration>
-                            <staleFile>${project.build.directory}/jaxb2/.in.common.model</staleFile>
                             <packageName>org.openhubframework.openhub.api.asynch.model</packageName>
-                            <schemaFiles>commonTypes-v1.0.xsd</schemaFiles>
                         </configuration>
                     </execution>
                 </executions>

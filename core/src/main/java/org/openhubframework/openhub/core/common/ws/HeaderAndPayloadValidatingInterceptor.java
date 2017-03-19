@@ -48,7 +48,7 @@ import org.xml.sax.SAXException;
 
 /**
  * Interceptor that validates the presence of trace header.
- * <p/>
+ * <p>
  * When the payload is invalid, this interceptor stops processing of the interceptor chain. Additionally, if the message
  * is a SOAP request message, a SOAP Fault is created as reply. Invalid SOAP responses do not result in a fault.
  *
@@ -137,6 +137,7 @@ public class HeaderAndPayloadValidatingInterceptor extends PayloadValidatingInte
      * @param messageContext the message context
      * @param errors         the validation errors
      * @return <code>true</code> to continue processing the request, <code>false</code> (the default) otherwise
+     * @throws TransformerException if error occurs during the transformation process
      */
     protected boolean handleHeaderValidationErrors(MessageContext messageContext, ValidationIntegrationException[] errors)
             throws TransformerException {

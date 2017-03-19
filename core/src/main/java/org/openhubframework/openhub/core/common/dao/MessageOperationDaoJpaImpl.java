@@ -16,8 +16,8 @@
 
 package org.openhubframework.openhub.core.common.dao;
 
+import java.time.Instant;
 import java.util.Arrays;
-import java.util.Date;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -59,7 +59,7 @@ public class MessageOperationDaoJpaImpl implements MessageOperationDao {
 
         Query q = em.createQuery(jSql);
         q.setParameter(1, MsgStateEnum.PARTLY_FAILED);
-        q.setParameter(2, new Date());
+        q.setParameter(2, Instant.now());
         q.setParameter(3, msg.getMsgId());
         q.setParameter(4, Arrays.asList(MsgStateEnum.CANCEL, MsgStateEnum.FAILED));
 

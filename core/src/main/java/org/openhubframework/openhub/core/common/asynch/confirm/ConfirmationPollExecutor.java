@@ -30,7 +30,7 @@ import org.openhubframework.openhub.api.exception.LockFailureException;
 /**
  * Reads confirmations (=external calls) from DB and sends them for next processing.
  * Execution will stop when there is no further confirmation for processing.
- * <p/>
+ * <p>
  * This executor is invoked by {@link JobStarterForConfirmationPooling}.
  *
  * @author Petr Juza

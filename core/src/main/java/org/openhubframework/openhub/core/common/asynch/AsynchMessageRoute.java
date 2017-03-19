@@ -48,7 +48,7 @@ import org.openhubframework.openhub.spi.msg.MessageService;
 
 /**
  * Route definition that processes asynchronous message taken from message queue.
- * <p/>
+ * <p>
  * Some "well-known" URIs:
  * <ul>
  *     <li>{@link AsynchConstants#URI_ERROR_FATAL}
@@ -126,9 +126,9 @@ public class AsynchMessageRoute extends AbstractBasicRoute {
 
     /**
      * Route for processing {@link Message messages} from the queue.
-     * <p/>
+     * <p>
      * Prerequisite: Message in the body in the state {@link MsgStateEnum#PROCESSING}
-     * <p/>
+     * <p>
      * Output: correctly processed message
      */
     @Override
@@ -435,6 +435,8 @@ public class AsynchMessageRoute extends AbstractBasicRoute {
 
     /**
      * Sends notification mail to admin(s).
+     * 
+     * @param msg as context of process
      */
     @Handler
     public void sendMailToAdmin(@Header(MSG_HEADER) Message msg) {

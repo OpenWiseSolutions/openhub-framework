@@ -35,7 +35,7 @@ public enum ExternalCallKeyType {
     /**
      * A key will be generated based on the message source system and correlation ID,
      * protecting external call from duplication, but not from obsolete calls.
-     * <p/>
+     * <p>
      * {@link ExtCallComponentParams#EXTERNAL_CALL_KEY} property will be appended, if specified.
      */
     MESSAGE(new ExpressionAdapter() {
@@ -60,7 +60,7 @@ public enum ExternalCallKeyType {
      * A key will be generated based on the message object ID (and possibly entity type, if specified),
      * protecting external call from both duplication and obsolete calls,
      * but also possibly unnecessarily skipping calls, if object ID is specified incorrectly.
-     * <p/>
+     * <p>
      * {@link ExtCallComponentParams#EXTERNAL_CALL_KEY} property will be appended, if specified.
      */
     ENTITY(new ExpressionAdapter() {

@@ -18,7 +18,7 @@ package org.openhubframework.openhub.component.funnel;
 
 import static org.apache.camel.component.mock.MockEndpoint.assertIsSatisfied;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.UUID;
 
 import org.apache.camel.EndpointInject;
@@ -26,7 +26,6 @@ import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.commons.lang3.time.DateUtils;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
@@ -78,7 +77,7 @@ public class MsgFunnelComponentTest extends AbstractComponentsDbTest {
     }
 
     private Message createMessage(String funnelValue) {
-        Date currDate = new Date();
+        Instant currDate = Instant.now();
 
         Message msg = new Message();
         msg.setState(MsgStateEnum.PROCESSING);
@@ -157,7 +156,7 @@ public class MsgFunnelComponentTest extends AbstractComponentsDbTest {
         mock.setExpectedMessageCount(1);
 
         Message msg = createMessage(FUNNEL_VALUE);
-        msg.setStartProcessTimestamp(DateUtils.addSeconds(new Date(), -MsgFunnelEndpoint.DEFAULT_IDLE_INTERVAL - 100));
+        msg.setStartProcessTimestamp(Instant.now().minusSeconds(MsgFunnelEndpoint.DEFAULT_IDLE_INTERVAL + 100));
         msg.setState(MsgStateEnum.WAITING_FOR_RES);
         em.persist(msg);
         em.flush();
@@ -209,7 +208,7 @@ public class MsgFunnelComponentTest extends AbstractComponentsDbTest {
         mock.setExpectedMessageCount(1);
 
         Message msg = createMessage(FUNNEL_VALUE);
-        msg.setMsgTimestamp(DateUtils.addSeconds(firstMsg.getMsgTimestamp(), -100)); // be before "first" message
+        msg.setMsgTimestamp(firstMsg.getMsgTimestamp().minusSeconds(100)); // be before "first" message
         msg.setState(MsgStateEnum.PROCESSING);
         em.persist(msg);
         em.flush();
@@ -227,7 +226,7 @@ public class MsgFunnelComponentTest extends AbstractComponentsDbTest {
         mock.setExpectedMessageCount(0);
 
         Message msg = createMessage(FUNNEL_VALUE);
-        msg.setMsgTimestamp(DateUtils.addSeconds(firstMsg.getMsgTimestamp(), 100)); // be after "first" message
+        msg.setMsgTimestamp(firstMsg.getMsgTimestamp().plusSeconds(100)); // be after "first" message
         msg.setState(MsgStateEnum.PROCESSING);
         em.persist(msg);
         em.flush();
@@ -245,7 +244,7 @@ public class MsgFunnelComponentTest extends AbstractComponentsDbTest {
         mock.setExpectedMessageCount(1);
 
         Message msg = createMessage(FUNNEL_VALUE);
-        msg.setMsgTimestamp(DateUtils.addSeconds(firstMsg.getMsgTimestamp(), 100)); // be after "first" message, but FAILED
+        msg.setMsgTimestamp(firstMsg.getMsgTimestamp().plusSeconds(100)); // be after "first" message, but FAILED
         msg.setState(MsgStateEnum.FAILED);
         em.persist(msg);
         em.flush();

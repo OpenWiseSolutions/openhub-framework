@@ -16,7 +16,7 @@
 
 package org.openhubframework.openhub.test;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import javax.persistence.EntityManager;
@@ -24,7 +24,6 @@ import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,7 +112,7 @@ public abstract class AbstractDbTest extends AbstractTest {
 
         Message msg = new Message();
 
-        Date now = new Date();
+        Instant now = Instant.now();
 
         msg.setState(MsgStateEnum.PROCESSING);
         msg.setMsgTimestamp(now);
@@ -162,7 +161,7 @@ public abstract class AbstractDbTest extends AbstractTest {
                 Message[] messages = new Message[messageCount];
                 for (int i = 0; i < messages.length; i++) {
                     messages[i] = createMessage(sourceSystem, service, operationName, payload);
-                    messages[i].setMsgTimestamp(DateTime.now().plusSeconds(i*5).toDate());
+                    messages[i].setMsgTimestamp(Instant.now().plusSeconds(i*5));
                     em.persist(messages[i]);
                 }
                 em.flush();

@@ -16,11 +16,11 @@
 
 package org.openhubframework.openhub.core.common.directcall;
 
+import java.time.Instant;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.joda.time.DateTime;
 import org.springframework.util.Assert;
 
 
@@ -37,7 +37,7 @@ public class DirectCallParams {
     private String uri;
     private String senderRef;
     private String soapAction;
-    private DateTime creationTimestamp;
+    private Instant creationTimestamp;
 
     public DirectCallParams(Object body, String uri, String senderRef, @Nullable String soapAction) {
         this(body, uri, senderRef, soapAction, null);
@@ -53,7 +53,7 @@ public class DirectCallParams {
         this.senderRef = senderRef;
         this.soapAction = soapAction;
         this.header = header;
-        this.creationTimestamp = DateTime.now();
+        this.creationTimestamp = Instant.now();
     }
 
     /**
@@ -117,7 +117,7 @@ public class DirectCallParams {
      *
      * @return timestamp
      */
-    public DateTime getCreationTimestamp() {
+    public Instant getCreationTimestamp() {
         return creationTimestamp;
     }
 

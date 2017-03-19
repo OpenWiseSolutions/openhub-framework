@@ -16,7 +16,7 @@
 
 package org.openhubframework.openhub.api.entity;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.Nullable;
@@ -33,7 +33,7 @@ import org.openhubframework.openhub.api.common.HumanReadable;
 
 /**
  * Entity for saving request with external system or during internal communication.
- * <p/>
+ * <p>
  * Request is uniquely identified by its {@link #getUri() URI} and {@link #getResponseJoinId() response join ID}.
  * Both these attributes helps to join right request and response together.
  *
@@ -80,7 +80,7 @@ public class Request implements HumanReadable {
     private String request;
 
     @Column(name = "req_timestamp", nullable = false)
-    private Date reqTimestamp;
+    private Instant reqTimestamp;
 
     /** Default public constructor. */
     public Request() {
@@ -100,7 +100,7 @@ public class Request implements HumanReadable {
         Assert.hasText(request, "request must not be empty");
         Assert.hasText(responseJoinId, "responseJoinId must not be empty");
 
-        Date currDate = new Date();
+        Instant currDate = Instant.now();
 
         Request req = new Request();
         req.setUri(uri);
@@ -221,11 +221,11 @@ public class Request implements HumanReadable {
      *
      * @return timestamp
      */
-    public Date getReqTimestamp() {
+    public Instant getReqTimestamp() {
         return reqTimestamp;
     }
 
-    public void setReqTimestamp(Date reqTimestamp) {
+    public void setReqTimestamp(Instant reqTimestamp) {
         Assert.notNull(reqTimestamp, "reqTimestamp must not be null");
 
         this.reqTimestamp = reqTimestamp;

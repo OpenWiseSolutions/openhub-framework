@@ -19,6 +19,9 @@ package org.openhubframework.openhub.common;
 
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -33,8 +36,6 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.camel.converter.jaxp.XmlConverter;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.slf4j.helpers.MessageFormatter;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.EnumerablePropertySource;
@@ -115,6 +116,7 @@ public final class Tools {
      *
      * @param obj   the object graph
      * @param qName the QName
+     * @param <T> as data type of object
      * @return XML as string
      * @see Marshaller
      */
@@ -143,6 +145,7 @@ public final class Tools {
      *
      * @param xml the input string
      * @param targetClass the target class
+     * @param <T> as data type of target object
      * @return object graph
      * @see XmlConverter
      */
@@ -155,43 +158,37 @@ public final class Tools {
     }
 
     /**
-     * Converts local instant of {@link DateTime} to standard UTC instant of {@link DateTime} with UTC time zone.
+     * Converts local instant of {@link OffsetDateTime} to standard UTC instant of {@link OffsetDateTime} with UTC time zone.
      *
      * @param localDateTime the local time
      * @return the UTC time
      */
-    public static DateTime toUTC(DateTime localDateTime) {
+    public static OffsetDateTime toUTC(OffsetDateTime localDateTime) {
         Assert.notNull(localDateTime, "localDateTime must not be null");
 
-        DateTimeZone dateTimeZone = localDateTime.getZone();
-        long utcTime = dateTimeZone.convertLocalToUTC(localDateTime.getMillis(), false);
-        return new DateTime(utcTime, DateTimeZone.UTC);
+        return OffsetDateTime.ofInstant(localDateTime.toInstant(), ZoneId.of("UTC"));
     }
 
     /**
-     * Converts UTC instant of {@link DateTime} to local instant of {@link DateTime} with default time zone.
+     * Converts UTC instant of {@link OffsetDateTime} to local instant of {@link OffsetDateTime} with default time zone.
      *
      * @param utcTime the UTC time
      * @return the local time
      */
-    public static DateTime fromUTC(DateTime utcTime) {
+    public static OffsetDateTime fromUTC(OffsetDateTime utcTime) {
         Assert.notNull(utcTime, "utcTime must not be null");
 
-        DateTimeZone dateTimeZone = DateTimeZone.getDefault();
-        long localTime = dateTimeZone.convertUTCToLocal(utcTime.getMillis());
-        return new DateTime(localTime, dateTimeZone);
+        return OffsetDateTime.ofInstant(utcTime.toInstant(), ZoneId.systemDefault());
     }
 
     /**
-     * Converts UTC time in millis to local {@link DateTime} with default time zone.
+     * Converts UTC time in millis to local {@link OffsetDateTime} with default time zone.
      *
      * @param utcMillis the UTC time in millis
      * @return the local time
      */
-    public static DateTime fromUTC(long utcMillis) {
-        DateTimeZone dateTimeZone = DateTimeZone.getDefault();
-        long localTime = dateTimeZone.convertUTCToLocal(utcMillis);
-        return new DateTime(localTime, dateTimeZone);
+    public static OffsetDateTime fromUTC(long utcMillis) {
+        return OffsetDateTime.ofInstant(Instant.ofEpochMilli(utcMillis), ZoneId.systemDefault());
     }
 
     /**

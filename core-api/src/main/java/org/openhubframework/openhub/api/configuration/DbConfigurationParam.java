@@ -36,7 +36,7 @@ import org.openhubframework.openhub.common.Tools;
 /**
  * Entity represents one configuration parameter in database.
  * </p>
- * Call {@link #checkConsistency()} to check that parameter is consistent state.
+ * Call {@link #checkConsistency(ConversionService)} to check that parameter is consistent state.
  *
  * @author Petr Juza
  * @since 2.0

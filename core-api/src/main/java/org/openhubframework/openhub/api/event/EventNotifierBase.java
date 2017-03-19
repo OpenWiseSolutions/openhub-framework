@@ -30,7 +30,7 @@ import org.springframework.util.Assert;
 
 /**
  * Base class for implementing {@link EventNotifier Camel event notifiers}.
- * <p/>
+ * <p>
  * Implements only one direct inherited child, no more inheritance levels.
  *
  * @author Petr Juza
@@ -58,6 +58,7 @@ public abstract class EventNotifierBase<T extends EventObject> extends EventNoti
      * Calls notification implementation.
      *
      * @param event the event
+     * @throws Exception if error occurs during notification             
      */
     protected abstract void doNotify(T event) throws Exception;
 

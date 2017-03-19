@@ -16,7 +16,7 @@
 
 package org.openhubframework.openhub.core.common.asynch.msg;
 
-import java.util.Date;
+import java.time.Instant;
 import javax.annotation.Nullable;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -43,10 +43,10 @@ import org.openhubframework.openhub.core.common.asynch.TraceHeaderProcessor;
 
 /**
  * Processes input message and transform it to {@link Message} entity.
- * <p/>
+ * <p>
  * Prerequisite: exchange with several header values - see input params of {@link #createMessage}
  * (call {@link AsynchInMessageRoute} before)
- * <p/>
+ * <p>
  * Output: {@link Message} entity in the state {@link MsgStateEnum#PROCESSING} because we want to process
  * the message immediately
  *
@@ -78,6 +78,8 @@ public final class MessageTransformer {
      * @param objectId the object ID
      * @param entityType the entity type
      * @param funnelValue the funnel value
+     * @param guaranteedOrder the flag if order is guaranteed or not
+     * @param excludeFailedState the exclude failed state flag
      * @return new message
      */
     @Handler
@@ -99,7 +101,7 @@ public final class MessageTransformer {
         Assert.notNull(service, "the service must not be null");
         Assert.notNull(operationName, "the operationName must not be null");
 
-        Date currDate = new Date();
+        Instant currDate = Instant.now();
 
         Message msg = new Message();
         msg.setState(MsgStateEnum.NEW);
@@ -107,7 +109,7 @@ public final class MessageTransformer {
 
         // params from trace header
         final TraceIdentifier traceId = traceHeader.getTraceIdentifier();
-        msg.setMsgTimestamp(traceId.getTimestamp().toDate());
+        msg.setMsgTimestamp(traceId.getTimestamp().toInstant());
         msg.setReceiveTimestamp(currDate);
         msg.setSourceSystem(new ExternalSystemExtEnum() {
             @Override

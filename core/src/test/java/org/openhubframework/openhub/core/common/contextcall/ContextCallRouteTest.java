@@ -63,7 +63,7 @@ public class ContextCallRouteTest extends AbstractCoreTest {
 
         @Bean
         @Primary
-        public TestService mockConfirmationCallback() {
+        public TestService testService() {
             return new TestService();
         }
     }

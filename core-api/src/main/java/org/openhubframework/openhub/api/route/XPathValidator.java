@@ -35,17 +35,17 @@ import org.openhubframework.openhub.api.exception.ValidationIntegrationException
 /**
  * XPath validator that checks existence of mandatory element values (only those which have text values, not other sub-elements).
  * If there is no specified element (also with any value) then {@link ValidationIntegrationException} is thrown.
- * <p/>
+ * <p>
  * Input XML:
  * <pre>
-     &lt;cus:setCustomerRequest>
-        &lt;cus:customer>
-           &lt;cus1:externalCustomerId>700034&lt;/cus1:externalCustomerId>
-           &lt;cus1:customerNo>2&lt;/cus1:customerNo>
-        &lt;/cus:customer>
-     &lt;/cus:setCustomerRequest>      
+     &lt;cus:setCustomerRequest&gt;
+        &lt;cus:customer&gt;
+           &lt;cus1:externalCustomerId&gt;700034&lt;/cus1:externalCustomerId&gt;
+           &lt;cus1:customerNo&gt;2&lt;/cus1:customerNo&gt;
+        &lt;/cus:customer&gt;
+     &lt;/cus:setCustomerRequest&gt;      
  * </pre>
- * ParentElm: /cus:setCustomerRequest/cus:customer <br/>
+ * ParentElm: /cus:setCustomerRequest/cus:customer <br>
  * elements: [cus1:externalCustomerId, cus1:customerNo]
  *
  * @author Petr Juza

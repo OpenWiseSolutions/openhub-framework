@@ -18,9 +18,8 @@ package org.openhubframework.openhub.api.configuration;
 
 import java.io.File;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.regex.Pattern;
-
-import org.joda.time.LocalDate;
 
 
 /**

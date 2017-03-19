@@ -34,15 +34,15 @@ import org.openhubframework.openhub.api.route.CamelConfiguration;
  * is used for {@link Pattern} compilation and only classes which match the pattern are included.
  * If there is no property defined then all Spring {@link CamelConfiguration} beans are included.
  * System property has higher priority.
- * <p/>
+ * <p>
  * Example:
- * <pre>
- * &lt;context:component-scan base-package="org.openhubframework.openhub.core" use-default-filters="false">
- * &lt;context:include-filter type="custom" expression="org.openhubframework.openhub.core.common.spring.SystemIncludeRegexPatternTypeFilter"/>
- * &lt;/context:component-scan>
- * </pre>
+    <pre>
+ &lt;context:component-scan base-package="org.openhubframework.openhub.core" use-default-filters="false"&gt;
+     &lt;context:include-filter type="custom" expression="org.openhubframework.openhub.core.common.spring.SystemIncludeRegexPatternTypeFilter"/&gt;
+ &lt;/context:component-scan&gt;
+    </pre>
  *
- * <p/>
+ * <p>
  * Remember: include filters are applied after exclude filters.
  *
  * @author Petr Juza

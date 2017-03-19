@@ -16,13 +16,13 @@
 
 package org.openhubframework.openhub.core.common.contextcall;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.joda.time.DateTime;
 import org.springframework.util.Assert;
 
 
@@ -39,7 +39,7 @@ public class ContextCallParams {
     private List<Object> methodArgs;
 
     // technical parameter
-    private DateTime creationTimestamp;
+    private Instant creationTimestamp;
 
     public ContextCallParams(Class<?> targetType, String methodName, Object... methodArgs) {
         Assert.notNull(targetType, "the targetType must not be null");
@@ -47,8 +47,8 @@ public class ContextCallParams {
 
         this.targetType = targetType;
         this.methodName = methodName;
-        this.methodArgs = new ArrayList<Object>(Arrays.asList(methodArgs));
-        this.creationTimestamp = DateTime.now();
+        this.methodArgs = new ArrayList<>(Arrays.asList(methodArgs));
+        this.creationTimestamp = Instant.now();
     }
 
     /**
@@ -83,7 +83,7 @@ public class ContextCallParams {
      *
      * @return timestamp
      */
-    public DateTime getCreationTimestamp() {
+    public Instant getCreationTimestamp() {
         return creationTimestamp;
     }
 

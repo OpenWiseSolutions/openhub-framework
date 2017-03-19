@@ -30,7 +30,7 @@ import org.openhubframework.openhub.spi.alerts.AlertListener;
 
 /**
  * Listener implementation that sends email notifications to admin mails.
- * <p/>
+ * <p>
  * If alert is activated then email is sent - there are default {@link #DEFAULT_ALERT_SUBJECT subject}
  * and {@link #DEFAULT_ALERT_BODY body} but if there are defined subject or body for specified alert
  * then these values are used. Also formats for {@link #formatSubject(AlertInfo) subject}

@@ -33,7 +33,7 @@ import org.springframework.util.Assert;
 /**
  * {@code WebServiceMessageSender} implementation that uses <a href="http://hc.apache.org/httpcomponents-client">Apache
  * HttpClient</a> ({@link CloseableHttpClient}) to execute POST requests.
- * <p/>
+ * <p>
  * Allows to use a pre-configured HttpClient instance, potentially with authentication, HTTP connection pooling, etc.
  * with NTLM authentication support.
  *

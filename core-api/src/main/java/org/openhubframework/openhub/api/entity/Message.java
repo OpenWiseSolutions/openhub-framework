@@ -16,6 +16,7 @@
 
 package org.openhubframework.openhub.api.entity;
 
+import java.time.Instant;
 import java.util.*;
 import javax.annotation.Nullable;
 import javax.persistence.*;
@@ -53,10 +54,10 @@ public class Message implements HumanReadable {
     private Long msgId;
 
     @Column(name = "msg_timestamp", nullable = false)
-    private Date msgTimestamp;
+    private Instant msgTimestamp;
 
     @Column(name = "receive_timestamp", nullable = false)
-    private Date receiveTimestamp;
+    private Instant receiveTimestamp;
 
     @Column(name = "service", length = 30, nullable = false)
     @Access(AccessType.PROPERTY)
@@ -104,10 +105,10 @@ public class Message implements HumanReadable {
     private MsgStateEnum state;
 
     @Column(name = "start_process_timestamp", nullable = true)
-    private Date startProcessTimestamp;
+    private Instant startProcessTimestamp;
 
     @Column(name = "start_in_queue_timestamp", nullable = true)
-    private Date startInQueueTimestamp;
+    private Instant startInQueueTimestamp;
 
     @Column(name = "failed_count", nullable = false)
     private int failedCount;
@@ -124,7 +125,7 @@ public class Message implements HumanReadable {
     private String failedDesc;
 
     @Column(name = "last_update_timestamp", nullable = true)
-    private Date lastUpdateTimestamp;
+    private Instant lastUpdateTimestamp;
 
     @Column(name = "custom_data", length = 20000, nullable = true)
     private String customData;
@@ -202,14 +203,15 @@ public class Message implements HumanReadable {
      *
      * @return timestamp
      */
-    public Date getMsgTimestamp() {
-        return msgTimestamp != null ? new Date(msgTimestamp.getTime()) : null;
+    @Nullable
+    public Instant getMsgTimestamp() {
+        return msgTimestamp;
     }
 
-    public void setMsgTimestamp(Date msgTimestamp) {
+    public void setMsgTimestamp(Instant msgTimestamp) {
         Assert.notNull(msgTimestamp, "the msgTimestamp must not be null");
 
-        this.msgTimestamp = msgTimestamp != null ? new Date(msgTimestamp.getTime()) : null;
+        this.msgTimestamp = msgTimestamp;
     }
 
     /**
@@ -218,14 +220,15 @@ public class Message implements HumanReadable {
      *
      * @return timestamp
      */
-    public Date getReceiveTimestamp() {
-        return receiveTimestamp != null ? new Date(receiveTimestamp.getTime()) : null;
+    @Nullable
+    public Instant getReceiveTimestamp() {
+        return receiveTimestamp;
     }
 
-    public void setReceiveTimestamp(Date receiveTimestamp) {
+    public void setReceiveTimestamp(Instant receiveTimestamp) {
         Assert.notNull(receiveTimestamp, "the receiveTimestamp must not be null");
 
-        this.receiveTimestamp = receiveTimestamp != null ? new Date(receiveTimestamp.getTime()) : null;
+        this.receiveTimestamp = receiveTimestamp;
     }
 
     /**
@@ -288,10 +291,10 @@ public class Message implements HumanReadable {
 
     /**
      * Gets type of the entity that is being changed.
-     * <p/>
+     * <p>
      * In general it's enough to detect identical changed data by objectId and operation name but there are
      * few different operations which can change the same data (e.g. setCustomer, setCustomerExt).
-     * <p/>
+     * <p>
      * If defined then it will be used for "obsolete operation call" detection instead of operation name.
      *
      * @return entity type
@@ -433,14 +436,15 @@ public class Message implements HumanReadable {
      *
      * @return start date of processing
      */
-    public Date getStartProcessTimestamp() {
-        return startProcessTimestamp != null ? new Date(startProcessTimestamp.getTime()) : null;
+    @Nullable
+    public Instant getStartProcessTimestamp() {
+        return startProcessTimestamp;
     }
 
-    public void setStartProcessTimestamp(Date startProcessTimestamp) {
+    public void setStartProcessTimestamp(Instant startProcessTimestamp) {
         Assert.notNull(startProcessTimestamp, "the processTimestamp must not be null");
 
-        this.startProcessTimestamp = startProcessTimestamp != null ? new Date(startProcessTimestamp.getTime()) : null;
+        this.startProcessTimestamp = startProcessTimestamp;
     }
 
     /**
@@ -449,11 +453,11 @@ public class Message implements HumanReadable {
      * @return time when the message was added into queue for processing
      */
     @Nullable
-    public Date getStartInQueueTimestamp() {
-        return startInQueueTimestamp != null ? new Date(startInQueueTimestamp.getTime()) : null;
+    public Instant getStartInQueueTimestamp() {
+        return startInQueueTimestamp;
     }
 
-    public void setStartInQueueTimestamp(Date startInQueueTimestamp){
+    public void setStartInQueueTimestamp(Instant startInQueueTimestamp){
         Assert.notNull(startInQueueTimestamp, "startInQueueTimestamp must not be null");
 
         this.startInQueueTimestamp = startInQueueTimestamp;
@@ -474,7 +478,7 @@ public class Message implements HumanReadable {
 
     /**
      * Gets error code if last try was unsuccessful with error.
-     * <p/>
+     * <p>
      * Note: there can be only one error during message processing because next processing is stopped
      * when an error occurred.
      *
@@ -535,17 +539,17 @@ public class Message implements HumanReadable {
      * @return timestamp
      */
     @Nullable
-    public Date getLastUpdateTimestamp() {
-        return lastUpdateTimestamp != null ? new Date(lastUpdateTimestamp.getTime()) : null;
+    public Instant getLastUpdateTimestamp() {
+        return lastUpdateTimestamp;
     }
 
-    public void setLastUpdateTimestamp(@Nullable Date lastUpdateTimestamp) {
-        this.lastUpdateTimestamp = lastUpdateTimestamp != null ? new Date(lastUpdateTimestamp.getTime()) : null;
+    public void setLastUpdateTimestamp(@Nullable Instant lastUpdateTimestamp) {
+        this.lastUpdateTimestamp = lastUpdateTimestamp;
     }
 
     /**
      * Gets custom data.
-     * <p/>
+     * <p>
      * Custom data can be used for saving arbitrary data for transferring state between more processing calls
      * of the asynchronous message.
      *
@@ -562,11 +566,11 @@ public class Message implements HumanReadable {
 
     /**
      * Gets business error descriptions.
-     * <p/>
+     * <p>
      * During processing of asynchronous message can be collected lot of business errors which is suitable
      * to present to source (callee) system (for example when we want to create new customer and this customer
      * doesn't have valid customer number).
-     * <p/>
+     * <p>
      * Each error description is separated by {@value #ERR_DESC_SEPARATOR}.
      *
      * @return business error descriptions
@@ -641,7 +645,7 @@ public class Message implements HumanReadable {
 
     /**
      * Is parent message that has child messages?
-     * <p/>
+     * <p>
      * Note: binding between child and parent message must be {@link BindingTypeEnum#HARD hard}.
      *
      * @return {@code true} when this message is parent, otherwise {@code false}
@@ -702,7 +706,7 @@ public class Message implements HumanReadable {
     /**
      * Returns {@code true} if FAILED state should be excluded from guaranteed order.
      * {@link MsgStateEnum#FAILED FAILED} state is used for guaranteed order by default;
-     * <p/>
+     * <p>
      * This option has influence only if {@link #isGuaranteedOrder() guaranteed processing order} is enabled.
      *
      * @return {@code true} if FAILED state should be excluded

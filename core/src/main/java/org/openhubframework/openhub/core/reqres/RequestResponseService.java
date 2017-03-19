@@ -16,7 +16,7 @@
 
 package org.openhubframework.openhub.core.reqres;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 import javax.annotation.Nullable;
 
@@ -50,7 +50,7 @@ public interface RequestResponseService {
 
     /**
      * Gets last request specified by target URI and response-join ID.
-     * <p/>
+     * <p>
      * Note: there can be more requests for one message and external system because of reprocessing the message.
      * Therefore last request is used.
      *
@@ -71,5 +71,5 @@ public interface RequestResponseService {
      * @param subRequest the substring of request content
      * @return list of {@link Request}
      */
-    List<Request> findByCriteria(Date from, Date to, @Nullable String subUri, @Nullable String subRequest);
+    List<Request> findByCriteria(Instant from, Instant to, @Nullable String subUri, @Nullable String subRequest);
 }

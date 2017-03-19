@@ -20,6 +20,7 @@ import static org.springframework.util.StringUtils.hasText;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.time.Instant;
 import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
@@ -27,7 +28,6 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
-import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,13 +95,13 @@ public class MessageController {
             List<String> logLines = new ArrayList<String>();
             try {
                 long start = System.currentTimeMillis();
-                SortedSet<LocalDate> logDates = getMsgDates(msg);
-                logDates.add(new LocalDate()); // adding today just in case
+                SortedSet<Instant> logDates = getMsgDates(msg);
+                logDates.add(Instant.now()); // adding today just in case
 
                 LOG.debug("Starts searching log for correlationId = " + correlationId);
 
-                for (LocalDate logDate : logDates) {
-                    logLines.addAll(messageLogParser.getLogLines(correlationId, logDate.toDate()));
+                for (Instant logDate : logDates) {
+                    logLines.addAll(messageLogParser.getLogLines(correlationId, logDate));
                 }
 
                 LOG.debug("Finished searching log in " + (System.currentTimeMillis() - start) + " ms.");
@@ -133,17 +133,17 @@ public class MessageController {
      * @param msg the message to find dates for
      * @return a set of dates
      */
-    private SortedSet<LocalDate> getMsgDates(Message msg) {
-        TreeSet<LocalDate> logDates = new TreeSet<LocalDate>();
-        Date[] msgDates = new Date[]{
+    private SortedSet<Instant> getMsgDates(Message msg) {
+        TreeSet<Instant> logDates = new TreeSet<Instant>();
+        Instant[] msgDates = new Instant[]{
                 msg.getMsgTimestamp(),
                 msg.getReceiveTimestamp(),
                 msg.getStartProcessTimestamp(),
                 msg.getLastUpdateTimestamp()
         };
-        for (Date msgDate : msgDates) {
+        for (Instant msgDate : msgDates) {
             if (msgDate != null) {
-                logDates.add(new LocalDate(msgDate));
+                logDates.add(msgDate);
             }
         }
         return logDates;

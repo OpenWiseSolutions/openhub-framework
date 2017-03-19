@@ -22,9 +22,9 @@ import static org.junit.Assert.assertThat;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
-import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +60,7 @@ public class RepairProcessingMsgServiceDbTest extends AbstractCoreDbTest {
 
     @Before
     public void prepareData() {
-        Date currDate = DateUtils.addDays(new Date(), -1);
+        Instant currDate = Instant.now().minus(1, ChronoUnit.DAYS);
 
         msg = new Message();
         msg.setState(MsgStateEnum.NEW);

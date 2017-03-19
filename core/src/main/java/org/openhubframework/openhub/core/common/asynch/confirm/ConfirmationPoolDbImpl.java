@@ -20,7 +20,6 @@ import static org.openhubframework.openhub.api.configuration.CoreProps.ASYNCH_CO
 
 import javax.annotation.Nullable;
 
-import org.joda.time.Seconds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +32,7 @@ import org.openhubframework.openhub.api.configuration.ConfigurationItem;
 import org.openhubframework.openhub.api.entity.ExternalCall;
 import org.openhubframework.openhub.api.entity.ExternalCallStateEnum;
 import org.openhubframework.openhub.api.exception.LockFailureException;
+import org.openhubframework.openhub.common.time.Seconds;
 import org.openhubframework.openhub.core.common.dao.ExternalCallDao;
 
 
@@ -61,7 +61,7 @@ public class ConfirmationPoolDbImpl implements ConfirmationPool {
     @Transactional
     public ExternalCall getNextConfirmation() {
         // -- is there next confirmation for processing?
-        final ExternalCall extCall = extCallDao.findConfirmation(interval.getValue());
+        final ExternalCall extCall = extCallDao.findConfirmation(interval.getValue().toDuration());
 
         if (extCall == null) {
             LOG.debug("There is no FAILED confirmation for processing.");

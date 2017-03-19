@@ -32,7 +32,7 @@ import org.springframework.util.Assert;
  * Asynchronous child message can be created from synchronous or asynchronous message. If from synch. message
  * then {@link BindingTypeEnum#SOFT SOFT} binding is set.
  *
- * <p/>
+ * <p>
  * Syntax: {@code asynch-child:service:operation[?options]}, where
  * <ul>
  *     <li>message service name, e.g. "customer".
