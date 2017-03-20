@@ -22,12 +22,9 @@ import javax.annotation.Nullable;
 import javax.persistence.*;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.util.Assert;
 
-import org.openhubframework.openhub.api.common.HumanReadable;
 import org.openhubframework.openhub.api.exception.ErrorExtEnum;
 
 
@@ -40,7 +37,7 @@ import org.openhubframework.openhub.api.exception.ErrorExtEnum;
 @Table(name = "message",
         uniqueConstraints = @UniqueConstraint(name = "uq_correlation_system",
                 columnNames = {"correlation_id", "source_system"}))
-public class Message implements HumanReadable {
+public class Message extends SuperEntity<Long> {
 
     /**
      * Separator that separates business error descriptions.
@@ -169,6 +166,7 @@ public class Message implements HumanReadable {
      * Empty (default) constructor.
      */
     public Message() {
+        super(null);
     }
 
     /**
@@ -178,6 +176,8 @@ public class Message implements HumanReadable {
      * @param correlationId the correlation ID
      */
     public Message(ExternalSystemExtEnum sourceSystem, String correlationId) {
+        super(null);
+
         Assert.notNull(sourceSystem, "the sourceSystem must not be null");
         Assert.hasText(correlationId, "the correlationId must not be empty");
 
@@ -196,6 +196,17 @@ public class Message implements HumanReadable {
 
     public void setMsgId(Long msgId) {
         this.msgId = msgId;
+    }
+
+    @Override
+    public void setId(@Nullable Long msgId) {
+        setMsgId(msgId);
+    }
+
+    @Nullable
+    @Override
+    public Long getId() {
+        return getMsgId();
     }
 
     /**
@@ -768,24 +779,7 @@ public class Message implements HumanReadable {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        } else if (obj instanceof Message) {
-            Message en = (Message) obj;
-
-            return new EqualsBuilder()
-                    .append(getMsgId(), en.getMsgId())
-                    .isEquals();
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(getMsgId())
-                .toHashCode();
+        return obj == this || obj instanceof Message && super.equals(obj);
     }
 
     @Override

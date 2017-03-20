@@ -17,6 +17,7 @@
 package org.openhubframework.openhub.core.configuration;
 
 import java.util.List;
+import java.util.Optional;
 import javax.annotation.Nullable;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -61,10 +62,10 @@ public class DbConfigurationParamDaoJpaImpl implements DbConfigurationParamDao {
 
     @Nullable
     @Override
-    public DbConfigurationParam findParameter(String code) {
+    public Optional<DbConfigurationParam> findParameter(String code) {
         Constraints.notNull(code, "the code must not be null");
 
-        return em.find(DbConfigurationParam.class, code);
+        return Optional.ofNullable(em.find(DbConfigurationParam.class, code));
     }
 
     @Override

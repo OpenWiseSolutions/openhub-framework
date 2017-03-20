@@ -16,6 +16,7 @@
 
 package org.openhubframework.openhub.core.configuration;
 
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.Nullable;
@@ -72,9 +73,9 @@ public class DbPropertySource extends PropertySource<DbConfigurationParamService
         Object value =  null;
 
         if (isDbProperty(name)) {
-            DbConfigurationParam param = this.source.findParameter(name);
-            if (param != null) {
-                value = param.getValue();
+            Optional<DbConfigurationParam> param = this.source.findParameter(name);
+            if (param.isPresent()) {
+                value = param.get().getValue();
             }
 
             LOG.debug("Get DB property value for name '{}': {}", name, value);

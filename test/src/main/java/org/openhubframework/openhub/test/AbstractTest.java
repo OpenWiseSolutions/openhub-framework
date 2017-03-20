@@ -16,23 +16,19 @@
 
 package org.openhubframework.openhub.test;
 
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import static org.hamcrest.CoreMatchers.anyOf;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 import static org.springframework.test.context.TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.Locale;
 
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.model.ModelCamelContext;
 import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.test.spring.CamelSpringTestContextLoaderTestExecutionListener;
-import org.custommonkey.xmlunit.*;
+import org.custommonkey.xmlunit.XMLUnit;
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Before;
@@ -45,10 +41,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
-import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
 
 import org.openhubframework.openhub.api.exception.ErrorExtEnum;
 import org.openhubframework.openhub.common.Profiles;
@@ -69,11 +62,20 @@ import org.openhubframework.openhub.common.Profiles;
 )
 public abstract class AbstractTest {
 
+    public static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
+
     @Autowired
     private ModelCamelContext camelContext;
 
     @Autowired
     private ApplicationContext ctx;
+
+    @Before
+    public void setDefaultLocale() {
+        // see https://docs.oracle.com/cd/E19455-01/806-0169/overview-9/index.html
+        // Large Number as 4,294,967,295.00
+        Locale.setDefault(DEFAULT_LOCALE);
+    }
 
     @Before
     public void configureXmlUnit() {
@@ -99,7 +101,7 @@ public abstract class AbstractTest {
      *
      * @return Spring context
      */
-    protected final ApplicationContext getApplicationContext() {
+    protected final ApplicationContext getApplContext() {
         return ctx;
     }
 
@@ -114,71 +116,6 @@ public abstract class AbstractTest {
         Field countField = ReflectionUtils.findField(target.getClass(), name);
         ReflectionUtils.makeAccessible(countField);
         ReflectionUtils.setField(countField, target, value);
-    }
-
-    /**
-     * Same as {@link XMLAssert#assertXMLEqual(String, String)},
-     * but with the specified node verified as XML using the same similarity technique,
-     * not as text (which would have to match completely).
-     *
-     * @param control               the expected XML
-     * @param test                  the actual XML being verified
-     * @param innerXmlXpathLocation the XPath location of the element, that should be verified as XML, not as text
-     * @throws org.xml.sax.SAXException can be thrown when creating {@link Diff} (e.g., if the provided XML is invalid)
-     * @throws java.io.IOException      can be thrown when creating {@link Diff}
-     */
-    public static void assertXMLEqualWithInnerXML(String control, String test, final String innerXmlXpathLocation)
-            throws SAXException, IOException {
-
-        Diff myDiff = new Diff(control, test);
-        myDiff.overrideDifferenceListener(new DifferenceListener() {
-            @Override
-            public int differenceFound(Difference difference) {
-                if (innerXmlXpathLocation.equals(difference.getTestNodeDetail().getXpathLocation())) {
-                    //use a custom verification for the encoded XML payload:
-                    try {
-                        Diff innerDiff = new Diff(
-                                difference.getControlNodeDetail().getValue(),
-                                difference.getTestNodeDetail().getValue());
-                        if (innerDiff.identical()) {
-                            return RETURN_IGNORE_DIFFERENCE_NODES_IDENTICAL;
-                        } else if (innerDiff.similar()) {
-                            return RETURN_IGNORE_DIFFERENCE_NODES_SIMILAR;
-                        } else {
-                            fail("Inner encoded XML node at " + innerXmlXpathLocation + " doesn't match\n" + innerDiff);
-                        }
-                    } catch (Exception e) {
-                        //shouldn't have a problem creating a Diff instance at this point,
-                        // so just ignore and acknowledge the difference
-                    }
-                }
-                // the default behavior is to acknowledge the difference:
-                return RETURN_ACCEPT_DIFFERENCE;
-            }
-
-            @Override
-            public void skippedComparison(Node control, Node test) {
-            }
-        });
-
-        assertXMLEqual(myDiff, true);
-    }
-
-    /**
-     * Returns processor that throws specified exception.
-     *
-     * @param exc the exception
-     * @return processor that throws specified exception
-     */
-    protected static Processor throwException(final Exception exc) {
-        Assert.notNull(exc, "exc must not be null");
-
-        return new Processor() {
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                throw exc;
-            }
-        };
     }
 
     /**

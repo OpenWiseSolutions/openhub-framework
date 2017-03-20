@@ -21,14 +21,12 @@ import javax.annotation.Nullable;
 import javax.persistence.*;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.core.convert.ConversionException;
 import org.springframework.core.convert.ConversionService;
 
 import org.openhubframework.openhub.api.common.Constraints;
-import org.openhubframework.openhub.api.common.HumanReadable;
+import org.openhubframework.openhub.api.entity.SuperEntity;
 import org.openhubframework.openhub.api.exception.ConfigurationException;
 import org.openhubframework.openhub.common.Tools;
 
@@ -43,7 +41,7 @@ import org.openhubframework.openhub.common.Tools;
  */
 @Entity
 @Table(name = "configuration_item")
-public class DbConfigurationParam implements HumanReadable {
+public class DbConfigurationParam extends SuperEntity<String> {
 
     @Id
     @Column(name = "code")
@@ -68,33 +66,42 @@ public class DbConfigurationParam implements HumanReadable {
     @Column(name = "mandatory")
     private boolean mandatory;
 
+    @Column(name = "description", length = 1000)
+    private String description;
+
     @Column(name = "validation", length = 100)
     private String validationRegEx;
 
 
     /** Default public constructor. */
     public DbConfigurationParam() {
+        super(null);
     }
 
     /**
      * Creates new configuration parameter.
      *
      * @param code           Unique code of one configuration item, e.g. ohf.asyncThread.processing.count.name
+     * @param description    Description of the parameter (in english).
      * @param categoryCode   Unique code for specific configuration scope, e.g. "dataSource" for data source settings
      * @param currentValue   Current (valid) value
      * @param defaultValue   Default value if there is no value defined
      * @param dataType       Data type of current and default value
      * @param mandatory      Is this configuration item mandatory?
      *                       In other worlds must be at least one current or default value defined?
-     * @param validationRegEx     Regular expression for checking if current value is valid
+     * @param validationRegEx     Regular expression for checking if current value or default value is valid
      */
-    public DbConfigurationParam(String code, String categoryCode, @Nullable String currentValue, @Nullable String defaultValue,
-            DataTypeEnum dataType, boolean mandatory, @Nullable String validationRegEx) {
+    public DbConfigurationParam(String code, String description, String categoryCode, @Nullable String currentValue,
+            @Nullable String defaultValue, DataTypeEnum dataType, boolean mandatory, @Nullable String validationRegEx) {
+        super(code);
+
         Constraints.hasText(code, "code must not be empty");
+        Constraints.hasText(description, "description must not be empty");
         Constraints.hasText(categoryCode, "categoryCode must not be empty");
         Constraints.notNull(dataType, "dataType must not be null");
 
         this.code = code;
+        this.description = description;
         this.categoryCode = categoryCode;
         this.currentValue = currentValue;
         this.defaultValue = defaultValue;
@@ -108,16 +115,39 @@ public class DbConfigurationParam implements HumanReadable {
      * Creates new configuration parameter.
      *
      * @param code           Unique code of one configuration item, e.g. ohf.asyncThread.processing.count.name
+     * @param description    Description of the parameter (in english).
      * @param categoryCode   Unique code for specific configuration scope, e.g. "dataSource" for data source settings
      * @param currentValue   Current (valid) value
      * @param dataType       Data type of current and default value
      */
-    public DbConfigurationParam(String code, String categoryCode, @Nullable String currentValue, DataTypeEnum dataType) {
-        this(code, categoryCode, currentValue, null, dataType, false, null);
+    public DbConfigurationParam(String code, String description, String categoryCode, @Nullable String currentValue,
+            DataTypeEnum dataType) {
+        this(code, description, categoryCode, currentValue, null, dataType, false, null);
     }
 
     public String getCode() {
         return code;
+    }
+
+    @Override
+    public void setId(@Nullable String s) {
+        throw new UnsupportedOperationException("it's not possible to change identifier of this entity: "
+                + DbConfigurationParam.class.getName());
+    }
+
+    @Nullable
+    @Override
+    public String getId() {
+        return getCode();
+    }
+
+    /**
+     * Gets parameter description.
+     *
+     * @return parameter description
+     */
+    public String getDescription() {
+        return description;
     }
 
     public String getCategoryCode() {
@@ -185,14 +215,14 @@ public class DbConfigurationParam implements HumanReadable {
             try {
                 if (!conversionService.canConvert(String.class, getDataType().getTypeClass())) {
                     throw new ConfigurationException(
-                            Tools.fm("Current value {} can't be converted to target type {}",
+                            Tools.fm("Current value '{}' can't be converted to target type {}",
                                     getCurrentValue(), getDataType().name()), getCode());
                 }
 
                 conversionService.convert(getCurrentValue(), getDataType().getTypeClass());
             } catch (ConversionException ex) {
                 throw new ConfigurationException(
-                        Tools.fm("Current value {} can't be converted to target type {}",
+                        Tools.fm("Current value '{}' can't be converted to target type {}",
                                 getCurrentValue(), getDataType().name()), ex, getCode());
             }
         }
@@ -200,14 +230,14 @@ public class DbConfigurationParam implements HumanReadable {
             try {
                 if (!conversionService.canConvert(String.class, getDataType().getTypeClass())) {
                     throw new ConfigurationException(
-                            Tools.fm("Default value {} can't be converted to target type {}",
+                            Tools.fm("Default value '{}' can't be converted to target type {}",
                                     getDefaultValue(), getDataType().name()), getCode());
                 }
 
                 conversionService.convert(getDefaultValue(), getDataType().getTypeClass());
             } catch (ConversionException ex) {
                 throw new ConfigurationException(
-                        Tools.fm("Default value {} can't be converted to target type {}",
+                        Tools.fm("Default value '{}' can't be converted to target type {}",
                                 getDefaultValue(), getDataType().name()), ex, getCode());
             }
         }
@@ -298,30 +328,14 @@ public class DbConfigurationParam implements HumanReadable {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        } else if (obj instanceof DbConfigurationParam) {
-            DbConfigurationParam en = (DbConfigurationParam) obj;
-
-            return new EqualsBuilder()
-                    .append(getCode(), en.getCode())
-                    .isEquals();
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(getCode())
-                .toHashCode();
+        return obj == this || obj instanceof DbConfigurationParam && super.equals(obj);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
             .append("code", code)
+            .append("description", StringUtils.abbreviate(description, 30))
             .append("categoryCode", categoryCode)
             .append("currentValue", currentValue)
             .append("defaultValue", defaultValue)

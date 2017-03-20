@@ -17,7 +17,7 @@
 package org.openhubframework.openhub.api.configuration;
 
 import java.util.List;
-import javax.annotation.Nullable;
+import java.util.Optional;
 
 import org.openhubframework.openhub.api.exception.ConfigurationException;
 
@@ -54,9 +54,7 @@ public interface DbConfigurationParamService {
      * @param code The parameter code
      * @return the parameter or {@code null} if there is no parameter with specified code
      */
-    //TODO PJUZA change it to Optional after upgrade to Java 8
-    @Nullable
-    DbConfigurationParam findParameter(String code);
+    Optional<DbConfigurationParam> findParameter(String code);
 
     /**
      * Finds all parameters.

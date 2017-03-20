@@ -57,7 +57,7 @@ import org.openhubframework.openhub.core.AbstractCoreDbTest;
 import org.openhubframework.openhub.core.common.asynch.msg.MessageSplitterImpl;
 import org.openhubframework.openhub.core.configuration.FixedConfigurationItem;
 import org.openhubframework.openhub.spi.msg.MessageService;
-import org.openhubframework.openhub.test.AbstractTest;
+import org.openhubframework.openhub.test.TestCamelUtils;
 import org.openhubframework.openhub.test.data.EntityTypeTestEnum;
 import org.openhubframework.openhub.test.data.ErrorTestEnum;
 import org.openhubframework.openhub.test.data.ExternalSystemTestEnum;
@@ -293,7 +293,7 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
 
                 from(subRouteUri)
                     .errorHandler(noErrorHandler())
-                    .process(AbstractTest.throwException(new IntegrationException(ErrorTestEnum.E300)));
+                    .process(TestCamelUtils.throwException(new IntegrationException(ErrorTestEnum.E300)));
             }
         };
 
@@ -351,7 +351,7 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
             @Override
             protected void doConfigure() throws Exception {
                 from(subRouteUri)
-                    .process(AbstractTest.throwException(new ValidationIntegrationException(
+                    .process(TestCamelUtils.throwException(new ValidationIntegrationException(
                             InternalErrorEnum.E102)));
             }
         };
@@ -388,7 +388,7 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
             public void configure() throws Exception {
                 from(subRouteUri)
                     .errorHandler(noErrorHandler())
-                    .process(AbstractTest.throwException(new IOException()));
+                    .process(TestCamelUtils.throwException(new IOException()));
             }
         };
 
@@ -535,7 +535,7 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
             public void configure() throws Exception {
                 from(msg2SubRouteUri)
                     .errorHandler(noErrorHandler())
-                    .process(throwException(new IntegrationException(ErrorTestEnum.E300)));
+                    .process(TestCamelUtils.throwException(new IntegrationException(ErrorTestEnum.E300)));
             }
         };
 
