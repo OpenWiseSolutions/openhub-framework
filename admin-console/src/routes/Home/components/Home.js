@@ -22,7 +22,7 @@ class Home extends Component {
 
     const appTableData = openHubInfo && [
       ['Name', openHubInfo.name],
-      ['Version', openHubInfo.version]
+      ['Version', openHubInfo.version + ' (' + openHubInfo.core.version + ')']
     ]
 
     const healthTableData = healthInfo && [
@@ -33,9 +33,9 @@ class Home extends Component {
 
     const diskTableData = healthInfo && [
       ['Status', <Status status={isUp(healthInfo.diskSpace.status)} />],
-      ['Free space', healthInfo.diskSpace.free],
-      ['Total space', healthInfo.diskSpace.total],
-      ['Threshold', healthInfo.diskSpace.threshold]
+      ['Free space', (healthInfo.diskSpace.free / 1000000000).toFixed(2) + ' GB'],
+      ['Total space', (healthInfo.diskSpace.total / 1000000000).toFixed(2) + ' GB'],
+      ['Threshold', (healthInfo.diskSpace.threshold / 1000000000).toFixed(2) + ' GB']
     ]
 
     const memChartProps = metricsInfo && {
@@ -87,13 +87,13 @@ class Home extends Component {
                 </PieChart>
                 <ul style={styles.info} >
                   <li><div style={[styles.tag, styles.tag.free]} />
-                    Free memory: { metricsInfo['mem.free'] / 1000 }MB
+                    Free memory: { (metricsInfo['mem.free'] / 1000).toFixed(2) } MB
                   </li>
                   <li><div style={[styles.tag, styles.tag.used]} />
-                    Used memory: { metricsInfo['mem'] - metricsInfo['mem.free'] / 1000 }MB
+                    Used memory: { ((metricsInfo['mem'] - metricsInfo['mem.free']) / 1000).toFixed(2) } MB
                   </li>
                   <li><b>
-                    Total memory: { metricsInfo['mem'] / 1000 }MB
+                    Total memory: { (metricsInfo['mem'] / 1000).toFixed(2) } MB
                   </b></li>
                 </ul>
               </div>
@@ -105,13 +105,13 @@ class Home extends Component {
                 </PieChart>
                 <ul style={styles.info} >
                   <li><div style={[styles.tag, styles.tag.free]} />
-                    Free heap: { metricsInfo['heap.committed'] / 1000 }MB
+                    Free heap: { (metricsInfo['heap.committed'] / 1000).toFixed(2) } MB
                   </li>
                   <li><div style={[styles.tag, styles.tag.used]} />
-                    Used heap: { metricsInfo['heap'] - metricsInfo['heap.committed'] / 1000 }MB
+                    Used heap: { ((metricsInfo['heap'] - metricsInfo['heap.committed']) / 1000).toFixed(2) } MB
                   </li>
                   <li><b>
-                    Total heap: { metricsInfo['heap'] / 1000 }MB
+                    Total heap: { (metricsInfo['heap'] / 1000).toFixed(2) } MB
                   </b></li>
                 </ul>
               </div>
