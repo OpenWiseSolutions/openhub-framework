@@ -2,7 +2,6 @@
 const path = require('path')
 const debug = require('debug')('app:config:project')
 const argv = require('yargs').argv
-const ip = require('ip')
 
 debug('Creating default configuration.')
 // ========================================================
@@ -24,7 +23,7 @@ const config = {
   // ----------------------------------
   // Server Configuration
   // ----------------------------------
-  server_host : ip.address(), // use string 'localhost' to prevent exposure on local network
+  server_host : 'localhost',
   server_port : process.env.PORT || 3000,
 
   // ----------------------------------
@@ -33,7 +32,7 @@ const config = {
 
   mock_server_port: 8080,
   mock_server_host: 'http://localhost:8080',
-  mock_server_prefix: '/api',
+  mock_server_prefix: '/web/admin',
 
   // ----------------------------------
   // Compiler Configuration

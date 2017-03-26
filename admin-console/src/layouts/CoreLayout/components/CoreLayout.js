@@ -9,16 +9,24 @@ import LoginModal from '../../../common/containers/loginModal.container'
 class CoreLayout extends Component {
 
   render () {
-    const { isAuth, children, sidebarExtended, navbarUserExpanded, actions, authActions } = this.props
+    const {
+      isAuth,
+      children,
+      sidebarExtended,
+      navbarUserExpanded,
+      actions,
+      authActions
+    } = this.props
+
     const bodyStyles = [
       styles.body,
-      sidebarExtended && styles.body.extended
+      sidebarExtended && isAuth && styles.body.extended
     ]
 
     return (
       <StyleRoot>
         <div style={styles.main}>
-          <Sidebar extended={sidebarExtended} />
+          <Sidebar extended={sidebarExtended && isAuth} />
           <LoginModal />
           <div style={bodyStyles}>
             <Navbar
@@ -28,7 +36,7 @@ class CoreLayout extends Component {
               toggleUser={actions.toggleNavbarUser}
               toggleLoginModal={authActions.toggleLoginModal}
               toggleSidebar={actions.toggleSidebar} />
-            <div className='core-layout-contents'>
+            <div style={styles.contents} >
               {children}
             </div>
           </div>

@@ -26,7 +26,7 @@ class Navbar extends Component {
     return (
       <div className='navbar-wrapper' style={styles.main}>
         <div className='sidebar-toggle' onClick={toggleSidebar} style={styles.left}>
-          <MenuIcon style={styles.menuIcon} />
+          { isAuth && <MenuIcon style={styles.menuIcon} />}
         </div>
         <div style={styles.right}>
           {!isAuth &&

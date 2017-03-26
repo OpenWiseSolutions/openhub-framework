@@ -9,6 +9,9 @@ export const defaultTransitionTime = '0.3s'
 export const userMenuWidth = 300
 export const dev = { backgroundColor: devColor, outline: `1px solid ${devColor}` }
 export const logo = 'logo.png'
+export const depth1 = 1
+export const depth2 = 2
+export const depth3 = 3
 
 // mixins
 export const transition = (prop = 'all', time = defaultTransitionTime) => (
