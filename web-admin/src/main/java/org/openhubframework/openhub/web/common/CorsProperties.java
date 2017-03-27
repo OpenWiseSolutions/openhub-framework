@@ -22,7 +22,7 @@ import org.springframework.web.cors.CorsConfiguration;
 
 
 /**
- * WisePorter specific CORS configuration which could be enabled/disabled via {@link #CORS_ENABLED} property.
+ * OpenHub specific CORS configuration which could be enabled/disabled via {@link #CORS_ENABLED} property.
  *
  * @author <a href="mailto:tomas.hanus@openwise.cz">Tomas Hanus</a>
  * @since 2.0

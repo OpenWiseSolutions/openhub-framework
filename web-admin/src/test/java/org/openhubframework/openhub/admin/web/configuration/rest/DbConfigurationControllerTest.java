@@ -56,7 +56,7 @@ import org.openhubframework.openhub.core.configuration.DbConfigurationParamDao;
 @Transactional
 public class DbConfigurationControllerTest extends AbstractAdminModuleRestTest {
 
-    protected static final String ROOT_URI = DbConfigurationController.REST_URI;
+    private static final String ROOT_URI = DbConfigurationController.REST_URI;
 
     private DbConfigurationParam param;
 
