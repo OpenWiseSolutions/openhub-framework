@@ -2,7 +2,18 @@ module.exports = [
   {
     request: {
       method: 'POST',
-      path: '/web/admin/login',
+      path: '/login',
+    },
+    response: () => {
+      return {
+        statusCode: 200
+      }
+    }
+  },
+  {
+    request: {
+      method: 'GET',
+      path: '/logout',
     },
     response: () => {
       return {

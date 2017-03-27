@@ -12,12 +12,16 @@ import Status from '../../../common/components/Status/Status'
 class Home extends Component {
 
   componentDidMount () {
-    const { actions: { getHealthInfo } } = this.props
+    const { actions: { getHealthInfo, getMetricsInfo } } = this.props
     getHealthInfo()
+    getMetricsInfo()
   }
 
   render () {
     const { isAuth, dashboard: { healthInfo, openHubInfo, metricsInfo } } = this.props
+
+    if (!healthInfo || !metricsInfo) return <div>Loading...</div>
+
     const isUp = (val) => val === 'UP'
 
     const appTableData = openHubInfo && [

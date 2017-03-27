@@ -7,7 +7,9 @@ const opt_serverConfig = {
 const sources = [
   require('./info/info.mock'),
   require('./health/health.mock'),
-  require('./metrics/metrics.mock')
+  require('./metrics/metrics.mock'),
+  require('./config/parameters.mock'),
+  require('./auth/auth.mock')
 ]
 
 runServer(sources, opt_serverConfig)

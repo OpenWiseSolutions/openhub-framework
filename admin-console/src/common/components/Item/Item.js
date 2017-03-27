@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import Radium from 'radium'
 import ArrowDown from 'react-icons/lib/md/keyboard-arrow-down'
 import styles from './item.styles'
-import { browserHistory } from 'react-router'
 
 @Radium
 class Item extends Component {
@@ -17,9 +16,10 @@ class Item extends Component {
 
   handleClick (event) {
     const { link, onClick, children } = this.props
+    const { router } = this.context
     event && event.stopPropagation()
     !children && onClick && onClick()
-    link && browserHistory.push(link)
+    link && router.push(link)
     children && this.setState(({ expanded }) => ({ expanded: !expanded }))
   }
 
@@ -60,6 +60,10 @@ Item.propTypes = {
   onClick: PropTypes.func,
   style: PropTypes.object,
   expandedStyle: PropTypes.object
+}
+
+Item.contextTypes = {
+  router: PropTypes.any
 }
 
 export default Item

@@ -2,9 +2,9 @@ import React, { Component, PropTypes } from 'react'
 import Radium from 'radium'
 import Modal from 'react-modal'
 import styles from './loginModal.styles'
-import MdClose from 'react-icons/lib/md/close'
 import Anchor from '../Anchor/Anchor'
 import Button from '../Button/Button'
+import ModalHeader from '../ModalHeader/ModalHeader'
 import { ValidForm, Field, ValidStyles } from 'valid-react-form'
 
 @Radium
@@ -13,12 +13,7 @@ class LoginModal extends Component {
     const { loginModalOpen, actions } = this.props
     return (
       <Modal style={styles} contentLabel='Login' isOpen={loginModalOpen}>
-        <div style={styles.header}>
-          <div style={styles.header.title}>Login</div>
-          <div style={styles.header.close}>
-            <MdClose onClick={actions.toggleLoginModal} />
-          </div>
-        </div>
+        <ModalHeader title={'Login'} onClose={actions.toggleLoginModal} />
         <ValidStyles>
           <ValidForm style={styles.form} onSubmit={actions.submitLogin} autoComplete='off'>
             <Field label='Username'

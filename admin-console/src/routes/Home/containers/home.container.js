@@ -3,11 +3,9 @@ import { connect } from 'react-redux'
 import { actions } from '../modules/home.module'
 import Home from '../components/Home'
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    actions: bindActionCreators(actions, dispatch)
-  }
-}
+const mapDispatchToProps = (dispatch) => ({
+  actions: bindActionCreators(actions, dispatch)
+})
 
 const mapStateToProps = (state) => {
   return {

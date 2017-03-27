@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { hashHistory } from 'react-router'
+
 export const INIT_AUTH = 'INIT_AUTH'
 export const LOGIN_TOGGLE = 'LOGIN_TOGGLE'
 export const LOGIN = 'LOGIN'
@@ -21,6 +23,7 @@ export function toggleLoginModal () {
 export function logout () {
   sessionStorage.removeItem(AUTH_SESSION)
   const payload = axios.get('/web/admin/logout')
+  hashHistory.push('/')
   return {
     type: LOGOUT,
     payload
