@@ -1,4 +1,189 @@
 --
+-- DB script for creating necessary tables (PostgreSQL 9.x)
+--
+-- PREREQUISITE: there is "openhub" user role defined
+--
+
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- START: create schema (call once only)
+--
+
+--DROP SCHEMA IF EXISTS openhub CASCADE;
+--CREATE SCHEMA openhub;
+
+-- Note: Heroku runs the SQL below to create a user and database for you.
+-- You cannot create or modify databases and roles on Heroku Postgres.
+-- For simple use if we need upgrade database schema from command line, we uncomment privileges double lines which
+-- global configure privileges of created objects in schema for appropriate user
+
+--ALTER SCHEMA openhub OWNER TO openhub;
+
+--ALTER DEFAULT PRIVILEGES IN SCHEMA openhub GRANT SELECT, USAGE, UPDATE ON SEQUENCES TO openhub;
+--ALTER DEFAULT PRIVILEGES IN SCHEMA openhub GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO openhub;
+
+--
+-- END: create schema
+--
+
+
+SET search_path = openhub, pg_catalog;
+
+drop sequence if exists openhub_sequence;
+
+create sequence openhub_sequence;
+
+--
+-- table: message
+--
+drop table if exists message cascade;
+
+create table message (
+    msg_id int8 not null,
+    correlation_id varchar(100) not null,
+    process_id varchar(100),
+    msg_timestamp timestamp not null,
+    receive_timestamp timestamp not null,
+    service varchar(30) not null,
+    source_system varchar(15) not null,
+    state varchar(15) not null,
+    start_process_timestamp timestamp,
+    object_id varchar(50),
+    entity_type varchar(30),
+    operation_name varchar(100) not null,
+    payload text not null,
+    envelope text null,
+    failed_desc text,
+    failed_error_code varchar(5),
+    failed_count int4 not null,
+    last_update_timestamp timestamp,
+    custom_data varchar(20000),
+    business_error varchar(20000),
+    parent_msg_id int8,
+    primary key (msg_id)
+);
+
+alter table message add constraint uq_correlation_system unique (correlation_id, source_system);
+
+drop index if exists msg_state_idx;
+create index msg_state_idx ON message (state);
+
+-- adding funnel_value
+alter table message add column funnel_value varchar(50) null;
+
+drop index if exists funnel_value_idx;
+create index funnel_value_idx ON message (funnel_value);
+
+ALTER TABLE message OWNER TO openhub;
+
+
+--
+-- table: external_call
+--
+drop table if exists external_call cascade;
+
+create table external_call (
+    call_id int8 not null,
+    creation_timestamp timestamp not null,
+    entity_id varchar(150) not null,
+    failed_count integer not null,
+    last_update_timestamp timestamp not null,
+    msg_timestamp timestamp not null,
+    msg_id bigint not null,
+    operation_name varchar(100) not null,
+    state varchar(20) not null,
+    primary key (call_id)
+);
+
+alter table external_call add constraint uq_ext_call_operation_entity_id unique (operation_name, entity_id);
+
+alter table external_call add constraint fk_external_call_message foreign key (msg_id) references message;
+
+drop index if exists operation_name_idx;
+create index operation_name_idx ON external_call (operation_name);
+
+drop index if exists ext_state_idx;
+create index ext_state_idx ON external_call (state);
+
+ALTER TABLE external_call OWNER TO openhub;
+
+
+
+
+--
+-- DB increment script for version 0.4
+--
+
+--
+-- tables: request and response
+--
+drop table if exists request cascade;
+drop table if exists response cascade;
+
+create table request (
+    req_id int8 not null,
+    msg_id int8 null,
+    res_join_id varchar(100) not null,
+    uri varchar(400) not null,
+    req_envelope text not null,
+    req_timestamp timestamp not null,
+    primary key (req_id)
+);
+
+alter table request add constraint fk_request_message foreign key (msg_id) references message;
+
+create table response (
+    res_id int8 not null,
+    req_id int8 null,
+    res_envelope text null,
+    failed_reason text null,
+    res_timestamp timestamp null,
+    failed boolean not null default false,
+    primary key (res_id)
+);
+
+alter table response add constraint fk_response_request foreign key (req_id) references request;
+
+ALTER TABLE request OWNER TO openhub;
+ALTER TABLE response OWNER TO openhub;
+
+
+--
+-- table changes: message
+--
+
+-- adding parent_binding_type
+alter table message add column parent_binding_type varchar(25) null;
+
+-- if defined parent ID then it was HARD binding type by default
+update message set parent_binding_type = 'HARD' where parent_msg_id is not null;
+
+-- adding guaranteed order
+alter table message add column guaranteed_order boolean not null default false;
+
+-- adding exclude FAILED state for guaranteed order
+alter table message add column exclude_failed_state boolean not null default false;
+
+-- adding funnel_component_id
+alter table message add column funnel_component_id varchar(50) null;
+
+
+--
+-- tables: response
+--
+
+-- adding reference to message
+alter table response add column msg_id int8 null;
+
+
+
+
+--
 -- DB increment script for version 0.4 - archive functionality that is compliant with 0.4 DB schema
 --
 
@@ -231,3 +416,51 @@ end;
 $BODY$
   language plpgsql VOLATILE
   COST 100;
+
+
+
+
+--
+-- DB increment script for version 2.0
+--
+
+--
+-- tables: configuration
+--
+drop table if exists configuration_item cascade;
+
+create table configuration_item (
+    -- unique code of one configuration item, e.g. ohf.asyncThread.processing.count.name
+    code            varchar(100)    not null unique,
+    -- unique code for specific configuration scope, e.g. "dataSource" for data source settings
+    category_code   varchar(100)    not null,
+    -- current (valid) value
+    current_value   varchar(1000)   null,
+    -- default value if there is no current_value defined
+    default_value   varchar(1000)   null,
+    -- data type of current and default value
+    data_type       varchar(20)     not null,
+    -- is this configuration item mandatory? In other worlds must be at least one current or default value defined?
+    mandatory       boolean         not null default true,
+    -- regular expression for checking if current value is valid
+    validation      varchar(100)    null,
+    primary key (code)
+);
+
+DROP INDEX IF EXISTS configuration_item_cat_code_idx;
+CREATE INDEX configuration_item_cat_code_idx ON configuration_item (category_code);
+
+
+ALTER TABLE configuration_item OWNER TO openhub;
+
+
+-- Call db_init-configuration.sql for inserting default configuration items
+
+
+--
+-- DB increment script for version 2.0.0
+--
+
+-- adding start_in_queue_timestamp
+alter table message add column start_in_queue_timestamp timestamp null;
+
