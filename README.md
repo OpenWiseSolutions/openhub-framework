@@ -3,14 +3,14 @@
 
 **ESB made by developers for developers**
 
--     Open-source ESB with community development.
--     No limits for distribution.
--     Real life needs turned into framework.
--     Focus on maximum reliability during operation.
--     Simplicity and high speed of the development.
--     Maximum reuse of the code.
--     100% control over the code.
--     Active architectural governance.
+* Open-source ESB with community development.
+* No limits for distribution.
+* Real life needs turned into framework.
+* Focus on maximum reliability during operation.
+* Simplicity and high speed of the development.
+* Maximum reuse of the code.
+* 100% control over the code.
+* Active architectural governance.
 
 
 Have you already noticed that most of integration projects consist of 80% from routine and only 20% are really new topics? Do you really want to spend so much effort on things which have already been solved before ? We don't.
