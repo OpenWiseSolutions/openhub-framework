@@ -35,10 +35,10 @@ import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.util.Assert;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -52,6 +52,9 @@ import org.openhubframework.openhub.api.exception.ConfigurationException;
  * Configuration checker that is called when application context is initialized.
  * There are some predefined checks or you can define your own checking via {@link ConfCheck} interface.
  * <p/>
+ * Checks will be performed after the application is fully started, if running with embedded servlet container,
+ * it will wait for its full initialization, see Spring {@link ApplicationReadyEvent} for more info.
+ * <p/>
  * Checking of {@link #checkLocalhostUri() localhost URI} must be explicitly enabled by setting
  * property "{@code ohf.server.localhostUri.check}".
  * <p/>
@@ -61,7 +64,7 @@ import org.openhubframework.openhub.api.exception.ConfigurationException;
  * @since 0.4
  * @see ConfCheck
  */
-public class ConfigurationChecker implements ApplicationListener<ContextRefreshedEvent> {
+public class ConfigurationChecker implements ApplicationListener<ApplicationReadyEvent> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConfigurationChecker.class);
 
@@ -93,7 +96,7 @@ public class ConfigurationChecker implements ApplicationListener<ContextRefreshe
     private List<ConfCheck> checks;
 
     @Override
-    public void onApplicationEvent(ContextRefreshedEvent event) {
+    public void onApplicationEvent(ApplicationReadyEvent event) {
         ApplicationContext ctx = event.getApplicationContext();
         if (ctx instanceof WebApplicationContext) {
             checkConfiguration(ctx);
