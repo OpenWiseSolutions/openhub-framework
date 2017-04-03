@@ -96,11 +96,6 @@ public enum InternalErrorEnum implements ErrorExtEnum {
     E112("locking exception - unsuccessful getting lock for the DB record."),
 
     /**
-     * There is no requested invoice in the repository.
-     */
-    E113("there is no requested invoice in the repository"),
-
-    /**
      * Request is rejected because of throttling rules.
      */
     E114("request is rejected because of throttling rules"),

@@ -17,7 +17,7 @@
 package org.openhubframework.openhub.core.configuration;
 
 import java.util.List;
-import javax.annotation.Nullable;
+import java.util.Optional;
 
 import org.openhubframework.openhub.api.configuration.DbConfigurationParam;
 
@@ -50,8 +50,7 @@ public interface DbConfigurationParamDao {
      * @param code The parameter code
      * @return the parameter or null if there is no parameter with specified code
      */
-    @Nullable
-    DbConfigurationParam findParameter(String code);
+    Optional<DbConfigurationParam> findParameter(String code);
 
     /**
      * Finds all parameters.

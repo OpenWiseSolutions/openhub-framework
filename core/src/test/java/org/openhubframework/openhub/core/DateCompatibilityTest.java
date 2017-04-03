@@ -27,6 +27,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
+import java.util.Date;
 import java.util.TimeZone;
 
 import org.junit.Before;
@@ -63,16 +64,30 @@ public class DateCompatibilityTest {
         // or 01-10-26T21:32 (all the parts must be specified).
 
         assertValidXmlDateTime("2013-10-05T00:00:00.000+02:00", "2013-10-05T00:00:00+02:00");
-        assertValidXmlDateTime("2013-10-05T00:00:00", "2013-10-05T00:00:00+01:00");
         assertValidXmlDateTime("2013-10-05T00:00:00Z", "2013-10-05T00:00:00Z");
-        assertValidXmlDateTime("2001-10-26T21:32:52.12679", "2001-10-26T21:32:52.12679+01:00");
-        assertValidXmlDateTime("2001-10-26T21:32", "2001-10-26T21:32:00+01:00");
+
+        if (isSummerTime()) {
+            assertValidXmlDateTime("2013-10-05T00:00:00", "2013-10-05T00:00:00+02:00");
+            assertValidXmlDateTime("2001-10-26T21:32:52.12679", "2001-10-26T21:32:52.12679+02:00");
+            assertValidXmlDateTime("2001-10-26T21:32", "2001-10-26T21:32:00+02:00");
+
+            OffsetDateTime xmlDate = JaxbDateAdapter.parseDate("2013-10-05");
+            assertThat(JaxbDateAdapter.printDate(xmlDate), startsWith("2013-10-05+02:00"));
+        } else {
+            assertValidXmlDateTime("2013-10-05T00:00:00", "2013-10-05T00:00:00+01:00");
+            assertValidXmlDateTime("2001-10-26T21:32:52.12679", "2001-10-26T21:32:52.12679+01:00");
+            assertValidXmlDateTime("2001-10-26T21:32", "2001-10-26T21:32:00+01:00");
+
+            OffsetDateTime xmlDate = JaxbDateAdapter.parseDate("2013-10-05");
+            assertThat(JaxbDateAdapter.printDate(xmlDate), startsWith("2013-10-05+01:00"));
+        }
 
         assertWrongXmlDateTime("2013-10-05");
         assertWrongXmlDateTime("2001-10-26T25:32:52+02:00");
+    }
 
-        OffsetDateTime xmlDate = JaxbDateAdapter.parseDate("2013-10-05");
-        assertThat(JaxbDateAdapter.printDate(xmlDate), startsWith("2013-10-05+01:00"));
+    private boolean isSummerTime() {
+        return TimeZone.getDefault().inDaylightTime(new Date());
     }
 
     private void assertValidXmlDateTime(String xml, String printedDate) {
@@ -135,12 +150,20 @@ public class DateCompatibilityTest {
         // without timezone
         xmlDate = JaxbDateAdapter.parseDate("2013-10-05");
 
-        assertThat(JaxbDateAdapter.printDate(xmlDate), startsWith("2013-10-05+01:00"));
+        if (isSummerTime()) {
+            assertThat(JaxbDateAdapter.printDate(xmlDate), startsWith("2013-10-05+02:00"));
+        } else {
+            assertThat(JaxbDateAdapter.printDate(xmlDate), startsWith("2013-10-05+01:00"));
+        }
 
         // converts to UTC
         OffsetDateTime localDate = OffsetDateTime.of(2013, 10, 5, 0, 0, 0, 0, ZoneOffset.from(ZonedDateTime.now()));
         utcDate = Tools.toUTC(localDate); // 2013-10-04 23:00 (UTC time zone)
-        assertThat(JaxbDateAdapter.printDateTime(utcDate), is("2013-10-04T23:00:00Z")); // default timezone
+        if (isSummerTime()) {
+            assertThat(JaxbDateAdapter.printDateTime(utcDate), is("2013-10-04T22:00:00Z")); // default timezone
+        } else {
+            assertThat(JaxbDateAdapter.printDateTime(utcDate), is("2013-10-04T23:00:00Z")); // default timezone
+        }
         assertThat(utcDate.toInstant().equals(localDate.toInstant()), is(true));
         assertThat(utcDate.toInstant().equals(xmlDate.toInstant()), is(true));
 

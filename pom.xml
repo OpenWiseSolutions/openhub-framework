@@ -162,6 +162,7 @@
         <javamelody-version>1.65.0</javamelody-version>
         <metrics-version>3.2.0</metrics-version>
         <jolokia-version>1.3.5</jolokia-version>
+        <spring-data-commons.version>1.12.8.RELEASE</spring-data-commons.version>
     </properties>
 
     <dependencyManagement>
@@ -310,6 +311,11 @@
                 <artifactId>spring-aspects</artifactId>
                 <version>${spring.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-commons</artifactId>
+                <version>${spring-data-commons.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -326,11 +332,6 @@
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjtools</artifactId>
-        </dependency>
-        <!-- enabled configuration properties in OHF classes -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
         </dependency>
     </dependencies>
 
@@ -354,12 +355,64 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${maven-compiler-plugin.version}</version>
                     <configuration>
+                        <!-- http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#configuration-metadata-annotation-processor -->
+                        <proc>none</proc>
                         <source>${java.version}</source>
                         <target>${java.version}</target>
                         <encoding>UTF-8</encoding>
                         <showDeprecation>true</showDeprecation>
                         <showWarnings>true</showWarnings>
                     </configuration>
+                    <!-- compiler is disabled because of aspectj compiler -->
+                    <executions>
+                        <execution>
+                            <id>default-compile</id>
+                            <phase>none</phase>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>aspectj-maven-plugin</artifactId>
+                    <version>1.10</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>compile</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <!-- https://eclipse.org/aspectj/doc/next/devguide/ajc-ref.html -->
+                        <complianceLevel>${java.version}</complianceLevel>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                        <Xlint>ignore</Xlint>
+                        <!--<showWeaveInfo>true</showWeaveInfo>-->
+                        <!--<forceAjcCompile>true</forceAjcCompile>-->
+                        <weaveDirectories>
+                            <weaveDirectory>${project.build.directory}/classes</weaveDirectory>
+                        </weaveDirectories>
+                        <aspectLibraries>
+                            <aspectLibrary>
+                                <groupId>org.springframework</groupId>
+                                <artifactId>spring-aspects</artifactId>
+                            </aspectLibrary>
+                        </aspectLibraries>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.aspectj</groupId>
+                            <artifactId>aspectjtools</artifactId>
+                            <version>${aspectj.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.aspectj</groupId>
+                            <artifactId>aspectjrt</artifactId>
+                            <version>${aspectj.version}</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
 
                 <!-- build source artifacts by default -->
@@ -626,6 +679,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>aspectj-maven-plugin</artifactId>
             </plugin>
 
             <plugin>

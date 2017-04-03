@@ -33,10 +33,8 @@ import org.springframework.boot.autoconfigure.web.MultipartAutoConfiguration;
 import org.springframework.boot.autoconfigure.websocket.WebSocketAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RestController;
@@ -66,6 +64,8 @@ import org.openhubframework.openhub.test.route.ActiveRoutesCollector;
                 value = {RestController.class, Controller.class, AutoConfiguration.class},
                 type = FilterType.ANNOTATION))
 @EnableConfigurationProperties
+@EnableSpringConfigured
+@EnableAspectJAutoProxy
 public class TestConfig {
 
     @Bean(name = WS_AUTH_POLICY)
@@ -77,12 +77,12 @@ public class TestConfig {
      * Implementation of {@link RoutesCollector} for tests that adds only active routes into camel context.
      */
     @Bean
-    public ActiveRoutesCollector activeRoutesCollector(ApplicationContext applicationContext, CamelConfigurationProperties config) {
+    public ActiveRoutesCollector activeRoutesCollector(ApplicationContext ctx, CamelConfigurationProperties config) {
         Assert.notNull(config, "config must not be null");
 
         Collection<CamelContextConfiguration> configurations
-                = applicationContext.getBeansOfType(CamelContextConfiguration.class).values();
-        return new ActiveRoutesCollector(applicationContext, new ArrayList<>(configurations), config);
+                = ctx.getBeansOfType(CamelContextConfiguration.class).values();
+        return new ActiveRoutesCollector(ctx, new ArrayList<>(configurations), config);
     }
 
     @Bean

@@ -19,12 +19,8 @@ package org.openhubframework.openhub.api.entity;
 import java.time.Instant;
 import javax.persistence.*;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.util.Assert;
-
-import org.openhubframework.openhub.api.common.HumanReadable;
 
 
 /**
@@ -44,7 +40,7 @@ import org.openhubframework.openhub.api.common.HumanReadable;
 @Table(name = "external_call",
         uniqueConstraints = @UniqueConstraint(name = "uq_operation_entity_id",
                 columnNames = {"operation_name", "entity_id"}))
-public class ExternalCall implements HumanReadable {
+public class ExternalCall extends SuperEntity<Long> {
 
     public static final String CONFIRM_OPERATION = "confirmation";
 
@@ -86,6 +82,7 @@ public class ExternalCall implements HumanReadable {
 
     /** Default public constructor. */
     public ExternalCall() {
+        super(null);
     }
 
     /**
@@ -149,10 +146,12 @@ public class ExternalCall implements HumanReadable {
      *
      * @return unique ID
      */
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
@@ -287,30 +286,13 @@ public class ExternalCall implements HumanReadable {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        } else if (obj instanceof ExternalCall) {
-            ExternalCall en = (ExternalCall) obj;
-
-            return new EqualsBuilder()
-                    .append(getId(), en.getId())
-                    .isEquals();
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(getId())
-                .toHashCode();
+        return obj == this || obj instanceof ExternalCall && super.equals(obj);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .append("id", id)
+                .appendSuper(super.toString())
                 .append("msgId", msgId)
                 .append("operationName", operationName)
                 .append("state", state)

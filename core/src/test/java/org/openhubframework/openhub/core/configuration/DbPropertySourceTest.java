@@ -53,11 +53,11 @@ public class DbPropertySourceTest extends AbstractCoreDbTest {
 
     @Before
     public void prepareConfParam() {
-        DbConfigurationParam param = new DbConfigurationParam("sth.source.1", "misc", "oneDB",
+        DbConfigurationParam param = new DbConfigurationParam("sth.source.1", "desc", "misc", "oneDB",
                 null, DataTypeEnum.STRING, true, null);
         paramDao.insert(param);
 
-        param = new DbConfigurationParam("ohf.source.2", "misc", "twoDB",
+        param = new DbConfigurationParam("ohf.source.2", "desc", "misc", "twoDB",
                 null, DataTypeEnum.STRING, true, null);
         paramDao.insert(param);
     }

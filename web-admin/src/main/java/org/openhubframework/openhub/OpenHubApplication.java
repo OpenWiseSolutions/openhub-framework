@@ -28,18 +28,19 @@ import org.springframework.boot.web.support.ErrorPageFilter;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 import org.springframework.web.WebApplicationInitializer;
 
 import org.openhubframework.openhub.api.route.CamelConfiguration;
 import org.openhubframework.openhub.common.AutoConfiguration;
 import org.openhubframework.openhub.common.log.LogContextFilter;
-import org.openhubframework.openhub.config.CamelRoutesConfig;
-import org.openhubframework.openhub.config.GlobalSecurityConfig;
-import org.openhubframework.openhub.config.WebContextConfig;
-import org.openhubframework.openhub.config.WebSecurityConfig;
 import org.openhubframework.openhub.core.config.CamelConfig;
 import org.openhubframework.openhub.core.config.JpaConfig;
 import org.openhubframework.openhub.core.config.WebServiceConfig;
+import org.openhubframework.openhub.web.config.CamelRoutesConfig;
+import org.openhubframework.openhub.web.config.GlobalSecurityConfig;
+import org.openhubframework.openhub.web.config.WebContextConfig;
+import org.openhubframework.openhub.web.config.WebSecurityConfig;
 
 
 /**
@@ -73,6 +74,8 @@ import org.openhubframework.openhub.core.config.WebServiceConfig;
                 @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = CamelConfiguration.class)
         })
 @Configuration
+@EnableSpringConfigured
+@EnableAspectJAutoProxy
 @PropertySource(value = {"classpath:/extensions.cfg"})
 // WebApplicationInitializer must be implemented directly because of Weblogic support
 // see https://docs.spring.io/spring-boot/docs/current/reference/html/howto-traditional-deployment.html#howto-weblogic

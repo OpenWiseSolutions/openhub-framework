@@ -88,11 +88,6 @@
             <groupId>org.jolokia</groupId>
             <artifactId>jolokia-core</artifactId>
         </dependency>
-        <!-- TODO PJUZA neni potreba pro Boot 1.4.1 -->
-        <dependency>
-            <groupId>com.googlecode.json-simple</groupId>
-            <artifactId>json-simple</artifactId>
-        </dependency>
 
         <!-- logging -->
         <dependency>
@@ -100,6 +95,12 @@
             <artifactId>janino</artifactId>
         </dependency>
 
+        <!-- test dependencies -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>openhub-test</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <profiles>

@@ -21,12 +21,8 @@ import javax.annotation.Nullable;
 import javax.persistence.*;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.util.Assert;
-
-import org.openhubframework.openhub.api.common.HumanReadable;
 
 
 /**
@@ -38,7 +34,7 @@ import org.openhubframework.openhub.api.common.HumanReadable;
  */
 @Entity
 @Table(name = "response")
-public class Response implements HumanReadable {
+public class Response extends SuperEntity<Long> {
 
     @Id
     @Column(name = "res_id")
@@ -70,6 +66,7 @@ public class Response implements HumanReadable {
 
     /** Default public constructor. */
     public Response() {
+        super(null);
     }
 
     /**
@@ -105,10 +102,12 @@ public class Response implements HumanReadable {
      *
      * @return unique ID
      */
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
@@ -200,30 +199,13 @@ public class Response implements HumanReadable {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        } else if (obj instanceof Response) {
-            Response en = (Response) obj;
-
-            return new EqualsBuilder()
-                    .append(getId(), en.getId())
-                    .isEquals();
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(getId())
-                .toHashCode();
+        return obj == this || obj instanceof Response && super.equals(obj);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .append("id", id)
+                .appendSuper(super.toString())
                 .append("request", request != null ? request.toHumanString() : "null")
                 .append("response", response)
                 .append("failedReason", failedReason)

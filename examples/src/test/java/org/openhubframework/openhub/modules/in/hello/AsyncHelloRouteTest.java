@@ -32,7 +32,7 @@ import org.openhubframework.openhub.api.asynch.model.ConfirmationTypes;
 import org.openhubframework.openhub.common.Tools;
 import org.openhubframework.openhub.modules.AbstractExampleModulesDbTest;
 import org.openhubframework.openhub.modules.in.hello.model.AsyncHelloResponse;
-import org.openhubframework.openhub.test.TestUtils;
+import org.openhubframework.openhub.test.TestCamelUtils;
 import org.openhubframework.openhub.test.data.ExternalSystemTestEnum;
 import org.openhubframework.openhub.test.data.ServiceTestEnum;
 import org.openhubframework.openhub.test.route.ActiveRoutes;
@@ -64,7 +64,7 @@ public class AsyncHelloRouteTest extends AbstractExampleModulesDbTest {
                 .adviceWith(getCamelContext(), new AdviceWithRouteBuilder() {
                     @Override
                     public void configure() throws Exception {
-                        TestUtils.replaceToAsynch(this);
+                        TestCamelUtils.replaceToAsynch(this);
 
                         weaveAddLast().to("mock:test");
                     }

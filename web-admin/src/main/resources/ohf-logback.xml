@@ -60,7 +60,7 @@
 
     <!-- OpenHub integration framework namespaces -->
     <logger name="org.openhubframework.openhub" level="${logging.level.org.openhubframework.openhub:-INFO}"/>
-    <logger name="org.openhubframework.openhub.admin.web.filter.RequestResponseLoggingFilter" level="${logging.level.org.openhubframework.openhub.admin.web.filter.RequestResponseLoggingFilter:-DEBUG}"/>
+    <logger name="org.openhubframework.openhub.web.RequestResponseLoggingFilter" level="${logging.level.org.openhubframework.openhub.admin.web.filter.RequestResponseLoggingFilter:-DEBUG}"/>
     <!-- Spring namespaces -->
     <logger name="org.springframework.ws" level="${logging.level.org.springframework.ws:-INFO}"/>
     <!--

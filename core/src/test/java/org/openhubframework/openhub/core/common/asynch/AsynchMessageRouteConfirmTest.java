@@ -50,6 +50,7 @@ import org.openhubframework.openhub.api.route.AbstractBasicRoute;
 import org.openhubframework.openhub.common.time.Seconds;
 import org.openhubframework.openhub.core.AbstractCoreDbTest;
 import org.openhubframework.openhub.core.common.asynch.confirm.ConfirmationPollExecutor;
+import org.openhubframework.openhub.test.TestCamelUtils;
 import org.openhubframework.openhub.test.data.ExternalSystemTestEnum;
 import org.openhubframework.openhub.test.data.ServiceTestEnum;
 import org.openhubframework.openhub.test.route.ActiveRoutes;
@@ -154,7 +155,7 @@ public class AsynchMessageRouteConfirmTest extends AbstractCoreDbTest {
     @Test
     public void testConfirmationStatusFailed() throws Exception {
         // simulate fatal failure:
-        mock.whenAnyExchangeReceived(throwException(new ValidationIntegrationException(InternalErrorEnum.E102)));
+        mock.whenAnyExchangeReceived(TestCamelUtils.throwException(new ValidationIntegrationException(InternalErrorEnum.E102)));
 
         // save message into DB
         em.persist(msg);

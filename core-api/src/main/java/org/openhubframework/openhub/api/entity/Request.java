@@ -23,12 +23,8 @@ import javax.annotation.Nullable;
 import javax.persistence.*;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.util.Assert;
-
-import org.openhubframework.openhub.api.common.HumanReadable;
 
 
 /**
@@ -43,7 +39,7 @@ import org.openhubframework.openhub.api.common.HumanReadable;
  */
 @Entity
 @Table(name = "request")
-public class Request implements HumanReadable {
+public class Request extends SuperEntity<Long> {
 
     private static final int URI_MAX_LENGTH = 400;
     /**
@@ -84,6 +80,7 @@ public class Request implements HumanReadable {
 
     /** Default public constructor. */
     public Request() {
+        super(null);
     }
 
     /**
@@ -117,10 +114,12 @@ public class Request implements HumanReadable {
      *
      * @return unique ID
      */
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
@@ -243,30 +242,13 @@ public class Request implements HumanReadable {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        } else if (obj instanceof Request) {
-            Request en = (Request) obj;
-
-            return new EqualsBuilder()
-                    .append(getId(), en.getId())
-                    .isEquals();
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(getId())
-                .toHashCode();
+        return obj == this || obj instanceof Request && super.equals(obj);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .append("id", id)
+                .appendSuper(super.toString())
                 .append("msgId", msgId)
                 .append("responseJoinId", responseJoinId)
                 .append("uri", uri)

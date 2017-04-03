@@ -17,6 +17,7 @@
 package org.openhubframework.openhub.core.configuration;
 
 import java.util.List;
+import java.util.Optional;
 import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
@@ -66,17 +67,14 @@ public class DbConfigurationParamServiceImpl implements DbConfigurationParamServ
     @Transactional(readOnly = true)
     @Override
     public DbConfigurationParam getParameter(String code) {
-        DbConfigurationParam param = paramDao.findParameter(code);
-        if (param == null) {
-            throw new ConfigurationException(Tools.fm("there is no conf. parameter with code = {}", code));
-        }
-        return param;
+        return paramDao.findParameter(code).orElseThrow(
+                () -> new ConfigurationException(Tools.fm("there is no conf. parameter with code = {}", code)));
     }
 
     @Transactional(readOnly = true)
     @Nullable
     @Override
-    public DbConfigurationParam findParameter(String code) {
+    public Optional<DbConfigurationParam> findParameter(String code) {
         return paramDao.findParameter(code);
     }
 

@@ -55,7 +55,7 @@ public class DbConfigurationParamServiceTest extends AbstractCoreDbTest {
 
     @Before
     public void prepareConfParam() {
-        param = new DbConfigurationParam("ohf.async.concurrentConsumers", "async", "1",
+        param = new DbConfigurationParam("ohf.async.concurrentConsumers", "desc", "async", "1",
                 null, DataTypeEnum.INT, true, null);
 
         paramDao.insert(param);
