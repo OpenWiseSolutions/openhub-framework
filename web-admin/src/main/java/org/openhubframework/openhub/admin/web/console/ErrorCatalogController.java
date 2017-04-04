@@ -16,6 +16,9 @@
 
 package org.openhubframework.openhub.admin.web.console;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -23,6 +26,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.openhubframework.openhub.admin.services.ErrorCatalogService;
+import org.openhubframework.openhub.api.entity.ErrorsCatalog;
+
 
 /**
  * Controller for displaying catalog of errors.
@@ -41,7 +46,10 @@ public class ErrorCatalogController {
     @RequestMapping("/" + VIEW_NAME)
     public String showErrorCatalog(@ModelAttribute("model") ModelMap model) {
 
-        model.addAttribute("errorCodesCatalog", errorCodesCatalog.getErrorCatalog());
+        final List<ErrorsCatalog> errorsCatalog = errorCodesCatalog.getErrorCatalog();
+        model.addAttribute("errorCodesCatalog", 
+                errorsCatalog.stream()
+                    .collect(Collectors.toMap(ErrorsCatalog::getName, ErrorsCatalog::getCodes)));
         return VIEW_NAME;
     }
 }

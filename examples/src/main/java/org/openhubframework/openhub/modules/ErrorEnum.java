@@ -16,6 +16,7 @@
 
 package org.openhubframework.openhub.modules;
 
+import org.openhubframework.openhub.api.exception.ErrorCodeCatalog;
 import org.openhubframework.openhub.api.exception.ErrorExtEnum;
 
 import org.springframework.util.Assert;
@@ -25,6 +26,7 @@ import org.springframework.util.Assert;
  *
  * @author Petr Juza
  */
+@ErrorCodeCatalog("CUSTOM")
 public enum ErrorEnum implements ErrorExtEnum {
 
     ;
