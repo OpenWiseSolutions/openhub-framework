@@ -22,11 +22,13 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
+import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.regex.Pattern;
 
 import org.junit.Test;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 
 /**
@@ -68,8 +70,9 @@ public class DataTypeConverterTest {
 
     @Test
     public void testFloat() throws ParseException {
-        assertConvertFrom(TypeConverterEnum.FLOAT, "13.5", 13.5f);
-        assertConvertToString(TypeConverterEnum.FLOAT, 13.5f, "13.5");
+        char separator = new DecimalFormatSymbols(LocaleContextHolder.getLocale()).getDecimalSeparator();
+        assertConvertFrom(TypeConverterEnum.FLOAT, "13" + separator + "5", 13.5f);
+        assertConvertToString(TypeConverterEnum.FLOAT, 13.5f, "13" + separator + "5");
     }
 
     @Test
