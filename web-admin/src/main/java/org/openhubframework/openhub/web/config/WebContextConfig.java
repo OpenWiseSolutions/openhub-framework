@@ -36,6 +36,7 @@ import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.Ordered;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -64,12 +65,15 @@ import org.openhubframework.openhub.web.common.JavaMelodyConfigurationProperties
 @EnableAutoConfiguration
 @EnableConfigurationProperties
 @ComponentScan(basePackages = {
-        "org.openhubframework.openhub.web",
-        "org.openhubframework.openhub.admin"
+        "org.openhubframework.openhub.admin",
+        "org.openhubframework.openhub.web"
 },
         excludeFilters =
         @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = AutoConfiguration.class))
 @Configuration
+// activate AOP also for web context
+@EnableSpringConfigured
+@EnableAspectJAutoProxy
 @ImportResource({"classpath:net/bull/javamelody/monitoring-spring.xml", "classpath:sp_h2_server.xml"})
 public class WebContextConfig {
 

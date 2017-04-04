@@ -80,7 +80,7 @@ public class DbConfigurationControllerTest extends AbstractAdminModuleRestTest {
         final URIBuilder uriBuilder = createGetUrl(ROOT_URI)
                 .addParameters(createPagePair(1, 100));
 
-        // performs GET: /web/admin/api/config-params?p=1&s=100
+        // performs GET: /api/config-params?p=1&s=100
         mockMvc.perform(get(toUrl(uriBuilder))
                 .accept(MediaType.APPLICATION_JSON)
                 .with(SecurityMockMvcRequestPostProcessors.authentication(mockAuthentication("ADMIN"))))
@@ -105,7 +105,7 @@ public class DbConfigurationControllerTest extends AbstractAdminModuleRestTest {
                 .add("defaultValue", "10")
                 .build();
 
-        // performs PUT: /web/admin/api/config-params
+        // performs PUT: /api/config-params
         mockMvc.perform(put(toUrl(uriBuilder))
                 .content(request.toString())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -132,7 +132,7 @@ public class DbConfigurationControllerTest extends AbstractAdminModuleRestTest {
                 .add("currentValue", "abc")
                 .build();
 
-        // performs PUT: /web/admin/api/config-params
+        // performs PUT: /api/config-params
         mockMvc.perform(put(toUrl(uriBuilder))
                 .content(request.toString())
                 .contentType(MediaType.APPLICATION_JSON)
