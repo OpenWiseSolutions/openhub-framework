@@ -65,8 +65,7 @@ import org.openhubframework.openhub.web.config.WebSecurityConfig;
 @ComponentScan(basePackages = {
         "org.openhubframework.openhub.common",
         "org.openhubframework.openhub.core",
-        "org.openhubframework.openhub.modules",
-        "org.openhubframework.openhub.config"
+        "org.openhubframework.openhub.modules"
 },
         excludeFilters = {
                 @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebContextConfig.class),

@@ -72,6 +72,13 @@
             <artifactId>spring-boot-starter-freemarker</artifactId>
         </dependency>
         
+        <!-- support Java 1.8 date/time API -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
+
+
         <!-- Spring security JSP tags -->
         <dependency>
             <groupId>org.springframework.security</groupId>

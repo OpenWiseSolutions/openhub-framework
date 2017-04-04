@@ -34,7 +34,7 @@ import org.springframework.util.Assert;
  */
 public abstract class AbstractOhfController {
 
-    public static final String BASE_PATH = "/web/admin/api";
+    public static final String BASE_PATH = "/api";
 
     @Autowired
     protected MessageSource messageSource;
