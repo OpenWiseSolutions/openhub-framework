@@ -42,9 +42,8 @@ import org.openhubframework.openhub.api.asynch.AsynchConstants;
 import org.openhubframework.openhub.api.asynch.msg.ChildMessage;
 import org.openhubframework.openhub.api.asynch.msg.MessageSplitterCallback;
 import org.openhubframework.openhub.api.asynch.msg.MsgSplitter;
-import org.openhubframework.openhub.api.entity.EntityTypeExtEnum;
+import org.openhubframework.openhub.api.entity.*;
 import org.openhubframework.openhub.api.entity.Message;
-import org.openhubframework.openhub.api.entity.MsgStateEnum;
 import org.openhubframework.openhub.api.event.AbstractAsynchEvent;
 import org.openhubframework.openhub.api.event.CompletedMsgAsynchEvent;
 import org.openhubframework.openhub.api.event.FailedMsgAsynchEvent;
@@ -58,6 +57,8 @@ import org.openhubframework.openhub.core.common.asynch.msg.MessageSplitterImpl;
 import org.openhubframework.openhub.core.configuration.FixedConfigurationItem;
 import org.openhubframework.openhub.spi.msg.MessageService;
 import org.openhubframework.openhub.test.TestCamelUtils;
+import org.openhubframework.openhub.spi.node.ChangeNodeCallback;
+import org.openhubframework.openhub.spi.node.NodeService;
 import org.openhubframework.openhub.test.data.EntityTypeTestEnum;
 import org.openhubframework.openhub.test.data.ErrorTestEnum;
 import org.openhubframework.openhub.test.data.ExternalSystemTestEnum;
@@ -117,6 +118,9 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
 
     @Autowired
     private MessageService messageService;
+
+    @Autowired
+    private NodeService nodeService;
 
     @Before
     public void prepareData() throws Exception {
@@ -199,6 +203,7 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
         Message msgDB = em.find(Message.class, msg.getMsgId());
         assertThat(msgDB, notNullValue());
         assertThat(msgDB.getState(), is(MsgStateEnum.OK));
+        assertThat(msgDB.getNodeId(), is(nodeService.getActualNode().getNodeId()));
         assertThat(msgDB.getBusinessError(), containsString(ErrorTestEnum.E300.getErrDesc()));
         assertThat(eventListener.getEvent(), instanceOf(CompletedMsgAsynchEvent.class));
     }
@@ -220,6 +225,7 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
         Message msgDB = em.find(Message.class, msg.getMsgId());
         assertThat(msgDB, notNullValue());
         assertThat(msgDB.getState(), is(MsgStateEnum.IN_QUEUE));
+        assertThat(msgDB.getNodeId(), is(nodeService.getActualNode().getNodeId()));
         assertThat(msgDB.getStartInQueueTimestamp(), notNullValue());
         assertThat(msgDB.getStartProcessTimestamp(), nullValue());
         assertThat(msgDB.getBusinessError(), nullValue());
@@ -269,6 +275,7 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
         Message msgDB = em.find(Message.class, msg.getMsgId());
         assertThat(msgDB, notNullValue());
         assertThat(msgDB.getState(), is(MsgStateEnum.PARTLY_FAILED));
+        assertThat(msgDB.getNodeId(), is(nodeService.getActualNode().getNodeId()));
         assertThat(msgDB.getFailedErrorCode().getErrorCode(), is(ErrorTestEnum.E300.getErrorCode()));
         assertThat(msgDB.getFailedDesc(), notNullValue());
         assertThat(msgDB.getFailedCount(), is(1));
@@ -334,6 +341,7 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
         msgDB = em.find(Message.class, msg.getMsgId());
         assertThat(msgDB, notNullValue());
         assertThat(msgDB.getState(), is(MsgStateEnum.FAILED));
+        assertThat(msgDB.getNodeId(), is(nodeService.getActualNode().getNodeId()));
         assertThat(msgDB.getFailedErrorCode().getErrorCode(), is(ErrorTestEnum.E300.getErrorCode()));
         assertThat(msgDB.getFailedDesc(), notNullValue());
         assertThat(msgDB.getFailedCount(), is(3));
@@ -369,6 +377,7 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
         Message msgDB = em.find(Message.class, msg.getMsgId());
         assertThat(msgDB, notNullValue());
         assertThat(msgDB.getState(), is(MsgStateEnum.FAILED));
+        assertThat(msgDB.getNodeId(), is(nodeService.getActualNode().getNodeId()));
         assertErrorCode(msgDB.getFailedErrorCode(), InternalErrorEnum.E102);
         assertThat(msgDB.getFailedDesc(), notNullValue());
         assertThat(msgDB.getFailedCount(), is(1));
@@ -405,6 +414,7 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
         Message msgDB = em.find(Message.class, msg.getMsgId());
         assertThat(msgDB, notNullValue());
         assertThat(msgDB.getState(), is(MsgStateEnum.PARTLY_FAILED));
+        assertThat(msgDB.getNodeId(), is(nodeService.getActualNode().getNodeId()));
         assertErrorCode(msgDB.getFailedErrorCode(), InternalErrorEnum.E103);
         assertThat(msgDB.getFailedDesc(), notNullValue());
         assertThat(msgDB.getFailedCount(), is(1));
@@ -481,6 +491,7 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
         Message msgDB = em.find(Message.class, msg.getMsgId());
         assertThat(msgDB, notNullValue());
         assertThat(msgDB.getState(), is(MsgStateEnum.OK));
+        assertThat(msgDB.getNodeId(), is(nodeService.getActualNode().getNodeId()));
         assertThat(msgDB.getBusinessError(), containsString(ErrorTestEnum.E300.getErrDesc()));
     }
 
@@ -552,6 +563,7 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
         Message msgDB = em.find(Message.class, msg.getMsgId());
         assertThat(msgDB, notNullValue());
         assertThat(msgDB.getState(), is(MsgStateEnum.FAILED));
+        assertThat(msgDB.getNodeId(), is(nodeService.getActualNode().getNodeId()));
         assertThat(msgDB.getFailedErrorCode().getErrorCode(), is(ErrorTestEnum.E300.getErrorCode()));
         assertThat(msgDB.getFailedDesc(), notNullValue());
         assertThat(msgDB.getFailedCount(), is(1));
@@ -611,6 +623,71 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
             producerSeda.sendBody(msg);
         }
     }
+
+    /**
+     * Test when actual node process only existing message ({@link NodeState#HANDLES_EXISTING_MESSAGES}).
+     */
+    @Test
+    public void testNodeProcessExistingMessage() throws Exception {
+        nodeService.update(nodeService.getActualNode(), new ChangeNodeCallback() {
+            @Override
+            public void updateNode(MutableNode node) {
+                node.setHandleOnlyExistingMessageState();
+            }
+        });
+
+        RouteBuilder setCustomerRoute = new AbstractBasicRoute() {
+            @Override
+            public void doConfigure() throws Exception {
+                from(subRouteUri)
+                        .process(new Processor() {
+                            @Override
+                            public void process(Exchange exchange) throws Exception {
+                            }
+                        });
+            }
+        };
+
+        getCamelContext().addRoutes(setCustomerRoute);
+
+        // save message into DB
+        em.persist(msg);
+        em.flush();
+
+        // send message
+        producerSyncMsg.sendBodyAndHeader(msg, AsynchConstants.MSG_HEADER, msg);
+
+        Message msgDB = em.find(Message.class, msg.getMsgId());
+        assertThat(msgDB, notNullValue());
+        assertThat(msgDB.getState(), is(MsgStateEnum.OK));
+        assertThat(msgDB.getFailedErrorCode(), nullValue());
+    }
+
+    /**
+     * Test when actual node is stopped ({@link NodeState#STOPPED}).
+     */
+    @Test
+    public void testNodeStopped() throws Exception {
+        nodeService.update(nodeService.getActualNode(), new ChangeNodeCallback() {
+            @Override
+            public void updateNode(MutableNode node) {
+                node.setStoppedState();
+            }
+        });
+
+        // save message into DB
+        em.persist(msg);
+        em.flush();
+
+        // send message
+        producerSyncMsg.sendBodyAndHeader(msg, AsynchConstants.MSG_HEADER, msg);
+
+        Message msgDB = em.find(Message.class, msg.getMsgId());
+        assertThat(msgDB, notNullValue());
+        assertThat(msgDB.getState(), is(MsgStateEnum.FAILED));
+        assertThat(msgDB.getFailedErrorCode().getErrorCode(), containsString(InternalErrorEnum.E119.getErrorCode()));
+    }
+
 
     /**
      * Event listener.

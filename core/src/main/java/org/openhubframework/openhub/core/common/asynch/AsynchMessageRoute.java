@@ -25,6 +25,7 @@ import javax.annotation.Nullable;
 
 import org.apache.camel.*;
 import org.apache.camel.component.spring.ws.SpringWebserviceConstants;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
@@ -38,6 +39,7 @@ import org.openhubframework.openhub.api.entity.ExternalCall;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
 import org.openhubframework.openhub.api.exception.LockFailureException;
+import org.openhubframework.openhub.api.exception.StoppingException;
 import org.openhubframework.openhub.api.extcall.ExtCallComponentParams;
 import org.openhubframework.openhub.api.route.AbstractBasicRoute;
 import org.openhubframework.openhub.api.route.CamelConfiguration;
@@ -45,6 +47,7 @@ import org.openhubframework.openhub.common.log.LogContextFilter;
 import org.openhubframework.openhub.core.common.asynch.confirm.ConfirmationService;
 import org.openhubframework.openhub.core.common.event.AsynchEventHelper;
 import org.openhubframework.openhub.spi.msg.MessageService;
+import org.openhubframework.openhub.spi.node.NodeService;
 
 /**
  * Route definition that processes asynchronous message taken from message queue.
@@ -177,6 +180,9 @@ public class AsynchMessageRoute extends AbstractBasicRoute {
 
                 .bean(this, "logStartProcessing")
 
+                // check if node process existing message
+                .bean(ROUTE_BEAN, "isAbleToHandleExistingMessage")
+
                 .choice()
                     .when().method(ROUTE_BEAN, "isMessageObsolete")
                         .log(LoggingLevel.WARN,
@@ -266,7 +272,7 @@ public class AsynchMessageRoute extends AbstractBasicRoute {
                 // .when(simple("${header[" + MSG_HEADER + "].failedCount} == " + countPartlyFailsBeforeFailed))
                 // .when().spel("#{request.headers['" + MSG_HEADER + "'].failedCount} >= " + countPartlyFailsBeforeFailed)
 
-                .when().method(ROUTE_BEAN, "checkFailedLimit")
+                .when().method(ROUTE_BEAN, "checkMessageFailed")
                     .to(URI_ERROR_FATAL)
 
                 .otherwise()
@@ -417,13 +423,20 @@ public class AsynchMessageRoute extends AbstractBasicRoute {
      * Returns {@code true} if failed count exceeds limit for failing.
      *
      * @param msg the message
+     * @param ex  error in processing {@link Message}, {@code NULL} - no error
      * @return {@code true} when limit was exceeded, otherwise {@code false}
      */
     @Handler
-    public boolean checkFailedLimit(@Header(MSG_HEADER) Message msg) {
+    public boolean checkMessageFailed(@Header(MSG_HEADER) Message msg, @Nullable Exception ex) {
         Assert.notNull(msg, "the msg must not be null");
 
-        return msg.getFailedCount() >= countPartlyFailsBeforeFailed.getValue();
+        boolean result = msg.getFailedCount() >= countPartlyFailsBeforeFailed.getValue();
+        if (!result && ex != null && ExceptionUtils.indexOfThrowable(ex, StoppingException.class) >= 0) {
+            LOG.warn("ESB not processing existing message. Message " + ex.getMessage()
+                    + " is changed to failed state.");
+            result = true;
+        }
+        return result;
     }
 
     @Handler
@@ -478,6 +491,20 @@ public class AsynchMessageRoute extends AbstractBasicRoute {
         if (!getBean(MessageService.class).setStateInQueueForLock(msg)) {
             throw new LockFailureException("Failed to lock message for change state to '" + MsgStateEnum.IN_QUEUE
                     + "': " + msg.toHumanString());
+        }
+    }
+
+    /**
+     * Checks if actual node handles existing message.
+     *
+     * @throws StoppingException if node not handles existing message
+     */
+    @Handler
+    public void isAbleToHandleExistingMessage() throws StoppingException {
+        NodeService nodeService = getApplicationContext().getBean(NodeService.class);
+
+        if (!nodeService.getActualNode().isAbleToHandleExistingMessages()) {
+            throw new StoppingException("ESB has been stopped...");
         }
     }
 }

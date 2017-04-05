@@ -147,6 +147,11 @@ public class CoreProps {
      */
     public static final String PROPERTY_INCLUDE_PATTERN = PREFIX + "dbProperty.includePattern";
 
+    /**
+     * Code of actual node for this application server instance.
+     */
+    public static final String CLUSTER_ACTUAL_NODE_INSTANCE_CODE = PREFIX + "cluster.actualNodeInstance.code";
+
     private CoreProps() {
     }
 }

@@ -21,7 +21,7 @@
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
 
-    <property scope="system" name="SERVER_ID" value="${ohf.cluster.nodeid:-${HOSTNAME}}" />
+    <property scope="system" name="SERVER_ID" value="${ohf.cluster.actualNodeInstance.code:-${HOSTNAME}}" />
     <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{ISO8601}){faint} [%clr(${SERVER_ID}){magenta}, %thread, %X{REQUEST_URI}, %X{REQUEST_ID}, %X{SESSION_ID}, %X{SOURCE_SYSTEM}, %X{CORRELATION_ID}, %X{PROCESS_ID}] %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(%-40.40logger{36}){cyan} : %msg%n"/>
     <property name="FILE_LOG_PATTERN" value="%d{ISO8601} [${SERVER_ID}, %thread, %X{REQUEST_URI}, %X{REQUEST_ID}, %X{SESSION_ID},%X{SOURCE_SYSTEM}, %X{CORRELATION_ID}, %X{PROCESS_ID}] ${LOG_LEVEL_PATTERN:-%5p} %-40.40logger{36} : %msg%n"/>
 

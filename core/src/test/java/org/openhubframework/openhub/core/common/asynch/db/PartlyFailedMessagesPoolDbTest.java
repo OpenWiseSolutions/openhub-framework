@@ -35,6 +35,7 @@ import org.openhubframework.openhub.core.AbstractCoreDbTest;
 import org.openhubframework.openhub.core.common.asynch.queue.MessagesPool;
 import org.openhubframework.openhub.core.common.asynch.queue.MessagesPoolImpl;
 import org.openhubframework.openhub.core.configuration.FixedConfigurationItem;
+import org.openhubframework.openhub.spi.node.NodeService;
 import org.openhubframework.openhub.test.data.ExternalSystemTestEnum;
 import org.openhubframework.openhub.test.data.ServiceTestEnum;
 
@@ -50,6 +51,9 @@ public class PartlyFailedMessagesPoolDbTest extends AbstractCoreDbTest {
     @Autowired
     private MessagesPool messagesPool;
 
+    @Autowired
+    private NodeService nodeService;
+
     @Before
     public void prepareData() {
         // set failed limit
@@ -64,6 +68,7 @@ public class PartlyFailedMessagesPoolDbTest extends AbstractCoreDbTest {
         Message nextMsg = messagesPool.getNextMessage();
         assertThat(nextMsg, notNullValue());
         assertThat(nextMsg.getState(), is(MsgStateEnum.IN_QUEUE));
+        assertThat(nextMsg.getNodeId(), is(nodeService.getActualNode().getNodeId()));
         assertThat(nextMsg.getStartProcessTimestamp(), nullValue());
         assertThat(nextMsg.getStartInQueueTimestamp(), notNullValue());
         assertThat(nextMsg.getLastUpdateTimestamp(), notNullValue());

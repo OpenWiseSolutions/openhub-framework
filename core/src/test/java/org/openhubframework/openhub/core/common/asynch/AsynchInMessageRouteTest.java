@@ -17,6 +17,7 @@
 package org.openhubframework.openhub.core.common.asynch;
 
 import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -30,10 +31,13 @@ import javax.annotation.Nullable;
 import org.apache.camel.*;
 import org.apache.camel.builder.AdviceWithRouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,12 +46,14 @@ import org.openhubframework.openhub.api.asynch.AsynchConstants;
 import org.openhubframework.openhub.api.asynch.model.CallbackResponse;
 import org.openhubframework.openhub.api.asynch.model.ConfirmationTypes;
 import org.openhubframework.openhub.api.asynch.model.TraceIdentifier;
+import org.openhubframework.openhub.api.entity.*;
 import org.openhubframework.openhub.api.entity.Message;
-import org.openhubframework.openhub.api.entity.MsgStateEnum;
 import org.openhubframework.openhub.api.exception.StoppingException;
 import org.openhubframework.openhub.api.exception.ThrottlingExceededException;
 import org.openhubframework.openhub.api.route.AbstractBasicRoute;
 import org.openhubframework.openhub.core.AbstractCoreDbTest;
+import org.openhubframework.openhub.spi.node.ChangeNodeCallback;
+import org.openhubframework.openhub.spi.node.NodeService;
 import org.openhubframework.openhub.test.data.ExternalSystemTestEnum;
 import org.openhubframework.openhub.test.data.ServiceTestEnum;
 import org.openhubframework.openhub.test.route.ActiveRoutes;
@@ -62,6 +68,9 @@ import org.openhubframework.openhub.test.route.ActiveRoutes;
 public class AsynchInMessageRouteTest extends AbstractCoreDbTest {
 
     private static final String FUNNEL_VALUE = "774724557";
+
+    @Autowired
+    private NodeService nodeService;
 
     @Produce(uri = AsynchConstants.URI_ASYNCH_IN_MSG)
     private ProducerTemplate producer;
@@ -145,6 +154,7 @@ public class AsynchInMessageRouteTest extends AbstractCoreDbTest {
                 assertThat(rs.getLong("parent_msg_id"), is(0L));
                 assertThat(rs.getBoolean("guaranteed_order"), is(false));
                 assertThat(rs.getBoolean("exclude_failed_state"), is(false));
+                assertThat(rs.getObject("node_id"), nullValue());
 
                 return new Message();
             }
@@ -248,6 +258,50 @@ public class AsynchInMessageRouteTest extends AbstractCoreDbTest {
         }
 
         mock.assertIsSatisfied();
+    }
+
+
+    /**
+     * Test when actual node process only existing message ({@link NodeState#HANDLES_EXISTING_MESSAGES}).
+     */
+    @Test
+    public void testNodeProcessExistingMessage() throws Exception {
+        nodeService.update(nodeService.getActualNode(), new ChangeNodeCallback() {
+            @Override
+            public void updateNode(MutableNode node) {
+                node.setHandleOnlyExistingMessageState();
+            }
+        });
+
+
+        // send message
+        try {
+            producer.sendBodyAndHeaders("bodyContent", getHeaders());
+            fail();
+        } catch (Exception e) {
+            assertThat(ExceptionUtils.getRootCause(e), instanceOf(StoppingException.class));
+        }
+    }
+
+    /**
+     * Test when actual node is stopped ({@link NodeState#STOPPED}).
+     */
+    @Test
+    public void testNodeStopped() throws Exception {
+        nodeService.update(nodeService.getActualNode(), new ChangeNodeCallback() {
+            @Override
+            public void updateNode(MutableNode node) {
+                node.setStoppedState();
+            }
+        });
+
+        // send message
+        try {
+            producer.sendBodyAndHeaders("bodyContent", getHeaders());
+            fail();
+        } catch (Exception e) {
+            assertThat(ExceptionUtils.getRootCause(e), instanceOf(StoppingException.class));
+        }
     }
 
     private void assertErrorResponse(String addInfo) throws InterruptedException {

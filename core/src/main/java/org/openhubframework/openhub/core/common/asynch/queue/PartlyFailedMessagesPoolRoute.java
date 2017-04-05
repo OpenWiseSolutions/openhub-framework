@@ -33,7 +33,7 @@ import org.openhubframework.openhub.api.route.CamelConfiguration;
 import org.openhubframework.openhub.common.Profiles;
 import org.openhubframework.openhub.common.time.Seconds;
 import org.openhubframework.openhub.core.common.asynch.repair.RepairProcessingMsgRoute;
-import org.openhubframework.openhub.core.common.asynch.stop.StopService;
+import org.openhubframework.openhub.spi.node.NodeService;
 
 
 /**
@@ -72,22 +72,27 @@ public class PartlyFailedMessagesPoolRoute extends SpringRouteBuilder {
                 .routeId(ROUTE_ID)
 
                 // allow only if ESB not stopping
-                .choice().when().method(ROUTE_BEAN, "isNotInStoppingMode")
+                .choice().when().method(ROUTE_BEAN, "isAbleToHandleExistingMessages")
                     .bean("jobStarterForMessagePooling", "start")
                 .end();
     }
 
     /**
-     * Checks if ESB goes down or not.
+     * Checks if actual node handles existing message.
      *
-     * @return {@code true} if ESB is in "stopping mode" otherwise {@code false}
+     * @return {@code true} is handles existing message, {@code false} - otherwise
      */
     @Handler
-    public boolean isNotInStoppingMode() {
-        StopService stopService = getApplicationContext().getBean(StopService.class);
+    public boolean isAbleToHandleExistingMessages() {
+        NodeService nodeService = getApplicationContext().getBean(NodeService.class);
 
-        LOG.debug("ESB stopping mode is switched on: " + stopService.isStopping());
+        boolean result = nodeService.getActualNode().isAbleToHandleExistingMessages();
 
-        return !stopService.isStopping();
+        if (result) {
+            LOG.debug("Node is able to handle existing message.");
+        } else {
+            LOG.debug("Node is not able to handle message. Node is stopped.");
+        }
+        return result;
     }
 }

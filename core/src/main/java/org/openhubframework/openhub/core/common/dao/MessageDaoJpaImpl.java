@@ -36,6 +36,7 @@ import org.springframework.util.Assert;
 import org.openhubframework.openhub.api.entity.ExternalSystemExtEnum;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
+import org.openhubframework.openhub.api.entity.Node;
 import org.openhubframework.openhub.api.exception.NoDataFoundException;
 
 
@@ -182,8 +183,9 @@ public class MessageDaoJpaImpl implements MessageDao {
     }
 
     @Override
-    public boolean updateMessageProcessingUnderLock(final Message msg) {
+    public boolean updateMessageProcessingUnderLock(Message msg, Node processingNode) {
         Assert.notNull(msg, "the msg must not be null");
+        Assert.notNull(processingNode, "processingNode must not be null");
 
         Message dbMsg = findMessageWithStates(msg.getMsgId(), true, MsgStateEnum.IN_QUEUE);
 
@@ -194,6 +196,7 @@ public class MessageDaoJpaImpl implements MessageDao {
             Instant currDate = Instant.now();
             msg.setStartProcessTimestamp(currDate);
             msg.setLastUpdateTimestamp(currDate);
+            msg.setNodeId(processingNode.getNodeId());
 
             update(msg);
             result = true;
@@ -202,8 +205,9 @@ public class MessageDaoJpaImpl implements MessageDao {
     }
 
     @Override
-    public boolean updateMessageInQueueUnderLock(Message msg) {
+    public boolean updateMessageInQueueUnderLock(Message msg, Node processingNode) {
         Assert.notNull(msg, "msg must not be null");
+        Assert.notNull(processingNode, "processingNode must not be null");
 
         Message dbMsg = findMessageWithStates(msg.getMsgId(), true, MsgStateEnum.NEW, MsgStateEnum.PARTLY_FAILED,
                 MsgStateEnum.POSTPONED, MsgStateEnum.WAITING_FOR_RES);
@@ -214,6 +218,7 @@ public class MessageDaoJpaImpl implements MessageDao {
             Instant currDate = Instant.now();
             msg.setStartInQueueTimestamp(currDate);
             msg.setLastUpdateTimestamp(currDate);
+            msg.setNodeId(processingNode.getNodeId());
 
             update(msg);
             result = true;
