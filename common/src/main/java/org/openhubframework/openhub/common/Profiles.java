@@ -49,6 +49,11 @@ public final class Profiles {
      */
     public static final String H2 = "h2";
 
+    /**
+     * Spring profile for running postgres DB.
+     */
+    public static final String POSTGRES = "postgresql";
+
     private Profiles() {
     }
 }

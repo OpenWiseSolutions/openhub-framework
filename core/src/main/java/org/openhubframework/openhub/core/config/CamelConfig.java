@@ -22,7 +22,6 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.LoggingErrorHandlerBuilder;
 import org.apache.camel.component.jpa.JpaComponent;
-import org.apache.camel.component.quartz2.QuartzComponent;
 import org.apache.camel.component.seda.PriorityBlockingQueueFactory;
 import org.apache.camel.processor.interceptor.DefaultTraceFormatter;
 import org.apache.camel.processor.interceptor.Tracer;
@@ -123,14 +122,5 @@ public class CamelConfig {
     @Profile(Profiles.PROD)
     public DelegateConfirmationCallback confirmationCallback() {
         return new DelegateConfirmationCallback();
-    }
-
-    @Bean
-    @Profile(Profiles.PROD)
-    public QuartzComponent quartzComponent() {
-        QuartzComponent quartz = new QuartzComponent();
-        quartz.setStartDelayedSeconds(90);
-
-        return quartz;
     }
 }
