@@ -91,17 +91,20 @@ public class DbConfigurationController extends AbstractOhfController {
      * @throws ValidationIntegrationException if input object has wrong values
      * @throws NoDataFoundException entity not found for update
      */
-    @RequestMapping(method = RequestMethod.PUT, produces = {"application/xml", "application/json"})
+    // .+ is workaround how to match everything after / as code of config parameters, otherwise last .* is removed as
+    // file extension
+    @RequestMapping(value = "/{code:.+}", method = RequestMethod.PUT, produces = {"application/xml", "application/json"})
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
-    public void update(@RequestBody final DbConfigurationParamRpc paramRpc) throws ValidationIntegrationException,
+    public void update(@PathVariable final String code, @RequestBody final DbConfigurationParamRpc paramRpc) throws 
+            ValidationIntegrationException,
             NoDataFoundException {
 
         Assert.notNull(paramRpc, "paramRpc can not be null");
-        Assert.notNull(paramRpc.getId(), "This method is only for update existing paramRpc.");
+        Assert.isNull(paramRpc.getCode(), "code of paramRpc must be null, object is referenced by path attribute");
 
         // get entity to update it
-        DbConfigurationParam dbParam = getParam(paramRpc.getId());
+        DbConfigurationParam dbParam = getParam(code);
         paramRpc.updateEntity(dbParam);
 
         // save entity
