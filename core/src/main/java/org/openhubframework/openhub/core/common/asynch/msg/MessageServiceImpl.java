@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.Nullable;
 
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -101,17 +102,29 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public void setStateOk(Message msg, Map<String, Object> props) {
         Assert.notNull(msg, "the msg must not be null");
-        Assert.isTrue(!msg.isParentMessage(), "the message must not be parent");
 
         msg.setState(MsgStateEnum.OK);
         msg.setLastUpdateTimestamp(Instant.now());
 
-        // move new business errors to message:
-        MessageHelper.updateBusinessErrors(msg, props);
+        if (msg.isParentMessage()) {
+            //set business error from child messages
+            List<Message> childMessages = messageDao.findChildMessagesForParent(msg);
+            msg.setBusinessError(getBusinessErrorsFromChildMessages(childMessages));
+        } else {
+            if (!MapUtils.isEmpty(props)) {
+                // move new business errors to message:
+                MessageHelper.updateBusinessErrors(msg, props);
+            }
+        }
 
         messageDao.update(msg);
 
-        LOG.debug("State of the message " + msg.toHumanString() + " was changed to " + MsgStateEnum.OK);
+        if (msg.isParentMessage()) {
+            LOG.debug("State of the parent message " + msg.toHumanString() + " was changed to "
+                    + MsgStateEnum.OK);
+        } else {
+            LOG.debug("State of the message " + msg.toHumanString() + " was changed to " + MsgStateEnum.OK);
+        }
 
         // check parent message with HARD binding - if any
         if (msg.existHardParent()) {
@@ -128,19 +141,11 @@ public class MessageServiceImpl implements MessageService {
             }
 
             if (finishedOK) {
-                // mark parent message as successfully processed
+                // mark parent message as successfully processed only if parent message is in waiting state
                 Message parentMsg = messageDao.getMessage(msg.getParentMsgId());
-
-                parentMsg.setState(MsgStateEnum.OK);
-                parentMsg.setLastUpdateTimestamp(Instant.now());
-
-                // extract business errors from all child messages
-                parentMsg.setBusinessError(getBusinessErrorsFromChildMessages(childMessages));
-
-                messageDao.update(parentMsg);
-
-                LOG.debug("State of the parent message " + parentMsg.toHumanString() + " was changed to "
-                        + MsgStateEnum.OK);
+                if (parentMsg.getState().equals(MsgStateEnum.WAITING)) {
+                    setStateOk(parentMsg, null);
+                }
             }
         }
     }
@@ -279,6 +284,11 @@ public class MessageServiceImpl implements MessageService {
         messageDao.update(parentMsg);
 
         LOG.debug("State of the parent message " + parentMsg.toHumanString() + " was changed to " + MsgStateEnum.FAILED);
+
+        //if message has parent another parent message then set parent message into FAILED
+        if (parentMsg.existHardParent()) {
+            setParentMsgFailed(parentMsg);
+        }
     }
 
     @Transactional

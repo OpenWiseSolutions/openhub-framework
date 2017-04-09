@@ -82,6 +82,14 @@ public interface MessageDao {
     List<Message> findChildMessages(Message msg);
 
     /**
+     * Finds all child message for parent message.
+     *
+     * @param parentMessage parent message
+     * @return list of child messages
+     */
+    List<Message> findChildMessagesForParent(Message parentMessage);
+
+    /**
      * Finds message by source system and correlation ID.
      *
      * @param correlationId correlation ID

@@ -103,6 +103,8 @@ public final class MessageSplitterImpl implements MsgSplitter {
 
         // mark original message as parent message
         parentMsg.setParentMessage(true);
+        // message has child so on parent set waiting state
+        messageService.setStateWaiting(parentMsg);
 
         // save all messages at once
         messageService.insertMessages(messages);

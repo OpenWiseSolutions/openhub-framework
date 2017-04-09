@@ -110,6 +110,17 @@ public class MessageDaoJpaImpl implements MessageDao {
     }
 
     @Override
+    public List<Message> findChildMessagesForParent(Message parentMessage) {
+        Assert.notNull(parentMessage, "parentMessage must not be null");
+
+        TypedQuery<Message> q = em.createQuery(
+                "SELECT m FROM " + Message.class.getName() + " m WHERE m.parentMsgId = :parentMsgId", Message.class);
+        q.setParameter("parentMsgId", parentMessage.getMsgId());
+
+        return q.getResultList();
+    }
+
+    @Override
     @Nullable
     public Message findByCorrelationId(String correlationId, @Nullable ExternalSystemExtEnum sourceSystem) {
         Assert.notNull(correlationId, "the correlationId must not be null");
