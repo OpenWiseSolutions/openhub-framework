@@ -16,12 +16,13 @@
 
 package org.openhubframework.openhub.admin.services;
 
-import java.util.Map;
-import javax.annotation.Resource;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import org.openhubframework.openhub.api.exception.ErrorExtEnum;
+import org.openhubframework.openhub.api.entity.ErrorsCatalog;
+
 
 /**
  * Implementation of {@link ErrorCatalogService}.
@@ -31,11 +32,11 @@ import org.openhubframework.openhub.api.exception.ErrorExtEnum;
 @Service
 public class ErrorCatalogServiceImpl implements ErrorCatalogService {
 
-    @Resource
-    private Map<String, ErrorExtEnum[]> errorCodesCatalog;
+    @Autowired
+    private List<ErrorsCatalog> errorCodesCatalog;
 
     @Override
-    public Map<String, ErrorExtEnum[]> getErrorCatalog() {
+    public List<ErrorsCatalog> getErrorCatalog() {
         return errorCodesCatalog;
     }
 }

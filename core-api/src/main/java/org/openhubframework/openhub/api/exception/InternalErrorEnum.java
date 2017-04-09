@@ -24,6 +24,7 @@ import org.springframework.util.Assert;
  *
  * @author Petr Juza
  */
+@ErrorCodeCatalog("OHF")
 public enum InternalErrorEnum implements ErrorExtEnum {
 
     // ------------------------------------------------------------------------

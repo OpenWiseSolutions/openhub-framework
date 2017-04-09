@@ -16,15 +16,12 @@
 
 package org.openhubframework.openhub.core.config;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-import org.openhubframework.openhub.api.exception.ErrorExtEnum;
+import org.openhubframework.openhub.api.entity.ErrorsCatalog;
 import org.openhubframework.openhub.api.exception.InternalErrorEnum;
 import org.openhubframework.openhub.common.Profiles;
 import org.openhubframework.openhub.core.confcheck.ConfigurationChecker;
@@ -50,12 +47,10 @@ public class CoreConfig {
     }
 
     /**
-     * Defines error codes catalogue.
+     * Defines OHF error codes catalogue.
      */
     @Bean
-    public Map<String, ErrorExtEnum[]> errorCodesCatalog() {
-        Map<String, ErrorExtEnum[]> map = new HashMap<>();
-        map.put("core", InternalErrorEnum.values());
-        return map;
+    public ErrorsCatalog coreErrorCatalog() {
+        return new ErrorsCatalog(InternalErrorEnum.values());
     }
 }

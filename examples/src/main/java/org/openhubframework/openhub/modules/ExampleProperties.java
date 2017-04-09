@@ -17,8 +17,11 @@
 package org.openhubframework.openhub.modules;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
+
+import org.openhubframework.openhub.api.entity.ErrorsCatalog;
 
 
 /**
@@ -36,5 +39,15 @@ public class ExampleProperties {
      * Spring profile for module "example".
      */
     public static final String EXAMPLE_PROFILE = "example-module";
+
+    /**
+     * Register {@link ErrorEnum} as {@link ErrorsCatalog}.
+     * 
+     * @return error catalog
+     */
+    @Bean
+    public ErrorsCatalog exampleErrorCatalog() {
+        return new ErrorsCatalog(ErrorEnum.class, ErrorEnum.values());
+    }
 
 }
