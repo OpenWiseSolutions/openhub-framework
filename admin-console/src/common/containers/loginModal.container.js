@@ -1,4 +1,4 @@
-import * as actionCreators from '../actions/auth.actions'
+import { actions as actionCreators } from '../modules/auth.module'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import LoginModal from '../components/LoginModal/LoginModal'

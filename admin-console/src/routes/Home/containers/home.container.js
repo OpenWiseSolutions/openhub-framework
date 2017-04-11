@@ -10,7 +10,7 @@ const mapDispatchToProps = (dispatch) => ({
 const mapStateToProps = (state) => {
   return {
     dashboard: state.home,
-    isAuth: state.auth.isAuth
+    authUser: state.auth.authUser
   }
 }
 

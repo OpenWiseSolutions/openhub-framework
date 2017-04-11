@@ -44,17 +44,21 @@ class ConfigParams extends Component {
           <div key={cat} style={styles.category}>
             <h4 style={styles.categoryTitle}>{cat}</h4>
             <table style={styles.table}>
-              <th style={styles.header}>Code</th>
-              <th style={styles.header}>Current Value</th>
-              <th style={styles.header}>Default Value</th>
-              <th style={styles.header}>Data Type</th>
-              <th style={styles.header}>Mandatory</th>
-              <th style={styles.header}>Description</th>
-              <th style={styles.header}>Validation</th>
-              <th style={styles.header}>Action</th>
-              { categories[cat].map((row, count) => (
-                <ParamRow count={count} openParam={openParam} key={row.id} data={row} />
-            ))}
+              <tbody>
+                <tr>
+                  <th style={styles.header}>Code</th>
+                  <th style={styles.header}>Current Value</th>
+                  <th style={styles.header}>Default Value</th>
+                  <th style={styles.header}>Data Type</th>
+                  <th style={styles.header}>Mandatory</th>
+                  <th style={styles.header}>Description</th>
+                  <th style={styles.header}>Validation</th>
+                  <th style={styles.header}>Action</th>
+                </tr>
+                { categories[cat].map((row, count) => (
+                  <ParamRow count={count} openParam={openParam} key={row.id} data={row} />
+                ))}
+              </tbody>
             </table>
           </div>
         ))}

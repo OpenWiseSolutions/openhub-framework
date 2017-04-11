@@ -18,7 +18,7 @@ class Home extends Component {
   }
 
   render () {
-    const { isAuth, dashboard: { healthInfo, openHubInfo, metricsInfo } } = this.props
+    const { authUser, dashboard: { healthInfo, openHubInfo, metricsInfo } } = this.props
 
     if (!healthInfo || !metricsInfo) return <div>Loading...</div>
 
@@ -76,7 +76,7 @@ class Home extends Component {
 
     return (
       <div style={styles.main}>
-        {isAuth &&
+        {authUser &&
           <div style={styles.widgets}>
             <Panel title='Health'>
               <Table data={healthTableData} />
@@ -136,7 +136,7 @@ class Home extends Component {
 }
 
 Home.propTypes = {
-  isAuth: PropTypes.bool,
+  authUser: PropTypes.object,
   actions: PropTypes.object.isRequired,
   dashboard: PropTypes.object.isRequired
 }

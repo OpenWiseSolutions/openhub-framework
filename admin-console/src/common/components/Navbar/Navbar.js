@@ -10,7 +10,7 @@ import Anchor from '../Anchor/Anchor'
 @Radium
 class Navbar extends Component {
   render () {
-    const { logout, toggleSidebar, toggleUser, toggleLoginModal, navbarUserExpanded, isAuth } = this.props
+    const { logout, toggleSidebar, toggleUser, toggleLoginModal, navbarUserExpanded, authUser } = this.props
 
     const links = [
       <Item style={styles.item} key={1} size={50} label='Account' />,
@@ -21,17 +21,17 @@ class Navbar extends Component {
     return (
       <div className='navbar-wrapper' style={styles.main}>
         <div className='sidebar-toggle' onClick={toggleSidebar} style={styles.left}>
-          { isAuth && <MenuIcon style={styles.menuIcon} />}
+          { authUser && <MenuIcon style={styles.menuIcon} />}
         </div>
         <div style={styles.right}>
-          {!isAuth &&
+          {!authUser &&
             <Anchor onClick={toggleLoginModal}>Login</Anchor>
           }
-          {isAuth && <UserButton avatar={<Avatar />}
+          {authUser && <UserButton avatar={<Avatar />}
             links={links}
             expanded={navbarUserExpanded}
             toggle={toggleUser}
-            name='Tomas Hanus' />
+            name={authUser.fullName} />
           }
 
         </div>
@@ -46,7 +46,7 @@ Navbar.propTypes = {
   navbarUserExpanded: PropTypes.bool,
   toggleLoginModal: PropTypes.func,
   logout: PropTypes.func,
-  isAuth: PropTypes.bool
+  authUser: PropTypes.object
 }
 
 export default Navbar

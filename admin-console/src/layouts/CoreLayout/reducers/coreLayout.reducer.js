@@ -1,5 +1,5 @@
 import { SIDEBAR_TOGGLE, NAVBAR_USER_TOGGLE } from '../actions/coreLayout.actions'
-import { LOGOUT } from '../../../common/actions/auth.actions'
+import { LOGOUT } from '../../../common/modules/auth.module'
 
 const defaultState = {
   sidebarExtended: true,

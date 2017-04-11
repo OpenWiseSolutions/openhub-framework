@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PropTypes, Component } from 'react'
 import Radium, { StyleRoot } from 'radium'
 import Navbar from '../../../common/components/Navbar/Navbar'
 import Sidebar from '../../../common/components/Sidebar/Sidebar'
@@ -10,7 +10,7 @@ class CoreLayout extends Component {
 
   render () {
     const {
-      isAuth,
+      authUser,
       children,
       sidebarExtended,
       navbarUserExpanded,
@@ -20,17 +20,17 @@ class CoreLayout extends Component {
 
     const bodyStyles = [
       styles.body,
-      sidebarExtended && isAuth && styles.body.extended
+      sidebarExtended && authUser && styles.body.extended
     ]
 
     return (
       <StyleRoot>
         <div style={styles.main}>
-          <Sidebar extended={sidebarExtended && isAuth} />
+          <Sidebar extended={sidebarExtended && !!authUser} />
           <LoginModal />
           <div style={bodyStyles}>
             <Navbar
-              isAuth={isAuth}
+              authUser={authUser}
               logout={authActions.logout}
               navbarUserExpanded={navbarUserExpanded}
               toggleUser={actions.toggleNavbarUser}
@@ -47,12 +47,12 @@ class CoreLayout extends Component {
 }
 
 CoreLayout.propTypes = {
-  children: React.PropTypes.element.isRequired,
-  sidebarExtended: React.PropTypes.bool,
-  actions: React.PropTypes.object,
-  authActions: React.PropTypes.object,
-  navbarUserExpanded: React.PropTypes.bool,
-  isAuth: React.PropTypes.bool
+  children: PropTypes.element.isRequired,
+  sidebarExtended: PropTypes.bool,
+  actions: PropTypes.object,
+  authActions: PropTypes.object,
+  navbarUserExpanded: PropTypes.bool,
+  authUser: PropTypes.object
 }
 
 export default CoreLayout

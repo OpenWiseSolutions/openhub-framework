@@ -1,5 +1,5 @@
 import CoreLayout from '../layouts/CoreLayout/containers/coreLayout.container'
-import { initAuth } from '../common/actions/auth.actions'
+import { initAuth } from '../common/modules/auth.module'
 import { getOpenHubInfo } from '../routes/Home/modules/home.module'
 import Home from './Home'
 import ConfigParams from './ConfigParams'
