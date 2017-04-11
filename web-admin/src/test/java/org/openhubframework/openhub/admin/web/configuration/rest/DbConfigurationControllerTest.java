@@ -96,16 +96,14 @@ public class DbConfigurationControllerTest extends AbstractAdminModuleRestTest {
 
     @Test
     public void testUpdate() throws Exception {
-        final URIBuilder uriBuilder = createGetUrl(ROOT_URI);
+        final URIBuilder uriBuilder = createGetUrl(ROOT_URI + "/" + param.getCode());
 
         JsonObject request = createJson()
-                .add("id", param.getId())
-                .add("code", param.getCode())
                 .add("currentValue", "222")
                 .add("defaultValue", "10")
                 .build();
 
-        // performs PUT: /api/config-params
+        // performs PUT: /api/config-params/ohf.async.concurrentConsumers
         mockMvc.perform(put(toUrl(uriBuilder))
                 .content(request.toString())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -124,11 +122,9 @@ public class DbConfigurationControllerTest extends AbstractAdminModuleRestTest {
 
     @Test
     public void testUpdate_wrongValueType() throws Exception {
-        final URIBuilder uriBuilder = createGetUrl(ROOT_URI);
+        final URIBuilder uriBuilder = createGetUrl(ROOT_URI + "/" + param.getCode());
 
         JsonObject request = createJson()
-                .add("id", param.getId())
-                .add("code", param.getCode())
                 .add("currentValue", "abc")
                 .build();
 
