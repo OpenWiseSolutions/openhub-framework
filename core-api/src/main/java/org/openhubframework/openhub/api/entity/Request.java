@@ -78,11 +78,6 @@ public class Request extends SuperEntity<Long> {
     @Column(name = "req_timestamp", nullable = false)
     private Instant reqTimestamp;
 
-    /** Default public constructor. */
-    public Request() {
-        super(null);
-    }
-
     /**
      * Creates a new request.
      *

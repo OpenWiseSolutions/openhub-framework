@@ -37,7 +37,16 @@ public abstract class AbstractOhfController {
     public static final String BASE_PATH = "/api";
 
     @Autowired
-    protected MessageSource messageSource;
+    private MessageSource messageSource;
+
+    /**
+     * Gets {@link MessageSource}.
+     *
+     * @return MessageSource
+     */
+    protected final MessageSource getMessageSource() {
+        return messageSource;
+    }
 
     /**
      * Gets localization message from {@link LocaleContextHolder#getLocale() selected language}.
@@ -49,7 +58,7 @@ public abstract class AbstractOhfController {
     protected String getMessage(String code, Object... args) {
         Assert.hasText(code, "code must not be empty");
 
-        return messageSource.getMessage(code, args, LocaleContextHolder.getLocale());
+        return getMessageSource().getMessage(code, args, LocaleContextHolder.getLocale());
     }
 
     /**
@@ -62,7 +71,7 @@ public abstract class AbstractOhfController {
     protected String getMessageEN(String code, Object... args) {
         Assert.hasText(code, "code must not be empty");
 
-        return messageSource.getMessage(code, args, Locale.ENGLISH);
+        return getMessageSource().getMessage(code, args, Locale.ENGLISH);
     }
 
     /**

@@ -21,8 +21,8 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import org.openhubframework.openhub.api.exception.IllegalDataException;
 import org.openhubframework.openhub.api.exception.InternalErrorEnum;
+import org.openhubframework.openhub.api.exception.validation.IllegalDataException;
 import org.openhubframework.openhub.test.data.ErrorTestEnum;
 
 

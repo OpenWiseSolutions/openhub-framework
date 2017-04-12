@@ -99,6 +99,9 @@ public class DbConfigurationControllerTest extends AbstractAdminModuleRestTest {
         final URIBuilder uriBuilder = createGetUrl(ROOT_URI + "/" + param.getCode());
 
         JsonObject request = createJson()
+                .add("code", param.getCode())
+                .add("categoryCode", param.getCategoryCode())
+                .add("dataType", param.getDataType().name())
                 .add("currentValue", "222")
                 .add("defaultValue", "10")
                 .build();
@@ -125,6 +128,9 @@ public class DbConfigurationControllerTest extends AbstractAdminModuleRestTest {
         final URIBuilder uriBuilder = createGetUrl(ROOT_URI + "/" + param.getCode());
 
         JsonObject request = createJson()
+                .add("code", param.getCode())
+                .add("categoryCode", param.getCategoryCode())
+                .add("dataType", param.getDataType().name())
                 .add("currentValue", "abc")
                 .build();
 
@@ -143,5 +149,37 @@ public class DbConfigurationControllerTest extends AbstractAdminModuleRestTest {
                 .andExpect(jsonPath("httpDesc", is("Bad Request")))
                 .andExpect(content().string(
                         containsString("Current value 'abc' can't be converted to target type INT")));
+    }
+
+    // test also JSR-303 Bean Validation API
+    @Test
+    public void testUpdate_beanValidation() throws Exception {
+        final URIBuilder uriBuilder = createGetUrl(ROOT_URI + "/" + param.getCode());
+
+        JsonObject request = createJson()
+                .add("code", param.getCode())
+                .add("categoryCode", param.getCategoryCode())
+                .add("currentValue", "abc")
+                .build();
+
+        // performs PUT: /api/config-params
+        mockMvc.perform(put(toUrl(uriBuilder))
+                .content(request.toString())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.authentication(mockAuthentication("ADMIN"))))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("errorCode", is("E109")))
+                .andExpect(jsonPath("type", is("InputValidationException")))
+                .andExpect(jsonPath("message",
+                        is("Input validation error in object 'dbConfigurationParamRpc'")))
+                .andExpect(jsonPath("httpStatus", is(400)))
+                .andExpect(jsonPath("httpDesc", is("Bad Request")))
+
+                // there is no dataType => one inputField
+                .andExpect(jsonPath("inputFields[0].objectName", is("dbConfigurationParamRpc")))
+                .andExpect(jsonPath("inputFields[0].field", is("dataType")))
+                .andExpect(jsonPath("inputFields[0].code", is("NotNull")))
+                .andExpect(jsonPath("inputFields[0].message", is("may not be null")));
     }
 }

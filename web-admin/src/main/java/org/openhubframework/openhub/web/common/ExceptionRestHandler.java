@@ -28,15 +28,19 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import org.openhubframework.openhub.admin.web.common.rpc.FieldInputErrorRpc;
 import org.openhubframework.openhub.admin.web.common.rpc.GeneralFaultRpc;
 import org.openhubframework.openhub.admin.web.common.rpc.ValidationFaultRpc;
 import org.openhubframework.openhub.api.exception.IntegrationException;
 import org.openhubframework.openhub.api.exception.InternalErrorEnum;
-import org.openhubframework.openhub.api.exception.ValidationIntegrationException;
+import org.openhubframework.openhub.api.exception.validation.InputValidationException;
+import org.openhubframework.openhub.api.exception.validation.ValidationException;
 
 
 /**
@@ -58,17 +62,26 @@ public class ExceptionRestHandler {
     @Autowired
     private MessageSource messageSource;
 
-
     /**
-     * Handle {@link ValidationIntegrationException}.
+     * Handle {@link ValidationException}.
      */
-    @ExceptionHandler(ValidationIntegrationException.class)
-    public ResponseEntity<ValidationFaultRpc> onIntegrationException(HttpServletRequest req, ValidationIntegrationException ex) {
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<ValidationFaultRpc> onValidationException(HttpServletRequest req, ValidationException ex) {
         Assert.notNull(req, "req can not be null");
         Assert.notNull(ex, "exception can not be null");
 
         HttpStatus status = getStatusFromException(ex);
         ValidationFaultRpc faultRpc = new ValidationFaultRpc(status, ex);
+
+        // add field errors
+        if (ex instanceof InputValidationException) {
+            BindingResult bindingResult = ((InputValidationException) ex).getBindingResult();
+
+            for (FieldError fieldError : bindingResult.getFieldErrors()) {
+                faultRpc.addInputField(new FieldInputErrorRpc(fieldError.getObjectName(), fieldError.getField(),
+                        fieldError.getRejectedValue(), fieldError.getCode(), fieldError.getDefaultMessage()));
+            }
+        }
 
         LOG.error("Validation exception posted to client side: " + faultRpc, ex);
 

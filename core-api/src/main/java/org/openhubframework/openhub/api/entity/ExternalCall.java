@@ -80,11 +80,6 @@ public class ExternalCall extends SuperEntity<Long> {
     @Column(name = "failed_count", nullable = false)
     private int failedCount = 0;
 
-    /** Default public constructor. */
-    public ExternalCall() {
-        super(null);
-    }
-
     /**
      * Creates new {@link ExternalCallStateEnum#FAILED failed} confirmation call.
      *

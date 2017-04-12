@@ -30,7 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.openhubframework.openhub.api.common.Constraints;
 import org.openhubframework.openhub.api.configuration.DbConfigurationParam;
 import org.openhubframework.openhub.api.configuration.DbConfigurationParamService;
-import org.openhubframework.openhub.api.exception.ConfigurationException;
+import org.openhubframework.openhub.api.exception.validation.ConfigurationException;
 import org.openhubframework.openhub.common.Tools;
 
 

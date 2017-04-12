@@ -26,13 +26,6 @@ import static org.junit.Assert.fail;
 import java.util.Arrays;
 import java.util.Collections;
 
-import org.openhubframework.openhub.api.asynch.model.TraceHeader;
-import org.openhubframework.openhub.api.asynch.model.TraceIdentifier;
-import org.openhubframework.openhub.api.exception.InternalErrorEnum;
-import org.openhubframework.openhub.api.exception.ValidationIntegrationException;
-import org.openhubframework.openhub.core.AbstractCoreTest;
-import org.openhubframework.openhub.core.common.validator.TraceIdentifierValidator;
-
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Exchange;
 import org.apache.camel.Produce;
@@ -40,6 +33,13 @@ import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.junit.Test;
+
+import org.openhubframework.openhub.api.asynch.model.TraceHeader;
+import org.openhubframework.openhub.api.asynch.model.TraceIdentifier;
+import org.openhubframework.openhub.api.exception.InternalErrorEnum;
+import org.openhubframework.openhub.api.exception.validation.ValidationException;
+import org.openhubframework.openhub.core.AbstractCoreTest;
+import org.openhubframework.openhub.core.common.validator.TraceIdentifierValidator;
 
 
 /**
@@ -137,8 +137,8 @@ public class TraceHeaderProcessorTest extends AbstractCoreTest {
             fail("request must be rejected since traceId does not have the valid value");
         } catch (Exception ex) {
             Throwable origExp = ex.getCause();
-            assertThat(origExp, instanceOf(ValidationIntegrationException.class));
-            assertThat(((ValidationIntegrationException) origExp).getError().getErrorCode(),
+            assertThat(origExp, instanceOf(ValidationException.class));
+            assertThat(((ValidationException) origExp).getError().getErrorCode(),
                     is(InternalErrorEnum.E120.getErrorCode()));
         }
     }

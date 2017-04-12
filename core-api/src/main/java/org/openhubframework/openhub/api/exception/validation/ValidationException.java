@@ -14,37 +14,42 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.api.exception;
+package org.openhubframework.openhub.api.exception.validation;
 
 import javax.annotation.Nullable;
 
+import org.openhubframework.openhub.api.entity.MsgStateEnum;
+import org.openhubframework.openhub.api.exception.ErrorExtEnum;
+import org.openhubframework.openhub.api.exception.IntegrationException;
+import org.openhubframework.openhub.api.exception.InternalErrorEnum;
+
 
 /**
- * Exception indicates non-valid, illegal data.
+ * Exception indicates error during validation.
+ * <p>
+ * If there is validation error than there is no next try, message gets to {@link MsgStateEnum#FAILED FAILED state}.
  *
  * @author Petr Juza
  */
-public class IllegalDataException extends ValidationIntegrationException {
+public class ValidationException extends IntegrationException {
 
     /**
-     * Creates exception with the message and {@link InternalErrorEnum#E109} error code.
+     * Creates validation exception with the message and {@link InternalErrorEnum#E102} error code.
      *
      * @param msg the message
      */
-    public IllegalDataException(String msg) {
-        this(InternalErrorEnum.E109, msg);
+    public ValidationException(String msg) {
+        super(InternalErrorEnum.E102, msg);
     }
 
     /**
-     * Creates exception with the message, {@link InternalErrorEnum#E109} error code and specified cause.
+     * Creates validation exception with the specified error code.
      *
-     * @param msg   the message
-     * @param cause the throwable that caused this exception
+     * @param error the error code
      */
-    public IllegalDataException(String msg, Throwable cause) {
-        this(InternalErrorEnum.E109, msg, cause);
+    public ValidationException(ErrorExtEnum error) {
+        super(error);
     }
-
 
     /**
      * Creates validation exception with the specified error code and message.
@@ -52,7 +57,7 @@ public class IllegalDataException extends ValidationIntegrationException {
      * @param error the error code
      * @param msg   the message
      */
-    public IllegalDataException(ErrorExtEnum error, String msg) {
+    public ValidationException(ErrorExtEnum error, String msg) {
         super(error, msg);
     }
 
@@ -63,7 +68,7 @@ public class IllegalDataException extends ValidationIntegrationException {
      * @param msg   the message
      * @param cause the throwable that caused this exception
      */
-    public IllegalDataException(ErrorExtEnum error, @Nullable String msg, @Nullable Throwable cause) {
+    public ValidationException(ErrorExtEnum error, @Nullable String msg, @Nullable Throwable cause) {
         super(error, msg, cause);
     }
 }

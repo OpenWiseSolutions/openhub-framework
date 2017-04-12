@@ -19,7 +19,7 @@ import org.openhubframework.openhub.api.configuration.ConfigurationItem;
 import org.openhubframework.openhub.api.configuration.CoreProps;
 import org.openhubframework.openhub.api.entity.MutableNode;
 import org.openhubframework.openhub.api.entity.Node;
-import org.openhubframework.openhub.api.exception.ConfigurationException;
+import org.openhubframework.openhub.api.exception.validation.ConfigurationException;
 import org.openhubframework.openhub.core.common.dao.NodeDao;
 import org.openhubframework.openhub.core.confcheck.ConfCheck;
 import org.openhubframework.openhub.spi.node.ChangeNodeCallback;

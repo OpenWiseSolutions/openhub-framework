@@ -17,33 +17,21 @@
 package org.openhubframework.openhub.core.common.ws;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
+import java.util.*;
 import javax.xml.namespace.QName;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.dom.DOMSource;
 
-import org.openhubframework.openhub.api.exception.InternalErrorEnum;
-import org.openhubframework.openhub.api.exception.ValidationIntegrationException;
-
 import org.springframework.util.ObjectUtils;
 import org.springframework.ws.context.MessageContext;
-import org.springframework.ws.soap.SoapBody;
-import org.springframework.ws.soap.SoapFault;
-import org.springframework.ws.soap.SoapFaultDetail;
-import org.springframework.ws.soap.SoapFaultDetailElement;
-import org.springframework.ws.soap.SoapHeader;
-import org.springframework.ws.soap.SoapHeaderElement;
-import org.springframework.ws.soap.SoapMessage;
+import org.springframework.ws.soap.*;
 import org.springframework.ws.soap.saaj.SaajSoapMessage;
 import org.springframework.ws.soap.server.endpoint.interceptor.PayloadValidatingInterceptor;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
+
+import org.openhubframework.openhub.api.exception.InternalErrorEnum;
+import org.openhubframework.openhub.api.exception.validation.ValidationException;
 
 
 /**
@@ -79,7 +67,7 @@ public class HeaderAndPayloadValidatingInterceptor extends PayloadValidatingInte
             SaajSoapMessage soapMessage = (SaajSoapMessage) messageContext.getRequest();
             SoapHeader soapHeader = soapMessage.getSoapHeader();
 
-            ValidationIntegrationException[] errors = validateHeader(soapHeader);
+            ValidationException[] errors = validateHeader(soapHeader);
             if (!ObjectUtils.isEmpty(errors)) {
                 return handleHeaderValidationErrors(messageContext, errors);
             } else if (logger.isDebugEnabled()) {
@@ -108,8 +96,8 @@ public class HeaderAndPayloadValidatingInterceptor extends PayloadValidatingInte
      * @param soapHeader the SOAP header
      * @return array of possible validation errors
      */
-    private ValidationIntegrationException[] validateHeader(SoapHeader soapHeader) {
-        List<ValidationIntegrationException> errors = new ArrayList<ValidationIntegrationException>();
+    private ValidationException[] validateHeader(SoapHeader soapHeader) {
+        List<ValidationException> errors = new ArrayList<ValidationException>();
 
         boolean headerFound = false;
         if (soapHeader != null) {
@@ -124,10 +112,10 @@ public class HeaderAndPayloadValidatingInterceptor extends PayloadValidatingInte
         }
 
         if (!headerFound) {
-            errors.add(new ValidationIntegrationException("there is no header element: " + TRACE_HEADER_ELM));
+            errors.add(new ValidationException("there is no header element: " + TRACE_HEADER_ELM));
         }
 
-        return errors.toArray(new ValidationIntegrationException[errors.size()]);
+        return errors.toArray(new ValidationException[errors.size()]);
     }
 
     /**
@@ -139,10 +127,10 @@ public class HeaderAndPayloadValidatingInterceptor extends PayloadValidatingInte
      * @return <code>true</code> to continue processing the request, <code>false</code> (the default) otherwise
      * @throws TransformerException if error occurs during the transformation process
      */
-    protected boolean handleHeaderValidationErrors(MessageContext messageContext, ValidationIntegrationException[] errors)
+    protected boolean handleHeaderValidationErrors(MessageContext messageContext, ValidationException[] errors)
             throws TransformerException {
 
-        for (ValidationIntegrationException error : errors) {
+        for (ValidationException error : errors) {
             logger.warn("XML validation error on request: " + error.getMessage());
         }
 
@@ -153,7 +141,7 @@ public class HeaderAndPayloadValidatingInterceptor extends PayloadValidatingInte
 
             if (getAddValidationErrorDetail()) {
                 SoapFaultDetail detail = fault.addFaultDetail();
-                for (ValidationIntegrationException error : errors) {
+                for (ValidationException error : errors) {
                     SoapFaultDetailElement detailElement = detail.addFaultDetailElement(getDetailElementName());
                     detailElement.addText(error.getMessage());
                 }

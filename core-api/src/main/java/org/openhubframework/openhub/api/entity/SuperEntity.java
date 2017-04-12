@@ -50,6 +50,13 @@ public abstract class SuperEntity<ID extends Serializable> implements Serializab
         this.id = id;
     }
 
+    /**
+     * Creates new entity with {@code null} identifier.
+     */
+    protected SuperEntity() {
+        this(null);
+    }
+
     @Override
     public void setId(@Nullable ID id) {
         this.id = id;

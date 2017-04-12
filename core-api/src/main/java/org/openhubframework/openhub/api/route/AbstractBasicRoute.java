@@ -24,7 +24,6 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Handler;
 import org.apache.camel.Header;
 import org.apache.camel.LoggingLevel;
-import org.apache.camel.ValidationException;
 import org.apache.camel.processor.DefaultExchangeFormatter;
 import org.apache.camel.spi.EventNotifier;
 import org.apache.camel.spring.SpringRouteBuilder;
@@ -33,18 +32,17 @@ import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.openhubframework.openhub.api.asynch.AsynchConstants;
-import org.openhubframework.openhub.api.entity.ExternalSystemExtEnum;
-import org.openhubframework.openhub.api.entity.ServiceExtEnum;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
+import org.openhubframework.openhub.api.asynch.AsynchConstants;
+import org.openhubframework.openhub.api.entity.ExternalSystemExtEnum;
+import org.openhubframework.openhub.api.entity.ServiceExtEnum;
 import org.openhubframework.openhub.api.exception.BusinessException;
 import org.openhubframework.openhub.api.exception.LockFailureException;
 import org.openhubframework.openhub.api.exception.MultipleDataFoundException;
 import org.openhubframework.openhub.api.exception.NoDataFoundException;
-import org.openhubframework.openhub.api.exception.ValidationIntegrationException;
+import org.openhubframework.openhub.api.exception.validation.ValidationException;
 
 
 /**
@@ -160,8 +158,8 @@ public abstract class AbstractBasicRoute extends SpringRouteBuilder {
 
         String nextUri;
 
-        if (ExceptionUtils.indexOfThrowable(ex, ValidationException.class) >= 0
-                || ExceptionUtils.indexOfThrowable(ex, ValidationIntegrationException.class) >= 0) {
+        if (ExceptionUtils.indexOfThrowable(ex, org.apache.camel.ValidationException.class) >= 0
+                || ExceptionUtils.indexOfThrowable(ex, ValidationException.class) >= 0) {
             LOG.warn("Validation error, no further processing - " + ex.getMessage());
             nextUri = AsynchConstants.URI_ERROR_FATAL;
 

@@ -27,7 +27,7 @@ import org.springframework.core.convert.ConversionService;
 
 import org.openhubframework.openhub.api.common.Constraints;
 import org.openhubframework.openhub.api.entity.SuperEntity;
-import org.openhubframework.openhub.api.exception.ConfigurationException;
+import org.openhubframework.openhub.api.exception.validation.ConfigurationException;
 import org.openhubframework.openhub.common.Tools;
 
 
@@ -72,10 +72,11 @@ public class DbConfigurationParam extends SuperEntity<String> {
     @Column(name = "validation", length = 100)
     private String validationRegEx;
 
-
-    /** Default public constructor. */
-    public DbConfigurationParam() {
-        super(null);
+    /**
+     * Default no-args constructor used only by JPA.
+     */
+    private DbConfigurationParam() {
+        // super SuperEntity is used by default
     }
 
     /**

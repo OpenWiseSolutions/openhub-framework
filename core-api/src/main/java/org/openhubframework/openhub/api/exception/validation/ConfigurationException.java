@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.api.exception;
+package org.openhubframework.openhub.api.exception.validation;
+
+import org.openhubframework.openhub.api.exception.InternalErrorEnum;
+
 
 /**
  * Configuration exception that reflects error state of configuration item.
@@ -22,7 +25,7 @@ package org.openhubframework.openhub.api.exception;
  * @author Tomas Hanus
  * @since 2.0
  */
-public class ConfigurationException extends ValidationIntegrationException {
+public class ConfigurationException extends ValidationException {
 
     private static final long serialVersionUID = 1L;
 

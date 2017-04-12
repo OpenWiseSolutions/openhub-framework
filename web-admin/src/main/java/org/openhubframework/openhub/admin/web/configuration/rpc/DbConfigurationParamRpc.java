@@ -18,16 +18,21 @@ package org.openhubframework.openhub.admin.web.configuration.rpc;
 
 import java.util.Map;
 import javax.annotation.Nullable;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.eclipse.core.runtime.Assert;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.util.Assert;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ValidationUtils;
+import org.springframework.validation.annotation.Validated;
 
-import org.openhubframework.openhub.admin.web.common.rpc.BaseRpc;
+import org.openhubframework.openhub.admin.web.common.rpc.ChangeableRpc;
+import org.openhubframework.openhub.api.common.Constraints;
 import org.openhubframework.openhub.api.configuration.DbConfigurationParam;
-import org.openhubframework.openhub.api.exception.ValidationIntegrationException;
+import org.openhubframework.openhub.api.exception.validation.ValidationException;
 
 
 /**
@@ -37,7 +42,8 @@ import org.openhubframework.openhub.api.exception.ValidationIntegrationException
  * @since 2.0
  */
 @XmlRootElement
-public class DbConfigurationParamRpc extends BaseRpc<DbConfigurationParam, String> {
+@Validated
+public class DbConfigurationParamRpc extends ChangeableRpc<DbConfigurationParam, String> {
 
     /**
      * Converts {@link DbConfigurationParam} to {@link DbConfigurationParamRpc}.
@@ -53,11 +59,13 @@ public class DbConfigurationParamRpc extends BaseRpc<DbConfigurationParam, Strin
     /**
      * code: ohf.server.localhostUri.check (string) - unique code of one configuration parameter
      */
+    @NotNull
     private String code;
 
     /**
      * categoryCode: core.server (string) - unique code for specific configuration scope/category
      */
+    @NotNull
     private String categoryCode;
 
     /**
@@ -80,6 +88,7 @@ public class DbConfigurationParamRpc extends BaseRpc<DbConfigurationParam, Strin
              + `BOOL`
              + `FILE`
      */
+    @NotNull
     private String dataType;
 
     /**
@@ -117,8 +126,11 @@ public class DbConfigurationParamRpc extends BaseRpc<DbConfigurationParam, Strin
     }
 
     @Override
-    protected void validate() throws ValidationIntegrationException {
-        //TODO PJUZA make validation
+    protected void validate(BindingResult errors, @Nullable DbConfigurationParam updateEntity) throws ValidationException {
+        if (updateEntity != null) {
+            ValidationUtils.rejectIfEmpty(errors, "code", "field.required");
+            Constraints.state(getCode().equals(updateEntity.getCode()), "codes must be equal");
+        }
     }
 
     @Override
