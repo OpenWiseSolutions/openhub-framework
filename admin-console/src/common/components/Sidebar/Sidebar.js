@@ -30,6 +30,10 @@ class Sidebar extends Component {
             icon={<MdVertDots />}
             style={styles.nestedItem}
             label='Config parameters' />
+          <Item link={'/config-logging'}
+            icon={<MdVertDots />}
+            style={styles.nestedItem}
+            label='Config logging' />
         </Item>
       </div>
     )

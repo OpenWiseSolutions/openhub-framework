@@ -3,13 +3,15 @@ import { initAuth } from '../common/modules/auth.module'
 import { getOpenHubInfo } from '../routes/Home/modules/home.module'
 import Home from './Home'
 import ConfigParams from './ConfigParams'
+import ConfigLogging from './ConfigLogging'
 
 export const createRoutes = (store) => ({
   path: '/',
   component: CoreLayout,
   indexRoute: Home(store),
   childRoutes: [
-    ConfigParams(store)
+    ConfigParams(store),
+    ConfigLogging(store)
   ],
   onEnter: () => {
     store.dispatch(initAuth())
