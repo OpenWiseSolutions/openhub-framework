@@ -1,0 +1,506 @@
+databaseChangeLog:
+- changeSet:
+    id: 1492356327217-1
+    author: Karel (generated)
+    changes:
+    - createSequence:
+        sequenceName: HIBERNATE_SEQUENCE
+- changeSet:
+    id: 1492356327217-2
+    author: Karel (generated)
+    changes:
+    - createSequence:
+        sequenceName: OPENHUB_SEQUENCE
+- changeSet:
+    id: 1492356327217-3
+    author: Karel (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: CODE
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: CATEGORY_CODE
+            type: VARCHAR(100)
+        - column:
+            name: CURRENT_VALUE
+            type: VARCHAR(1000)
+        - column:
+            constraints:
+              nullable: false
+            name: DATA_TYPE
+            type: VARCHAR(20)
+        - column:
+            name: DEFAULT_VALUE
+            type: VARCHAR(1000)
+        - column:
+            name: DESCRIPTION
+            type: VARCHAR(1000)
+        - column:
+            name: MANDATORY
+            type: BOOLEAN(1)
+        - column:
+            name: VALIDATION
+            type: VARCHAR(100)
+        tableName: CONFIGURATION_ITEM
+- changeSet:
+    id: 1492356327217-4
+    author: Karel (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: CALL_ID
+            type: BIGINT(19)
+        - column:
+            constraints:
+              nullable: false
+            name: CREATION_TIMESTAMP
+            type: TIMESTAMP
+        - column:
+            constraints:
+              nullable: false
+            name: ENTITY_ID
+            type: VARCHAR(150)
+        - column:
+            constraints:
+              nullable: false
+            name: FAILED_COUNT
+            type: INT(10)
+        - column:
+            constraints:
+              nullable: false
+            name: LAST_UPDATE_TIMESTAMP
+            type: TIMESTAMP
+        - column:
+            constraints:
+              nullable: false
+            name: MSG_ID
+            type: BIGINT(19)
+        - column:
+            constraints:
+              nullable: false
+            name: MSG_TIMESTAMP
+            type: TIMESTAMP
+        - column:
+            constraints:
+              nullable: false
+            name: OPERATION_NAME
+            type: VARCHAR(100)
+        - column:
+            constraints:
+              nullable: false
+            name: STATE
+            type: VARCHAR(20)
+        tableName: EXTERNAL_CALL
+- changeSet:
+    id: 1492356327217-5
+    author: Karel (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: MSG_ID
+            type: BIGINT(19)
+        - column:
+            name: BUSINESS_ERROR
+            type: VARCHAR(20000)
+        - column:
+            constraints:
+              nullable: false
+            name: CORRELATION_ID
+            type: VARCHAR(100)
+        - column:
+            name: CUSTOM_DATA
+            type: VARCHAR(20000)
+        - column:
+            name: ENTITY_TYPE
+            type: VARCHAR(30)
+        - column:
+            name: ENVELOPE
+            type: VARCHAR(2147483647)
+        - column:
+            constraints:
+              nullable: false
+            name: EXCLUDE_FAILED_STATE
+            type: BOOLEAN(1)
+        - column:
+            constraints:
+              nullable: false
+            name: FAILED_COUNT
+            type: INT(10)
+        - column:
+            name: FAILED_DESC
+            type: VARCHAR(2147483647)
+        - column:
+            name: FAILED_ERROR_CODE
+            type: VARCHAR(5)
+        - column:
+            name: FUNNEL_COMPONENT_ID
+            type: VARCHAR(50)
+        - column:
+            name: FUNNEL_VALUE
+            type: VARCHAR(50)
+        - column:
+            constraints:
+              nullable: false
+            name: GUARANTEED_ORDER
+            type: BOOLEAN(1)
+        - column:
+            name: LAST_UPDATE_TIMESTAMP
+            type: TIMESTAMP
+        - column:
+            constraints:
+              nullable: false
+            name: MSG_TIMESTAMP
+            type: TIMESTAMP
+        - column:
+            name: NODE_ID
+            type: BIGINT(19)
+        - column:
+            name: OBJECT_ID
+            type: VARCHAR(50)
+        - column:
+            constraints:
+              nullable: false
+            name: OPERATION_NAME
+            type: VARCHAR(100)
+        - column:
+            name: PARENT_BINDING_TYPE
+            type: VARCHAR(25)
+        - column:
+            name: PARENT_MSG_ID
+            type: BIGINT(19)
+        - column:
+            constraints:
+              nullable: false
+            name: PAYLOAD
+            type: VARCHAR(2147483647)
+        - column:
+            name: PROCESS_ID
+            type: VARCHAR(100)
+        - column:
+            constraints:
+              nullable: false
+            name: RECEIVE_TIMESTAMP
+            type: TIMESTAMP
+        - column:
+            constraints:
+              nullable: false
+            name: SERVICE
+            type: VARCHAR(30)
+        - column:
+            constraints:
+              nullable: false
+            name: SOURCE_SYSTEM
+            type: VARCHAR(15)
+        - column:
+            name: START_IN_QUEUE_TIMESTAMP
+            type: TIMESTAMP
+        - column:
+            name: START_PROCESS_TIMESTAMP
+            type: TIMESTAMP
+        - column:
+            constraints:
+              nullable: false
+            name: STATE
+            type: VARCHAR(25)
+        tableName: MESSAGE
+- changeSet:
+    id: 1492356327217-6
+    author: Karel (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: NODE_ID
+            type: BIGINT(19)
+        - column:
+            constraints:
+              nullable: false
+            name: CODE
+            type: VARCHAR(64)
+        - column:
+            name: DESCRIPTION
+            type: VARCHAR(2056)
+        - column:
+            constraints:
+              nullable: false
+            name: NAME
+            type: VARCHAR(256)
+        - column:
+            constraints:
+              nullable: false
+            name: STATE
+            type: VARCHAR(64)
+        tableName: NODE
+- changeSet:
+    id: 1492356327217-7
+    author: Karel (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: REQ_ID
+            type: BIGINT(19)
+        - column:
+            name: MSG_ID
+            type: BIGINT(19)
+        - column:
+            constraints:
+              nullable: false
+            name: REQ_TIMESTAMP
+            type: TIMESTAMP
+        - column:
+            constraints:
+              nullable: false
+            name: REQ_ENVELOPE
+            type: VARCHAR(2147483647)
+        - column:
+            constraints:
+              nullable: false
+            name: RES_JOIN_ID
+            type: VARCHAR(100)
+        - column:
+            constraints:
+              nullable: false
+            name: URI
+            type: VARCHAR(400)
+        tableName: REQUEST
+- changeSet:
+    id: 1492356327217-8
+    author: Karel (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: RES_ID
+            type: BIGINT(19)
+        - column:
+            constraints:
+              nullable: false
+            name: FAILED
+            type: BOOLEAN(1)
+        - column:
+            name: FAILED_REASON
+            type: VARCHAR(2147483647)
+        - column:
+            name: RES_TIMESTAMP
+            type: TIMESTAMP
+        - column:
+            name: RES_ENVELOPE
+            type: VARCHAR(2147483647)
+        - column:
+            name: MSG_ID
+            type: BIGINT(19)
+        - column:
+            name: REQ_ID
+            type: BIGINT(19)
+        tableName: RESPONSE
+- changeSet:
+    id: 1492356327217-9
+    author: Karel (generated)
+    changes:
+    - addPrimaryKey:
+        columnNames: RES_ID
+        constraintName: CONSTRAINT_1
+        tableName: RESPONSE
+- changeSet:
+    id: 1492356327217-10
+    author: Karel (generated)
+    changes:
+    - addPrimaryKey:
+        columnNames: NODE_ID
+        constraintName: CONSTRAINT_2
+        tableName: NODE
+- changeSet:
+    id: 1492356327217-11
+    author: Karel (generated)
+    changes:
+    - addPrimaryKey:
+        columnNames: MSG_ID
+        constraintName: CONSTRAINT_6
+        tableName: MESSAGE
+- changeSet:
+    id: 1492356327217-12
+    author: Karel (generated)
+    changes:
+    - addPrimaryKey:
+        columnNames: REQ_ID
+        constraintName: CONSTRAINT_6C
+        tableName: REQUEST
+- changeSet:
+    id: 1492356327217-13
+    author: Karel (generated)
+    changes:
+    - addPrimaryKey:
+        columnNames: CODE
+        constraintName: CONSTRAINT_9
+        tableName: CONFIGURATION_ITEM
+- changeSet:
+    id: 1492356327217-14
+    author: Karel (generated)
+    changes:
+    - addPrimaryKey:
+        columnNames: CALL_ID
+        constraintName: CONSTRAINT_B
+        tableName: EXTERNAL_CALL
+- changeSet:
+    id: 1492356327217-15
+    author: Karel (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: NAME
+        constraintName: UK_FWIGXDMJ6BSRPCMHCGPMLSIRH
+        tableName: NODE
+- changeSet:
+    id: 1492356327217-16
+    author: Karel (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: CODE
+        constraintName: UK_TCGSVCB1U24GNSRTGKFUUCBR6
+        tableName: NODE
+- changeSet:
+    id: 1492356327217-17
+    author: Karel (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: CORRELATION_ID, SOURCE_SYSTEM
+        constraintName: UQ_CORRELATION_SYSTEM
+        tableName: MESSAGE
+- changeSet:
+    id: 1492356327217-18
+    author: Karel (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: CODE
+        constraintName: UQ_NODE_CODE
+        tableName: NODE
+- changeSet:
+    id: 1492356327217-19
+    author: Karel (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: NAME
+        constraintName: UQ_NODE_NAME
+        tableName: NODE
+- changeSet:
+    id: 1492356327217-20
+    author: Karel (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: OPERATION_NAME, ENTITY_ID
+        constraintName: UQ_OPERATION_ENTITY_ID
+        tableName: EXTERNAL_CALL
+- changeSet:
+    id: 1492356327217-21
+    author: Karel (generated)
+    changes:
+    - createIndex:
+        columns:
+        - column:
+            name: MSG_ID
+        indexName: FKMB95LWQX0QQN830RWDBAN187O_INDEX_6
+        tableName: REQUEST
+- changeSet:
+    id: 1492356327217-22
+    author: Karel (generated)
+    changes:
+    - createIndex:
+        columns:
+        - column:
+            name: MSG_ID
+        indexName: FKMRK9KJXAWIAL0973KSGJQKOA2_INDEX_1
+        tableName: RESPONSE
+- changeSet:
+    id: 1492356327217-23
+    author: Karel (generated)
+    changes:
+    - createIndex:
+        columns:
+        - column:
+            name: REQ_ID
+        indexName: FKO1WN9A2359KS1RE952WA3WVTR_INDEX_1
+        tableName: RESPONSE
+- changeSet:
+    id: 1492356327217-24
+    author: Karel (generated)
+    changes:
+    - createIndex:
+        columns:
+        - column:
+            name: MSG_ID
+        indexName: FKQJ7BA73BJXD7XV9XKA3RXUF4M_INDEX_B
+        tableName: EXTERNAL_CALL
+- changeSet:
+    id: 1492356327217-25
+    author: Karel (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: MSG_ID
+        baseTableName: REQUEST
+        constraintName: FKMB95LWQX0QQN830RWDBAN187O
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: RESTRICT
+        onUpdate: RESTRICT
+        referencedColumnNames: MSG_ID
+        referencedTableName: MESSAGE
+- changeSet:
+    id: 1492356327217-26
+    author: Karel (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: MSG_ID
+        baseTableName: RESPONSE
+        constraintName: FKMRK9KJXAWIAL0973KSGJQKOA2
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: RESTRICT
+        onUpdate: RESTRICT
+        referencedColumnNames: MSG_ID
+        referencedTableName: MESSAGE
+- changeSet:
+    id: 1492356327217-27
+    author: Karel (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: REQ_ID
+        baseTableName: RESPONSE
+        constraintName: FKO1WN9A2359KS1RE952WA3WVTR
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: RESTRICT
+        onUpdate: RESTRICT
+        referencedColumnNames: REQ_ID
+        referencedTableName: REQUEST
+- changeSet:
+    id: 1492356327217-28
+    author: Karel (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: MSG_ID
+        baseTableName: EXTERNAL_CALL
+        constraintName: FKQJ7BA73BJXD7XV9XKA3RXUF4M
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: RESTRICT
+        onUpdate: RESTRICT
+        referencedColumnNames: MSG_ID
+        referencedTableName: MESSAGE

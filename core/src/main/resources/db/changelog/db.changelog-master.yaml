@@ -1,0 +1,13 @@
+databaseChangeLog:
+
+- include:
+    file: db/changelog/scripts/001_db_schema.yaml
+
+- include:
+    file: db/changelog/scripts/002_init-configuration.sql
+
+
+#- includeAll:
+#    path: classpath*:db/changelog/
+#    relativeToChangelogFile: false
+#    errorIfMissingOrEmpty: false
