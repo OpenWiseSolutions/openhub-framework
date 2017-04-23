@@ -4,6 +4,7 @@ import styles from './sidebar.styles'
 import Item from '../Item/Item'
 import MdHome from 'react-icons/lib/md/home'
 import MdVertDots from 'react-icons/lib/md/more-vert'
+import MdMergeType from 'react-icons/lib/md/merge-type'
 import MdInsertInvitation from 'react-icons/lib/md/insert-invitation'
 
 @Radium
@@ -35,6 +36,10 @@ class Sidebar extends Component {
             style={styles.nestedItem}
             label='Config logging' />
         </Item>
+        <Item link={'/changes'}
+          icon={<MdMergeType />}
+          style={styles.item}
+          label='Changes' />
       </div>
     )
   }

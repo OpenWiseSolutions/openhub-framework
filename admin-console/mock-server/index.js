@@ -10,7 +10,8 @@ const sources = [
   require('./metrics/metrics.mock'),
   require('./config/parameters.mock'),
   require('./auth/auth.mock'),
-  require('./config/logging.mock')
+  require('./config/logging.mock'),
+  require('./changes/changes.mock')
 ]
 
 runServer(sources, opt_serverConfig)
