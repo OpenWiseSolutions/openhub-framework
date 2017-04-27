@@ -5,6 +5,7 @@ import Home from './Home'
 import ConfigParams from './ConfigParams'
 import ConfigLogging from './ConfigLogging'
 import Changes from './Changes'
+import EnvironmentProperties from './EnvironmentProperties'
 
 export const createRoutes = (store) => ({
   path: '/',
@@ -13,7 +14,8 @@ export const createRoutes = (store) => ({
   childRoutes: [
     ConfigParams(store),
     ConfigLogging(store),
-    Changes(store)
+    Changes(store),
+    EnvironmentProperties(store)
   ],
   onEnter: () => {
     store.dispatch(initAuth())

@@ -35,6 +35,10 @@ class Sidebar extends Component {
             icon={<MdVertDots />}
             style={styles.nestedItem}
             label='Config logging' />
+          <Item link={'/environment-properties'}
+            icon={<MdVertDots />}
+            style={styles.nestedItem}
+            label='Environment properties' />
         </Item>
         <Item link={'/changes'}
           icon={<MdMergeType />}

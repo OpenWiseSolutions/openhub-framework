@@ -1,5 +1,3 @@
-let rootResponseMode
-
 module.exports = [
   {
     request: {
