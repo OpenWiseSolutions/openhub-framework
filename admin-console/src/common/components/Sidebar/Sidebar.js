@@ -5,6 +5,7 @@ import Item from '../Item/Item'
 import MdHome from 'react-icons/lib/md/home'
 import MdVertDots from 'react-icons/lib/md/more-vert'
 import MdMergeType from 'react-icons/lib/md/merge-type'
+import MdAnnouncement from 'react-icons/lib/md/announcement'
 import MdInsertInvitation from 'react-icons/lib/md/insert-invitation'
 
 @Radium
@@ -44,6 +45,10 @@ class Sidebar extends Component {
           icon={<MdMergeType />}
           style={styles.item}
           label='Changes' />
+        <Item link={'/errors-overview'}
+          icon={<MdAnnouncement />}
+          style={styles.item}
+          label='Errors Overview' />
       </div>
     )
   }

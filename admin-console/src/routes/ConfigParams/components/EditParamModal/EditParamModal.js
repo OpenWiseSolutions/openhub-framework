@@ -87,7 +87,6 @@ EditParamModal.propTypes = {
   isOpen: PropTypes.bool,
   updating: PropTypes.bool,
   updateError: PropTypes.bool,
-  actions: PropTypes.object,
   data: PropTypes.object,
   close: PropTypes.func,
   updateParam: PropTypes.func

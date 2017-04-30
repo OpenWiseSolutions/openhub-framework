@@ -12,7 +12,8 @@ const sources = [
   require('./auth/auth.mock'),
   require('./config/logging.mock'),
   require('./changes/changes.mock'),
-  require('./config/environment.mock')
+  require('./config/environment.mock'),
+  require('./errors/errorsOverview.mock')
 ]
 
 runServer(sources, opt_serverConfig)

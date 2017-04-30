@@ -6,6 +6,7 @@ import ConfigParams from './ConfigParams'
 import ConfigLogging from './ConfigLogging'
 import Changes from './Changes'
 import EnvironmentProperties from './EnvironmentProperties'
+import ErrorsOverview from './ErrorsOverview'
 
 export const createRoutes = (store) => ({
   path: '/',
@@ -15,7 +16,8 @@ export const createRoutes = (store) => ({
     ConfigParams(store),
     ConfigLogging(store),
     Changes(store),
-    EnvironmentProperties(store)
+    EnvironmentProperties(store),
+    ErrorsOverview(store)
   ],
   onEnter: () => {
     store.dispatch(initAuth())
