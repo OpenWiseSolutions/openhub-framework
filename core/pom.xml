@@ -37,6 +37,12 @@
             <artifactId>spring-boot-starter-web-services</artifactId>
         </dependency>
 
+        <!--spring-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+        </dependency>
+
         <!-- Spring security -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

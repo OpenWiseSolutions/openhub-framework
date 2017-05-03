@@ -24,6 +24,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Properties;
 import java.util.Set;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -207,6 +208,27 @@ public final class Tools {
         }
 
         return names;
+    }
+
+    /**
+     * Gets {@link Properties} from {@link ConfigurableEnvironment} with properties that name start with
+     * prefix from parameter.
+     *
+     * @param env                environment
+     * @param propertyNamePrefix prefix for property names
+     * @return {@link Properties} with properties that name start with propertyNamePrefix
+     */
+    public static Properties getPropertiesWithPrefix(ConfigurableEnvironment env, String propertyNamePrefix) {
+        Assert.notNull(env, "env must not be null");
+        Assert.hasText(propertyNamePrefix, "propertyNamePrefix must not be empty");
+
+        Properties result = new Properties();
+        for (String propertyName : getAllKnownPropertyNames(env)) {
+            if (propertyName.startsWith(propertyNamePrefix)) {
+                result.setProperty(propertyName, env.getProperty(propertyName));
+            }
+        }
+        return result;
     }
 
     /**
