@@ -17,6 +17,7 @@
 package org.openhubframework.openhub.admin.web.configuration.rest;
 
 import java.util.List;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,16 +25,18 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import org.openhubframework.openhub.admin.web.common.AbstractOhfController;
 import org.openhubframework.openhub.admin.web.common.rpc.paging.PagingWrapper;
 import org.openhubframework.openhub.admin.web.configuration.rpc.DbConfigurationParamRpc;
+import org.openhubframework.openhub.api.common.Constraints;
 import org.openhubframework.openhub.api.configuration.DbConfigurationParam;
 import org.openhubframework.openhub.api.configuration.DbConfigurationParamService;
-import org.openhubframework.openhub.api.exception.ConfigurationException;
 import org.openhubframework.openhub.api.exception.NoDataFoundException;
-import org.openhubframework.openhub.api.exception.ValidationIntegrationException;
+import org.openhubframework.openhub.api.exception.validation.ConfigurationException;
+import org.openhubframework.openhub.api.exception.validation.ValidationException;
 
 
 /**
@@ -88,7 +91,7 @@ public class DbConfigurationController extends AbstractOhfController {
      * Updates existing configuration parameter.
      *
      * @param paramRpc The paramRpc
-     * @throws ValidationIntegrationException if input object has wrong values
+     * @throws ValidationException if input object has wrong values
      * @throws NoDataFoundException entity not found for update
      */
     // .+ is workaround how to match everything after / as code of config parameters, otherwise last .* is removed as
@@ -96,16 +99,15 @@ public class DbConfigurationController extends AbstractOhfController {
     @RequestMapping(value = "/{code:.+}", method = RequestMethod.PUT, produces = {"application/xml", "application/json"})
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
-    public void update(@PathVariable final String code, @RequestBody final DbConfigurationParamRpc paramRpc) throws 
-            ValidationIntegrationException,
-            NoDataFoundException {
+    public void update(@PathVariable final String code, @RequestBody @Valid final DbConfigurationParamRpc paramRpc,
+            BindingResult errors) throws ValidationException, NoDataFoundException {
 
         Assert.notNull(paramRpc, "paramRpc can not be null");
-        Assert.isNull(paramRpc.getCode(), "code of paramRpc must be null, object is referenced by path attribute");
+        Constraints.state(code.equals(paramRpc.getCode()), "codes must be equal");
 
         // get entity to update it
         DbConfigurationParam dbParam = getParam(code);
-        paramRpc.updateEntity(dbParam);
+        paramRpc.updateEntity(dbParam, errors);
 
         // save entity
         paramService.update(dbParam);

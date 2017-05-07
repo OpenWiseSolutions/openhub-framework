@@ -139,7 +139,6 @@ public class WebContextConfig {
     /**
      * Defines localized messages for admin console.
      */
-    //TODO PJUZA configure MessageSource as in WIS ?
     @Bean
     @ConditionalOnMissingBean
     public ReloadableResourceBundleMessageSource messageSource() {

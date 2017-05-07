@@ -35,7 +35,7 @@ import org.openhubframework.openhub.api.asynch.model.TraceHeader;
 import org.openhubframework.openhub.api.asynch.model.TraceIdentifier;
 import org.openhubframework.openhub.api.common.ExchangeConstants;
 import org.openhubframework.openhub.api.exception.InternalErrorEnum;
-import org.openhubframework.openhub.api.exception.ValidationIntegrationException;
+import org.openhubframework.openhub.api.exception.validation.ValidationException;
 import org.openhubframework.openhub.core.common.validator.TraceIdentifierValidator;
 
 
@@ -112,7 +112,7 @@ public class TraceHeaderProcessor implements Processor {
         }
 
         if (isMandatoryHeader()) {
-            throw new ValidationIntegrationException(InternalErrorEnum.E104);
+            throw new ValidationException(InternalErrorEnum.E104);
         }
     }
 
@@ -128,24 +128,24 @@ public class TraceHeaderProcessor implements Processor {
         TraceHeader traceHeader = unmarshaller.unmarshal(traceHeaderElmSource, TraceHeader.class).getValue();
         if (traceHeader == null) {
             if (isMandatoryHeader()) {
-                throw new ValidationIntegrationException(InternalErrorEnum.E105, "there is no trace header");
+                throw new ValidationException(InternalErrorEnum.E105, "there is no trace header");
             }
         } else {
             // validate header content
             TraceIdentifier traceId = traceHeader.getTraceIdentifier();
             if (traceId == null) {
                 if (isMandatoryHeader()) {
-                    throw new ValidationIntegrationException(InternalErrorEnum.E105, "there is no trace identifier");
+                    throw new ValidationException(InternalErrorEnum.E105, "there is no trace identifier");
                 }
             } else {
                 if (traceId.getApplicationID() == null) {
-                    throw new ValidationIntegrationException(InternalErrorEnum.E105, "there is no application ID");
+                    throw new ValidationException(InternalErrorEnum.E105, "there is no application ID");
 
                 } else if (traceId.getCorrelationID() == null) {
-                    throw new ValidationIntegrationException(InternalErrorEnum.E105, "there is no correlation ID");
+                    throw new ValidationException(InternalErrorEnum.E105, "there is no correlation ID");
 
                 } else if (traceId.getTimestamp() == null) {
-                    throw new ValidationIntegrationException(InternalErrorEnum.E105, "there is no timestamp ID");
+                    throw new ValidationException(InternalErrorEnum.E105, "there is no timestamp ID");
                 }
 
                 validateTraceIdentifier(traceId);
@@ -172,7 +172,7 @@ public class TraceHeaderProcessor implements Processor {
      * Checks that {@link TraceIdentifier} contains values which are valid.
      *
      * @param traceId the {@link TraceIdentifier}
-     * @throws ValidationIntegrationException
+     * @throws ValidationException
      */
     private void validateTraceIdentifier(TraceIdentifier traceId) {
         Assert.notNull(traceId, "the traceId must not be null");
@@ -191,7 +191,7 @@ public class TraceHeaderProcessor implements Processor {
         }
 
         // trace identifier values was not found in any list of possible values
-        throw new ValidationIntegrationException(InternalErrorEnum.E120,
+        throw new ValidationException(InternalErrorEnum.E120,
                 "the trace identifier '" + ToStringBuilder.reflectionToString(traceId,
                         ToStringStyle.SHORT_PREFIX_STYLE) + "' is not allowed");
     }

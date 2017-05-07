@@ -64,11 +64,6 @@ public class Response extends SuperEntity<Long> {
     @Column(name = "failed", nullable = false)
     private boolean failed;
 
-    /** Default public constructor. */
-    public Response() {
-        super(null);
-    }
-
     /**
      * Creates a new response.
      *

@@ -29,12 +29,12 @@ import org.springframework.util.Assert;
 import org.w3c.dom.NodeList;
 
 import org.openhubframework.openhub.api.exception.InternalErrorEnum;
-import org.openhubframework.openhub.api.exception.ValidationIntegrationException;
+import org.openhubframework.openhub.api.exception.validation.ValidationException;
 
 
 /**
  * XPath validator that checks existence of mandatory element values (only those which have text values, not other sub-elements).
- * If there is no specified element (also with any value) then {@link ValidationIntegrationException} is thrown.
+ * If there is no specified element (also with any value) then {@link ValidationException} is thrown.
  * <p>
  * Input XML:
  * <pre>
@@ -131,6 +131,6 @@ public class XPathValidator implements Processor {
      * @param msg the exception message
      */
     protected void throwException(String msg) {
-        throw new ValidationIntegrationException(InternalErrorEnum.E110, msg);
+        throw new ValidationException(InternalErrorEnum.E110, msg);
     }
 }

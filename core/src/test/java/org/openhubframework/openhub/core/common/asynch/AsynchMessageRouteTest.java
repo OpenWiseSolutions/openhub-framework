@@ -50,15 +50,14 @@ import org.openhubframework.openhub.api.event.FailedMsgAsynchEvent;
 import org.openhubframework.openhub.api.event.PartlyFailedMsgAsynchEvent;
 import org.openhubframework.openhub.api.exception.IntegrationException;
 import org.openhubframework.openhub.api.exception.InternalErrorEnum;
-import org.openhubframework.openhub.api.exception.ValidationIntegrationException;
 import org.openhubframework.openhub.api.route.AbstractBasicRoute;
 import org.openhubframework.openhub.core.AbstractCoreDbTest;
 import org.openhubframework.openhub.core.common.asynch.msg.MessageSplitterImpl;
 import org.openhubframework.openhub.core.configuration.FixedConfigurationItem;
 import org.openhubframework.openhub.spi.msg.MessageService;
-import org.openhubframework.openhub.test.TestCamelUtils;
 import org.openhubframework.openhub.spi.node.ChangeNodeCallback;
 import org.openhubframework.openhub.spi.node.NodeService;
+import org.openhubframework.openhub.test.TestCamelUtils;
 import org.openhubframework.openhub.test.data.EntityTypeTestEnum;
 import org.openhubframework.openhub.test.data.ErrorTestEnum;
 import org.openhubframework.openhub.test.data.ExternalSystemTestEnum;
@@ -359,7 +358,7 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
             @Override
             protected void doConfigure() throws Exception {
                 from(subRouteUri)
-                    .process(TestCamelUtils.throwException(new ValidationIntegrationException(
+                    .process(TestCamelUtils.throwException(new org.openhubframework.openhub.api.exception.validation.ValidationException(
                             InternalErrorEnum.E102)));
             }
         };

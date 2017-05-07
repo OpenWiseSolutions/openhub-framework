@@ -16,7 +16,7 @@
 
 package org.openhubframework.openhub.api.configuration;
 
-import org.openhubframework.openhub.api.exception.ConfigurationException;
+import org.openhubframework.openhub.api.exception.validation.ConfigurationException;
 
 
 /**

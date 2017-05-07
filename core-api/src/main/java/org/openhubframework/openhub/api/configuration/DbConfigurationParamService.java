@@ -19,7 +19,7 @@ package org.openhubframework.openhub.api.configuration;
 import java.util.List;
 import java.util.Optional;
 
-import org.openhubframework.openhub.api.exception.ConfigurationException;
+import org.openhubframework.openhub.api.exception.validation.ConfigurationException;
 
 
 /**

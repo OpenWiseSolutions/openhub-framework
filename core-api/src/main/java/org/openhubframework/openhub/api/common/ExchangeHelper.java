@@ -20,12 +20,12 @@ import static org.openhubframework.openhub.api.common.ExchangeConstants.TRACE_HE
 
 import javax.annotation.Nullable;
 
-import org.openhubframework.openhub.api.asynch.model.TraceHeader;
-import org.openhubframework.openhub.api.exception.IllegalDataException;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.springframework.util.Assert;
+
+import org.openhubframework.openhub.api.asynch.model.TraceHeader;
+import org.openhubframework.openhub.api.exception.validation.IllegalDataException;
 
 /**
  * Some helper methods for working with {@link Exchange} objects.

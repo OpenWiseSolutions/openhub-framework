@@ -25,7 +25,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.http.HttpStatus;
 
-import org.openhubframework.openhub.api.exception.ValidationIntegrationException;
+import org.openhubframework.openhub.api.exception.validation.ValidationException;
 
 
 /**
@@ -38,11 +38,11 @@ public class ValidationFaultRpc extends GeneralFaultRpc {
 
     private final List<FieldInputErrorRpc> inputFields = new ArrayList<>();
 
-    public ValidationFaultRpc(ValidationIntegrationException ex) {
+    public ValidationFaultRpc(ValidationException ex) {
         super(HttpStatus.BAD_REQUEST, ex);
     }
 
-    public ValidationFaultRpc(HttpStatus status, ValidationIntegrationException ex) {
+    public ValidationFaultRpc(HttpStatus status, ValidationException ex) {
         super(status, ex);
     }
 

@@ -18,14 +18,13 @@ package org.openhubframework.openhub.api.common;
 
 
 import org.openhubframework.openhub.api.exception.ErrorExtEnum;
-import org.openhubframework.openhub.api.exception.IllegalDataException;
-import org.openhubframework.openhub.api.exception.InternalErrorEnum;
-import org.openhubframework.openhub.api.exception.ValidationIntegrationException;
+import org.openhubframework.openhub.api.exception.validation.IllegalDataException;
+import org.openhubframework.openhub.api.exception.validation.ValidationException;
 
 
 /**
  * Assertion utility class that assists in validating arguments by throwing specific
- * {@link ValidationIntegrationException} exceptions.
+ * {@link ValidationException} exceptions.
  *
  * <p>Useful for identifying data integration errors early and clearly at runtime.
  *
@@ -50,7 +49,7 @@ public final class Constraints {
     public static void hasText(String text, String message) throws IllegalDataException {
         notNull(text, message);
         if (!org.springframework.util.StringUtils.hasText(text)) {
-            throw new IllegalDataException(InternalErrorEnum.E109, message);
+            throw new IllegalDataException(message);
         }
     }
 
@@ -74,19 +73,21 @@ public final class Constraints {
     /**
      * Assert that an object is not {@code null}.
      * <pre class="code">Assert.notNull(clazz, "The class must not be null");</pre>
+     *
      * @param object the object to check
      * @param message the exception message to use if the assertion fails
      * @throws IllegalArgumentException if the object is {@code null}
      */
     public static void notNull(Object object, String message) {
         if (object == null) {
-            throw new IllegalDataException(InternalErrorEnum.E109, message);
+            throw new IllegalDataException(message);
         }
     }
 
     /**
      * Assert that an object is not {@code null}.
      * <pre class="code">Assert.notNull(clazz, "The class must not be null");</pre>
+     *
      * @param object the object to check
      * @param message the exception message to use if the assertion fails
      * @param errorCode the internal error code
@@ -101,19 +102,21 @@ public final class Constraints {
     /**
      * Assert that an object <strong>is</strong> {@code null}.
      * <pre class="code">Assert.isNull(clazz, "The class must be null");</pre>
+     *
      * @param object the object to check
      * @param message the exception message to use if the assertion fails
      * @throws IllegalArgumentException if the object is not {@code null}
      */
     public static void isNull(Object object, String message) {
         if (object != null) {
-            throw new IllegalDataException(InternalErrorEnum.E109, message);
+            throw new IllegalDataException(message);
         }
     }
 
     /**
      * Assert that an object <strong>is</strong> {@code null}.
      * <pre class="code">Assert.isNull(clazz, "The class must be null");</pre>
+     *
      * @param object the object to check
      * @param message the exception message to use if the assertion fails
      * @param errorCode the internal error code
@@ -128,6 +131,7 @@ public final class Constraints {
     /**
      * Assert a boolean expression, throwing {@code IllegalArgumentException}
      * if the test result is {@code false}.
+     *
      * @param expression a boolean expression
      * @param message the exception message to use if the assertion fails
      * @throws IllegalArgumentException if expression is {@code false}
@@ -135,13 +139,14 @@ public final class Constraints {
     public static void isTrue(Boolean expression, String message) {
         notNull(expression, message);
         if (expression.booleanValue() != Boolean.TRUE) {
-            throw new IllegalDataException(InternalErrorEnum.E109, message);
+            throw new IllegalDataException(message);
         }
     }
 
     /**
      * Assert a boolean expression, throwing {@code IllegalArgumentException}
      * if the test result is {@code false}.
+     *
      * @param expression a boolean expression
      * @param message the exception message to use if the assertion fails
      * @param errorCode the internal error code
@@ -153,6 +158,22 @@ public final class Constraints {
             throw new IllegalDataException(errorCode, message);
         }
     }
+
+    /**
+   	 * Assert a boolean expression, throwing {@code IllegalStateException}
+   	 * if the test result is {@code false}. Call isTrue if you wish to
+   	 * throw IllegalArgumentException on an assertion failure.
+   	 * <pre class="code">Assert.state(id == null, "The id property must not already be initialized");</pre>
+     *
+   	 * @param expression a boolean expression
+   	 * @param message the exception message to use if the assertion fails
+   	 * @throws IllegalStateException if expression is {@code false}
+   	 */
+   	public static void state(boolean expression, String message) {
+   		if (!expression) {
+   			throw new IllegalDataException(message);
+   		}
+   	}
 
     private Constraints() {
     }
