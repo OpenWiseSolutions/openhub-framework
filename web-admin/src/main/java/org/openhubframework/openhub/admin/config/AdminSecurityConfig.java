@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.web.config;
+package org.openhubframework.openhub.admin.config;
 
 import static org.openhubframework.openhub.api.route.RouteConstants.WEB_URI_PREFIX;
 import static org.openhubframework.openhub.web.config.GlobalSecurityConfig.DEFAULT_PATH_PATTERN;
@@ -28,6 +28,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 import org.openhubframework.openhub.api.route.RouteConstants;
+import org.openhubframework.openhub.web.config.GlobalSecurityConfig;
+import org.openhubframework.openhub.web.config.WebSecurityConfig;
 
 
 /**

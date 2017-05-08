@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.web.config;
+package org.openhubframework.openhub.config;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

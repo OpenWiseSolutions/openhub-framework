@@ -16,10 +16,7 @@
 
 package org.openhubframework.openhub.core.confcheck;
 
-import static org.openhubframework.openhub.api.configuration.CoreProps.ENDPOINTS_INCLUDE_PATTERN;
-import static org.openhubframework.openhub.api.configuration.CoreProps.REQUEST_SAVING_ENDPOINT_FILTER;
-import static org.openhubframework.openhub.api.configuration.CoreProps.SERVER_LOCALHOST_URI;
-import static org.openhubframework.openhub.api.configuration.CoreProps.SERVER_LOCALHOST_URI_CHECK;
+import static org.openhubframework.openhub.api.configuration.CoreProps.*;
 import static org.openhubframework.openhub.api.route.RouteConstants.HTTP_URI_PREFIX;
 
 import java.io.IOException;
@@ -39,7 +36,6 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.util.Assert;
 import org.springframework.web.context.WebApplicationContext;
 
 import org.openhubframework.openhub.api.configuration.ConfigurableValue;
@@ -111,9 +107,6 @@ public class ConfigurationChecker implements ApplicationListener<ApplicationRead
      */
     void checkConfiguration(ApplicationContext context) {
         LOG.debug("Checking configuration validity ...");
-
-        Assert.state(context instanceof WebApplicationContext && context.getParent() != null,
-                "configuration checking is enabled for web context only");
 
         try {
             if (checkUrl.getValue()) {

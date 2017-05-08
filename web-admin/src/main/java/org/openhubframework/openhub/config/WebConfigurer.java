@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.web.config;
+package org.openhubframework.openhub.config;
 
-import static org.openhubframework.openhub.api.route.RouteConstants.WEB_URI_PREFIX_MAPPING;
-
-import java.util.Locale;
 import java.util.Map;
 import javax.servlet.DispatcherType;
 
@@ -27,43 +24,29 @@ import net.bull.javamelody.SessionListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.*;
-import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.Ordered;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-import org.springframework.web.servlet.DispatcherServlet;
-import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
-import org.openhubframework.openhub.api.route.RouteConstants;
+import org.openhubframework.openhub.admin.config.WebAdminConfigurer;
 import org.openhubframework.openhub.common.AutoConfiguration;
-import org.openhubframework.openhub.web.RequestResponseLoggingFilter;
 import org.openhubframework.openhub.web.common.CorsProperties;
 import org.openhubframework.openhub.web.common.JavaMelodyConfigurationProperties;
+import org.openhubframework.openhub.web.config.WebServiceConfigurer;
 
 
 /**
- * OpenHub web configuration.
- * <p/>
- * This class configures child context of {@link org.openhubframework.openhub.OpenHubApplication root context}.
+ * Web configurer which is responsible for configuration of web runtime layer of OpenHub.
  *
  * @author Tomas Hanus
- * @see WebConfigurer
- * @see AdminMvcConfig
+ * @see WebServiceConfigurer
+ * @see WebAdminConfigurer
  * @since 2.0
  */
-@EnableAutoConfiguration
-@EnableConfigurationProperties
 @ComponentScan(basePackages = {
         "org.openhubframework.openhub.admin",
         "org.openhubframework.openhub.web"
@@ -71,40 +54,16 @@ import org.openhubframework.openhub.web.common.JavaMelodyConfigurationProperties
         excludeFilters =
         @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = AutoConfiguration.class))
 @Configuration
-// activate AOP also for web context
-@EnableSpringConfigured
-@EnableAspectJAutoProxy
 @ImportResource({"classpath:net/bull/javamelody/monitoring-spring.xml", "classpath:sp_h2_server.xml"})
-public class WebContextConfig {
+public class WebConfigurer {
 
-    private static final Logger LOG = LoggerFactory.getLogger(WebContextConfig.class);
-
-    /**
-     * The ID of web context.
-     */
-    public static final String CONTEXT_ID = "WebContext";
+    private static final Logger LOG = LoggerFactory.getLogger(WebConfigurer.class);
 
     @Autowired
     private JavaMelodyConfigurationProperties javaMelodyProps;
 
     @Autowired
     private CorsProperties corsConfiguration;
-
-    /**
-     * Registers {@link RequestResponseLoggingFilter}.
-     */
-    @Bean
-    public FilterRegistrationBean loggingRest() {
-        LOG.info("REQ/RES logging initialization");
-
-        RequestResponseLoggingFilter filter = new RequestResponseLoggingFilter();
-        filter.setLogUnsupportedContentType(false);
-        final FilterRegistrationBean bean = new FilterRegistrationBean(filter);
-        // we use logging filter only for administration endpoints to avoid duplication log events
-        bean.addUrlPatterns(WEB_URI_PREFIX_MAPPING);
-        
-        return bean;
-    }
 
     /**
      * Creates {@link MonitoringFilter} filter.
@@ -135,50 +94,6 @@ public class WebContextConfig {
     public ServletListenerRegistrationBean<SessionListener> sessionListener() {
         // add session listener for JavaMelody
         return new ServletListenerRegistrationBean<>(new SessionListener());
-    }
-
-    /**
-     * Defines localized messages for admin console.
-     */
-    @Bean
-    @ConditionalOnMissingBean
-    public ReloadableResourceBundleMessageSource messageSource() {
-        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("classpath:messages/messages");
-        messageSource.setDefaultEncoding("UTF-8");
-        return messageSource;
-    }
-
-    /**
-     * Defines default {@link LocaleResolver}.
-     */
-    @Bean
-    @ConditionalOnMissingBean
-    public LocaleResolver localeResolver() {
-        SessionLocaleResolver localeResolver = new SessionLocaleResolver();
-        localeResolver.setDefaultLocale(Locale.ENGLISH);
-        return localeResolver;
-    }
-
-    /**
-     * Configures servlet for admin interface of OpenHub.
-     *
-     * @param context           current context
-     * @param dispatcherServlet as actually registered dispatcher
-     * @return registration bean of {@link DispatcherServlet} to handling {@link RouteConstants#WEB_URI_PREFIX_MAPPING}.
-     */
-    @Bean(name = CONTEXT_ID)
-    @ConditionalOnMissingBean(name = CONTEXT_ID)
-    public ServletRegistrationBean adminServlet(
-            ConfigurableApplicationContext context,
-            DispatcherServlet dispatcherServlet) {
-
-        ServletRegistrationBean bean = new ServletRegistrationBean(dispatcherServlet);
-        // sets corresponding ID (name) of web context
-        context.setId(CONTEXT_ID);
-        bean.addUrlMappings(WEB_URI_PREFIX_MAPPING);
-
-        return bean;
     }
 
     @ConditionalOnProperty(value = CorsProperties.CORS_ENABLED)

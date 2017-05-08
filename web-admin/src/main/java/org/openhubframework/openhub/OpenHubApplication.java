@@ -37,19 +37,19 @@ import org.openhubframework.openhub.common.log.LogContextFilter;
 import org.openhubframework.openhub.core.config.CamelConfig;
 import org.openhubframework.openhub.core.config.JpaConfig;
 import org.openhubframework.openhub.core.config.WebServiceConfig;
-import org.openhubframework.openhub.web.config.CamelRoutesConfig;
+import org.openhubframework.openhub.config.CamelRoutesConfig;
 import org.openhubframework.openhub.web.config.GlobalSecurityConfig;
-import org.openhubframework.openhub.web.config.WebContextConfig;
+import org.openhubframework.openhub.config.WebConfigurer;
 import org.openhubframework.openhub.web.config.WebSecurityConfig;
 
 
 /**
  * OpenHub application configuration.
  * <p/>
- * This class configures root Spring context and {@link WebContextConfig web child} context.
+ * This class configures root Spring context and {@link WebConfigurer web child} context.
  *
  * @author Petr Juza
- * @see WebContextConfig
+ * @see WebConfigurer
  * @see GlobalSecurityConfig
  * @see WebSecurityConfig
  * @see CamelRoutesConfig
@@ -65,10 +65,10 @@ import org.openhubframework.openhub.web.config.WebSecurityConfig;
 @ComponentScan(basePackages = {
         "org.openhubframework.openhub.common",
         "org.openhubframework.openhub.core",
-        "org.openhubframework.openhub.modules"
+        "org.openhubframework.openhub.modules",
+        "org.openhubframework.openhub.config"
 },
         excludeFilters = {
-                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebContextConfig.class),
                 @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = AutoConfiguration.class),
                 @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = CamelConfiguration.class)
         })
@@ -128,8 +128,7 @@ public class OpenHubApplication extends SpringBootServletInitializer implements 
 
     private static SpringApplicationBuilder createOpenHubApplicationBuilder() {
         return new SpringApplicationBuilder()
-                .parent(OpenHubApplication.class)
-                .child(WebContextConfig.class);
+                .parent(OpenHubApplication.class);
     }
     
 }

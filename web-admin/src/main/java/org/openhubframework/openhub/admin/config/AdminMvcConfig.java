@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.web.config;
+package org.openhubframework.openhub.admin.config;
 
 import static org.springframework.util.StringUtils.hasText;
 
