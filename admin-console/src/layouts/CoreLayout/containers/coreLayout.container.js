@@ -8,7 +8,8 @@ function mapStateToProps (state, props) {
   return {
     sidebarExtended: state.coreLayout.sidebarExtended,
     navbarUserExpanded: state.coreLayout.navbarUserExpanded,
-    authUser: state.auth.authUser
+    authUser: state.auth.authUser,
+    config: state.auth.config
   }
 }
 

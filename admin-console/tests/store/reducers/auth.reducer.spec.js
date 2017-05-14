@@ -5,7 +5,8 @@ describe('Auth Reducer', () => {
     const expected = {
       loginModalOpen: false,
       authUser: null,
-      loginErrors: null
+      loginErrors: null,
+      config: null
     }
     const actual = reducer(undefined, {})
     expect(actual).to.deep.equal(expected)
@@ -15,7 +16,8 @@ describe('Auth Reducer', () => {
     const expected = {
       loginModalOpen: true,
       authUser: null,
-      loginErrors: null
+      loginErrors: null,
+      config: null
     }
     const actual = reducer(undefined, { type: LOGIN_TOGGLE })
     expect(actual).to.deep.equal(expected)
@@ -25,7 +27,8 @@ describe('Auth Reducer', () => {
     const expected = {
       loginModalOpen: false,
       authUser: {},
-      loginErrors: null
+      loginErrors: null,
+      config: null
     }
 
     const actual = reducer(undefined, { type: LOGIN, payload: {} })

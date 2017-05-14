@@ -15,7 +15,8 @@ class CoreLayout extends Component {
       sidebarExtended,
       navbarUserExpanded,
       actions,
-      authActions
+      authActions,
+      config
     } = this.props
 
     const bodyStyles = [
@@ -26,7 +27,8 @@ class CoreLayout extends Component {
     return (
       <StyleRoot>
         <div style={styles.main}>
-          <Sidebar extended={sidebarExtended && !!authUser} />
+          { config &&
+          <Sidebar config={config.menu} extended={sidebarExtended && !!authUser} />}
           <LoginModal />
           <div style={bodyStyles}>
             <Navbar
@@ -52,7 +54,8 @@ CoreLayout.propTypes = {
   actions: PropTypes.object,
   authActions: PropTypes.object,
   navbarUserExpanded: PropTypes.bool,
-  authUser: PropTypes.object
+  authUser: PropTypes.object,
+  config: PropTypes.object
 }
 
 export default CoreLayout

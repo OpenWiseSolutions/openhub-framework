@@ -9,6 +9,7 @@ export const LOGIN_TOGGLE = 'LOGIN_TOGGLE'
 export const LOGIN = 'LOGIN'
 export const LOGOUT = 'LOGOUT'
 export const AUTH_SESSION = 'OH_AUTH_SESSION'
+export const GET_APP_CONFIG_SUCCESS = 'GET_APP_CONFIG_SUCCESS'
 
 // ------------------------------------
 // Actions
@@ -31,6 +32,19 @@ export const toggleLoginModal = () => {
   }
 }
 
+export const getConfig = () => (dispatch) => {
+  axios.get('/web/admin/api/console-config')
+    .then(({ data }) => {
+      dispatch({
+        type   : GET_APP_CONFIG_SUCCESS,
+        payload: data.config
+      })
+    })
+    .catch(() => {
+      dispatch(logout())
+    })
+}
+
 export const logout = () => {
   sessionStorage.removeItem(AUTH_SESSION)
   const payload = axios.get('/web/admin/logout')
@@ -47,6 +61,7 @@ export const login = () =>
       .then(({ data }) => {
         sessionStorage.setItem(AUTH_SESSION, true)
         dispatch({ type: LOGIN, payload: data })
+        dispatch(getConfig())
       })
       .catch(() => {
         dispatch(logout())
@@ -56,7 +71,7 @@ export const login = () =>
 export const loginError = () => {
   sessionStorage.removeItem(AUTH_SESSION)
   return {
-    type: LOGIN,
+    type   : LOGIN,
     payload: null
   }
 }
@@ -85,14 +100,15 @@ export const actions = {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [INIT_AUTH]: (state, { payload }) => ({ ...state, authUser: payload }),
-  [LOGOUT]: (state) => ({ ...state, authUser: null }),
-  [LOGIN_TOGGLE]: (state) => ({
+  [INIT_AUTH]         : (state, { payload }) => ({ ...state, authUser: payload }),
+  [LOGOUT]            : (state) => ({ ...state, authUser: null }),
+  [LOGIN_TOGGLE]      : (state) => ({
     ...state,
     loginModalOpen: !state.loginModalOpen,
-    loginErrors: null
+    loginErrors   : null
   }),
-  [LOGIN]: (state, { payload }) => ({ ...state, loginModalOpen: false, authUser: payload })
+  [LOGIN]             : (state, { payload }) => ({ ...state, loginModalOpen: false, authUser: payload }),
+  [GET_APP_CONFIG_SUCCESS]: (state, { payload }) => ({ ...state, config: payload })
 }
 
 // ------------------------------------
@@ -100,8 +116,9 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 export const initialState = {
   loginModalOpen: false,
-  authUser: null,
-  loginErrors: null
+  authUser      : null,
+  loginErrors   : null,
+  config        : null
 }
 
 export default function (state = initialState, action) {

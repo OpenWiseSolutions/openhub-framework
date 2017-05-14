@@ -11,7 +11,9 @@ const GET_CHANGES_ERROR = 'GET_CHANGES_ERROR'
 // ------------------------------------
 
 export const getChanges = () => (dispatch) => {
-  axios.get('/web/admin/changes')
+  axios.get('/web/admin/changes', {
+    headers: { Accept: 'text/plain' }
+  })
     .then(({ data }) => {
       dispatch({ type: GET_CHANGES_SUCCESS, payload: data })
     })

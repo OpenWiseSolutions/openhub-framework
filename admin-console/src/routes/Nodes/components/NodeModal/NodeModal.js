@@ -31,7 +31,7 @@ class NodeModal extends Component {
         {isOpen && data &&
         <div style={styles.content}>
           <ValidStyles>
-            <ValidForm extended={this.state} autoComplete='off' onSubmit={(payload) => updateNode(data.id, payload)}>
+            <ValidForm extended={{ state }} autoComplete='off' onSubmit={(payload) => updateNode(data.id, payload)}>
               <div style={styles.row}>
                 <div style={styles.label}>Name</div>
                 <Field required name='name' value={data.name} />

@@ -37,7 +37,7 @@ export const closeNode = () => ({
 
 export const updateNode = (id, payload) => (dispatch) => {
   const update = () => {
-    axios.put(`/web/admin/api/cluster/nodes/${id}`)
+    axios.put(`/web/admin/api/cluster/nodes/${id}`, payload)
       .then(() => {
         dispatch(closeNode())
         dispatch(getNodes())
