@@ -4,7 +4,7 @@ import axios from 'axios'
 // Constants
 // ------------------------------------
 const GET_CHANGES_SUCCESS = 'GET_CHANGES_SUCCESS'
-const GET_CHANGES_ERROR = 'GET_CHANGES_SUCCESS'
+const GET_CHANGES_ERROR = 'GET_CHANGES_ERROR'
 
 // ------------------------------------
 // Actions

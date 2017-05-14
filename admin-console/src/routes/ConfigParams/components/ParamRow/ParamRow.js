@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react'
 import Radium from 'radium'
 import { pipe, omit, values, map, append, addIndex, toString } from 'ramda'
 import styles from './paramRow.styles.js'
+import Button from '../../../../common/components/Button/Button'
 
 @Radium
 class ParamRow extends Component {
@@ -18,7 +19,10 @@ class ParamRow extends Component {
       values,
       map((value) => typeof value !== 'string' ? toString(value) : value),
       addIndex(map)((cell, index) => <td style={styles.cell} key={index}>{cell}</td>),
-      append(<td style={styles.button} key={id} onClick={() => openParam(id)}>edit</td>)
+      append(
+        <td key={id}>
+          <Button style={styles.button} fullWidth onClick={() => openParam(id)} >Edit</Button>
+        </td>)
     )(data)
 
     return (
@@ -30,9 +34,9 @@ class ParamRow extends Component {
 }
 
 ParamRow.propTypes = {
-  data: PropTypes.object,
+  data     : PropTypes.object,
   openParam: PropTypes.func,
-  count: PropTypes.number
+  count    : PropTypes.number
 }
 
 export default ParamRow

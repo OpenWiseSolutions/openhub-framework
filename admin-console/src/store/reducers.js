@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux'
 import locationReducer from './location'
+import { reducer as toastrReducer } from 'react-redux-toastr'
 
 import coreLayoutReducer from '../layouts/CoreLayout/reducers/coreLayout.reducer'
 import authReducer from '../common/modules/auth.module'
@@ -9,6 +10,7 @@ export const makeRootReducer = (asyncReducers) => {
     location: locationReducer,
     coreLayout: coreLayoutReducer,
     auth: authReducer,
+    toastr: toastrReducer,
     ...asyncReducers
   })
 }

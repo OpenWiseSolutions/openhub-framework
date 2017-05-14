@@ -12,6 +12,9 @@ class ErrorsOverview extends Component {
 
   render () {
     const { errorsData } = this.props
+
+    if (!errorsData) return <div>Loading...</div>
+
     return (
       <div style={styles.main}>
         { errorsData && errorsData.map(({ name, codes }) =>
@@ -24,7 +27,7 @@ class ErrorsOverview extends Component {
                   <th style={styles.header}>Recommended action</th>
                 </tr>
                 { codes.map(({ code, desc, action }, index) => (
-                  <tr style={index % 2 === 0 ? styles.even : styles.odd}>
+                  <tr key={code} style={index % 2 === 0 ? styles.even : styles.odd}>
                     <td style={styles.cell}>{code}</td>
                     <td style={styles.cell}>{desc}</td>
                     <td style={styles.cell}>{action}</td>

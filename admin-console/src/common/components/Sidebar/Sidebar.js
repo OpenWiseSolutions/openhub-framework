@@ -7,6 +7,7 @@ import MdVertDots from 'react-icons/lib/md/more-vert'
 import MdMergeType from 'react-icons/lib/md/merge-type'
 import MdAnnouncement from 'react-icons/lib/md/announcement'
 import MdInsertInvitation from 'react-icons/lib/md/insert-invitation'
+import MdDeviceHub from 'react-icons/lib/md/device-hub'
 
 @Radium
 class Sidebar extends Component {
@@ -49,6 +50,10 @@ class Sidebar extends Component {
           icon={<MdAnnouncement />}
           style={styles.item}
           label='Errors Overview' />
+        <Item link={'/nodes'}
+          icon={<MdDeviceHub />}
+          style={styles.item}
+          label='Nodes' />
       </div>
     )
   }

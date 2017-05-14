@@ -1,5 +1,4 @@
-import tc from 'tinycolor2'
-import { primaryColor, lightColor, positiveColor } from '../../../../styles/colors'
+import { primaryColor, lightColor } from '../../../../styles/colors'
 
 export default {
   even: {
@@ -16,14 +15,7 @@ export default {
     paddingRight: 10
   },
   button: {
-    backgroundColor: positiveColor,
-    fontSize: '0.7em',
-    paddingLeft: 10,
-    paddingRight: 10,
     textAlign: 'center',
-    cursor: 'pointer',
-    ':hover': {
-      backgroundColor: tc(positiveColor).lighten(10)
-    }
+    backgroundColor: 'transparent'
   }
 }

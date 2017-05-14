@@ -40,6 +40,7 @@ export const updateParam = (code, payload) => {
     dispatch({ type: UPDATE_PARAM_INIT })
     axios.put(`/web/admin/config-params/${code}`, payload)
       .then(() => {
+        dispatch(getConfigParams())
         dispatch({ type: UPDATE_PARAM_SUCCESS })
       })
       .catch(() => {

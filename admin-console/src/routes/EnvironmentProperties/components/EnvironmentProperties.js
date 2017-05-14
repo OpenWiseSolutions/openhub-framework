@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react'
 import Radium from 'radium'
-import styles from './environmentProperties.styles.js'
 import ReactJson from 'react-json-view'
+import styles from './environmentProperties.styles.js'
 import Panel from '../../../common/components/Panel/Panel'
 
 @Radium

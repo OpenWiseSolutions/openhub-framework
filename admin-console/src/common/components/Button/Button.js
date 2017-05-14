@@ -6,10 +6,11 @@ import styles from './button.styles'
 class Button extends Component {
 
   render () {
-    const { style, children, ...other } = this.props
+    const { style, fullWidth, children, ...other } = this.props
     const computedStyles = [
       styles,
-      style
+      style,
+      fullWidth && { width: '100%' }
     ]
 
     return (
@@ -23,6 +24,7 @@ class Button extends Component {
 
 Button.propTypes = {
   children: PropTypes.node,
+  fullWidth: PropTypes.bool,
   style: PropTypes.object
 }
 
