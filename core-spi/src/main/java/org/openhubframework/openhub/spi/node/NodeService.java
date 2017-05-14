@@ -32,7 +32,7 @@ public interface NodeService {
     Node update(Node node, ChangeNodeCallback changeNodeCallback);
 
     /**
-     * Update existing {@link Node}.
+     * Delete existing {@link Node}.
      *
      * @param node node
      */

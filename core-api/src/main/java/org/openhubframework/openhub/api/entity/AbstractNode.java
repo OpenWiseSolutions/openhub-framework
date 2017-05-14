@@ -1,5 +1,7 @@
 package org.openhubframework.openhub.api.entity;
 
+import javax.annotation.Nullable;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -14,6 +16,17 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @since 2.0
  */
 public abstract class AbstractNode implements Node {
+
+    @Nullable
+    @Override
+    public Long getId() {
+        return getNodeId();
+    }
+
+    @Override
+    public void setId(@Nullable Long id) {
+        throw new UnsupportedOperationException("It is not possible to update unique identifier");
+    }
 
     @Override
     public boolean isStopped() {
