@@ -1,0 +1,4 @@
+openhubdb:
+  build: .
+  ports:
+    - "5435:5432"
