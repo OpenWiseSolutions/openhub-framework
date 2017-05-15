@@ -15,7 +15,7 @@ import org.openhubframework.openhub.api.common.HumanReadable;
  * @see MutableNode
  * @since 2.0
  */
-public interface Node extends HumanReadable {
+public interface Node extends HumanReadable, Identifiable<Long> {
 
     /**
      * Is node for this instance stopping?
