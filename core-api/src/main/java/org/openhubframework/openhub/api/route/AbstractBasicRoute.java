@@ -20,10 +20,7 @@ import java.util.Set;
 import javax.annotation.Nullable;
 import javax.xml.namespace.QName;
 
-import org.apache.camel.Exchange;
-import org.apache.camel.Handler;
-import org.apache.camel.Header;
-import org.apache.camel.LoggingLevel;
+import org.apache.camel.*;
 import org.apache.camel.processor.DefaultExchangeFormatter;
 import org.apache.camel.spi.EventNotifier;
 import org.apache.camel.spring.SpringRouteBuilder;
@@ -38,11 +35,7 @@ import org.springframework.util.Assert;
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
 import org.openhubframework.openhub.api.entity.ExternalSystemExtEnum;
 import org.openhubframework.openhub.api.entity.ServiceExtEnum;
-import org.openhubframework.openhub.api.exception.BusinessException;
-import org.openhubframework.openhub.api.exception.LockFailureException;
-import org.openhubframework.openhub.api.exception.MultipleDataFoundException;
-import org.openhubframework.openhub.api.exception.NoDataFoundException;
-import org.openhubframework.openhub.api.exception.validation.ValidationException;
+import org.openhubframework.openhub.api.exception.*;
 
 
 /**
@@ -59,6 +52,7 @@ public abstract class AbstractBasicRoute extends SpringRouteBuilder {
      */
     public static final String ROUTE_SUFFIX = "_route";
 
+
     /**
      * Suffix for asynchronous incoming routes.
      */
@@ -73,6 +67,16 @@ public abstract class AbstractBasicRoute extends SpringRouteBuilder {
      * Suffix for outbound routes with external systems.
      */
     public static final String EXTERNAL_ROUTE_SUFFIX = "_external_route";
+
+    /**
+     * Delimiter in generated route id for service and operation name.
+     *
+     * @see #getRouteId(ServiceExtEnum, String)
+     * @see #getInRouteId(ServiceExtEnum, String)
+     * @see #getOutRouteId(ServiceExtEnum, String)
+     * @see #getExternalRouteId(ExternalSystemExtEnum, String)
+     */
+    public static final String ROUTE_ID_DELIMITER = "_";
 
     // note: I prefer using this before calling repeatedly lookup method for getting bean implementation
     @Autowired(required = false)
@@ -279,7 +283,7 @@ public abstract class AbstractBasicRoute extends SpringRouteBuilder {
         Assert.notNull(service, "the service must not be null");
         Assert.hasText(operationName, "the operationName must not be empty");
 
-        return service.getServiceName() + "_" + operationName + ROUTE_SUFFIX;
+        return service.getServiceName() + ROUTE_ID_DELIMITER + operationName + ROUTE_SUFFIX;
     }
 
     /**
@@ -294,7 +298,7 @@ public abstract class AbstractBasicRoute extends SpringRouteBuilder {
         Assert.notNull(service, "the service must not be null");
         Assert.hasText(operationName, "the operationName must not be empty");
 
-        return service.getServiceName() + "_" + operationName + IN_ROUTE_SUFFIX;
+        return service.getServiceName() + ROUTE_ID_DELIMITER + operationName + IN_ROUTE_SUFFIX;
     }
 
     /**
@@ -309,7 +313,7 @@ public abstract class AbstractBasicRoute extends SpringRouteBuilder {
         Assert.notNull(service, "the service must not be null");
         Assert.hasText(operationName, "the operationName must not be empty");
 
-        return service.getServiceName() + "_" + operationName + OUT_ROUTE_SUFFIX;
+        return service.getServiceName() + ROUTE_ID_DELIMITER + operationName + OUT_ROUTE_SUFFIX;
     }
 
     /**
@@ -324,7 +328,7 @@ public abstract class AbstractBasicRoute extends SpringRouteBuilder {
         Assert.notNull(system, "the system must not be null");
         Assert.hasText(operationName, "the operationName must not be empty");
 
-        return system.getSystemName() + "_" + operationName + EXTERNAL_ROUTE_SUFFIX;
+        return system.getSystemName() + ROUTE_ID_DELIMITER + operationName + EXTERNAL_ROUTE_SUFFIX;
     }
 
     /**

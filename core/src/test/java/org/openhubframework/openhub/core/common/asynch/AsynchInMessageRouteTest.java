@@ -20,6 +20,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import static org.openhubframework.openhub.api.configuration.CoreProps.URI_INPUT_PATTERN_FILTER;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -39,6 +40,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,6 +67,7 @@ import org.openhubframework.openhub.test.route.ActiveRoutes;
  * @author Petr Juza
  */
 @ActiveRoutes(classes = AsynchInMessageRoute.class)
+@TestPropertySource(properties = {URI_INPUT_PATTERN_FILTER + "=" + AsynchConstants.URI_ASYNCH_IN_MSG})
 public class AsynchInMessageRouteTest extends AbstractCoreDbTest {
 
     private static final String FUNNEL_VALUE = "774724557";
@@ -237,12 +240,17 @@ public class AsynchInMessageRouteTest extends AbstractCoreDbTest {
 
     @Test
     public void testResponseFAIL_stopping() throws Exception {
+        nodeService.update(nodeService.getActualNode(), new ChangeNodeCallback() {
+            @Override
+            public void updateNode(MutableNode node) {
+                node.setStoppedState();
+            }
+        });
+
         getCamelContext().getRouteDefinition(AsynchInMessageRoute.ROUTE_ID_ASYNC)
                 .adviceWith(getCamelContext(), new AdviceWithRouteBuilder() {
                     @Override
                     public void configure() throws Exception {
-                        weaveById("stopChecking").replace().throwException(new StoppingException("stop"));
-
                         weaveAddLast().to("mock:test");
                     }
                 });
