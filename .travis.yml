@@ -1,6 +1,8 @@
 language: java
 jdk:
   - oraclejdk8
+services:
+    - docker
 env:
   global:
   - secure: Ba4t6j5JmDamuCPj8ed4900/X8Nqw8Iyh5bQmp+JBRvf5jcWmurSuddhuXp09puUgRFiOgMGMqE/LyvnnjYNMQFuagZNHMNO9gBdbLPsUs1SbiR399XIaIEnkur4VEjHZp6Jr9WseaOh8mZlNKNZmYKyb5nQLCbTgzdgWY/bFsDVVTvQq/SkBBUoPN/MHWsCOtDoixjkeAfkdHm1gOBrA5+UP4Yg/tJgJWpPecalbRp42o29S93Dh6h+0teeCib+t0Jy3qGIFCRA6NbRyXF44xj31WnD75Vj6iBr6JHz7p+Viu2CRL2LcCbdlMFV2et4Evk/KosmEih0yLgeHrFYvLXobPVike9SgsvDOsXiKoLK4huK6QJflyhXQlglA3Qak3ycLD1/SY2PmJ+ZxgFPcT4oubgpL/0L5G5lCtHb86s8P/Q29Tq0l/4WO8JtNVoxzdsqSu9glMeupumzP5rPZ479ZQ0Ice3rCcPuihqz4GAwhGC48lbhGgY2F+AFngGkvVELa4R0njgrZxFLxN792ykHFjBcwc1AlHWgCfe8/rzan3wK6TKpUeQ+PYMGWsaLYB9HaN4XPKn19xupHUw5xQ0sZKWZuknbLsabGmItiqlqfGY/nQbCoobfRhrYm24Zm6HJV90Nz04K3okiRMUPUs/EEb3gb+M6cBUhi6rZzUc=
@@ -9,7 +11,14 @@ env:
   - GPG_DIR="`pwd`/.utility"
 before_install:
   - chmod +x .utility/push-javadoc-to-gh-pages.sh 
-  - chmod +x .utility/publish-artifacts.sh 
+  - chmod +x .utility/publish-artifacts.sh
+  #- docker-compose --version
+  - cd docker/postgresql
+  #- docker-compose up --build -d
+  #- docker-compose ps
+  - docker build . -t postgres-ohb
+  - docker run -d -p 5435:5432 postgres-ohb
+  - cd ../..
 install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -q
 script: mvn test javadoc:aggregate jacoco:report -Dlogging.level.org.openhubframework.openhub=INFO
 after_success:  
@@ -23,4 +32,4 @@ cache:
 notifications:
   email:
     - openhub_dev@openwise.cz
-sudo: false
+sudo: required
