@@ -24,11 +24,18 @@ import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
@@ -45,7 +52,28 @@ import org.openhubframework.openhub.test.data.ServiceTestEnum;
  *
  * @author Petr Juza
  */
-@ActiveProfiles(profiles = Profiles.H2)
+@ActiveProfiles(profiles = Profiles.POSTGRES)
+@Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD,
+        statements = {
+        "DROP TABLE IF EXISTS RESPONSE;",
+        "DROP TABLE IF EXISTS REQUEST;",
+        "DROP TABLE IF EXISTS EXTERNAL_CALL;",
+        "DROP TABLE IF EXISTS MESSAGE;",
+        "DROP TABLE IF EXISTS NODE;",
+        "DROP TABLE IF EXISTS SCHEMA_VERSION;",
+        "DROP TABLE IF EXISTS CONFIGURATION_ITEM;",
+        "DROP TABLE IF EXISTS ARCHIVE_REQUEST;",
+        "DROP TABLE IF EXISTS ARCHIVE_RESPONSE;",
+        "DROP TABLE IF EXISTS ARCHIVE_EXTERNAL_CALL;",
+        "DROP TABLE IF EXISTS ARCHIVE_MESSAGE;",
+        "ALTER SEQUENCE OPENHUB_NODE_SEQUENCE RESTART WITH 1;",
+        "ALTER SEQUENCE OPENHUB_SEQUENCE RESTART WITH 1;",
+        "DROP SEQUENCE IF EXISTS OPENHUB_NODE_SEQUENCE;",
+        "DROP SEQUENCE IF EXISTS OPENHUB_SEQUENCE;"
+})
+@TestPropertySource(properties = {
+        "flyway.enabled = true"
+})
 public abstract class AbstractDbTest extends AbstractTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractDbTest.class);

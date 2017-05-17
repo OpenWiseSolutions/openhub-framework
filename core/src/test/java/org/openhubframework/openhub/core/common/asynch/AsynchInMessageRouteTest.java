@@ -36,9 +36,11 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -207,7 +209,11 @@ public class AsynchInMessageRouteTest extends AbstractCoreDbTest {
 
         producer.sendBodyAndHeaders("bodyContent", getHeaders());
 
-        assertErrorResponse("Unique index or primary key violation");
+        // for H2
+     //   assertErrorResponse("Unique index or primary key violation");
+
+        // for postgresql
+        assertErrorResponse("duplicate key value");
     }
 
     @Test
