@@ -16,8 +16,6 @@
 
 package org.openhubframework.openhub.admin.web.services.wsdl.rpc;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -27,7 +25,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  * @author Karel Kovarik
  */
-@XmlRootElement
 public class WsdlInfoRpc {
 
     private final String name;

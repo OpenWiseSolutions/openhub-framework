@@ -19,7 +19,6 @@ package org.openhubframework.openhub.admin.web.configuration.rpc;
 import java.util.Map;
 import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -41,7 +40,6 @@ import org.openhubframework.openhub.api.exception.validation.ValidationException
  * @author Petr Juza
  * @since 2.0
  */
-@XmlRootElement
 @Validated
 public class DbConfigurationParamRpc extends ChangeableRpc<DbConfigurationParam, String> {
 

@@ -18,16 +18,17 @@ package org.openhubframework.openhub.admin.web.errorscatalog.rpc;
 
 import java.util.Collections;
 import java.util.List;
-import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 
 /**
+ * RPC object that holds error catalog.
+ * 
  * @author Tomas Hanus
+ * @see 2.0
  */
-@XmlRootElement
 public class ErrorsCatalogRpc {
 
     private final String name;
