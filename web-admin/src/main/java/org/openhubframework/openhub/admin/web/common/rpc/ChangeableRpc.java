@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nullable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.util.Assert;
 import org.springframework.validation.AbstractPropertyBindingResult;
 import org.springframework.validation.BeanPropertyBindingResult;
@@ -148,6 +149,7 @@ public abstract class ChangeableRpc<T extends Identifiable<ID>, ID extends Seria
      *
      * @return object's name
      */
+    @JsonIgnore
     public String getObjectName() {
         String name = this.getClass().getSimpleName();
         return name.substring(0, 1).toUpperCase() + name.substring(1);
