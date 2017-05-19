@@ -1,5 +1,5 @@
-import axios from 'axios'
 import { toastr } from 'react-redux-toastr'
+import { fetchNodes, editNode, removeNode } from '../../../services/nodes.service.js'
 
 // ------------------------------------
 // Constants
@@ -12,13 +12,14 @@ const CLOSE_NODE = 'CLOSE_NODE_DETAIL'
 // Actions
 // ------------------------------------
 
+export const getNodesSuccess = ({ data }) => {
+  return ({ type: GET_NODES_SUCCESS, payload: data })
+}
+
 export const getNodes = () => (dispatch) => {
-  axios.get('/web/admin/api/cluster/nodes')
-    .then(({ data }) => {
-      dispatch({ type: GET_NODES_SUCCESS, payload: data.data })
-    })
-    .catch(() => {
-      toastr.error('Error fetching nodes!')
+  return fetchNodes()
+    .then((data) => {
+      dispatch(getNodesSuccess(data))
     })
 }
 
@@ -26,7 +27,7 @@ export const openNode = (id) => (dispatch, getState) => {
   const { nodes: { allNodes } } = getState()
   const nodeDetail = allNodes.find(node => node.id === id)
   dispatch({
-    type   : OPEN_NODE,
+    type: OPEN_NODE,
     payload: nodeDetail
   })
 }
@@ -37,11 +38,11 @@ export const closeNode = () => ({
 
 export const updateNode = (id, payload) => (dispatch) => {
   const update = () => {
-    axios.put(`/web/admin/api/cluster/nodes/${id}`, payload)
+    return editNode(id, payload)
       .then(() => {
         dispatch(closeNode())
         dispatch(getNodes())
-        toastr.success('Node successfully updated')
+        toastr.success('Success', 'Node successfully updated')
       })
       .catch(() => {
         toastr.error('Node update failed')
@@ -54,11 +55,11 @@ export const updateNode = (id, payload) => (dispatch) => {
 
 export const deleteNode = (id) => (dispatch) => {
   const remove = () => {
-    axios.delete(`/web/admin/api/cluster/nodes/${id}`)
+    return removeNode(id)
       .then(() => {
         dispatch(closeNode())
         dispatch(getNodes())
-        toastr.success('Node successfully deleted')
+        toastr.success('Success', 'Node successfully deleted')
       })
       .catch(() => {
         toastr.error('Node delete failed')

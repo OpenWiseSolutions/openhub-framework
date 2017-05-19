@@ -1,24 +1,28 @@
-import axios from 'axios'
+import { toastr } from 'react-redux-toastr'
+import { fetchChanges } from '../../../services/changes.service.js'
 
 // ------------------------------------
 // Constants
 // ------------------------------------
 const GET_CHANGES_SUCCESS = 'GET_CHANGES_SUCCESS'
-const GET_CHANGES_ERROR = 'GET_CHANGES_ERROR'
 
 // ------------------------------------
 // Actions
 // ------------------------------------
 
+export const getChangesSuccess = (payload) => ({
+  type: GET_CHANGES_SUCCESS,
+  payload
+})
+
 export const getChanges = () => (dispatch) => {
-  axios.get('/web/admin/changes', {
-    headers: { Accept: 'text/plain' }
-  })
-    .then(({ data }) => {
-      dispatch({ type: GET_CHANGES_SUCCESS, payload: data })
+  return fetchChanges()
+    .then((response) => {
+      dispatch(getChangesSuccess(response))
     })
     .catch(() => {
-      dispatch({ type: GET_CHANGES_ERROR })
+      // todo error
+      toastr.error('Error fetching changes!')
     })
 }
 

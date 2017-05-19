@@ -5,8 +5,8 @@ import { Provider } from 'react-redux'
 
 class AppContainer extends Component {
   static propTypes = {
-    routes : PropTypes.object.isRequired,
-    store  : PropTypes.object.isRequired
+    routes: PropTypes.object.isRequired,
+    store: PropTypes.object.isRequired
   }
 
   shouldComponentUpdate () {
@@ -22,7 +22,6 @@ class AppContainer extends Component {
           <ReduxToastr
             timeOut={4000}
             newestOnTop={false}
-            preventDuplicates
             position='top-right'
             transitionIn='fadeIn'
             transitionOut='fadeOut'

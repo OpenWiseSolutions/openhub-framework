@@ -9,7 +9,7 @@ module.exports = [
       body: JSON.stringify({
         'config': {
           'menu': {
-            'analytisc': {
+            'analytics': {
               'messages': {
                 'enable': true
               }
@@ -45,7 +45,7 @@ module.exports = [
               'items': [
                 {
                   'title': 'OpenHub',
-                  'link': 'openhub.org'
+                  'link': 'http://openhub.org'
                 }
               ]
             },

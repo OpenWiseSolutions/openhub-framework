@@ -40,21 +40,39 @@ export default {
     }
   },
   trace: {
-    backgroundColor: 'yellow'
+    backgroundColor: 'yellow',
+    ':hover': {
+      backgroundColor: 'yellow'
+    }
   },
   debug: {
-    backgroundColor: 'green'
+    backgroundColor: 'green',
+    ':hover': {
+      backgroundColor: 'green'
+    }
   },
   info: {
-    backgroundColor: 'blue'
+    backgroundColor: 'blue',
+    ':hover': {
+      backgroundColor: 'blue'
+    }
   },
   warn: {
-    backgroundColor: 'orange'
+    backgroundColor: 'orange',
+    ':hover': {
+      backgroundColor: 'orange'
+    }
   },
   error: {
-    backgroundColor: 'red'
+    backgroundColor: 'red',
+    ':hover': {
+      backgroundColor: 'red'
+    }
   },
   off: {
-    backgroundColor: 'gray'
+    backgroundColor: 'gray',
+    ':hover': {
+      backgroundColor: 'gray'
+    }
   }
 }

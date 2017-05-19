@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import validator from 'validator'
 import Radium from 'radium'
 import Modal from 'react-modal'
@@ -40,7 +41,7 @@ class EditParamModal extends Component {
         <div style={styles.content}>
           {updateError && <div style={styles.error}>Update failed!</div>}
           <ValidStyles>
-            <ValidForm autoComplete='off' onSubmit={(payload) => updateParam(data.code, payload)}>
+            <ValidForm autoComplete='off' onSubmit={(payload) => updateParam(data, payload)}>
               <div style={styles.row}>
                 <div style={styles.label}>Code</div>
                 <div>{data.code}</div>
@@ -66,7 +67,7 @@ class EditParamModal extends Component {
               <div style={styles.row}>
                 <div style={styles.label}>Validation</div>
                 <div>
-                  <Field name='validation' value={data.validationRegEx} />
+                  <Field name='validationRegEx' value={data.validationRegEx} />
                 </div>
               </div>
               <br />

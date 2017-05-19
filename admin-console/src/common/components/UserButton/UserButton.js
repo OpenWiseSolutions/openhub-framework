@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import Radium from 'radium'
 import ArrowDown from 'react-icons/lib/md/keyboard-arrow-down'
 import styles from './userButton.styles'
-// todo links! import { IndexLink, Link } from 'react-router'
 
 @Radium
 class UserButton extends Component {

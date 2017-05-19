@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Radium from 'radium'
 import { reverse, length, take } from 'ramda'
 import { Field, ValidStyles } from 'valid-react-form'

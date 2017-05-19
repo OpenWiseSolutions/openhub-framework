@@ -1,5 +1,5 @@
 import { SIDEBAR_TOGGLE, NAVBAR_USER_TOGGLE } from '../actions/coreLayout.actions'
-import { LOGOUT } from '../../../common/modules/auth.module'
+import { LOGOUT_SUCCESS } from '../../../common/modules/auth.module'
 
 const defaultState = {
   sidebarExtended: true,
@@ -9,7 +9,7 @@ const defaultState = {
 export default function (state = defaultState, action) {
   switch (action.type) {
 
-    case LOGOUT:
+    case LOGOUT_SUCCESS:
       return {
         ...state,
         navbarUserExpanded: false

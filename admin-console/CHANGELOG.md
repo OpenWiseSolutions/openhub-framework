@@ -1,3 +1,11 @@
+**v0.1.0**
+----------
+- Removed axios
+- Added fetch
+- Added fetch-redux service
+- Refactored sidemenu
+- Added Toastr
+
 **v0.0.3**
 ----------
 - Added new mock server (express)

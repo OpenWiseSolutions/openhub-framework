@@ -1,35 +1,29 @@
-import axios from 'axios'
+import { fetchEnvironmentData, fetchEnvironmentConfig } from '../../../services/environment.service.js'
 
 // ------------------------------------
 // Constants
 // ------------------------------------
 const GET_ENVIRONMENT_SUCCESS = 'GET_ENVIRONMENT_SUCCESS'
-const GET_ENVIRONMENT_ERROR = 'GET_ENVIRONMENT_ERROR'
 const GET_CONFIG_SUCCESS = 'GET_CONFIG_SUCCESS'
-const GET_CONFIG_ERROR = 'GET_CONFIG_ERROR'
 
 // ------------------------------------
 // Actions
 // ------------------------------------
 
+export const getEnvironmentDataSuccess = (payload) =>
+  ({ type: GET_ENVIRONMENT_SUCCESS, payload })
+
 export const getEnvironmentData = () => (dispatch) => {
-  axios.get('/web/admin/mgmt/env')
-    .then(({ data }) => {
-      dispatch({ type: GET_ENVIRONMENT_SUCCESS, payload: data })
-    })
-    .catch(() => {
-      dispatch({ type: GET_ENVIRONMENT_ERROR })
-    })
+  return fetchEnvironmentData()
+    .then((data) => dispatch(getEnvironmentDataSuccess(data)))
 }
 
+export const getConfigDataSuccess = (payload) =>
+  ({ type: GET_CONFIG_SUCCESS, payload })
+
 export const getConfigData = () => (dispatch) => {
-  axios.get('/web/admin/mgmt/configprops')
-    .then(({ data }) => {
-      dispatch({ type: GET_CONFIG_SUCCESS, payload: data })
-    })
-    .catch(() => {
-      dispatch({ type: GET_CONFIG_ERROR })
-    })
+  return fetchEnvironmentConfig()
+    .then((data) => dispatch(getConfigDataSuccess(data)))
 }
 
 export const actions = {

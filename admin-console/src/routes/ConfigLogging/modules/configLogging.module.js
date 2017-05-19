@@ -1,13 +1,11 @@
 import { pipe, toPairs, map } from 'ramda'
-import axios from 'axios'
+import { fetchLoggers, editLogger } from '../../../services/loggers.service'
 
 // ------------------------------------
 // Constants
 // ------------------------------------
 export const GET_LOGGERS_SUCCESS = 'GET_LOGGERS_SUCCESS'
 export const GET_LOGGERS_ERROR = 'GET_LOGGERS_ERROR'
-export const UPDATE_LOGGER_SUCCESS = 'UPDATE_LOGGER_SUCCESS'
-export const UPDATE_LOGGER_ERROR = 'UPDATE_LOGGER_ERROR'
 
 // ------------------------------------
 // Transforms
@@ -25,8 +23,8 @@ const transformLoggers = pipe(
 // ------------------------------------
 
 export const getLoggers = () => (dispatch) => {
-  axios.get('/web/admin/mgmt/loggers')
-    .then(({ data }) => {
+  return fetchLoggers()
+    .then((data) => {
       const loggingData = {
         levels: data.levels,
         loggers: transformLoggers(data.loggers)
@@ -39,11 +37,8 @@ export const getLoggers = () => (dispatch) => {
 }
 
 export const updateLogger = (logger, configuredLevel) => (dispatch) => {
-  axios.post(`/web/admin/mgmt/loggers/${logger}`, { configuredLevel })
+  return editLogger(logger, configuredLevel)
     .then(() => {
-      dispatch(getLoggers())
-    })
-    .catch(() => {
       dispatch(getLoggers())
     })
 }

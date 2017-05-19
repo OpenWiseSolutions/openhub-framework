@@ -1,11 +1,10 @@
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import ConfigParams from '../components/ConfigParams/ConfigParams'
 import { actions } from '../modules/configParams.module'
 
-const mapDispatchToProps = (dispatch) => ({
-  actions: bindActionCreators(actions, dispatch)
-})
+const mapDispatchToProps = {
+  ...actions
+}
 
 const mapStateToProps = (state) => ({
   configParams: state.configParams.configParams,

@@ -2,7 +2,7 @@ import tc from 'tinycolor2'
 import { transition, itemSize, gap, bigGap, logo, depth1 } from '../../../styles/constants'
 import { primaryColor, secondaryColor, lightColor, darkColor } from '../../../styles/colors'
 
-export const sidebarWidth = 200
+export const sidebarWidth = 250
 
 export default {
   main: {
@@ -13,7 +13,6 @@ export default {
     height: '100%',
     overflow: 'hidden',
     backgroundColor: secondaryColor,
-    boxShadow: 'inset -10px 0px 15px -5px rgba(0,0,0,0.5)',
     zIndex: depth1,
     ...transition()
   },
@@ -44,9 +43,6 @@ export default {
   },
   nestedItem: {
     paddingLeft: bigGap,
-    color: lightColor,
-    ':hover': {
-      backgroundColor: tc(primaryColor).lighten(5).setAlpha(0.05).toString()
-    }
+    color: lightColor
   }
 }

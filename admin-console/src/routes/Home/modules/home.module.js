@@ -1,39 +1,41 @@
-import objectPath from 'object-path'
-import axios from 'axios'
+import { fetchHealth, fetchInfo, fetchMetrics } from '../../../services/home.service.js'
 
 // ------------------------------------
 // Constants
 // ------------------------------------
-export const GET_OPENHUB_INFO = 'GET_OPENHUB_INFO'
-export const GET_HEALTH_INFO = 'GET_HEALTH_INFO'
-export const GET_METRICS_INFO = 'GET_METRICS_INFO'
+export const GET_HEALTH_INFO_SUCCESS = 'GET_HEALTH_INFO_SUCCESS'
+export const GET_OPENHUB_INFO_SUCCESS = 'GET_OPENHUB_INFO_SUCCESS'
+export const GET_METRICS_INFO_SUCCESS = 'GET_METRICS_INFO_SUCCESS'
 
 // ------------------------------------
 // Actions
 // ------------------------------------
 
-export const getHealthInfo = () => {
-  const payload = axios.get('/web/admin/mgmt/health')
-  return {
-    type: GET_HEALTH_INFO,
-    payload
-  }
+export const getHealthInfoSuccess = (payload) =>
+  ({ type: GET_HEALTH_INFO_SUCCESS, payload })
+
+export const getHealthInfo = () => (dispatch) => {
+  return fetchHealth()
+    .then((response) => dispatch(getHealthInfoSuccess(response)))
+    // todo error
 }
 
-export const getMetricsInfo = () => {
-  const payload = axios.get('/web/admin/mgmt/metrics')
-  return {
-    type: GET_METRICS_INFO,
-    payload
-  }
+export const getMetricsInfoSuccess = (payload) =>
+  ({ type: GET_METRICS_INFO_SUCCESS, payload })
+
+export const getMetricsInfo = () => (dispatch) => {
+  return fetchMetrics()
+    .then((data) => dispatch(getMetricsInfoSuccess(data)))
+    // todo error
 }
 
-export const getOpenHubInfo = () => {
-  const payload = axios.get('/web/admin/mgmt/info')
-  return {
-    type: GET_OPENHUB_INFO,
-    payload
-  }
+const getOpenHubInfoSuccess = (payload) =>
+  ({ type: GET_OPENHUB_INFO_SUCCESS, payload: payload.app })
+
+export const getOpenHubInfo = () => (dispatch) => {
+  return fetchInfo()
+    .then((data) => dispatch(getOpenHubInfoSuccess(data)))
+    // todo error
 }
 
 export const actions = {
@@ -46,9 +48,9 @@ export const actions = {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [GET_HEALTH_INFO]: (state, { payload }) => ({ ...state, healthInfo: payload.data }),
-  [GET_OPENHUB_INFO]: (state, { payload }) => ({ ...state, openHubInfo: objectPath.get(payload, 'data.app') }),
-  [GET_METRICS_INFO]: (state, { payload }) => ({ ...state, metricsInfo: payload.data })
+  [GET_HEALTH_INFO_SUCCESS]: (state, { payload }) => ({ ...state, healthInfo: payload }),
+  [GET_OPENHUB_INFO_SUCCESS]: (state, { payload }) => ({ ...state, openHubInfo: payload }),
+  [GET_METRICS_INFO_SUCCESS]: (state, { payload }) => ({ ...state, metricsInfo: payload })
 }
 
 // ------------------------------------

@@ -1,15 +1,20 @@
-import axios from 'axios'
 import { hashHistory } from 'react-router'
+import { toastr } from 'react-redux-toastr'
+import { login, userInfo, logout } from '../../services/auth.service'
+import { fetchConsoleConfig } from '../../services/appConfig.service'
 
 // ------------------------------------
 // Constants
 // ------------------------------------
 export const INIT_AUTH = 'INIT_AUTH'
 export const LOGIN_TOGGLE = 'LOGIN_TOGGLE'
-export const LOGIN = 'LOGIN'
-export const LOGOUT = 'LOGOUT'
-export const AUTH_SESSION = 'OH_AUTH_SESSION'
+export const LOGIN_CLOSE = 'LOGIN_CLOSE'
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
+export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS'
 export const GET_APP_CONFIG_SUCCESS = 'GET_APP_CONFIG_SUCCESS'
+
+// storage
+export const AUTH_SESSION = 'OH_AUTH_SESSION'
 
 // ------------------------------------
 // Actions
@@ -17,13 +22,12 @@ export const GET_APP_CONFIG_SUCCESS = 'GET_APP_CONFIG_SUCCESS'
 
 export const initAuth = () =>
   (dispatch, getState) => {
-    const { auth: { authUser } } = getState()
+    const { auth: { userData } } = getState()
     const localSession = sessionStorage.getItem(AUTH_SESSION)
     if (localSession) {
-      return dispatch(login())
+      return dispatch(loginSuccess())
     }
-
-    return dispatch({ type: INIT_AUTH, payload: authUser })
+    return dispatch({ type: INIT_AUTH, payload: userData })
   }
 
 export const toggleLoginModal = () => {
@@ -32,35 +36,44 @@ export const toggleLoginModal = () => {
   }
 }
 
+export const closeModal = () => {
+  return {
+    type: LOGIN_CLOSE
+  }
+}
+
 export const getConfig = () => (dispatch) => {
-  axios.get('/web/admin/api/console-config')
-    .then(({ data }) => {
+  return fetchConsoleConfig()
+    .then((data) => {
       dispatch({
-        type   : GET_APP_CONFIG_SUCCESS,
+        type: GET_APP_CONFIG_SUCCESS,
         payload: data.config
       })
     })
     .catch(() => {
-      dispatch(logout())
+      dispatch(logoutUser())
+      toastr.error('Failed to retrieve console config!')
     })
 }
 
-export const logout = () => {
+export const logoutUser = () => (dispatch) => {
   sessionStorage.removeItem(AUTH_SESSION)
-  const payload = axios.get('/web/admin/logout')
-  hashHistory.push('/')
-  return {
-    type: LOGOUT,
-    payload
-  }
+  return logout()
+    .then(() => {
+      hashHistory.push('/')
+      dispatch({
+        type: LOGOUT_SUCCESS
+      })
+    })
 }
 
-export const login = () =>
+export const loginSuccess = () =>
   (dispatch) => {
-    axios.get('/web/admin/auth')
-      .then(({ data }) => {
+    dispatch(closeModal())
+    return userInfo()
+      .then((payload) => {
         sessionStorage.setItem(AUTH_SESSION, true)
-        dispatch({ type: LOGIN, payload: data })
+        dispatch({ type: LOGIN_SUCCESS, payload })
         dispatch(getConfig())
       })
       .catch(() => {
@@ -68,12 +81,10 @@ export const login = () =>
       })
   }
 
-export const loginError = () => {
+export const loginError = (res) => () => {
   sessionStorage.removeItem(AUTH_SESSION)
-  return {
-    type   : LOGIN,
-    payload: null
-  }
+  toastr.error('Login Failed!')
+  // todo error handler
 }
 
 export const submitLogin = ({ username, password }) => {
@@ -81,16 +92,16 @@ export const submitLogin = ({ username, password }) => {
     const params = new URLSearchParams()
     params.append('username', username)
     params.append('password', password)
-    return axios.post('/web/admin/login', params)
-      .then((res) => dispatch(login()))
-      .catch((res) => dispatch(loginError()))
+    return login(params)
+      .then((res) => dispatch(loginSuccess()))
+      .catch((res) => dispatch(loginError(res)))
   }
 }
 
 export const actions = {
   initAuth,
   toggleLoginModal,
-  logout,
+  logoutUser,
   login,
   loginError,
   submitLogin
@@ -100,14 +111,11 @@ export const actions = {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [INIT_AUTH]         : (state, { payload }) => ({ ...state, authUser: payload }),
-  [LOGOUT]            : (state) => ({ ...state, authUser: null }),
-  [LOGIN_TOGGLE]      : (state) => ({
-    ...state,
-    loginModalOpen: !state.loginModalOpen,
-    loginErrors   : null
-  }),
-  [LOGIN]             : (state, { payload }) => ({ ...state, loginModalOpen: false, authUser: payload }),
+  [INIT_AUTH]: (state, { payload }) => ({ ...state, userData: payload }),
+  [LOGOUT_SUCCESS]: (state) => ({ ...state, userData: null }),
+  [LOGIN_TOGGLE]: (state) => ({ ...state, loginModalOpen: !state.loginModalOpen }),
+  [LOGIN_CLOSE]: (state) => ({ ...state, loginModalOpen: false }),
+  [LOGIN_SUCCESS]: (state, { payload }) => ({ ...state, userData: payload }),
   [GET_APP_CONFIG_SUCCESS]: (state, { payload }) => ({ ...state, config: payload })
 }
 
@@ -115,10 +123,10 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 export const initialState = {
+  // todo zmenit nazvy ?
   loginModalOpen: false,
-  authUser      : null,
-  loginErrors   : null,
-  config        : null
+  userData: null,
+  config: null
 }
 
 export default function (state = initialState, action) {

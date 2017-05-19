@@ -13,8 +13,8 @@ module.exports = [
             'build': {
               'number': 'c8ddcfc',
               'time': '2016'
-            }, 
-            'version': 'OHF core'              
+            },
+            'version': 'OHF core'
           },
           'description': 'OpenHub integration framework',
           'version': 'OHF project'

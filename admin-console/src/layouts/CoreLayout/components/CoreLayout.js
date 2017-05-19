@@ -10,7 +10,7 @@ class CoreLayout extends Component {
 
   render () {
     const {
-      authUser,
+      userData,
       children,
       sidebarExtended,
       navbarUserExpanded,
@@ -21,19 +21,19 @@ class CoreLayout extends Component {
 
     const bodyStyles = [
       styles.body,
-      sidebarExtended && authUser && styles.body.extended
+      sidebarExtended && userData && styles.body.extended
     ]
 
     return (
       <StyleRoot>
         <div style={styles.main}>
           { config &&
-          <Sidebar config={config.menu} extended={sidebarExtended && !!authUser} />}
+          <Sidebar config={config.menu} extended={sidebarExtended && !!userData} />}
           <LoginModal />
           <div style={bodyStyles}>
             <Navbar
-              authUser={authUser}
-              logout={authActions.logout}
+              userData={userData}
+              logout={authActions.logoutUser}
               navbarUserExpanded={navbarUserExpanded}
               toggleUser={actions.toggleNavbarUser}
               toggleLoginModal={authActions.toggleLoginModal}
@@ -54,7 +54,7 @@ CoreLayout.propTypes = {
   actions: PropTypes.object,
   authActions: PropTypes.object,
   navbarUserExpanded: PropTypes.bool,
-  authUser: PropTypes.object,
+  userData: PropTypes.object,
   config: PropTypes.object
 }
 

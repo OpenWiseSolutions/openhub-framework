@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Radium from 'radium'
 import styles from './configParams.styles'
 import ParamRow from '../ParamRow/ParamRow'
@@ -8,7 +9,7 @@ import EditParamModal from '../EditParamModal/EditParamModal'
 class ConfigParams extends Component {
 
   componentDidMount () {
-    const { actions: { getConfigParams } } = this.props
+    const { getConfigParams } = this.props
     getConfigParams()
   }
 
@@ -18,14 +19,15 @@ class ConfigParams extends Component {
       paramDetail,
       updating,
       updateError,
-      actions: { openParam, closeParam, updateParam }
+      openParam,
+      closeParam,
+      updateParam
     } = this.props
 
     if (!configParams) return <div>Loading...</div>
 
     const computedStyles = [styles.main]
-    const data = configParams.data
-    const categories = data.reduce((acc, item) => {
+    const categories = configParams.reduce((acc, item) => {
       if (!acc[item.categoryCode]) acc[item.categoryCode] = []
       acc[item.categoryCode] = [ ...acc[item.categoryCode], item ]
       return acc
@@ -68,8 +70,11 @@ class ConfigParams extends Component {
 }
 
 ConfigParams.propTypes = {
-  configParams: PropTypes.object,
-  actions: PropTypes.object,
+  configParams: PropTypes.array,
+  openParam: PropTypes.func,
+  closeParam: PropTypes.func,
+  updateParam: PropTypes.func,
+  getConfigParams: PropTypes.func,
   paramDetail: PropTypes.object,
   updating: PropTypes.bool,
   updateError: PropTypes.bool

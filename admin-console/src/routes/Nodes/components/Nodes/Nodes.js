@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Radium from 'radium'
 import styles from './nodes.styles'
 import Panel from '../../../../common/components/Panel/Panel'
@@ -75,12 +76,12 @@ class ConfigParams extends Component {
 }
 
 ConfigParams.propTypes = {
-  getNodes  : PropTypes.func,
-  openNode  : PropTypes.func,
-  closeNode  : PropTypes.func,
+  getNodes: PropTypes.func,
+  openNode: PropTypes.func,
+  closeNode: PropTypes.func,
   updateNode: PropTypes.func,
   deleteNode: PropTypes.func,
-  nodes     : PropTypes.array,
+  nodes: PropTypes.array,
   nodeDetail: PropTypes.object
 }
 

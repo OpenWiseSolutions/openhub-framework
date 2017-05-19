@@ -10,27 +10,31 @@ class Item extends Component {
     super(props)
     this.handleClick = this.handleClick.bind(this)
     this.state = {
-      expanded: false
+      expanded: !!this.props.children
     }
   }
 
   handleClick (event) {
-    const { link, onClick, children } = this.props
+    const { externalLink, link, onClick, children } = this.props
     const { router } = this.context
     event && event.stopPropagation()
     !children && onClick && onClick()
     link && router.push(link)
     children && this.setState(({ expanded }) => ({ expanded: !expanded }))
+    externalLink && window.open(externalLink, '_blank')
   }
 
   render () {
-    const { children, label, size, icon, style = {}, expandedStyle = {} } = this.props
+    const { children, label, size, link, icon, style = {}, expandedStyle = {} } = this.props
     const { expanded } = this.state
+    const { router } = this.context
+    const isActive = router.location.pathname === link
 
     const computedStyle = [
       styles.main,
       size && { lineHeight: `${size}px`, minHeight: `${size}px` },
-      style
+      style,
+      isActive && styles.active
     ]
 
     const labelStyle = [
@@ -57,6 +61,7 @@ Item.propTypes = {
   label: PropTypes.string,
   size: PropTypes.number,
   link: PropTypes.string,
+  externalLink: PropTypes.string,
   onClick: PropTypes.func,
   style: PropTypes.object,
   expandedStyle: PropTypes.object

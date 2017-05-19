@@ -5,12 +5,13 @@ import makeRootReducer from './reducers'
 import { updateLocation } from './location'
 import reduxPromise from 'redux-promise'
 import authMiddleware from './auth.middleware'
+import errorMiddleware from './error.middleware'
 
 export default (initialState = {}) => {
   // ======================================================
   // Middleware Configuration
   // ======================================================
-  const middleware = [thunk, reduxPromise, authMiddleware]
+  const middleware = [thunk, reduxPromise, authMiddleware, errorMiddleware]
 
   // ======================================================
   // Store Enhancers

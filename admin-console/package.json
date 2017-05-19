@@ -1,6 +1,6 @@
 {
   "name": "admin-console",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "license": "Apache-2.0",
   "description": "",
   "main": "index.js",
@@ -93,7 +93,6 @@
     "url": ""
   },
   "dependencies": {
-    "axios": "^0.15.3",
     "babel-core": "^6.17.0",
     "babel-loader": "^6.2.5",
     "babel-plugin-transform-runtime": "^6.15.0",
@@ -104,6 +103,7 @@
     "better-npm-run": "0.0.13",
     "compression": "^1.6.2",
     "debug": "^2.2.0",
+    "fetch-mock": "^5.10.0",
     "file-loader": "^0.9.0",
     "fs-extra": "^1.0.0",
     "html-webpack-plugin": "^2.22.0",
@@ -112,6 +112,8 @@
     "json-loader": "^0.5.4",
     "moment": "^2.17.1",
     "object-path": "^0.11.3",
+    "prop-types": "^15.5.10",
+    "qs": "^6.4.0",
     "radium": "^0.18.1",
     "ramda": "^0.23.0",
     "react": "^15.0.0",
@@ -134,6 +136,7 @@
     "valid-react-form": "^1.0.2",
     "validator": "^7.0.0",
     "webpack": "^1.12.14",
+    "whatwg-fetch": "^2.0.3",
     "yargs": "^6.3.0"
   },
   "devDependencies": {

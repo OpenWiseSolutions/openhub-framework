@@ -1,22 +1,21 @@
-import axios from 'axios'
+import { fetchErrorCatalog } from '../../../services/errors.service.js'
 
 // ------------------------------------
 // Constants
 // ------------------------------------
 const GET_ENVIRONMENT_SUCCESS = 'GET_ENVIRONMENT_SUCCESS'
-const GET_ENVIRONMENT_ERROR = 'GET_ENVIRONMENT_ERROR'
 
 // ------------------------------------
 // Actions
 // ------------------------------------
 
+export const getErrorsOverviewSuccess = (payload) =>
+  ({ type: GET_ENVIRONMENT_SUCCESS, payload })
+
 export const getErrorsOverview = () => (dispatch) => {
-  axios.get('/web/admin/api/errors-catalog')
-    .then(({ data }) => {
-      dispatch({ type: GET_ENVIRONMENT_SUCCESS, payload: data })
-    })
-    .catch(() => {
-      dispatch({ type: GET_ENVIRONMENT_ERROR })
+  return fetchErrorCatalog()
+    .then((data) => {
+      dispatch(getErrorsOverviewSuccess(data))
     })
 }
 
