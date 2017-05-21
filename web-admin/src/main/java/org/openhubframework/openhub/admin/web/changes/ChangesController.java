@@ -16,6 +16,8 @@
 
 package org.openhubframework.openhub.admin.web.changes;
 
+import static org.openhubframework.openhub.common.OpenHubPropertyConstants.PREFIX;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -33,6 +35,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import org.openhubframework.openhub.api.configuration.ConfigurableValue;
+import org.openhubframework.openhub.api.configuration.ConfigurationItem;
+
 
 /**
  * Controller for displaying changes.MD (aka release notes/change log).
@@ -46,7 +51,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class ChangesController {
 
     public static final String CHANGES_URI = "/changes";
-    private static final String CHANGE_LOG_PATH = "changes.MD";
+    private static final String CHANGE_LOG_PATH = PREFIX + "admin.console.config.changes.change-log-path";
+    
+    @ConfigurableValue(key = CHANGE_LOG_PATH)
+    private ConfigurationItem<String> changeLogPath;
     
     @Autowired
     private ChangelogProvider changelogProvider;
@@ -73,7 +81,7 @@ public class ChangesController {
     @Bean
     @ConditionalOnMissingBean
     public ChangelogProvider defaultChangelogProvider() {
-        return () -> new ClassPathResource(CHANGE_LOG_PATH);
+        return () -> new ClassPathResource(changeLogPath.getValue("changes.MD"));
     }
 
     /**
