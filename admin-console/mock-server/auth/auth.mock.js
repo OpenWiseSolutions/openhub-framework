@@ -24,7 +24,7 @@ module.exports = [
   {
     request: {
       method: 'GET',
-      path: '/auth',
+      path: '/api/auth',
     },
     response: {
       statusCode: 200,

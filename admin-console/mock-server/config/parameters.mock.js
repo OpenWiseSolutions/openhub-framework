@@ -2,7 +2,7 @@ module.exports = [
   {
     request: {
       method: 'GET',
-      path: '/config-params'
+      path: '/api/config-params'
     },
     response: {
       statusCode: 200,

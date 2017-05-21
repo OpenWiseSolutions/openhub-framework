@@ -3,7 +3,7 @@ import apiService from './api.service'
 export const URL = {
   login: '/login',
   logout: '/logout',
-  userInfo: '/auth'
+  userInfo: '/api/auth'
 }
 
 // ------------------------------------

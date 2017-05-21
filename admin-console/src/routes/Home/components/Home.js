@@ -149,9 +149,7 @@ Home.propTypes = {
   userData: PropTypes.object,
   dashboard: PropTypes.object.isRequired,
   getHealthInfo: PropTypes.func,
-  getOpenHubInfo: PropTypes.func,
   getMetricsInfo: PropTypes.func
-
 }
 
 export default Home

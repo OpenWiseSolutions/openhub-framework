@@ -28,7 +28,7 @@ class Item extends Component {
     const { children, label, size, link, icon, style = {}, expandedStyle = {} } = this.props
     const { expanded } = this.state
     const { router } = this.context
-    const isActive = router.location.pathname === link
+    const isActive = router && router.location.pathname === link
 
     const computedStyle = [
       styles.main,
