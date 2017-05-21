@@ -20,7 +20,6 @@ import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -35,7 +34,6 @@ import org.springframework.security.core.Authentication;
  * @author Tomas Hanus
  * @since 2.0
  */
-@XmlRootElement
 public class AuthInfoRpc {
 
     private final String fullName;

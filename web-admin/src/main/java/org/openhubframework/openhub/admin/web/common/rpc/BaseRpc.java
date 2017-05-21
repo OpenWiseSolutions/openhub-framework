@@ -18,7 +18,6 @@ package org.openhubframework.openhub.admin.web.common.rpc;
 
 import java.io.Serializable;
 import javax.annotation.Nullable;
-import javax.xml.bind.annotation.XmlAttribute;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -65,7 +64,6 @@ public abstract class BaseRpc<T extends Identifiable<ID>, ID extends Serializabl
 
     @Nullable
     @Override
-    @XmlAttribute
     public ID getId() {
         return id;
     }

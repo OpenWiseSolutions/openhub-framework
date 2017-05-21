@@ -20,7 +20,6 @@ import static org.springframework.util.StringUtils.hasText;
 
 import java.util.Map;
 import javax.annotation.Nullable;
-import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -46,7 +45,6 @@ import org.openhubframework.openhub.spi.node.ChangeNodeCallback;
  * @author Tomas Hanus
  * @since 2.0
  */
-@XmlRootElement
 @Validated
 public class NodeRpc extends ChangeableRpc<Node, Long> {
 

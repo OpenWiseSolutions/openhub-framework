@@ -16,16 +16,16 @@
 
 package org.openhubframework.openhub.admin.web.errorscatalog.rpc;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 
 /**
+ * RPC object to hold error code.
+ * 
  * @author Tomas Hanus
+ * @see 2.0
  */
-@XmlRootElement
 public class ErrorCodeRpc {
     
     private final String code;
