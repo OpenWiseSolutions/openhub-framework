@@ -16,9 +16,9 @@
 
     <properties>
         <!-- dependency versions-->
-        <frontend-plugin-version>0.0.29</frontend-plugin-version>
+        <frontend-plugin-version>1.4</frontend-plugin-version>
         <node-version>v7.2.1</node-version>
-        <npm-version>3.10.10</npm-version>
+        <yarn-version>v0.16.1</yarn-version>
     </properties>
 
     <profiles>
@@ -69,34 +69,38 @@
 
                 <executions>
                     <execution>
-                        <id>install node and npm</id>
+                        <id>install node and yarn</id>
                         <goals>
-                            <goal>install-node-and-npm</goal>
+                            <goal>install-node-and-yarn</goal>
                         </goals>
                         <phase>generate-resources</phase>
                         <configuration>
                             <nodeVersion>${node-version}</nodeVersion>
-                            <npmVersion>${npm-version}</npmVersion>
+                            <yarnVersion>${yarn-version}</yarnVersion>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>npm install</id>
+                        <id>yarn install</id>
                         <goals>
-                            <goal>npm</goal>
+                            <goal>yarn</goal>
                         </goals>
                         <phase>generate-resources</phase>
                         <configuration>
+                            <!-- optional: The default argument is actually
+                            "install", so unless you need to run some other yarn command,
+                            you can remove this whole <configuration> section.
+                            -->
                             <arguments>install</arguments>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>npm run deploy</id>
+                        <id>yarn run deploy</id>
                         <goals>
-                            <goal>npm</goal>
+                            <goal>yarn</goal>
                         </goals>
                         <phase>generate-resources</phase>
                         <configuration>
-                            <arguments>run deploy:prod</arguments>
+                            <arguments>deploy:prod</arguments>
                         </configuration>
                     </execution>
                 </executions>
