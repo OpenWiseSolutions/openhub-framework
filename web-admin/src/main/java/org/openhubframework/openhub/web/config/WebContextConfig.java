@@ -119,6 +119,7 @@ public class WebContextConfig {
         registration.setAsyncSupported(true);
         registration.setName("javamelody");
         registration.setDispatcherTypes(DispatcherType.REQUEST, DispatcherType.ASYNC);
+        registration.setEnabled(javaMelodyProps.isEnabled());
 
         // Set the initialization parameter for the monitoring filter.
         for (final Map.Entry<String, String> parameter : javaMelodyProps.getInitParameters().entrySet()) {
