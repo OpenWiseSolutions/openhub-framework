@@ -11,37 +11,37 @@ module.exports = [
           'menu': {
             'analytics': {
               'messages': {
-                'enable': true
+                'enabled': true
               }
             },
             'infrastructure': {
               'services': {
                 'wsdl': {
-                  'enable': true
+                  'enabled': true
                 }
               }
             },
             'cluster': {
               'nodes': {
-                'enable': true
+                'enabled': true
               }
             },
             'configuration': {
               'systemParams': {
-                'enable': true
+                'enabled': true
               },
               'logging': {
-                'enable': true
+                'enabled': true
               },
               'environment': {
-                'enable': true
+                'enabled': true
               },
               'errorCodeCatalog': {
-                'enable': true
+                'enabled': true
               }
             },
             'externalLinks': {
-              'enable': true,
+              'enabled': true,
               'items': [
                 {
                   'title': 'OpenHub',
@@ -50,7 +50,7 @@ module.exports = [
               ]
             },
             'changes': {
-              'enable': true
+              'enabled': true
             }
           }
         }

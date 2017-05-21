@@ -44,7 +44,7 @@ class Sidebar extends Component {
           expandedStyle={styles.item.expanded}
           label='Analytics'
         >
-          {path(['analytics', 'messages', 'enable'], config) &&
+          {path(['analytics', 'messages', 'enabled'], config) &&
           <Item
             link={'/messages'}
             icon={<MdDrafts />}
@@ -60,7 +60,7 @@ class Sidebar extends Component {
           expandedStyle={styles.item.expanded}
           label='Infrastructure'
         >
-          { path(['cluster', 'nodes', 'enable'], config) &&
+          { path(['cluster', 'nodes', 'enabled'], config) &&
           <Item
             link={'/nodes'}
             icon={<MdDeviceHub />}
@@ -76,31 +76,31 @@ class Sidebar extends Component {
           expandedStyle={styles.item.expanded}
           label='Configuration'
         >
-          {path(['configuration', 'systemParams', 'enable'], config) &&
+          {path(['configuration', 'systemParams', 'enabled'], config) &&
           <Item link={'/config-params'}
             icon={<MdExtension />}
             style={styles.nestedItem}
             label='Config parameters' />
           }
-          {path(['configuration', 'logging', 'enable'], config) &&
+          {path(['configuration', 'logging', 'enabled'], config) &&
           <Item link={'/config-logging'}
             icon={<MdInfo />}
             style={styles.nestedItem}
             label='Config logging' />
           }
-          {path(['configuration', 'environment', 'enable'], config) &&
+          {path(['configuration', 'environment', 'enabled'], config) &&
           <Item link={'/environment-properties'}
             icon={<MdFilterHdr />}
             style={styles.nestedItem}
             label='Environment properties' />
           }
-          {path(['configuration', 'alerts', 'enable'], config) &&
+          {path(['configuration', 'alerts', 'enabled'], config) &&
           <Item link={'/alerts'}
             icon={<MdNotificationsActive />}
             style={styles.nestedItem}
             label='Alerts' />
           }
-          {path(['configuration', 'errorCodeCatalog', 'enable'], config) &&
+          {path(['configuration', 'errorCodeCatalog', 'enabled'], config) &&
           <Item link={'/errors-overview'}
             icon={<MdBugReport />}
             style={styles.nestedItem}
@@ -109,7 +109,7 @@ class Sidebar extends Component {
         </Item>
 
         {/* External links */}
-        { path(['externalLinks', 'enable'], config) &&
+        { path(['externalLinks', 'enabled'], config) &&
         <Item
           icon={<MdLink />}
           style={styles.item}
@@ -127,7 +127,7 @@ class Sidebar extends Component {
         </Item>}
 
         {/* Changes */}
-        {path(['changes', 'enable'], config) &&
+        {path(['changes', 'enabled'], config) &&
         <Item
           link={'/changes'}
           icon={<MdMergeType />}
