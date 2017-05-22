@@ -116,14 +116,17 @@ class Sidebar extends Component {
           expandedStyle={styles.item.expanded}
           label='External links'
          >
-          {config.externalLinks.items.map(({ title, link }) => (
-            <Item
-              key={link}
-              externalLink={link}
-              icon={<MdKeyboardArrowRight />}
-              style={styles.nestedItem}
-              label={title}
-            />))}
+          {config.externalLinks.items.map(({ title, link, enabled }) => {
+            if (!enabled) return null
+            return (
+              <Item
+                key={link}
+                externalLink={link}
+                icon={<MdKeyboardArrowRight />}
+                style={styles.nestedItem}
+                label={title}
+              />)
+          })}
         </Item>}
 
         {/* Changes */}

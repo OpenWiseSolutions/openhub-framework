@@ -45,7 +45,13 @@ module.exports = [
               'items': [
                 {
                   'title': 'OpenHub',
-                  'link': 'http://openhub.org'
+                  'link': 'http://openhub.org',
+                  'enabled': false
+                },
+                {
+                  'title': 'Google',
+                  'link': 'http://google.com',
+                  'enabled': true
                 }
               ]
             },
