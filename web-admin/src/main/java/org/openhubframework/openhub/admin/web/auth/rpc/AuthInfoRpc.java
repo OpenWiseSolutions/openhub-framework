@@ -36,11 +36,19 @@ import org.springframework.security.core.Authentication;
  */
 public class AuthInfoRpc {
 
-    private final String fullName;
-    private final List<RoleInfoRpc> roles;
+    private String fullName;
+    private List<RoleInfoRpc> roles;
 
     /**
      * Default constructor.
+     */
+    public AuthInfoRpc() {
+        fullName = null;
+        roles = null;
+    }
+
+    /**
+     * Default constructor that creates {@link AuthInfoRpc} based upon full name and roles.
      *
      * @param fullName of authenticated user.
      * @param roles    of authenticated user.
@@ -51,7 +59,7 @@ public class AuthInfoRpc {
     }
 
     /**
-     * Default constructor.
+     * Default constructor that creates {@link AuthInfoRpc} based upon {@link Authentication}.
      *
      * @param authentication of authenticated user.
      */
@@ -72,12 +80,36 @@ public class AuthInfoRpc {
     }
 
     /**
+     * Sets full name of authenticated user.
+     * 
+     * @param fullName as common name of user
+     */
+    public void setFullName(String fullName) {
+        if (this.fullName != null) {
+            throw new IllegalStateException("This property is already set");
+        }
+        this.fullName = fullName;
+    }
+
+    /**
      * Gets roles.
      *
      * @return roles
      */
     public List<RoleInfoRpc> getRoles() {
         return roles;
+    }
+
+    /**
+     * Sets roles.
+     * 
+     * @param roles to be set
+     */
+    public void setRoles(List<RoleInfoRpc> roles) {
+        if (this.roles != null) {
+            throw new IllegalStateException("This property is already set");
+        }
+        this.roles = roles;
     }
 
     @Override
@@ -108,6 +140,7 @@ public class AuthInfoRpc {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("fullName", fullName)
+                .append("roles", roles)
                 .toString();
     }
 }

@@ -27,6 +27,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -50,7 +51,7 @@ public class ChangesController {
     @Autowired
     private ChangelogProvider changelogProvider;
 
-    @RequestMapping(value = CHANGES_URI, method = RequestMethod.GET)
+    @RequestMapping(value = CHANGES_URI, method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
     @ResponseBody
     public String getChangesContent() throws IOException {
         // add end of lines
@@ -58,7 +59,7 @@ public class ChangesController {
         List<String> lines = IOUtils.readLines(changelogProvider.getChangelog().getInputStream(), StandardCharsets.UTF_8);
         for (String line : lines) {
             resStr += line;
-            resStr += "<br/>\n";
+            resStr += "\n";
         }
 
         return resStr;
@@ -72,12 +73,7 @@ public class ChangesController {
     @Bean
     @ConditionalOnMissingBean
     public ChangelogProvider defaultChangelogProvider() {
-        return new ChangelogProvider() {
-            @Override
-            public Resource getChangelog() {
-                return new ClassPathResource(CHANGE_LOG_PATH);
-            }
-        };
+        return () -> new ClassPathResource(CHANGE_LOG_PATH);
     }
 
     /**

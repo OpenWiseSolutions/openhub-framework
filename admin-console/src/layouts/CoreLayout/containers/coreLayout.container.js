@@ -1,5 +1,5 @@
 import * as actionCreators from '../actions/coreLayout.actions'
-import * as authActions from '../../../common/actions/auth.actions'
+import { actions as authActions } from '../../../common/modules/auth.module'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import CoreLayout from '../components/CoreLayout'
@@ -8,7 +8,8 @@ function mapStateToProps (state, props) {
   return {
     sidebarExtended: state.coreLayout.sidebarExtended,
     navbarUserExpanded: state.coreLayout.navbarUserExpanded,
-    isAuth: state.auth.isAuth
+    userData: state.auth.userData,
+    config: state.auth.config
   }
 }
 

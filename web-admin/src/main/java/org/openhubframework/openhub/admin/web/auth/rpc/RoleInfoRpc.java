@@ -30,7 +30,14 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public class RoleInfoRpc {
 
-    private final String name;
+    private String name;
+
+    /**
+     * Default constructor.
+     */
+    public RoleInfoRpc() {
+        this.name = null;
+    }
 
     /**
      * Default constructor to create role object based upon role name.
@@ -48,6 +55,17 @@ public class RoleInfoRpc {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Sets the role name
+     * @param name of role
+     */
+    public void setName(String name) {
+        if (this.name != null) {
+            throw new IllegalStateException("This property is already set");
+        }
+        this.name = name;
     }
 
     @Override

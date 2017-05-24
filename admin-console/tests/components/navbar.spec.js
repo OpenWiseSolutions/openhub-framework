@@ -31,8 +31,8 @@ describe('Navbar Component', () => {
     expect(toggleSidebar).to.have.property('callCount', 1)
   })
 
-  it('should have menu icon if isAuth', () => {
-    const wrp = getWrapper({ isAuth: true, toggleSidebar })
+  it('should have menu icon if userData', () => {
+    const wrp = getWrapper({ userData: true, toggleSidebar })
     expect(wrp.find('.navbar-wrapper')).to.have.descendants(MenuIcon)
   })
 })

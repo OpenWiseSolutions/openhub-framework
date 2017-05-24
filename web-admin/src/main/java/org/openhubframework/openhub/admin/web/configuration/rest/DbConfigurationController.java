@@ -16,6 +16,8 @@
 
 package org.openhubframework.openhub.admin.web.configuration.rest;
 
+import static org.springframework.util.StringUtils.hasText;
+
 import java.util.List;
 import javax.validation.Valid;
 
@@ -103,7 +105,11 @@ public class DbConfigurationController extends AbstractOhfController {
             BindingResult errors) throws ValidationException, NoDataFoundException {
 
         Assert.notNull(paramRpc, "paramRpc can not be null");
-        Constraints.state(code.equals(paramRpc.getCode()), "codes must be equal");
+        if (hasText(paramRpc.getCode())) {
+            Constraints.state(code.equals(paramRpc.getCode()), "codes must be equal");
+        } else {
+            paramRpc.setCode(code);
+        }
 
         // get entity to update it
         DbConfigurationParam dbParam = getParam(code);

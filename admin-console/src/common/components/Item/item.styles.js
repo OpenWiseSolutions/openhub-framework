@@ -1,5 +1,5 @@
 import tc from 'tinycolor2'
-import { darkColor } from '../../../styles/colors'
+import { darkColor, secondaryColor, primaryColor } from '../../../styles/colors'
 import { itemSize, gap } from '../../../styles/constants'
 
 export default {
@@ -12,7 +12,11 @@ export default {
     boxSizing: 'border-box',
     color: tc(darkColor).lighten(50),
     backgroundColor: 'transparent',
-    whiteSpace: 'nowrap'
+    whiteSpace: 'nowrap',
+    ':hover': {
+      backgroundColor: tc(primaryColor).lighten(5).setAlpha(0.05).toString()
+    }
+
   },
   label: {
     paddingLeft: gap,
@@ -27,6 +31,13 @@ export default {
   },
   children: {
     position: 'relative',
-    height: 'auto'
+    height: 'auto',
+    backgroundColor: secondaryColor
+  },
+  active: {
+    backgroundColor: tc(secondaryColor).lighten(20).setAlpha(0.5),
+    ':hover': {
+      backgroundColor: tc(secondaryColor).lighten(20).setAlpha(0.5)
+    }
   }
 }

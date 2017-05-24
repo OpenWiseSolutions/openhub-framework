@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Radium from 'radium'
 import { PieChart, Pie } from 'recharts'
 import ms2hrs from '../../../utils/ms2hrs'
@@ -12,12 +13,15 @@ import Status from '../../../common/components/Status/Status'
 class Home extends Component {
 
   componentDidMount () {
-    const { actions: { getHealthInfo } } = this.props
+    const { getHealthInfo, getMetricsInfo } = this.props
     getHealthInfo()
+    getMetricsInfo()
   }
 
   render () {
-    const { isAuth, dashboard: { healthInfo, openHubInfo, metricsInfo } } = this.props
+    const { userData, dashboard: { healthInfo, openHubInfo, metricsInfo } } = this.props
+    if (!openHubInfo && !healthInfo && !metricsInfo) return <div>Loading...</div>
+
     const isUp = (val) => val === 'UP'
 
     const appTableData = openHubInfo && [
@@ -70,9 +74,19 @@ class Home extends Component {
         ['Unloaded classes', metricsInfo['classes.unloaded']]
     ]
 
+    const freeMemory = metricsInfo && `Free memory: ${(metricsInfo['mem.free'] / 1000).toFixed(2)} MB`
+    const usedMemory = metricsInfo &&
+      `Used memory: ${((metricsInfo['mem'] - metricsInfo['mem.free']) / 1000).toFixed(2)} MB`
+    const totalMemory = metricsInfo && `Total memory: ${(metricsInfo['mem'] / 1000).toFixed(2)} MB`
+
+    const freeHeap = metricsInfo && `Free heap: ${(metricsInfo['heap.committed'] / 1000).toFixed(2)} MB`
+    const usedHeap = metricsInfo &&
+      `Used heap: ${((metricsInfo['heap'] - metricsInfo['heap.committed']) / 1000).toFixed(2)} MB`
+    const totalHeap = metricsInfo && `Total heap: ${(metricsInfo['heap'] / 1000).toFixed(2)} MB`
+
     return (
       <div style={styles.main}>
-        {isAuth &&
+        {userData &&
           <div style={styles.widgets}>
             <Panel title='Health'>
               <Table data={healthTableData} />
@@ -83,17 +97,17 @@ class Home extends Component {
             <Panel title='Memory'>
               <div style={styles.memChart}>
                 <PieChart width={200} height={200}>
-                  <Pie {...memChartProps} />
+                  <Pie isAnimationActive={false} {...memChartProps} />
                 </PieChart>
                 <ul style={styles.info} >
                   <li><div style={[styles.tag, styles.tag.free]} />
-                    Free memory: { (metricsInfo['mem.free'] / 1000).toFixed(2) } MB
+                    {freeMemory}
                   </li>
                   <li><div style={[styles.tag, styles.tag.used]} />
-                    Used memory: { ((metricsInfo['mem'] - metricsInfo['mem.free']) / 1000).toFixed(2) } MB
+                    {usedMemory}
                   </li>
                   <li><b>
-                    Total memory: { (metricsInfo['mem'] / 1000).toFixed(2) } MB
+                    {totalMemory}
                   </b></li>
                 </ul>
               </div>
@@ -101,17 +115,17 @@ class Home extends Component {
             <Panel title='Heap'>
               <div style={styles.memChart}>
                 <PieChart width={200} height={200}>
-                  <Pie {...heapChartProps} />
+                  <Pie isAnimationActive={false} {...heapChartProps} />
                 </PieChart>
                 <ul style={styles.info} >
                   <li><div style={[styles.tag, styles.tag.free]} />
-                    Free heap: { (metricsInfo['heap.committed'] / 1000).toFixed(2) } MB
+                    {freeHeap}
                   </li>
                   <li><div style={[styles.tag, styles.tag.used]} />
-                    Used heap: { ((metricsInfo['heap'] - metricsInfo['heap.committed']) / 1000).toFixed(2) } MB
+                    {usedHeap}
                   </li>
                   <li><b>
-                    Total heap: { (metricsInfo['heap'] / 1000).toFixed(2) } MB
+                    {totalHeap}
                   </b></li>
                 </ul>
               </div>
@@ -132,9 +146,10 @@ class Home extends Component {
 }
 
 Home.propTypes = {
-  isAuth: PropTypes.bool,
-  actions: PropTypes.object.isRequired,
-  dashboard: PropTypes.object.isRequired
+  userData: PropTypes.object,
+  dashboard: PropTypes.object.isRequired,
+  getHealthInfo: PropTypes.func,
+  getMetricsInfo: PropTypes.func
 }
 
 export default Home

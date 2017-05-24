@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import ApiService from './services/api.service'
 import createStore from './store/createStore'
 import AppContainer from './common/containers/app.container'
 
@@ -8,6 +9,11 @@ import AppContainer from './common/containers/app.container'
 // ========================================================
 const initialState = window.___INITIAL_STATE__
 const store = createStore(initialState)
+
+// ========================================================
+// API Instantiation
+// ========================================================
+ApiService.connectApiToStore(store)
 
 // ========================================================
 // Render Setup

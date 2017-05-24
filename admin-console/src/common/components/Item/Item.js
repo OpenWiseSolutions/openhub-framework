@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import Radium from 'radium'
 import ArrowDown from 'react-icons/lib/md/keyboard-arrow-down'
 import styles from './item.styles'
-import { browserHistory } from 'react-router'
 
 @Radium
 class Item extends Component {
@@ -11,26 +10,31 @@ class Item extends Component {
     super(props)
     this.handleClick = this.handleClick.bind(this)
     this.state = {
-      expanded: false
+      expanded: !!this.props.children
     }
   }
 
   handleClick (event) {
-    const { link, onClick, children } = this.props
+    const { externalLink, link, onClick, children } = this.props
+    const { router } = this.context
     event && event.stopPropagation()
     !children && onClick && onClick()
-    link && browserHistory.push(link)
+    link && router.push(link)
     children && this.setState(({ expanded }) => ({ expanded: !expanded }))
+    externalLink && window.open(externalLink, '_blank')
   }
 
   render () {
-    const { children, label, size, icon, style = {}, expandedStyle = {} } = this.props
+    const { children, label, size, link, icon, style = {}, expandedStyle = {} } = this.props
     const { expanded } = this.state
+    const { router } = this.context
+    const isActive = router && router.location.pathname === link
 
     const computedStyle = [
       styles.main,
       size && { lineHeight: `${size}px`, minHeight: `${size}px` },
-      style
+      style,
+      isActive && styles.active
     ]
 
     const labelStyle = [
@@ -57,9 +61,14 @@ Item.propTypes = {
   label: PropTypes.string,
   size: PropTypes.number,
   link: PropTypes.string,
+  externalLink: PropTypes.string,
   onClick: PropTypes.func,
   style: PropTypes.object,
   expandedStyle: PropTypes.object
+}
+
+Item.contextTypes = {
+  router: PropTypes.any
 }
 
 export default Item

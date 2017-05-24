@@ -1,10 +1,12 @@
-import { LOGOUT, AUTH_SESSION } from '../common/actions/auth.actions'
+import { logoutUser } from '../common/modules/auth.module'
 
 export default (store) => (next) => (action) => {
-  if (action.error) {
-    sessionStorage.removeItem(AUTH_SESSION)
-    next({ type: LOGOUT })
-  } else {
-    next(action)
+  if (action.type === 'LOCATION_CHANGE') {
+    const { auth: { userData } } = store.getState()
+    if (!userData) {
+      store.dispatch(logoutUser())
+      return
+    }
   }
+  next(action)
 }

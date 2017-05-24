@@ -16,6 +16,8 @@
 
 package org.openhubframework.openhub.admin.web.configuration.rpc;
 
+import static org.springframework.util.StringUtils.hasText;
+
 import java.util.Map;
 import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
@@ -57,7 +59,6 @@ public class DbConfigurationParamRpc extends ChangeableRpc<DbConfigurationParam,
     /**
      * code: ohf.server.localhostUri.check (string) - unique code of one configuration parameter
      */
-    @NotNull
     private String code;
 
     /**
@@ -127,7 +128,9 @@ public class DbConfigurationParamRpc extends ChangeableRpc<DbConfigurationParam,
     protected void validate(BindingResult errors, @Nullable DbConfigurationParam updateEntity) throws ValidationException {
         if (updateEntity != null) {
             ValidationUtils.rejectIfEmpty(errors, "code", "field.required");
-            Constraints.state(getCode().equals(updateEntity.getCode()), "codes must be equal");
+            if (hasText(getCode())) {
+                Constraints.state(getCode().equals(updateEntity.getCode()), "codes must be equal");
+            }
         }
     }
 
