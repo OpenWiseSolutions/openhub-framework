@@ -1,19 +1,22 @@
 sudo: false
 language: node_js
 node_js:
-  - "6"
-
-cache:
-  directories:
-    - node_modules
+  - "7"
+  
+before_install:
+  - nvm install 7
+  - nvm use 7
+  
+env:
+  - TRAVIS_NODE_VERSION="7"
 
 install:
   - npm install -g yarn
   - yarn install
 
 script:
-  - npm run deploy:dev
-  - npm run deploy:prod
+  - yarn deploy:dev
+  - yarn deploy:prod
 
 after_success:
   - npm run codecov
