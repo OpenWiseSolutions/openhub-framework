@@ -67,6 +67,13 @@ class Sidebar extends Component {
             style={styles.nestedItem}
             label='Nodes'
           />}
+          { path(['infrastructure', 'services', 'wsdl', 'enabled'], config) &&
+          <Item
+            link={'/wsdl'}
+            icon={<MdDeviceHub />}
+            style={styles.nestedItem}
+            label='WSDL'
+          />}
         </Item>}
 
         {/* Configuration */}

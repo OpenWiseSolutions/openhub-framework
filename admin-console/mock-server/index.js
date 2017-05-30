@@ -15,7 +15,8 @@ const sources = [
   require('./config/environment.mock'),
   require('./errors/errorsOverview.mock'),
   require('./nodes/nodes.mock'),
-  require('./config/console.mock')
+  require('./config/console.mock'),
+  require('./wsdl/wsdl.mock')
 ]
 
 runServer(sources, opt_serverConfig)
