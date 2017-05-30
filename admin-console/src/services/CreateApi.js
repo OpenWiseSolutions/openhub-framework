@@ -14,7 +14,6 @@ export default class ApiService {
     return fetch(path, config)
       .then(res => {
         if (!res.ok) {
-          this.store.dispatch(fetchError(relativePath, res))
           const error = new Error(res.statusText || res.status)
           error.response = res
           return Promise.reject(error)
