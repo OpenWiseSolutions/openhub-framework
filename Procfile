@@ -1,0 +1,1 @@
+web: java $JAVA_OPTS -Dserver.port=${PORT} -Dspring.profiles.active=example-module,h2 -Dlogging.level.org.hibernate.SQL=warn -jar web-admin/target/openhub-exec.war
