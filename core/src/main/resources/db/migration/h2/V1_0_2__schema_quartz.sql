@@ -1,9 +1,6 @@
 --
--- DB script for SA schema (specific for H2 database)
+-- DB script for QUARTZ jobs.
 --
-
--- script must not be empty
-select 'connection test'
 
 -- create quartz tables
 
@@ -244,5 +241,3 @@ ALTER TABLE QRTZ_TRIGGERS ADD
     JOB_NAME,
     JOB_GROUP
   );
-
-COMMIT;

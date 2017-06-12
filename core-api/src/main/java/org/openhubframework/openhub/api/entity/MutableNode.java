@@ -29,7 +29,8 @@ public class MutableNode extends AbstractNode {
      */
     @Id
     @Column(name = "node_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "openhub_node_id_sequence")
+    @SequenceGenerator(name="openhub_node_id_sequence", sequenceName="openhub_node_sequence", allocationSize=1)
     private Long nodeId;
 
     /**
