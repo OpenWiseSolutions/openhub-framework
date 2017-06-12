@@ -6,6 +6,10 @@ import chai from 'chai'
 import sinonChai from 'sinon-chai'
 import chaiAsPromised from 'chai-as-promised'
 import chaiEnzyme from 'chai-enzyme'
+import { polyfill } from 'es6-promise'
+import 'whatwg-fetch'
+
+polyfill()
 
 chai.use(sinonChai)
 chai.use(chaiAsPromised)

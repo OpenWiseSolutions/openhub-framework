@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import ApiService from './services/api.service'
 import createStore from './store/createStore'
 import AppContainer from './common/containers/app.container'
+import 'whatwg-fetch'
 
 // ========================================================
 // Store Instantiation

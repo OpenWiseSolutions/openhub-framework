@@ -32,7 +32,7 @@ describe('Navbar Component', () => {
   })
 
   it('should have menu icon if userData', () => {
-    const wrp = getWrapper({ userData: true, toggleSidebar })
+    const wrp = getWrapper({ userData: { fullName: 'Ochmonek' }, toggleSidebar })
     expect(wrp.find('.navbar-wrapper')).to.have.descendants(MenuIcon)
   })
 })
