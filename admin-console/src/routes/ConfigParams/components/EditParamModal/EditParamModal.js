@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import validator from 'validator'
 import Radium from 'radium'
 import Modal from 'react-modal'
-import { ValidForm, Field, Toggle, ValidStyles } from 'valid-react-form'
+import { ValidForm, Field, Toggle } from 'valid-react-form'
 import ModalHeader from '../../../../common/components/ModalHeader/ModalHeader'
 import styles from './editParamModal.styles'
 import Button from '../../../../common/components/Button/Button'
@@ -40,43 +40,41 @@ class EditParamModal extends Component {
         {isOpen && data &&
         <div style={styles.content}>
           {updateError && <div style={styles.error}>Update failed!</div>}
-          <ValidStyles>
-            <ValidForm autoComplete='off' onSubmit={(payload) => updateParam(data, payload)}>
-              <div style={styles.row}>
-                <div style={styles.label}>Code</div>
-                <div>{data.code}</div>
+          <ValidForm autoComplete='off' onSubmit={(payload) => updateParam(data, payload)}>
+            <div style={styles.row}>
+              <div style={styles.label}>Code</div>
+              <div>{data.code}</div>
+            </div>
+            <div style={styles.row}>
+              <div style={styles.label}>Description</div>
+              <div>{data.description}</div>
+            </div>
+            <div style={styles.row}>
+              <div style={styles.label}>Data type</div>
+              <div>{data.dataType}</div>
+            </div>
+            <div style={styles.row}>
+              <div style={styles.label}>Mandatory</div>
+              <div>
+                <Toggle name='mandatory' value={data.mandatory} />
               </div>
-              <div style={styles.row}>
-                <div style={styles.label}>Description</div>
-                <div>{data.description}</div>
+            </div>
+            <br />
+            <Value type={data.dataType} value={data.currentValue} label='Current Value' name='currentValue' />
+            <Value type={data.dataType} value={data.defaultValue} label='Default Value' name='defaultValue' />
+            <br />
+            <div style={styles.row}>
+              <div style={styles.label}>Validation</div>
+              <div>
+                <Field name='validationRegEx' value={data.validationRegEx} />
               </div>
-              <div style={styles.row}>
-                <div style={styles.label}>Data type</div>
-                <div>{data.dataType}</div>
-              </div>
-              <div style={styles.row}>
-                <div style={styles.label}>Mandatory</div>
-                <div>
-                  <Toggle name='mandatory' value={data.mandatory} />
-                </div>
-              </div>
-              <br />
-              <Value type={data.dataType} value={data.currentValue} label='Current Value' name='currentValue' />
-              <Value type={data.dataType} value={data.defaultValue} label='Default Value' name='defaultValue' />
-              <br />
-              <div style={styles.row}>
-                <div style={styles.label}>Validation</div>
-                <div>
-                  <Field name='validationRegEx' value={data.validationRegEx} />
-                </div>
-              </div>
-              <br />
-              <div style={[styles.row, styles.controls]}>
-                <Anchor style={styles.controls.cancel} onClick={close}>Cancel</Anchor>
-                <Button style={styles.controls.submit}>{updating ? 'Updating...' : 'Update'}</Button>
-              </div>
-            </ValidForm>
-          </ValidStyles>
+            </div>
+            <br />
+            <div style={[styles.row, styles.controls]}>
+              <Anchor style={styles.controls.cancel} onClick={close}>Cancel</Anchor>
+              <Button style={styles.controls.submit}>{updating ? 'Updating...' : 'Update'}</Button>
+            </div>
+          </ValidForm>
         </div>
         }
       </Modal>

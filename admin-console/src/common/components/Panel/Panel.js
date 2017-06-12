@@ -26,7 +26,7 @@ class Panel extends Component {
 
 Panel.propTypes = {
   title: PropTypes.string,
-  children: PropTypes.element,
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.array]),
   style: PropTypes.object
 }
 
