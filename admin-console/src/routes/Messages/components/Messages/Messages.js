@@ -105,32 +105,32 @@ class Messages extends Component {
         </ValidForm>}
         {messages.length && <table style={[styles.table, styles.messages]}>
           <tbody>
-            <tr>
-              <th style={styles.header}>{'Correlation ID'}</th>
-              <th style={styles.header}>{'Source System'}</th>
-              <th style={styles.header}>{'Received Time'}</th>
-              <th style={styles.header}>{'Start Process Time'}</th>
-              <th style={styles.header}>{'State'}</th>
-              <th style={styles.header}>{'Error Code'}</th>
-              <th style={styles.header}>{'Service'}</th>
-              <th style={styles.header}>{'Operation'}</th>
+          <tr>
+            <th style={styles.header}>{'Correlation ID'}</th>
+            <th style={styles.header}>{'Source System'}</th>
+            <th style={styles.header}>{'Received Time'}</th>
+            <th style={styles.header}>{'Start Process Time'}</th>
+            <th style={styles.header}>{'State'}</th>
+            <th style={styles.header}>{'Error Code'}</th>
+            <th style={styles.header}>{'Service'}</th>
+            <th style={styles.header}>{'Operation'}</th>
+          </tr>
+          {messages.map((message, index) => (
+            <tr
+              onClick={() => this.openDetail(message)}
+              key={message.id}
+              style={index % 2 === 0 ? styles.even : styles.odd}
+            >
+              <td style={styles.cell}>{message.correlationId}</td>
+              <td style={styles.cell}>{message.sourceSystem}</td>
+              <td style={styles.cell}>{moment(message.received).format('MMMM Do YYYY, hh:mm:ss')}</td>
+              <td style={styles.cell}>{moment(message.processingStarted).format('MMMM Do YYYY, hh:mm:ss')}</td>
+              <td style={styles.cell}>{message.state}</td>
+              <td style={styles.cell}>{message.errorCode}</td>
+              <td style={styles.cell}>{message.serviceName}</td>
+              <td style={styles.cell}>{message.operationName}</td>
             </tr>
-            {messages.map((message, index) => (
-              <tr
-                onClick={() => this.openDetail(message)}
-                key={message.id}
-                style={index % 2 === 0 ? styles.even : styles.odd}
-              >
-                <td style={styles.cell}>{message.correlationId}</td>
-                <td style={styles.cell}>{message.sourceSystem}</td>
-                <td style={styles.cell}>{moment(message.received).format('MMMM Do YYYY, hh:mm:ss')}</td>
-                <td style={styles.cell}>{moment(message.processingStarted).format('MMMM Do YYYY, hh:mm:ss')}</td>
-                <td style={styles.cell}>{message.state}</td>
-                <td style={styles.cell}>{message.errorCode}</td>
-                <td style={styles.cell}>{message.serviceName}</td>
-                <td style={styles.cell}>{message.operationName}</td>
-              </tr>
-            ))}
+          ))}
           </tbody>
         </table>}
       </Panel>
