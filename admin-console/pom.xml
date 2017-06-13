@@ -18,7 +18,7 @@
         <!-- dependency versions-->
         <frontend-plugin-version>1.4</frontend-plugin-version>
         <node-version>v7.2.1</node-version>
-        <yarn-version>v0.16.1</yarn-version>
+        <yarn-version>v0.23.4</yarn-version>
     </properties>
 
     <profiles>

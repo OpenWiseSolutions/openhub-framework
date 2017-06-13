@@ -35,7 +35,7 @@
       }
     },
     "dev:mock": {
-      "command": "parallelshell \"npm run mock\" \"npm run dev\"",
+      "command": "parallelshell \"yarn run mock\" \"yarn run dev\"",
       "env": {
         "NODE_ENV": "development",
         "DEBUG": "app:*"
@@ -55,20 +55,20 @@
       }
     },
     "deploy": {
-      "command": "npm run lint && npm run test && npm run clean && npm run compile",
+      "command": "yarn run lint && yarn run test && yarn run clean && yarn run compile",
       "env": {
         "DEBUG": "app:*"
       }
     },
     "deploy:dev": {
-      "command": "npm run deploy",
+      "command": "yarn run deploy",
       "env": {
         "NODE_ENV": "development",
         "DEBUG": "app:*"
       }
     },
     "deploy:prod": {
-      "command": "npm run deploy",
+      "command": "yarn run deploy",
       "env": {
         "NODE_ENV": "production",
         "DEBUG": "app:*"
@@ -91,6 +91,9 @@
   "repository": {
     "type": "",
     "url": ""
+  },
+  "optionalDependencies": {
+    "fsevents": "*"
   },
   "dependencies": {
     "babel-core": "^6.17.0",
