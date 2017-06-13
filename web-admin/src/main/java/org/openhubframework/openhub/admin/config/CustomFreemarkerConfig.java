@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.web.config;
+package org.openhubframework.openhub.admin.config;
 
 import freemarker.ext.jsp.TaglibFactory;
 import freemarker.template.ObjectWrapper;

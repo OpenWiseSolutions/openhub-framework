@@ -1,19 +1,3 @@
-/*
- *  Copyright 2017 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package org.openhubframework.openhub.web.config;
 
 import org.apache.camel.component.servlet.CamelHttpTransportServlet;
@@ -28,17 +12,20 @@ import org.springframework.ws.transport.http.WebServiceMessageReceiverHandlerAda
 import org.openhubframework.openhub.api.route.RouteConstants;
 import org.openhubframework.openhub.core.common.ws.ErrorCodeAwareWebServiceMessageReceiverHandlerAdapter;
 
-
 /**
- * Web configurer which is responsible for configuration of web runtime layer of OpenHub, for example servlet
- * registration of camel connectors.
+ * Web configurer which is responsible for servlet registration of camel connectors.
  *
  * @author Tomas Hanus
- * @see WebContextConfig
+ * @see WebSecurityConfig
  * @since 2.0
  */
 @Configuration
-public class WebConfigurer {
+public class WebServiceConfigurer {
+
+    /**
+     * The ID of webservice context.
+     */
+    public static final String WS_CONTEXT_ID = "WsContext";
 
     /**
      * Configures servlet for HTTP communication.
@@ -69,7 +56,8 @@ public class WebConfigurer {
     public ServletRegistrationBean dispatcherWsRegistration(ApplicationContext applicationContext) {
         MessageDispatcherServlet servlet = new MessageDispatcherServlet();
         servlet.setApplicationContext(applicationContext);
-        
+        servlet.setContextId(WS_CONTEXT_ID);
+
         return new ServletRegistrationBean(servlet, RouteConstants.WS_URI_PREFIX_MAPPING);
     }
 
