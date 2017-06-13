@@ -590,6 +590,7 @@
                             <link>http://www.javadoc.io/doc/org.springframework.ws/spring-ws-core/2.4.0.RELEASE/</link>
                             <link>http://www.javadoc.io/doc/org.springframework/spring-core/4.3.4.RELEASE/</link>
                         </links>
+                        <failOnError>false</failOnError>
                         <aggregate>true</aggregate>
                         <additionalDependencies>
                             <additionalDependency>
