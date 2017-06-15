@@ -16,11 +16,14 @@
 
 package org.openhubframework.openhub.core.common.dao;
 
+import static org.springframework.util.StringUtils.hasText;
+
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import javax.annotation.Nullable;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
@@ -28,6 +31,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.openhubframework.openhub.api.entity.MessageFilter;
+import org.openhubframework.openhub.api.entity.Request;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -402,5 +407,108 @@ public class MessageDaoJpaImpl implements MessageDao {
         q.setMaxResults(MAX_MESSAGES_IN_ONE_QUERY);
 
         return q.getResultList();
+    }
+
+    @Override
+    public List<Message> findMessagesByFilter(final MessageFilter filter) {
+        Assert.notNull(filter, "the messageFilter must not be null");
+
+        String jSql = "SELECT m "
+                + "         FROM " +  Message.class.getName() + " m " +
+                "           WHERE m.receiveTimestamp >= :receivedFrom ";
+
+        // conditions
+        if (null != filter.getReceivedTo()) {
+            jSql += "           AND m.receiveTimestamp <= :receivedTo";
+        }
+        if (null != filter.getLastChangeFrom()) {
+            jSql += "           AND m.lastUpdateTimestamp >= :lastChangeFrom";
+        }
+        if (null != filter.getLastChangeTo()) {
+            jSql += "           AND m.lastUpdateTimestamp <= :lastChangeTo";
+        }
+        if (hasText(filter.getSourceSystem())) {
+            jSql += "           AND m.sourceSystemInternal like :sourceSystem";
+        }
+        if (hasText(filter.getCorrelationId())) {
+            jSql += "           AND m.correlationId like :correlationId";
+        }
+        if (hasText(filter.getProcessId())) {
+            jSql += "           AND m.processId like :processId";
+        }
+        if (null != filter.getState()) {
+            jSql += "           AND m.state like :state";
+        }
+        if (hasText(filter.getErrorCode())) {
+            jSql += "           AND m.failedErrorCodeInternal like :errorCode";
+        }
+        if (hasText(filter.getServiceName())) {
+            jSql += "           AND m.serviceInternal like :serviceName";
+        }
+        if (hasText(filter.getOperationName())) {
+            jSql += "           AND m.operationName like :operationName";
+        }
+        // fulltext
+        if (hasText(filter.getFulltext())) {
+            jSql += "           AND m.payload like :fulltext";
+        }
+
+        jSql += "           ORDER BY m.receiveTimestamp DESC";
+
+        TypedQuery<Message> q = em.createQuery(jSql, Message.class);
+        q.setParameter("receivedFrom", filter.getReceivedFrom());
+
+        if (null != filter.getReceivedTo()) {
+            q.setParameter("receivedTo", filter.getReceivedTo());
+        }
+        if (null != filter.getLastChangeFrom()) {
+            q.setParameter("lastChangeFrom", filter.getLastChangeFrom());
+        }
+        if (null != filter.getLastChangeTo()) {
+            q.setParameter("lastChangeTo", filter.getLastChangeTo());
+        }
+        if (hasText(filter.getSourceSystem())) {
+            q.setParameter("sourceSystem", filter.getSourceSystem());
+        }
+        if (hasText(filter.getCorrelationId())) {
+            q.setParameter("correlationId", filter.getCorrelationId());
+        }
+        if (hasText(filter.getProcessId())) {
+            q.setParameter("processId", filter.getProcessId());
+        }
+        if (null != filter.getState()) {
+            q.setParameter("state", filter.getState());
+        }
+        if (hasText(filter.getErrorCode())) {
+            q.setParameter("errorCode", filter.getErrorCode());
+        }
+        if (hasText(filter.getServiceName())) {
+            q.setParameter("serviceName", filter.getServiceName());
+        }
+        if (hasText(filter.getOperationName())) {
+            q.setParameter("operationName", filter.getOperationName());
+        }
+        // fulltext
+        if (hasText(filter.getFulltext())) {
+            q.setParameter("fulltext", "%" + filter.getFulltext() + "%");
+        }
+        //TODO (kkovarik, 27.5.2017, TASK) configuration
+        q.setMaxResults(100);
+
+        return q.getResultList();
+    }
+
+          /*  addParamIfHasText(q, filter.getSourceSystem(), "sourceSystem");
+        addParamIfHasText(q, filter.getCorrelationId(), "correlationId");
+        addParamIfHasText(q, filter.getProcessId(), "processId");
+        addParamIfHasText(q, filter.getState(), "state");
+        addParamIfHasText(q, filter.getErrorCode(), "errorCode");
+        addParamIfHasText(q, filter.getServiceName(), "serviceName");
+        addParamIfHasText(q, filter.getOperationName(), "operationName");*/
+
+    private static void addParamIfHasText(TypedQuery<?> q, String key, String value) {
+        if (hasText(key)) {
+            q.setParameter(key, value);
+        }
     }
 }

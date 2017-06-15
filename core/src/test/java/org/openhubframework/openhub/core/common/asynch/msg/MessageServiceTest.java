@@ -22,9 +22,13 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 import org.junit.Test;
+import org.openhubframework.openhub.api.entity.MessageFilter;
+import org.openhubframework.openhub.test.data.ServiceTestEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.openhubframework.openhub.api.entity.Message;
@@ -212,6 +216,118 @@ public class MessageServiceTest extends AbstractCoreDbTest {
         assertThat(count, is(1));
     }
 
+
+    @Test
+    public void testFindMessagesByFilter_minimalOk() throws Exception {
+        // prepare message
+        createAndSaveMessages(1, (message, order) -> {
+            if (order == 1) {
+                message.setPayload("message-payload");
+            }
+        });
+
+        final MessageFilter filter = new MessageFilter();
+        filter.setReceivedFrom(LocalDateTime.of(2017,5,27,19,17,10).toInstant(ZoneOffset.UTC));
+        List<Message> dbMessages = messageService.findMessagesByFilter(filter);
+        assertThat(dbMessages.size(), is(1));
+        assertThat(dbMessages.get(0).getPayload(), is("message-payload"));
+    }
+
+    @Test
+    public void testFindMessagesByFilter_fullFilter() throws Exception {
+        // prepare message
+        createAndSaveMessages(10, (message, order) -> {
+            findByFilter_messageFill(message);
+            switch (order) {
+                case 1:
+                    message.setReceiveTimestamp(LocalDateTime.of(2016,5,27,19,17,10).toInstant(ZoneOffset.UTC));
+                    break;
+                case 2:
+                    message.setLastUpdateTimestamp(LocalDateTime.of(2016,5,27,19,17,10).toInstant(ZoneOffset.UTC));
+                    break;
+                case 3:
+                    message.setSourceSystem(ExternalSystemTestEnum.BILLING);
+                    break;
+                case 4:
+                    message.setProcessId("987-654-321");
+                    break;
+                case 5:
+                    message.setState(MsgStateEnum.FAILED);
+                    break;
+                case 6:
+                    message.setFailedErrorCode(ErrorTestEnum.E200);
+                    break;
+                case 7:
+                    message.setService(ServiceTestEnum.ACCOUNT);
+                    break;
+                case 8:
+                    message.setOperationName("fakeOperation");
+                    break;
+                case 9:
+                    message.setPayload("another payload");
+                    break;
+
+            }
+        });
+
+        final MessageFilter filter = new MessageFilter();
+        filter.setReceivedFrom(LocalDateTime.of(2017,5,27,19,17,10).toInstant(ZoneOffset.UTC));
+        filter.setReceivedTo(LocalDateTime.of(2017,5,27,19,17,10).toInstant(ZoneOffset.UTC));
+        filter.setLastChangeFrom(LocalDateTime.of(2017,5,27,20,17,10).toInstant(ZoneOffset.UTC));
+        filter.setLastChangeTo(LocalDateTime.of(2017,5,27,20,17,10).toInstant(ZoneOffset.UTC));
+        filter.setSourceSystem(ExternalSystemTestEnum.CRM.getSystemName());
+        filter.setProcessId("123-456-789");
+        filter.setState(MsgStateEnum.PROCESSING);
+        filter.setErrorCode("E300");
+        filter.setServiceName(ServiceTestEnum.CUSTOMER.getServiceName());
+        filter.setOperationName("testOperation");
+        filter.setFulltext("test payload");
+        assertThat(messageService.findMessagesByFilter(filter).size(), is(1));
+    }
+
+    @Test
+    public void testFindMessagesByFilter_correlationId() throws Exception {
+        // prepare message
+        createAndSaveMessages(10, (message, order) -> {
+            if (order == 1) {
+                message.setCorrelationId("11111-22222-33333");
+            }
+        });
+
+        final MessageFilter filter = new MessageFilter();
+        filter.setReceivedFrom(LocalDateTime.of(2017,5,27,19,17,10).toInstant(ZoneOffset.UTC));
+        filter.setCorrelationId("11111-22222-33333");
+        List<Message> dbMessages = messageService.findMessagesByFilter(filter);
+        assertThat(dbMessages.size(), is(1));
+    }
+
+    @Test
+    public void testFindMessagesByFilter_fullText() throws Exception {
+        // prepare message
+        createAndSaveMessages(4, (message, order) -> {
+            if (order == 1) {
+                message.setPayload("car");
+            } else if (order == 2) {
+                message.setPayload("carrot");
+            } else if (order == 3) {
+                message.setPayload("scar");
+            }
+        });
+
+        final MessageFilter filter = new MessageFilter();
+        filter.setReceivedFrom(LocalDateTime.of(2017,5,27,19,17,10).toInstant(ZoneOffset.UTC));
+        filter.setFulltext("car");
+        assertThat(messageService.findMessagesByFilter(filter).size(), is(3));
+    }
+
+    private static void findByFilter_messageFill(final Message msg) {
+        Instant received = LocalDateTime.of(2017,5,27,19,17,10).toInstant(ZoneOffset.UTC);
+        Instant lastUpdate = LocalDateTime.of(2017,5,27,20,17,10).toInstant(ZoneOffset.UTC);
+        msg.setFailedErrorCode(ErrorTestEnum.E300);
+        msg.setProcessId("123-456-789");
+        msg.setReceiveTimestamp(received);
+        msg.setLastUpdateTimestamp(lastUpdate);
+    }
 
     private void assertSetState(final MsgStateEnum initState, MessageCallback processor, final MsgStateEnum expState)
             throws Exception {

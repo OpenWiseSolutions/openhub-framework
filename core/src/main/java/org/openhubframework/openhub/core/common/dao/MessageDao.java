@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
 
 import org.openhubframework.openhub.api.entity.ExternalSystemExtEnum;
 import org.openhubframework.openhub.api.entity.Message;
+import org.openhubframework.openhub.api.entity.MessageFilter;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
 import org.openhubframework.openhub.api.entity.Node;
 
@@ -197,4 +198,6 @@ public interface MessageDao {
      * @return list of message or {@code empty list} if not available
      */
     List<Message> findMessagesByContent(String substring);
+
+    List<Message> findMessagesByFilter(MessageFilter messageFilter);
 }
