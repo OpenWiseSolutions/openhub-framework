@@ -196,11 +196,13 @@ public interface MessageService {
 
 
     /**
-     * Find list of messages that match with given filter.
+     * Finds list of messages that match with given filter. Sorted by received timestamp (newest first).
+     *
      * @param messageFilter the filter.
+     * @param limit the limit of message count.
      * @return collection of messages, or {@code empty list} if none were found.
      */
-    List<Message> findMessagesByFilter(MessageFilter messageFilter);
+    List<Message> findMessagesByFilter(MessageFilter messageFilter, long limit);
 
     /**
      * Get count of messages in specific state.

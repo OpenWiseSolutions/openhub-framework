@@ -16,32 +16,50 @@
 
 package org.openhubframework.openhub.admin.web.message.rpc;
 
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.openhubframework.openhub.api.entity.Message;
-import org.springframework.core.convert.converter.Converter;
+import org.springframework.validation.annotation.Validated;
 
 
 /**
- * Message list item RPC, only subset of message attributes are used.
+ * Request rpc for action with message.
  *
  * @author Karel Kovarik
  * @since 2.0
  */
-public class MessageListItemRpc extends MessageBaseRpc {
+@Validated
+public class ActionRequestRpc {
 
-    /**
-     * Convert MessageListRpc from Message entity.
-     * @return filled in rpc object.
-     */
-    public static Converter<Message, MessageListItemRpc> fromMessage() {
-        return source -> fromMessage(new MessageListItemRpc()).convert(source);
+    public static final String TOTAL_RESTART_FIELD = "totalRestart";
+
+    @NotNull
+    private ActionTypeRpc type;
+    private JsonNode data;
+
+    public ActionTypeRpc getType() {
+        return type;
+    }
+
+    public void setType(ActionTypeRpc type) {
+        this.type = type;
+    }
+
+    public JsonNode getData() {
+        return data;
+    }
+
+    public void setData(JsonNode data) {
+        this.data = data;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .appendSuper(super.toString())
+                .append("type", type)
+                .append("data", data)
                 .toString();
     }
 }

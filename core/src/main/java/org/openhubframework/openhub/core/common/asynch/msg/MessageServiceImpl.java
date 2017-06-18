@@ -437,10 +437,10 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<Message> findMessagesByFilter(final MessageFilter messageFilter) {
+    public List<Message> findMessagesByFilter(final MessageFilter messageFilter, long limit) {
         Assert.notNull(messageFilter, "the messageFilter must not be null");
 
-        return messageDao.findMessagesByFilter(messageFilter);
+        return messageDao.findMessagesByFilter(messageFilter, limit);
     }
 
     @Override

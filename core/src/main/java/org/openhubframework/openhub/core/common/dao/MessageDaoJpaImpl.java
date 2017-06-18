@@ -23,7 +23,6 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import javax.annotation.Nullable;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
@@ -32,7 +31,6 @@ import javax.persistence.TypedQuery;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.openhubframework.openhub.api.entity.MessageFilter;
-import org.openhubframework.openhub.api.entity.Request;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -410,7 +408,7 @@ public class MessageDaoJpaImpl implements MessageDao {
     }
 
     @Override
-    public List<Message> findMessagesByFilter(final MessageFilter filter) {
+    public List<Message> findMessagesByFilter(final MessageFilter filter, long limit) {
         Assert.notNull(filter, "the messageFilter must not be null");
 
         String jSql = "SELECT m "
@@ -450,7 +448,7 @@ public class MessageDaoJpaImpl implements MessageDao {
         }
         // fulltext
         if (hasText(filter.getFulltext())) {
-            jSql += "           AND m.payload like :fulltext";
+            jSql += findMessagesByFilterFulltextSql("fulltext");
         }
 
         jSql += "           ORDER BY m.receiveTimestamp DESC";
@@ -492,23 +490,19 @@ public class MessageDaoJpaImpl implements MessageDao {
         if (hasText(filter.getFulltext())) {
             q.setParameter("fulltext", "%" + filter.getFulltext() + "%");
         }
-        //TODO (kkovarik, 27.5.2017, TASK) configuration
-        q.setMaxResults(100);
+        q.setMaxResults((int) limit);
 
         return q.getResultList();
     }
 
-          /*  addParamIfHasText(q, filter.getSourceSystem(), "sourceSystem");
-        addParamIfHasText(q, filter.getCorrelationId(), "correlationId");
-        addParamIfHasText(q, filter.getProcessId(), "processId");
-        addParamIfHasText(q, filter.getState(), "state");
-        addParamIfHasText(q, filter.getErrorCode(), "errorCode");
-        addParamIfHasText(q, filter.getServiceName(), "serviceName");
-        addParamIfHasText(q, filter.getOperationName(), "operationName");*/
-
-    private static void addParamIfHasText(TypedQuery<?> q, String key, String value) {
-        if (hasText(key)) {
-            q.setParameter(key, value);
-        }
+    /**
+     * Fulltext SQL used with fulltext field of messageFilter in operation findMessagesByFilter.
+     * Note: it is protected, as it could be overriden.
+     *
+     * @param placeholder where the actual fulltext string will be.
+     * @return the sql with placeholder.
+     */
+    protected String findMessagesByFilterFulltextSql(String placeholder) {
+        return "           AND m.payload like :" + placeholder;
     }
 }

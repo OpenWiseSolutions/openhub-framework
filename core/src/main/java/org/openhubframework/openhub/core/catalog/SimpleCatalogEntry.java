@@ -36,7 +36,7 @@ public class SimpleCatalogEntry implements CatalogEntry {
     private final String code;
     private final String description;
 
-    public SimpleCatalogEntry(String code, String description) {
+    public SimpleCatalogEntry(String code, @Nullable String description) {
         Assert.hasText(code, "the code must not be null");
 
         this.code = code;

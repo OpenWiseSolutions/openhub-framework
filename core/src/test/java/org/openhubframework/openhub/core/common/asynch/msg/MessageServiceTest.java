@@ -228,7 +228,7 @@ public class MessageServiceTest extends AbstractCoreDbTest {
 
         final MessageFilter filter = new MessageFilter();
         filter.setReceivedFrom(LocalDateTime.of(2017,5,27,19,17,10).toInstant(ZoneOffset.UTC));
-        List<Message> dbMessages = messageService.findMessagesByFilter(filter);
+        List<Message> dbMessages = messageService.findMessagesByFilter(filter, 100L);
         assertThat(dbMessages.size(), is(1));
         assertThat(dbMessages.get(0).getPayload(), is("message-payload"));
     }
@@ -282,7 +282,7 @@ public class MessageServiceTest extends AbstractCoreDbTest {
         filter.setServiceName(ServiceTestEnum.CUSTOMER.getServiceName());
         filter.setOperationName("testOperation");
         filter.setFulltext("test payload");
-        assertThat(messageService.findMessagesByFilter(filter).size(), is(1));
+        assertThat(messageService.findMessagesByFilter(filter, 100L).size(), is(1));
     }
 
     @Test
@@ -297,7 +297,7 @@ public class MessageServiceTest extends AbstractCoreDbTest {
         final MessageFilter filter = new MessageFilter();
         filter.setReceivedFrom(LocalDateTime.of(2017,5,27,19,17,10).toInstant(ZoneOffset.UTC));
         filter.setCorrelationId("11111-22222-33333");
-        List<Message> dbMessages = messageService.findMessagesByFilter(filter);
+        List<Message> dbMessages = messageService.findMessagesByFilter(filter, 100L);
         assertThat(dbMessages.size(), is(1));
     }
 
@@ -317,7 +317,7 @@ public class MessageServiceTest extends AbstractCoreDbTest {
         final MessageFilter filter = new MessageFilter();
         filter.setReceivedFrom(LocalDateTime.of(2017,5,27,19,17,10).toInstant(ZoneOffset.UTC));
         filter.setFulltext("car");
-        assertThat(messageService.findMessagesByFilter(filter).size(), is(3));
+        assertThat(messageService.findMessagesByFilter(filter, 100L).size(), is(3));
     }
 
     private static void findByFilter_messageFill(final Message msg) {

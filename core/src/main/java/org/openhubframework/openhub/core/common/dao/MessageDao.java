@@ -199,5 +199,12 @@ public interface MessageDao {
      */
     List<Message> findMessagesByContent(String substring);
 
-    List<Message> findMessagesByFilter(MessageFilter messageFilter);
+    /**
+     * Finds messages by multiple fields, hold together in MessageFilter.
+     *
+     * @param messageFilter the filter.
+     * @param limit the limit of messages.
+     * @return list of messages.
+     */
+    List<Message> findMessagesByFilter(MessageFilter messageFilter, long limit);
 }

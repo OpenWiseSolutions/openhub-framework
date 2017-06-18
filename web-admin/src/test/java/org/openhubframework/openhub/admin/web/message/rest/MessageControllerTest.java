@@ -1,21 +1,45 @@
+/*
+ * Copyright 2012-2017 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.openhubframework.openhub.admin.web.message.rest;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.isEmptyString;
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.times;
 import static org.openhubframework.openhub.test.rest.TestRestUtils.createGetUrl;
+import static org.openhubframework.openhub.test.rest.TestRestUtils.createJson;
 import static org.openhubframework.openhub.test.rest.TestRestUtils.toUrl;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.lang.reflect.Field;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Collections;
+
+import javax.json.JsonObject;
 
 import org.apache.http.client.utils.URIBuilder;
 import org.junit.Test;
@@ -28,6 +52,7 @@ import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.MessageFilter;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
 import org.openhubframework.openhub.api.entity.Request;
+import org.openhubframework.openhub.core.common.asynch.msg.MessageOperationService;
 import org.openhubframework.openhub.spi.msg.MessageService;
 import org.openhubframework.openhub.test.data.EntityTypeTestEnum;
 import org.openhubframework.openhub.test.data.ErrorTestEnum;
@@ -56,6 +81,9 @@ public class MessageControllerTest extends AbstractAdminModuleRestTest {
     @MockBean
     private MessageService messageService;
 
+    @MockBean
+    private MessageOperationService messageOperationService;
+
     @Test
     public void list_minimalOk() throws Exception {
         final URIBuilder uriBuilder = createGetUrl(ROOT_URI)
@@ -63,7 +91,7 @@ public class MessageControllerTest extends AbstractAdminModuleRestTest {
                 ;
 
         final ArgumentCaptor<MessageFilter> argumentCaptor = ArgumentCaptor.forClass(MessageFilter.class);
-        Mockito.when(messageService.findMessagesByFilter(argumentCaptor.capture()))
+        Mockito.when(messageService.findMessagesByFilter(argumentCaptor.capture(), eq(42L)))
                 .thenReturn(Collections.emptyList());
 
         // GET /api/messages
@@ -129,7 +157,7 @@ public class MessageControllerTest extends AbstractAdminModuleRestTest {
         msg.setFailedDesc("Something went terribly wrong");
 
         final ArgumentCaptor<MessageFilter> argumentCaptor = ArgumentCaptor.forClass(MessageFilter.class);
-        Mockito.when(messageService.findMessagesByFilter(argumentCaptor.capture()))
+        Mockito.when(messageService.findMessagesByFilter(argumentCaptor.capture(), eq(42L)))
                 .thenReturn(Collections.singletonList(msg));
 
         // GET /api/messages
@@ -141,8 +169,8 @@ public class MessageControllerTest extends AbstractAdminModuleRestTest {
                 .andExpect(jsonPath("$.data[0].id", is(84)))
                 .andExpect(jsonPath("$.data[0].correlationId", is("20301-2332-1321")))
                 .andExpect(jsonPath("$.data[0].sourceSystem", is("CRM")))
-                .andExpect(jsonPath("$.data[0].received", is("2017-05-27T20:05:10+02:00")))
-                .andExpect(jsonPath("$.data[0].processingStarted", is("2017-05-27T19:06:10+02:00")))
+                .andExpect(jsonPath("$.data[0].received", is(systemDefaultIsoDateTime(LocalDateTime.of(2017, 5, 27, 20, 5, 10)))))
+                .andExpect(jsonPath("$.data[0].processingStarted", is(systemDefaultIsoDateTime(LocalDateTime.of(2017, 5, 27, 19, 6, 10)))))
                 .andExpect(jsonPath("$.data[0].state", is("OK")))
                 .andExpect(jsonPath("$.data[0].errorCode", is("E300")))
                 .andExpect(jsonPath("$.data[0].serviceName", is("CUSTOMER")))
@@ -244,13 +272,13 @@ public class MessageControllerTest extends AbstractAdminModuleRestTest {
                 .andExpect(jsonPath("correlationId", is("123-456")))
                 .andExpect(jsonPath("processId", is("789-654")))
                 .andExpect(jsonPath("state", is("PROCESSING")))
-                .andExpect(jsonPath("processingStarted", is("2017-05-27T19:06:10+02:00")))
-                .andExpect(jsonPath("lastChange", is("2017-05-27T21:05:10+02:00")))
+                .andExpect(jsonPath("processingStarted", is(systemDefaultIsoDateTime(LocalDateTime.of(2017, 5, 27, 19, 6, 10)))))
+                .andExpect(jsonPath("lastChange", is(systemDefaultIsoDateTime(LocalDateTime.of(2017, 5, 27, 21, 5, 10)))))
                 .andExpect(jsonPath("errorCode", is("E300")))
                 .andExpect(jsonPath("failedCount", is(3)))
                 .andExpect(jsonPath("sourceSystem", is("CRM")))
-                .andExpect(jsonPath("received", is("2017-05-27T20:05:10+02:00")))
-                .andExpect(jsonPath("msgTimestamp", is("2017-05-27T19:05:10+02:00")))
+                .andExpect(jsonPath("received", is(systemDefaultIsoDateTime(LocalDateTime.of(2017, 5, 27, 20, 5, 10)))))
+                .andExpect(jsonPath("msgTimestamp", is(systemDefaultIsoDateTime(LocalDateTime.of(2017, 5, 27, 19, 5, 10)))))
                 .andExpect(jsonPath("serviceName", is("CUSTOMER")))
                 .andExpect(jsonPath("operationName", is("setCustomer")))
                 .andExpect(jsonPath("objectId", is("customer42")))
@@ -267,14 +295,14 @@ public class MessageControllerTest extends AbstractAdminModuleRestTest {
                 .andExpect(jsonPath("requests", hasSize(1)))
                 .andExpect(jsonPath("requests[0].id", is(421)))
                 .andExpect(jsonPath("requests[0].uri", is("spring-ws:http://helloservice.com")))
-                .andExpect(jsonPath("requests[0].timestamp", is("2017-05-27T19:05:09+02:00")))
+                .andExpect(jsonPath("requests[0].timestamp", is(systemDefaultIsoDateTime(LocalDateTime.of(2017, 5, 27, 19, 5, 9)))))
                 .andExpect(jsonPath("requests[0].payload", is("request-body")))
                 .andExpect(jsonPath("externalCalls", hasSize(1)))
                 .andExpect(jsonPath("externalCalls[0].id", is(327)))
                 .andExpect(jsonPath("externalCalls[0].state", is("OK")))
                 .andExpect(jsonPath("externalCalls[0].operationName", is("setCustomerExtCall")))
                 .andExpect(jsonPath("externalCalls[0].callId", is("CRM_4yEW32321")))
-                .andExpect(jsonPath("externalCalls[0].lastChange", is("2017-05-27T19:05:08+02:00")))
+                .andExpect(jsonPath("externalCalls[0].lastChange", is(systemDefaultIsoDateTime(LocalDateTime.of(2017, 5, 27, 19, 5, 8)))))
                 .andExpect(jsonPath("allowedActions", hasSize(1)))
                 .andExpect(jsonPath("allowedActions[0]", is("CANCEL")))
         ;
@@ -292,6 +320,148 @@ public class MessageControllerTest extends AbstractAdminModuleRestTest {
                 .andExpect(status().isNotFound())
         ;
 
-        Mockito.verify(messageService, times(1)).findEagerMessageById(42L);
+        Mockito.verify(messageService, times(1)).findEagerMessageById(eq(42L));
+    }
+
+    @Test
+    public void action_restart_ok() throws Exception {
+        final URIBuilder uriBuilder = createGetUrl(ROOT_URI + "/42/action");
+
+        JsonObject request = createJson()
+                .add("type", "RESTART")
+                .add("data", createJson()
+                        .add("totalRestart", "false"))
+                .build();
+
+        // performs POST: /api/messages/42/action
+        mockMvc.perform(post(toUrl(uriBuilder))
+                .content(request.toString())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.authentication(mockAuthentication("ADMIN"))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("result", is("OK")))
+        ;
+
+        Mockito.verify(messageOperationService, times(1)).restartMessage(eq(42L), eq(false));
+    }
+
+    @Test
+    public void action_restart_totalRestart() throws Exception {
+        final URIBuilder uriBuilder = createGetUrl(ROOT_URI + "/42/action");
+
+        JsonObject request = createJson()
+                .add("type", "RESTART")
+                .add("data", createJson()
+                        .add("totalRestart", "true"))
+                .build();
+
+        // performs POST: /api/messages/42/action
+        mockMvc.perform(post(toUrl(uriBuilder))
+                .content(request.toString())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.authentication(mockAuthentication("ADMIN"))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("result", is("OK")))
+        ;
+
+        Mockito.verify(messageOperationService, times(1)).restartMessage(eq(42L), eq(true));
+    }
+
+
+    @Test
+    public void action_cancel_ok() throws Exception {
+        final URIBuilder uriBuilder = createGetUrl(ROOT_URI + "/42/action");
+
+        JsonObject request = createJson()
+                .add("type", "CANCEL")
+                .build();
+
+        // performs POST: /api/messages/42/action
+        mockMvc.perform(post(toUrl(uriBuilder))
+                .content(request.toString())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.authentication(mockAuthentication("ADMIN"))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("result", is("OK")))
+                ;
+
+        Mockito.verify(messageOperationService, times(1)).cancelMessage(eq(42L));
+    }
+
+    @Test
+    public void action_restart_badRequest() throws Exception {
+        final URIBuilder uriBuilder = createGetUrl(ROOT_URI + "/42/action");
+
+        JsonObject request = createJson()
+                .add("type", "RESTART")
+                .add("data", createJson()
+                        .add("nothing", "true"))
+                .build();
+
+        // performs POST: /api/messages/42/action
+        mockMvc.perform(post(toUrl(uriBuilder))
+                .content(request.toString())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.authentication(mockAuthentication("ADMIN"))))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(isEmptyString()));
+    }
+
+    @Test
+    public void action_cancel_exception() throws Exception {
+        Mockito.doThrow(new IllegalStateException("Cancel failed"))
+                .when(messageOperationService).cancelMessage(eq(42L));
+
+        final URIBuilder uriBuilder = createGetUrl(ROOT_URI + "/42/action");
+
+        JsonObject request = createJson()
+                .add("type", "CANCEL")
+                .build();
+
+        // performs POST: /api/messages/42/action
+        mockMvc.perform(post(toUrl(uriBuilder))
+                .content(request.toString())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.authentication(mockAuthentication("ADMIN"))))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("result", is("ERROR")))
+        ;
+
+        Mockito.verify(messageOperationService, times(1)).cancelMessage(eq(42L));
+    }
+
+    @Test
+    public void action_restart_exception() throws Exception {
+        Mockito.doThrow(new IllegalStateException("Restart failed"))
+                .when(messageOperationService).restartMessage(eq(42L), eq(true));
+
+        final URIBuilder uriBuilder = createGetUrl(ROOT_URI + "/42/action");
+
+        JsonObject request = createJson()
+                .add("type", "RESTART")
+                .add("data", createJson()
+                        .add("totalRestart", "true"))
+                .build();
+
+        // performs POST: /api/messages/42/action
+        mockMvc.perform(post(toUrl(uriBuilder))
+                .content(request.toString())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.authentication(mockAuthentication("ADMIN"))))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("result", is("ERROR")))
+                ;
+
+        Mockito.verify(messageOperationService, times(1)).restartMessage(eq(42L), eq(true));
+    }
+
+    private static String systemDefaultIsoDateTime(final LocalDateTime localDateTime) {
+        return "" + localDateTime.atOffset(OffsetDateTime.now().getOffset());
     }
 }

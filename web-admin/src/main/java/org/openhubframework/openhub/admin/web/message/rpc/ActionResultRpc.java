@@ -18,30 +18,36 @@ package org.openhubframework.openhub.admin.web.message.rpc;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.openhubframework.openhub.api.entity.Message;
-import org.springframework.core.convert.converter.Converter;
 
 
 /**
- * Message list item RPC, only subset of message attributes are used.
+ * Action result rpc object.
  *
  * @author Karel Kovarik
  * @since 2.0
  */
-public class MessageListItemRpc extends MessageBaseRpc {
+public class ActionResultRpc {
+    private final String result;
+    private final String resultDescription;
 
-    /**
-     * Convert MessageListRpc from Message entity.
-     * @return filled in rpc object.
-     */
-    public static Converter<Message, MessageListItemRpc> fromMessage() {
-        return source -> fromMessage(new MessageListItemRpc()).convert(source);
+    public ActionResultRpc(String result, String resultDescription) {
+        this.result = result;
+        this.resultDescription = resultDescription;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public String getResultDescription() {
+        return resultDescription;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .appendSuper(super.toString())
+                .append("result", result)
+                .append("resultDescription", resultDescription)
                 .toString();
     }
 }

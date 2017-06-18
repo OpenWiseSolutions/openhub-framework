@@ -16,6 +16,9 @@
 
 package org.openhubframework.openhub.core.common.asynch.msg;
 
+import java.text.MessageFormat;
+
+import org.openhubframework.openhub.api.entity.MessageActionType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +27,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.openhubframework.openhub.api.entity.Message;
-import org.openhubframework.openhub.api.entity.MsgStateEnum;
 import org.openhubframework.openhub.core.common.dao.MessageDao;
 import org.openhubframework.openhub.core.common.dao.MessageOperationDao;
 
@@ -66,9 +68,13 @@ public class MessageOperationServiceImpl implements MessageOperationService {
         try {
             Message msg = msgDao.getMessage(messageId);
 
-            // check FAILED/CANCEL state
-            if (msg.getState() != MsgStateEnum.FAILED && msg.getState() != MsgStateEnum.CANCEL) {
-                throw new IllegalStateException("message " + msg.toHumanString() + " is not in FAILED or CANCEL state.");
+            // check message state
+            if (!MessageHelper.allowedActions(msg).contains(MessageActionType.RESTART)) {
+                throw new IllegalStateException(
+                        MessageFormat.format("Message [{0}] : [{1}] is not in final state, unable to RESTART.",
+                                msg.toHumanString(),
+                                msg.getState())
+                );
             }
 
             if (!msgOpDao.setPartlyFailedState(msg)) {
@@ -91,10 +97,12 @@ public class MessageOperationServiceImpl implements MessageOperationService {
             Message msg = msgDao.getMessage(messageId);
 
             // check message state
-            if (msg.getState() != MsgStateEnum.NEW && msg.getState() != MsgStateEnum.PARTLY_FAILED
-                    && msg.getState() != MsgStateEnum.POSTPONED) {
-                throw new IllegalStateException("Message (id = " + messageId + ") can be canceled only "
-                        + "when its NEW or PARTLY_FAILED or POSTPONED.");
+            if (!MessageHelper.allowedActions(msg).contains(MessageActionType.CANCEL)) {
+                throw new IllegalStateException(
+                        MessageFormat.format("Message [{0}] : [{1}] is already in final state, unable to CANCEL.",
+                                msg.toHumanString(),
+                                msg.getState())
+                );
             }
 
             if (!msgOpDao.setCancelState(msg)) {

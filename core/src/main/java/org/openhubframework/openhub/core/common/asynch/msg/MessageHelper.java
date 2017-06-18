@@ -16,9 +16,8 @@
 
 package org.openhubframework.openhub.core.common.asynch.msg;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
 import org.openhubframework.openhub.api.entity.Message;
+import org.springframework.util.Assert;
 
 
 /**
@@ -59,14 +59,11 @@ public final class MessageHelper {
     /**
      * Map with ACTION and STATES in which the ACTION can be performed on given message.
      */
-    private static final Map<MessageActionType, Set<MsgStateEnum>> ACTION_TYPES = Collections.unmodifiableMap(Stream.of(
-            new AbstractMap.SimpleImmutableEntry<>(MessageActionType.CANCEL, CANCEL_STATES),
-            new AbstractMap.SimpleImmutableEntry<>(MessageActionType.RESTART, RESTART_STATES))
-            .collect(Collectors.toMap(
-                    AbstractMap.SimpleImmutableEntry::getKey,
-                    AbstractMap.SimpleImmutableEntry::getValue)
-            )
-    );
+    private static final Map<MessageActionType, Set<MsgStateEnum>> ACTION_TYPES = new HashMap<>();
+    static {
+        ACTION_TYPES.put(MessageActionType.CANCEL, CANCEL_STATES);
+        ACTION_TYPES.put(MessageActionType.RESTART, RESTART_STATES);
+    }
 
     private MessageHelper() {
     }
@@ -109,10 +106,13 @@ public final class MessageHelper {
 
     /**
      * Get allowed actions for message.
+     *
      * @param message the message entity.
      * @return list of action types.
      */
     public static List<MessageActionType> allowedActions(final Message message) {
+        Assert.notNull(message, "the message must not be null.");
+
         return ACTION_TYPES.keySet().stream()
                 .filter(key -> ACTION_TYPES.get(key).contains(message.getState()))
                 .collect(Collectors.toList());

@@ -14,15 +14,22 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.admin.web.message.rpc;
+package org.openhubframework.openhub.web.common;
+
+import org.openhubframework.openhub.common.OpenHubPropertyConstants;
+
 
 /**
- * Rpc for action possible to perform with message.
+ * Constants of web module related property names.
  *
  * @author Karel Kovarik
  * @since 2.0
  */
-public enum ActionTypeRpc {
-    RESTART,
-    CANCEL
+public final class WebProps {
+
+    public static final String MESSAGES_LIMIT = OpenHubPropertyConstants.PREFIX + "admin.console.messages.limit";
+
+    private WebProps() {
+        // to prevent instantiation
+    }
 }
