@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react'
 import Radium from 'radium'
+import MdEdit from 'react-icons/lib/md/edit'
 import { pipe, omit, values, map, append, addIndex, toString } from 'ramda'
 import styles from './paramRow.styles.js'
 import Button from '../../../../common/components/Button/Button'
@@ -9,9 +10,7 @@ class ParamRow extends Component {
 
   render () {
     const { data, openParam, count } = this.props
-
     const computedStyles = count % 2 === 0 ? styles.even : styles.odd
-
     const id = data.id
 
     const ensureNumberOfCells = {
@@ -28,15 +27,17 @@ class ParamRow extends Component {
       omit(['id', 'categoryCode', 'dataType', 'mandatory', 'validationRegEx']),
       values,
       map((value) => typeof value !== 'string' ? toString(value) : value),
-      addIndex(map)((cell, index) => <td style={styles.cell} key={index}>{cell}</td>),
+      addIndex(map)((cell, index) => <td style={styles.cell} key={index} >{cell}</td>),
       append(
-        <td key={id}>
-          <Button style={styles.button} fullWidth onClick={() => openParam(id)} >Edit</Button>
+        <td key={id} style={styles.cell} >
+          <Button style={styles.button} fullWidth onClick={() => openParam(id)} >
+            <MdEdit size={30} />
+          </Button>
         </td>)
     )({ ...ensureNumberOfCells, ...data })
 
     return (
-      <tr style={computedStyles}>
+      <tr style={computedStyles} >
         {cells}
       </tr>
     )
@@ -44,9 +45,9 @@ class ParamRow extends Component {
 }
 
 ParamRow.propTypes = {
-  data     : PropTypes.object,
+  data: PropTypes.object,
   openParam: PropTypes.func,
-  count    : PropTypes.number
+  count: PropTypes.number
 }
 
 export default ParamRow
