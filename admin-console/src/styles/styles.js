@@ -1,4 +1,4 @@
-import { primaryColor, lightColor } from './colors'
+import { lightColor } from './colors'
 
 export default {
   panel: {
@@ -8,23 +8,27 @@ export default {
     position: 'relative',
     width: '100%',
     boxShadow: '0 2px 10px -2px silver',
-    borderSpacing: 1
+    borderSpacing: 0
   },
-  header:{
+  header: {
     textAlign: 'left',
-    paddingLeft: 10
+    paddingLeft: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
+    borderBottom: `1px solid #73C2FF`
   },
   even: {
-    backgroundColor: primaryColor
+    backgroundColor: '#fff'
   },
   odd: {
-    backgroundColor: lightColor
+    backgroundColor: '#fff'
   },
   cell: {
     margin: 0,
     paddingTop: 10,
     paddingBottom: 10,
     paddingLeft: 10,
-    paddingRight: 10
+    paddingRight: 10,
+    borderBottom: `1px solid ${lightColor}`
   }
 }
