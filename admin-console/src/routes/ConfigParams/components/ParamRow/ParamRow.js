@@ -25,7 +25,7 @@ class ParamRow extends Component {
     }
 
     const cells = pipe(
-      omit(['id', 'categoryCode']),
+      omit(['id', 'categoryCode', 'dataType', 'mandatory', 'validationRegEx']),
       values,
       map((value) => typeof value !== 'string' ? toString(value) : value),
       addIndex(map)((cell, index) => <td style={styles.cell} key={index}>{cell}</td>),
