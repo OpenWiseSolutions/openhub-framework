@@ -51,10 +51,7 @@ class ConfigParams extends Component {
                   <th style={styles.header}>Code</th>
                   <th style={styles.header}>Current Value</th>
                   <th style={styles.header}>Default Value</th>
-                  <th style={styles.header}>Data Type</th>
-                  <th style={styles.header}>Mandatory</th>
                   <th style={styles.header}>Description</th>
-                  <th style={styles.header}>Validation</th>
                   <th style={styles.header}>Action</th>
                 </tr>
                 { categories[cat].map((row, count) => (
