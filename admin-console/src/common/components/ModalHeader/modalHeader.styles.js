@@ -1,5 +1,5 @@
 import { gap, itemSize } from '../../../styles/constants'
-import { primaryColor, secondaryColor } from '../../../styles/colors'
+import { primaryColor, componentsColor } from '../../../styles/colors'
 
 export default {
   main: {
@@ -10,13 +10,13 @@ export default {
     paddingLeft: gap,
     paddingRight: gap,
     lineHeight: `${itemSize}px`,
-    backgroundColor: secondaryColor,
+    backgroundColor: componentsColor,
     boxSizing: 'border-box'
   },
   title: {
     position: 'relative',
     color: primaryColor,
-    fontWeight: 400
+    fontWeight: 200
   },
   close: {
     position: 'absolute',

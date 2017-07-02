@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Radium from 'radium'
-import { ValidForm, Field, Valid, Select } from 'valid-react-form'
+import { ValidForm, Valid } from 'valid-react-form'
+import Field from '../../../../common/components/Field/Field'
+import Select from '../../../../common/components/Select/Select'
+import fieldStyles from '../../../../common/components/Field/field.styles'
 import { hashHistory } from 'react-router'
 import moment from 'moment'
 import Flatpickr from 'react-flatpickr'
@@ -42,8 +45,7 @@ class Messages extends Component {
 
   render () {
     const { messages } = this.props
-    const validStyles = this.context.styles
-    const datepickerStyle = { ...validStyles.field, ...styles.datepicker }
+    const datepickerStyle = { ...fieldStyles.field, ...styles.datepicker }
     return (
       <Panel style={styles.panel} title={'Messages'} >
         {this.state.form &&
@@ -105,31 +107,31 @@ class Messages extends Component {
         </ValidForm>}
         {messages.length && <table style={[styles.table, styles.messages]}>
           <tbody>
-          <tr>
-            <th style={styles.header}>{'Correlation ID'}</th>
-            <th style={styles.header}>{'Source System'}</th>
-            <th style={styles.header}>{'Received Time'}</th>
-            <th style={styles.header}>{'Start Process Time'}</th>
-            <th style={styles.header}>{'State'}</th>
-            <th style={styles.header}>{'Error Code'}</th>
-            <th style={styles.header}>{'Service'}</th>
-            <th style={styles.header}>{'Operation'}</th>
-          </tr>
-          {messages.map((message, index) => (
-            <tr
-              onClick={() => this.openDetail(message)}
-              key={message.id}
-              style={index % 2 === 0 ? styles.even : styles.odd}
-            >
-              <td style={styles.cell}>{message.correlationId}</td>
-              <td style={styles.cell}>{message.sourceSystem}</td>
-              <td style={styles.cell}>{moment(message.received).format('MMMM Do YYYY, hh:mm:ss')}</td>
-              <td style={styles.cell}>{moment(message.processingStarted).format('MMMM Do YYYY, hh:mm:ss')}</td>
-              <td style={styles.cell}>{message.state}</td>
-              <td style={styles.cell}>{message.errorCode}</td>
-              <td style={styles.cell}>{message.serviceName}</td>
-              <td style={styles.cell}>{message.operationName}</td>
+            <tr>
+              <th style={styles.header}>{'Correlation ID'}</th>
+              <th style={styles.header}>{'Source System'}</th>
+              <th style={styles.header}>{'Received Time'}</th>
+              <th style={styles.header}>{'Start Process Time'}</th>
+              <th style={styles.header}>{'State'}</th>
+              <th style={styles.header}>{'Error Code'}</th>
+              <th style={styles.header}>{'Service'}</th>
+              <th style={styles.header}>{'Operation'}</th>
             </tr>
+            {messages.map((message, index) => (
+              <tr
+                onClick={() => this.openDetail(message)}
+                key={message.id}
+                style={index % 2 === 0 ? styles.even : styles.odd}
+            >
+                <td style={styles.cell}>{message.correlationId}</td>
+                <td style={styles.cell}>{message.sourceSystem}</td>
+                <td style={styles.cell}>{moment(message.received).format('MMMM Do YYYY, hh:mm:ss')}</td>
+                <td style={styles.cell}>{moment(message.processingStarted).format('MMMM Do YYYY, hh:mm:ss')}</td>
+                <td style={styles.cell}>{message.state}</td>
+                <td style={styles.cell}>{message.errorCode}</td>
+                <td style={styles.cell}>{message.serviceName}</td>
+                <td style={styles.cell}>{message.operationName}</td>
+              </tr>
           ))}
           </tbody>
         </table>}
