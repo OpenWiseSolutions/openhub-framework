@@ -23,9 +23,12 @@ import org.apache.camel.Exchange;
 import org.apache.camel.builder.LoggingErrorHandlerBuilder;
 import org.apache.camel.component.jpa.JpaComponent;
 import org.apache.camel.component.seda.PriorityBlockingQueueFactory;
+import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.processor.interceptor.DefaultTraceFormatter;
 import org.apache.camel.processor.interceptor.Tracer;
+import org.apache.camel.spi.Registry;
 import org.apache.camel.spi.ThreadPoolProfile;
+import org.apache.camel.spring.SpringCamelContext;
 import org.apache.camel.spring.boot.CamelContextConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,6 +39,7 @@ import org.openhubframework.openhub.api.asynch.AsynchConstants;
 import org.openhubframework.openhub.common.Profiles;
 import org.openhubframework.openhub.core.common.asynch.confirm.DelegateConfirmationCallback;
 import org.openhubframework.openhub.core.common.asynch.msg.MsgPriorityComparator;
+import org.openhubframework.openhub.core.common.camel.ApplicationContextsRegistry;
 
 
 /**
@@ -52,7 +56,7 @@ public class CamelConfig {
     private static final int MAX_THREAD_POOL_SIZE = 30;
 
     @Bean
-    public CamelContextConfiguration contextConfiguration() {
+    public CamelContextConfiguration contextConfiguration(Registry registry) {
       return new CamelContextConfiguration() {
 
           @Override
@@ -62,6 +66,9 @@ public class CamelConfig {
               handlerBuilder.logName("org.openhubframework.openhub.core");
               camelContext.setErrorHandlerBuilder(handlerBuilder);
               camelContext.setHandleFault(true);
+              if (camelContext instanceof DefaultCamelContext){
+                  ((SpringCamelContext) camelContext).setRegistry(registry);
+              }
 
               // default thread profile (see DefaultExecutorServiceManager for defaults)
               ThreadPoolProfile threadPoolProfile = camelContext.getExecutorServiceManager()
@@ -75,6 +82,14 @@ public class CamelConfig {
               // nothing to set
           }
       };
+    }
+
+    /**
+     * Configures {@link ApplicationContextsRegistry}.
+     */
+    @Bean
+    public ApplicationContextsRegistry applicationContextsRegistry() {
+        return new ApplicationContextsRegistry();
     }
 
     /**
