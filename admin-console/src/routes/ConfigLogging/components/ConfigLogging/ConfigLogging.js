@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Radium from 'radium'
 import { reverse, length, take } from 'ramda'
-import { Field } from 'valid-react-form'
+import Field from '../../../../common/components/Field/Field'
 import styles from './configLogging.styles.js'
 import LoggerRow from '../LoggerRow/LoggerRow'
 

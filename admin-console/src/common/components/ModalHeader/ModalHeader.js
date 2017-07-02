@@ -9,12 +9,8 @@ class ModalHeader extends Component {
   render () {
     const { onClose, title } = this.props
 
-    const computedStyles = [
-      styles.main
-    ]
-
     return (
-      <div style={computedStyles}>
+      <div style={styles.main}>
         <div style={styles.title}>{title}</div>
         <div style={styles.close}>
           <MdClose onClick={onClose} />

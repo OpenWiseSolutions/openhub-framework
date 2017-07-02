@@ -1,11 +1,12 @@
 import React, { Component, PropTypes } from 'react'
 import Radium from 'radium'
 import Modal from 'react-modal'
+import { ValidForm } from 'valid-react-form'
 import styles from './loginModal.styles'
 import Anchor from '../Anchor/Anchor'
 import Button from '../Button/Button'
 import ModalHeader from '../ModalHeader/ModalHeader'
-import { ValidForm, Field } from 'valid-react-form'
+import Field from '../Field/Field'
 
 @Radium
 class LoginModal extends Component {
@@ -15,12 +16,13 @@ class LoginModal extends Component {
       <Modal style={styles} contentLabel='Login' isOpen={loginModalOpen} >
         <ModalHeader title={'Login'} onClose={actions.toggleLoginModal} />
         <ValidForm style={styles.form} onSubmit={actions.submitLogin} autoComplete='off' >
-          <Field label='Username'
+          <Field
             autoFocus
             required
             placeholder='Enter your username'
-            name='username' />
-          <Field label='Password'
+            name='username'
+          />
+          <Field
             required
             type='password'
             placeholder='Enter password'
