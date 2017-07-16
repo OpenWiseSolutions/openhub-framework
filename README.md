@@ -1,32 +1,24 @@
 # Welcome to OpenHub Framework 
 [![Build Status](https://travis-ci.org/OpenWiseSolutions/openhub-framework.svg?branch=develop)](https://travis-ci.org/OpenWiseSolutions/openhub-framework) [![Coverage Status](https://coveralls.io/repos/github/OpenWiseSolutions/openhub-framework/badge.svg?branch=develop)](https://coveralls.io/github/OpenWiseSolutions/openhub-framework?branch=develop) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.openhubframework/openhub/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.openhubframework/openhub)
 
-**ESB made by developers for developers**
+## Apache Camel, but improved
 
--     Open-source ESB with community development.
--     No limits for distribution.
--     Real life needs turned into framework.
--     Focus on maximum reliability during operation.
--     Simplicity and high speed of the development.
--     Maximum reuse of the code.
--     100% control over the code.
--     Active architectural governance.
+* open source
+* power of Apache Camel community
+* proven application stack
+* asynchronous messaging model
+* cluster support
+* own administration console
+* technologically neutral
+* enterprise ready
 
+We believe OpenHub framework is useful and effective integration framework, see [WHY]. **Don't hesitate and [try it].**
 
-Have you already noticed that most of integration projects consist of 80% from routine and only 20% are really new topics? Do you really want to spend so much effort on things which have already been solved before ? We don't.
-
-In OpenHub world most of the operational infrastructure is ready out of the box. Also typical coding scenarios can be generated and only adjusted if you need to. And when you code something, there is a big chance that somebody already did the same before.  We offer you to profit from the wide community, not to code, just install.
-Also repeating business scenarios can be downloaded from the catalogue and just plugged in into  your project.
-
-And if you really face to something special and new, OpenHub does not limit you in any direction. There are no dark corners in your project. Who has ever had to deal with black box, sure understands ....
-
-With OpenHub you have the whole source code in your hands and the community around, with many people ready to help.
-
-## License
+### License
 
 [Apache License 2.0]
 
-## Getting Started
+### Getting Started
 To help you get started, try the following links:
 
 * [how to start]
@@ -44,10 +36,12 @@ Enjoy!
 The OpenHub team!
 
 
+[WHY]:https://openhubframework.atlassian.net/wiki/spaces/OHF/pages/33600
+[try it]:https://openhubframework.atlassian.net/wiki/spaces/OHF/pages/33662/
 [Apache License 2.0]: http://www.apache.org/licenses/LICENSE-2.0.txt
 [how to start]: https://openhubframework.atlassian.net/wiki/display/OHF/Getting+started
 [building]: https://openhubframework.atlassian.net/wiki/x/foM
 [contributions]: https://github.com/OpenWiseSolutions/openhub-framework/blob/master/CONTRIBUTING.md
 [issue tracker]: https://openhubframework.atlassian.net/projects/OHFJIRA
-[wiki]: https://openwise.atlassian.net/projects/OHFJIRA
+[wiki]: https://openhubframework.atlassian.net/wiki
 [OpenHub Framework StackOverflow]: http://stackoverflow.com/questions/tagged/openhubframework
