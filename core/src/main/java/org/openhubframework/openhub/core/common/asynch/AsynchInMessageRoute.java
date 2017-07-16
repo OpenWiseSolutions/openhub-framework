@@ -47,7 +47,6 @@ import org.openhubframework.openhub.core.common.event.AsynchEventHelper;
 import org.openhubframework.openhub.core.common.exception.ExceptionTranslator;
 import org.openhubframework.openhub.core.common.validator.TraceIdentifierValidator;
 import org.openhubframework.openhub.spi.msg.MessageService;
-import org.openhubframework.openhub.spi.node.NodeService;
 import org.openhubframework.openhub.spi.throttling.ThrottleScope;
 import org.openhubframework.openhub.spi.throttling.ThrottlingProcessor;
 
@@ -117,9 +116,6 @@ public class AsynchInMessageRoute extends AbstractBasicRoute {
                 // check headers existence
                 .validate(header(SERVICE_HEADER).isNotNull())
                 .validate(header(OPERATION_HEADER).isNotNull())
-
-                // check if ESB is not stopping?
-                .bean(ROUTE_BEAN, "checkStopping").id("stopChecking")
 
                 // extract trace header, trace header is mandatory
                 .process(new TraceHeaderProcessor(true, validatorList))
@@ -308,18 +304,6 @@ public class AsynchInMessageRoute extends AbstractBasicRoute {
 
         // generates event
         AsynchEventHelper.notifyMsgPostponed(exchange);
-    }
-
-    /**
-     * Checks if ESB goes down or not. If yes then {@link StoppingException} is thrown.
-     */
-    @Handler
-    public void checkStopping() {
-        NodeService nodeService = getApplicationContext().getBean(NodeService.class);
-
-        if (!nodeService.getActualNode().isAbleToHandleNewMessages()) {
-            throw new StoppingException("ESB is stopping ...");
-        }
     }
 
     /**

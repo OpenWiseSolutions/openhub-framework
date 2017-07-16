@@ -375,7 +375,7 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
         // verify message
         Message msgDB = em.find(Message.class, msg.getMsgId());
         assertThat(msgDB, notNullValue());
-        assertThat(msgDB.getState(), is(MsgStateEnum.FAILED));
+        assertThat(msgDB.getState(), is(MsgStateEnum.PARTLY_FAILED));
         assertThat(msgDB.getNodeId(), is(nodeService.getActualNode().getNodeId()));
         assertErrorCode(msgDB.getFailedErrorCode(), InternalErrorEnum.E102);
         assertThat(msgDB.getFailedDesc(), notNullValue());

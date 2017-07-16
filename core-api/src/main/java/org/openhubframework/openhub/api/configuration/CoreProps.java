@@ -152,6 +152,11 @@ public class CoreProps {
      */
     public static final String CLUSTER_ACTUAL_NODE_INSTANCE_CODE = PREFIX + "cluster.actualNodeInstance.code";
 
+    /**
+     * Pattern for all input URIs into ESB.
+     */
+    public static final String URI_INPUT_PATTERN_FILTER = PREFIX + "uri.inputPattern";
+
     private CoreProps() {
     }
 }
