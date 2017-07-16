@@ -47,7 +47,7 @@ import org.openhubframework.openhub.spi.msg.MessageService;
  * @author Petr Juza
  * @author Tomas Hanus
  */
-@Controller
+@Controller("LegacyMessageControler")
 @RequestMapping("/messages")
 public class MessageController {
 

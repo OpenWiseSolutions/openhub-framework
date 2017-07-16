@@ -27,6 +27,7 @@ import javax.annotation.Nullable;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.openhubframework.openhub.api.entity.MessageFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -433,6 +434,13 @@ public class MessageServiceImpl implements MessageService {
         Assert.hasText(substring, "the substring must not be empty");
 
         return messageDao.findMessagesByContent(substring);
+    }
+
+    @Override
+    public List<Message> findMessagesByFilter(final MessageFilter messageFilter, long limit) {
+        Assert.notNull(messageFilter, "the messageFilter must not be null");
+
+        return messageDao.findMessagesByFilter(messageFilter, limit);
     }
 
     @Override

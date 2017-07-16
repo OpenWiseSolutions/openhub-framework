@@ -35,7 +35,7 @@ public class CatalogEntryRpc {
     private final String code;
     private final String description;
 
-    public CatalogEntryRpc(String code, String description) {
+    public CatalogEntryRpc(String code, @Nullable String description) {
         Assert.hasText(code, "the code must not be null");
 
         this.code = code;

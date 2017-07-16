@@ -17,16 +17,23 @@
 package org.openhubframework.openhub.core.common.asynch.msg;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
+import org.openhubframework.openhub.api.entity.MessageActionType;
+import org.openhubframework.openhub.api.entity.MsgStateEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
 import org.openhubframework.openhub.api.entity.Message;
+import org.springframework.util.Assert;
 
 
 /**
@@ -36,6 +43,27 @@ import org.openhubframework.openhub.api.entity.Message;
 public final class MessageHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(MessageHelper.class);
+
+    /**
+     * States in which RESTART operation is available.
+     */
+    private static final Set<MsgStateEnum> RESTART_STATES = Stream.of(MsgStateEnum.OK, MsgStateEnum.FAILED, MsgStateEnum.CANCEL)
+            .collect(Collectors.toSet());
+    /**
+     * States valid for CANCEL operation.
+     */
+    private static final Set<MsgStateEnum> CANCEL_STATES = Stream.of(MsgStateEnum.values())
+            .filter(state -> !RESTART_STATES.contains(state))
+            .collect(Collectors.toSet());
+
+    /**
+     * Map with ACTION and STATES in which the ACTION can be performed on given message.
+     */
+    private static final Map<MessageActionType, Set<MsgStateEnum>> ACTION_TYPES = new HashMap<>();
+    static {
+        ACTION_TYPES.put(MessageActionType.CANCEL, CANCEL_STATES);
+        ACTION_TYPES.put(MessageActionType.RESTART, RESTART_STATES);
+    }
 
     private MessageHelper() {
     }
@@ -74,5 +102,19 @@ public final class MessageHelper {
 
         String businessErrors = StringUtils.join(errorList, Message.ERR_DESC_SEPARATOR);
         msg.setBusinessError(businessErrors);
+    }
+
+    /**
+     * Get allowed actions for message.
+     *
+     * @param message the message entity.
+     * @return list of action types.
+     */
+    public static List<MessageActionType> allowedActions(final Message message) {
+        Assert.notNull(message, "the message must not be null.");
+
+        return ACTION_TYPES.keySet().stream()
+                .filter(key -> ACTION_TYPES.get(key).contains(message.getState()))
+                .collect(Collectors.toList());
     }
 }

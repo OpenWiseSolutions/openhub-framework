@@ -32,6 +32,7 @@ import org.apache.camel.Properties;
 
 import org.openhubframework.openhub.api.entity.ExternalSystemExtEnum;
 import org.openhubframework.openhub.api.entity.Message;
+import org.openhubframework.openhub.api.entity.MessageFilter;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
 import org.openhubframework.openhub.api.exception.ErrorExtEnum;
 
@@ -192,6 +193,16 @@ public interface MessageService {
      * @return list of messages or {@code empty list} if not found messages with substring in payload property
      */
     List<Message> findMessagesByContent(String substring);
+
+
+    /**
+     * Finds list of messages that match with given filter. Sorted by received timestamp (newest first).
+     *
+     * @param messageFilter the filter.
+     * @param limit the limit of message count.
+     * @return collection of messages, or {@code empty list} if none were found.
+     */
+    List<Message> findMessagesByFilter(MessageFilter messageFilter, long limit);
 
     /**
      * Get count of messages in specific state.
