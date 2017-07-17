@@ -128,7 +128,9 @@ public class OpenHubApplication extends SpringBootServletInitializer implements 
 
     private static SpringApplicationBuilder createOpenHubApplicationBuilder() {
         return new SpringApplicationBuilder()
-                .parent(OpenHubApplication.class);
+                .parent(OpenHubApplication.class)
+                // explicitly request a web environment for standalone running
+                .web(true);
     }
     
 }
