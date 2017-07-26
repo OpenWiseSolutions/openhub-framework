@@ -52,7 +52,6 @@ export const getConfig = () => (dispatch) => {
       })
     })
     .catch(() => {
-      dispatch(logoutUser())
       toastr.error('Failed to retrieve console config!')
     })
 }
@@ -76,11 +75,6 @@ export const loginSuccess = () =>
         sessionStorage.setItem(AUTH_SESSION, true)
         dispatch({ type: LOGIN_SUCCESS, payload })
         dispatch(getConfig())
-        dispatch(getHealthInfo())
-        dispatch(getMetricsInfo())
-      })
-      .catch(() => {
-        dispatch(logout())
       })
   }
 
@@ -95,7 +89,11 @@ export const submitLogin = ({ username, password }) => {
     params.append('username', username)
     params.append('password', password)
     return login(params)
-      .then((res) => dispatch(loginSuccess()))
+      .then(() => {
+        dispatch(loginSuccess())
+        dispatch(getHealthInfo())
+        dispatch(getMetricsInfo())
+      })
       .catch((res) => dispatch(loginError(res)))
   }
 }
