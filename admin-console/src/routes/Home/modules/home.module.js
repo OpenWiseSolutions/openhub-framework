@@ -17,7 +17,6 @@ export const getHealthInfoSuccess = (payload) =>
 export const getHealthInfo = () => (dispatch) => {
   return fetchHealth()
     .then((response) => dispatch(getHealthInfoSuccess(response)))
-    // todo error
 }
 
 export const getMetricsInfoSuccess = (payload) =>
@@ -26,7 +25,6 @@ export const getMetricsInfoSuccess = (payload) =>
 export const getMetricsInfo = () => (dispatch) => {
   return fetchMetrics()
     .then((data) => dispatch(getMetricsInfoSuccess(data)))
-    // todo error
 }
 
 const getOpenHubInfoSuccess = (payload) =>
@@ -35,7 +33,6 @@ const getOpenHubInfoSuccess = (payload) =>
 export const getOpenHubInfo = () => (dispatch) => {
   return fetchInfo()
     .then((data) => dispatch(getOpenHubInfoSuccess(data)))
-    // todo error
 }
 
 export const actions = {

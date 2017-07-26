@@ -1,5 +1,6 @@
 import { hashHistory } from 'react-router'
 import { toastr } from 'react-redux-toastr'
+import { getHealthInfo, getMetricsInfo } from '../../routes/Home/modules/home.module'
 import { login, userInfo, logout } from '../../services/auth.service'
 import { fetchConsoleConfig } from '../../services/appConfig.service'
 
@@ -75,6 +76,8 @@ export const loginSuccess = () =>
         sessionStorage.setItem(AUTH_SESSION, true)
         dispatch({ type: LOGIN_SUCCESS, payload })
         dispatch(getConfig())
+        dispatch(getHealthInfo())
+        dispatch(getMetricsInfo())
       })
       .catch(() => {
         dispatch(logout())
@@ -84,7 +87,6 @@ export const loginSuccess = () =>
 export const loginError = (res) => () => {
   sessionStorage.removeItem(AUTH_SESSION)
   toastr.error('Login Failed!')
-  // todo error handler
 }
 
 export const submitLogin = ({ username, password }) => {
@@ -123,7 +125,6 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 export const initialState = {
-  // todo zmenit nazvy ?
   loginModalOpen: false,
   userData: null,
   config: null
