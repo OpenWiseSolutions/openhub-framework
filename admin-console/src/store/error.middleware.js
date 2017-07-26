@@ -1,6 +1,6 @@
 import { path } from 'ramda'
 import { toastr } from 'react-redux-toastr'
-import { logoutUser } from '../common/modules/auth.module'
+import { logoutUser, toggleLoginModal } from '../common/modules/auth.module'
 import { FETCH_ERROR } from '../services/api.module'
 
 export default (store) => (next) => (action) => {
@@ -10,6 +10,7 @@ export default (store) => (next) => (action) => {
     const errorCode = path(['payload', 'response', 'errorCode'], action)
     if (status === 401) {
       store.dispatch(logoutUser())
+      store.dispatch(toggleLoginModal())
       return
     }
     if (status === 404) {
