@@ -139,6 +139,14 @@
             <!-- Standalone running -->
             <!-- See: https://openhubframework.atlassian.net/wiki/display/OHF/Standalone+running -->
             <id>esb.executable</id>
+
+            <!-- auto-activation for Heroku -->
+            <activation>
+                <property>
+                    <name>env.DYNO</name>
+                </property>
+            </activation>
+            
             <properties>
                 <packaging.type>executable</packaging.type>
             </properties>

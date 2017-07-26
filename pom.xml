@@ -141,7 +141,50 @@
                     </plugin>
                 </plugins>
             </build>
-        </profile>        
+        </profile>
+
+        <profile>
+            <!-- Heroku deployment -->
+            <!-- See: https://devcenter.heroku.com/articles/slug-compiler -->
+            <id>heroku</id>
+
+            <!-- auto-activation for Heroku -->
+            <activation>
+                <property>
+                    <name>env.DYNO</name>
+                </property>
+            </activation>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-clean-plugin</artifactId>
+                        <version>2.5</version>
+                        <executions>
+                            <execution>
+                                <id>clean-jar-artifacts</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>clean</goal>
+                                </goals>
+                                <configuration>
+                                    <excludeDefaultDirectories>true</excludeDefaultDirectories>
+                                    <filesets>
+                                        <fileset>
+                                            <directory>target</directory>
+                                            <includes>
+                                                <include>**/*.jar</include>
+                                                <include>**/openhub.war</include>
+                                            </includes>
+                                        </fileset>
+                                    </filesets>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
     <properties>
@@ -590,6 +633,7 @@
                             <link>http://www.javadoc.io/doc/org.springframework.ws/spring-ws-core/2.4.0.RELEASE/</link>
                             <link>http://www.javadoc.io/doc/org.springframework/spring-core/4.3.4.RELEASE/</link>
                         </links>
+                        <failOnError>false</failOnError>
                         <aggregate>true</aggregate>
                         <additionalDependencies>
                             <additionalDependency>
@@ -769,7 +813,7 @@
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
-            </plugin>            
+            </plugin>
         </plugins>
     </build>
 </project>
