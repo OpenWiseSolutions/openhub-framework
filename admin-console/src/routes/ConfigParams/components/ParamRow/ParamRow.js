@@ -14,6 +14,16 @@ class ParamRow extends Component {
 
     const id = data.id
 
+    const ensureNumberOfCells = {
+      code: '',
+      currentValue: '',
+      defaultValue: '',
+      dataType: '',
+      mandatory: '',
+      description: '',
+      validationRegEx: ''
+    }
+
     const cells = pipe(
       omit(['id', 'categoryCode']),
       values,
@@ -23,7 +33,7 @@ class ParamRow extends Component {
         <td key={id}>
           <Button style={styles.button} fullWidth onClick={() => openParam(id)} >Edit</Button>
         </td>)
-    )(data)
+    )({ ...ensureNumberOfCells, ...data })
 
     return (
       <tr style={computedStyles}>
