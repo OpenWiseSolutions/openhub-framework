@@ -176,26 +176,6 @@ public interface MessageService {
     Message findEagerMessageById(Long msgId);
 
     /**
-     * Finds message by message external system and correlation Id.
-     * If system parameter is null then messages are searched by correlation id only.
-     *
-     * @param correlationId the correlation ID
-     * @param systemEnum the external system
-     * @return message or {@code null} if not found message with specified correlation ID
-     */
-    @Nullable
-    Message findMessageByCorrelationId(String correlationId, @Nullable ExternalSystemExtEnum systemEnum);
-
-    /**
-     * Finds message by substring in payload property.
-     *
-     * @param substring the substring of payload property
-     * @return list of messages or {@code empty list} if not found messages with substring in payload property
-     */
-    List<Message> findMessagesByContent(String substring);
-
-
-    /**
      * Finds list of messages that match with given filter. Sorted by received timestamp (newest first).
      *
      * @param messageFilter the filter.

@@ -139,25 +139,6 @@ public class MessageServiceTest extends AbstractCoreDbTest {
     }
 
     @Test
-    public void testFindMessagesByContent() throws Exception {
-        // prepare message
-        createAndSaveMessages(2, new MessageCallback() {
-            @Override
-            public void beforeInsert(Message message, int order) {
-                if (order == 1) {
-                    message.setPayload("payload");
-                } else if (order == 2) {
-                    message.setPayload("different");
-                }
-            }
-        });
-
-        List<Message> dbMessages = messageService.findMessagesByContent("payload");
-        assertThat(dbMessages.size(), is(1));
-        assertThat(dbMessages.get(0).getPayload(), is("payload"));
-    }
-
-    @Test
     public void testGetCountMessages() throws Exception {
         // prepare message
         createAndSaveMessages(2, new MessageCallback() {
@@ -170,32 +151,6 @@ public class MessageServiceTest extends AbstractCoreDbTest {
         assertThat(messageService.getCountMessages(MsgStateEnum.CANCEL, null), is(2));
         assertThat(messageService.getCountMessages(MsgStateEnum.PROCESSING, null), is(0));
         assertThat(messageService.getCountMessages(MsgStateEnum.CANCEL, Seconds.of(60).toDuration()), is(2));
-    }
-
-    @Test
-    public void testFindMessageByCorrelationId() throws Exception {
-        final String correlationId = "3478934j3";
-
-        // prepare message
-        createAndSaveMessages(2, new MessageCallback() {
-            @Override
-            public void beforeInsert(Message message, int order) {
-                if (order == 1) {
-                    message.setCorrelationId(correlationId);
-                } else if (order == 2) {
-                    message.setCorrelationId("3498738947b");
-                }
-                message.setSourceSystem(ExternalSystemTestEnum.BILLING);
-            }
-        });
-
-        // verify
-        Message dbMsg = messageService.findMessageByCorrelationId(correlationId, null);
-        assertThat(dbMsg, notNullValue());
-        assertThat(dbMsg.getCorrelationId(), is(correlationId));
-
-        dbMsg = messageService.findMessageByCorrelationId(correlationId, ExternalSystemTestEnum.BILLING);
-        assertThat(dbMsg, notNullValue());
     }
 
     @Test

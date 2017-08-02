@@ -67,10 +67,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-freemarker</artifactId>
-        </dependency>
         
         <!-- support Java 1.8 date/time API -->
         <dependency>
@@ -81,13 +77,6 @@
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-xml</artifactId>
-        </dependency>
-
-        <!-- Spring security JSP tags -->
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-taglibs</artifactId>
-            <version>${spring-security.version}</version>
         </dependency>
 
         <!-- monitoring -->
@@ -175,18 +164,6 @@
                 <dependency>
                     <groupId>org.apache.tomcat</groupId>
                     <artifactId>tomcat-jdbc</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.tomcat.embed</groupId>
-                    <artifactId>tomcat-embed-el</artifactId>
-                </dependency>
-
-                <!-- For embedded container it is necessary to include JSP API for correct freemarker behaviour -->
-                <!-- Class not found issue: missing package javax.servlet.jsp.tagext -->
-                <dependency>
-                    <groupId>javax.servlet</groupId>
-                    <artifactId>jsp-api</artifactId>
-                    <version>2.0</version>
                 </dependency>
             </dependencies>
 
@@ -296,6 +273,21 @@
                     -->
                     <injectAllReactorProjects>true</injectAllReactorProjects>                    
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>exec</classifier>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
