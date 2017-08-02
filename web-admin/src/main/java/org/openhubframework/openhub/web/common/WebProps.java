@@ -29,6 +29,8 @@ public final class WebProps {
 
     public static final String MESSAGES_LIMIT = OpenHubPropertyConstants.PREFIX + "admin.console.messages.limit";
 
+    public static final String SESSION_CONCURRENCY_LIMIT = OpenHubPropertyConstants.PREFIX + "admin.console.session-concurrency.limit";
+
     private WebProps() {
         // to prevent instantiation
     }

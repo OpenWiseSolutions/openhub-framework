@@ -19,17 +19,35 @@ package org.openhubframework.openhub.admin.config;
 import static org.openhubframework.openhub.api.route.RouteConstants.WEB_URI_PREFIX;
 import static org.openhubframework.openhub.web.config.GlobalSecurityConfig.DEFAULT_PATH_PATTERN;
 
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.openhubframework.openhub.api.common.Constraints;
+import org.openhubframework.openhub.api.configuration.ConfigurableValue;
+import org.openhubframework.openhub.api.configuration.ConfigurationItem;
+import org.openhubframework.openhub.web.common.WebProps;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 import org.openhubframework.openhub.api.route.RouteConstants;
 import org.openhubframework.openhub.web.config.GlobalSecurityConfig;
 import org.openhubframework.openhub.web.config.WebSecurityConfig;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 
 /**
@@ -53,6 +71,9 @@ public class AdminSecurityConfig extends WebSecurityConfigurerAdapter {
     @Order(UiSecurityConfig.ORDER)
     public static class UiSecurityConfig extends AdminSecurityConfig {
 
+        @ConfigurableValue(key = WebProps.SESSION_CONCURRENCY_LIMIT)
+        private ConfigurationItem<Integer> sessionConcurrencyLimit;
+
         /**
          * Order of this {@link UiSecurityConfig}. Must be processed after
          * {@link WebSecurityConfig.WsSecurityConfig}.
@@ -63,19 +84,17 @@ public class AdminSecurityConfig extends WebSecurityConfigurerAdapter {
         private static final String[] COOKIES_TO_DELETE = new String[]{"JSESSIONID"};
 
         @Override
-        public void configure(WebSecurity web) throws Exception {
-            // ignore security check for static resources
-            web.ignoring().antMatchers("/webjars/**", "/js/**", "/img/**", "/css/**");
-        }
-
-        @Override
         protected void configure(HttpSecurity http) throws Exception {
+            Constraints.notNull(sessionConcurrencyLimit.getValue(), "the sessionConcurrencyLimit must be configured.");
+
             // @formatter:off
             http.csrf().disable() // HTTP with disabled CSRF
                     .authorizeRequests() //Authorize Request Configuration
-                        .antMatchers(WEB_URI_PREFIX + "homepage/**")
+                        .antMatchers(WEB_URI_PREFIX + "console/**")
                             .permitAll()
                         .antMatchers(WEB_URI_PREFIX + "login/**")
+                            .permitAll()
+                        .antMatchers(WEB_URI_PREFIX + "mgmt/info")
                             .permitAll()
                         .antMatchers(WEB_URI_PREFIX + DEFAULT_PATH_PATTERN)
                             .hasRole(GlobalSecurityConfig.AuthRole.WEB.name())
@@ -87,8 +106,9 @@ public class AdminSecurityConfig extends WebSecurityConfigurerAdapter {
                     .formLogin()
                         .loginPage(LOGIN_PAGE_URL)
                         .loginProcessingUrl(LOGIN_PAGE_URL)
-                        .defaultSuccessUrl(WEB_URI_PREFIX + "console")
-                        .failureUrl(WEB_URI_PREFIX + "login?error")
+                        .successHandler(authenticationSuccessHandler())
+                        // on failure, return 403 FORBIDDEN
+                        .failureHandler((request, response, exception) -> response.setStatus(HttpServletResponse.SC_FORBIDDEN))
                         .permitAll()
                         .and()
                     .logout()
@@ -96,14 +116,36 @@ public class AdminSecurityConfig extends WebSecurityConfigurerAdapter {
                         .invalidateHttpSession(true)
                         .deleteCookies(COOKIES_TO_DELETE)
                         .logoutUrl(WEB_URI_PREFIX + "logout")
-                        .logoutSuccessUrl(WEB_URI_PREFIX + "homepage")
+                        .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK))
+                        .and()
+                    .exceptionHandling()
+                        .authenticationEntryPoint(unauthorizedEntryPoint())
                         .and()
                     .sessionManagement()
-                        .maximumSessions(1)
-                        .expiredUrl(LOGIN_PAGE_URL + "?expired");
+                        .maximumSessions(sessionConcurrencyLimit.getValue())
+                        .expiredUrl(WEB_URI_PREFIX + "console/")
+            ;
             // @formatter:on
         }
     }
+
+    // simple authenticationSuccessHandler, results in 200 OK response.
+    private static AuthenticationSuccessHandler authenticationSuccessHandler() {
+        return new SimpleUrlAuthenticationSuccessHandler() {
+            public void onAuthenticationSuccess(HttpServletRequest request,
+                    HttpServletResponse response, Authentication authentication)
+                    throws IOException, ServletException {
+                clearAuthenticationAttributes(request);
+            }
+        };
+    }
+
+    // unauthorized entry point, does return 401 UNAUTHORIZED.
+    private static AuthenticationEntryPoint unauthorizedEntryPoint() {
+        return (request, response, authException) -> {
+            if (authException != null) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            }
+        };
+    }
 }
-
-
