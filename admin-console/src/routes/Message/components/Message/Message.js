@@ -103,6 +103,7 @@ class Message extends Component {
             <Button
               disabled={!states.includes(message.state)}
               type='button'
+              primary
               onClick={() => restart(message.id, this.state.totalCheckbox)}
             >
               Restart

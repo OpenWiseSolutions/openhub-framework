@@ -43,7 +43,11 @@ export default {
     paddingRight: 100
   },
   label: {
+    flex: 1,
     fontWeight: 600
+  },
+  field: {
+    flex: 1
   },
   controls: {
     height: '40px',
@@ -51,11 +55,11 @@ export default {
     paddingBottom: gap,
     justifyContent: 'flex-end',
     cancel: {
-      float: 'right',
-      paddingRight: gap
+      float: 'right'
     },
     submit: {
-      float: 'right'
+      float: 'right',
+      marginRight: gap
     }
   },
   error: {

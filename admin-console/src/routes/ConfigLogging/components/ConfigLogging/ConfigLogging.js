@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Radium from 'radium'
 import { reverse, length, take } from 'ramda'
+import Panel from '../../../../common/components/Panel/Panel'
 import Field from '../../../../common/components/Field/Field'
 import styles from './configLogging.styles.js'
 import LoggerRow from '../LoggerRow/LoggerRow'
@@ -50,35 +51,37 @@ class ConfigLogging extends Component {
   render () {
     const { filtered, value, takes } = this.state
     const { loggingData, updateLogger } = this.props
-    if (!loggingData) return <div>Loading...</div>
+    if (!loggingData) return <div >Loading...</div >
     const levels = reverse(loggingData.levels)
     const items = take(LIST_LENGTH * takes, filtered || loggingData.loggers)
     const count = `${length(filtered || loggingData.loggers)} / ${length(loggingData.loggers)}`
 
     return (
-      <div style={styles.main}>
-        <div style={styles.searchBox}>
-          <Field onChange={(val) => this.updateSearchQuery(val)}
-            value={value}
-            placeholder='filter'
-            name='searchQuery' />
-          <div style={styles.counts}>{count}</div>
-        </div>
-        <div style={styles.loggers}>
-          {items.map(logger => <LoggerRow
-            key={logger.name}
-            updateLogger={updateLogger}
-            configuredLevel={logger.data.configuredLevel}
-            levels={levels}
-            label={logger.name}
-          />)}
-        </div>
-        {items.length >= LIST_LENGTH && items.length < loggingData.loggers.length &&
-        <div>
-          <div key='showMore' onClick={() => this.showMore()} style={styles.listControl}>show more</div>
-          <div key='showAll' onClick={() => this.showAll()} style={styles.listControl}>show all</div>
-        </div>}
-      </div>
+      <Panel title='Config Logging' style={styles.panel} >
+        <div style={styles.main} >
+          <div style={styles.searchBox} >
+            <Field onChange={(val) => this.updateSearchQuery(val)}
+              value={value}
+              placeholder='filter'
+              name='searchQuery' />
+            <div style={styles.counts} >{count}</div >
+          </div >
+          <div style={styles.loggers} >
+            {items.map(logger => <LoggerRow
+              key={logger.name}
+              updateLogger={updateLogger}
+              configuredLevel={logger.data.configuredLevel}
+              levels={levels}
+              label={logger.name}
+            />)}
+          </div >
+          {items.length >= LIST_LENGTH && items.length < loggingData.loggers.length &&
+          <div >
+            <div key='showMore' onClick={() => this.showMore()} style={styles.listControl} >show more</div >
+            <div key='showAll' onClick={() => this.showAll()} style={styles.listControl} >show all</div >
+          </div >}
+        </div >
+      </Panel >
     )
   }
 }

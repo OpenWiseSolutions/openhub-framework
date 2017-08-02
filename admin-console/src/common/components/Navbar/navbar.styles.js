@@ -8,7 +8,7 @@ export default {
     width: '100%',
     height: `${itemSize}px`,
     lineHeight: `${itemSize}px`,
-    backgroundColor: primaryColor
+    backgroundColor: tc(secondaryColor).lighten(50)
   },
   menuIcon: {
     cursor: 'pointer',

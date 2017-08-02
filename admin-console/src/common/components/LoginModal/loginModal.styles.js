@@ -58,11 +58,11 @@ export default {
     paddingTop: gap,
     paddingBottom: gap,
     cancel: {
-      float: 'right',
-      paddingRight: gap
+      float: 'right'
     },
     submit: {
-      float: 'right'
+      float: 'right',
+      marginRight: gap
     }
   }
 }

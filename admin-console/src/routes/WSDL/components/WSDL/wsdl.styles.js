@@ -1,10 +1,9 @@
 import { primaryColor } from '../../../../styles/colors'
+import styles from '../../../../styles/styles'
 import { gap } from '../../../../styles/constants'
 
 export default {
-  panel: {
-    width: '98%'
-  },
+  ...styles,
   item: {
     paddingBottom: gap,
     marginTop: gap,

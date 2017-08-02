@@ -5,12 +5,12 @@ export default {
   main: {
     position: 'relative',
     boxSizing: 'border-box',
-    minHeight: 200,
     marginTop: gap,
     marginLeft: gap,
     marginRight: gap,
     marginBottom: gap,
-    width: '48%'
+    width: '48%',
+    boxShadow: '0 2px 10px -2px silver'
   },
   content: {
     position: 'relative'

@@ -2,7 +2,7 @@ import tc from 'tinycolor2'
 import { primaryColor } from '../../../styles/colors'
 import { itemSize, gap } from '../../../styles/constants'
 
-export default {
+export default (backgroundColor = primaryColor) => ({
   fontSize: '0.9em',
   height: `${itemSize}px`,
   lineHeight: `${itemSize}px`,
@@ -13,8 +13,8 @@ export default {
   border: 'none',
   paddingLeft: gap,
   paddingRight: gap,
-  backgroundColor: primaryColor,
+  backgroundColor,
   ':hover': {
-    backgroundColor: tc(primaryColor).darken(10).toString()
+    backgroundColor: tc(backgroundColor).darken(10).toString()
   }
-}
+})

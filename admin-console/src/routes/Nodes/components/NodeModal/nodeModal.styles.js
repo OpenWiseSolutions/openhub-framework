@@ -43,7 +43,11 @@ export default {
     marginTop: gap
   },
   label: {
+    flex: 0.5,
     fontWeight: 600
+  },
+  field: {
+    flex: 1
   },
   controls: {
     height: '40px',
@@ -55,7 +59,8 @@ export default {
       paddingRight: gap
     },
     submit: {
-      float: 'right'
+      float: 'right',
+      marginRight: gap
     }
   },
   state: {

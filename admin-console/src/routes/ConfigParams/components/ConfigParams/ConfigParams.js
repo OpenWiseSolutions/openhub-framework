@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Radium from 'radium'
+import Panel from '../../../../common/components/Panel/Panel'
 import styles from './configParams.styles'
 import ParamRow from '../ParamRow/ParamRow'
 import EditParamModal from '../EditParamModal/EditParamModal'
@@ -43,8 +44,7 @@ class ConfigParams extends Component {
           data={paramDetail}
           isOpen={!!paramDetail} />
         { Object.keys(categories).map((cat) => (
-          <div key={cat} style={styles.category}>
-            <h4 style={styles.categoryTitle}>{cat}</h4>
+          <Panel title={cat} key={cat} style={styles.panel}>
             <table style={styles.table}>
               <tbody>
                 <tr>
@@ -59,7 +59,7 @@ class ConfigParams extends Component {
                 ))}
               </tbody>
             </table>
-          </div>
+          </Panel>
         ))}
       </div>
     )

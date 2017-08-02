@@ -18,11 +18,10 @@ export default {
     }
   },
   controls: {
-    marginTop: bigGap,
-    marginBottom: bigGap,
-    width: '300px',
     display: 'flex',
     flexDirection: 'row',
+    height: '60px',
+    width: '300px',
     justifyContent: 'space-between',
     alignItems: 'center'
   },

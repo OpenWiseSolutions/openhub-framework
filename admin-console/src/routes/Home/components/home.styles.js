@@ -2,14 +2,12 @@ import { gap } from '../../../styles/constants'
 import { positiveColor, secondaryColor } from '../../../styles/colors'
 
 export default {
-  main: {},
   widgets: {
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    alignContent: 'flex-start'
+    justifyContent: 'center',
+    alignItems: 'flex-start'
   },
   memChart: {
     position: 'relative',
@@ -19,7 +17,8 @@ export default {
     flexWrap: 'wrap',
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    alignContent: 'flex-start'
+    paddingLeft: gap,
+    paddingBottom: gap
   },
   info: {
     listStyle: 'none'

@@ -3,7 +3,6 @@ import Radium from 'radium'
 import Modal from 'react-modal'
 import { ValidForm } from 'valid-react-form'
 import styles from './loginModal.styles'
-import Anchor from '../Anchor/Anchor'
 import Button from '../Button/Button'
 import ModalHeader from '../ModalHeader/ModalHeader'
 import Field from '../Field/Field'
@@ -28,8 +27,8 @@ class LoginModal extends Component {
             placeholder='Enter password'
             name='password' />
           <div style={styles.controls} >
-            <Button style={styles.controls.submit} >Submit</Button>
-            <Anchor style={styles.controls.cancel} onClick={actions.toggleLoginModal} >Cancel</Anchor>
+            <Button style={styles.controls.cancel} onClick={actions.toggleLoginModal} >Cancel</Button>
+            <Button primary style={styles.controls.submit} >Submit</Button>
           </div>
         </ValidForm>
       </Modal>

@@ -1,7 +1,9 @@
 import { secondaryColor } from '../../../../styles/colors'
 import { gap } from '../../../../styles/constants'
+import styles from '../../../../styles/styles'
 
 export default {
+  ...styles,
   main: {
     paddingTop: gap,
     paddingLeft: gap,

@@ -7,7 +7,6 @@ export default {
   table: {
     position: 'relative',
     width: '100%',
-    boxShadow: '0 2px 10px -2px silver',
     borderSpacing: 0
   },
   header: {

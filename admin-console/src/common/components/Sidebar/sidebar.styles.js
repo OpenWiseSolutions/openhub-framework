@@ -1,6 +1,6 @@
 import tc from 'tinycolor2'
 import { transition, itemSize, gap, bigGap, logo, depth1 } from '../../../styles/constants'
-import { primaryColor, secondaryColor, lightColor, darkColor } from '../../../styles/colors'
+import { secondaryColor, lightColor, darkColor } from '../../../styles/colors'
 
 export const sidebarWidth = 250
 
@@ -20,7 +20,7 @@ export default {
     position: 'relative',
     width: '100%',
     height: itemSize,
-    backgroundColor: primaryColor,
+    backgroundColor: tc(secondaryColor).lighten(50),
     backgroundImage: `url(${logo})`,
     backgroundSize: 'auto 80%',
     backgroundRepeat: 'no-repeat',

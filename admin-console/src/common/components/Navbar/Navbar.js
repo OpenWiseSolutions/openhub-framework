@@ -4,7 +4,6 @@ import styles from './navbar.styles'
 import MenuIcon from 'react-icons/lib/md/menu'
 import UserButton from '../UserButton/UserButton'
 import Item from '../Item/Item'
-import Avatar from '../Avatar/Avatar'
 import Anchor from '../Anchor/Anchor'
 
 @Radium
@@ -25,7 +24,7 @@ class Navbar extends Component {
           {!userData &&
             <Anchor onClick={toggleLoginModal}>Login</Anchor>
           }
-          {userData && <UserButton avatar={<Avatar />}
+          {userData && <UserButton
             links={links}
             expanded={navbarUserExpanded}
             toggle={toggleUser}

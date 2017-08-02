@@ -101,8 +101,8 @@ class Messages extends Component {
             </div>
           </div>
           <div style={styles.controls} >
-            <Button style={styles.control}>Submit</Button>
             <Button style={styles.control} onClick={() => this.reset()} type='button' >Reset</Button>
+            <Button primary style={styles.control}>Submit</Button>
           </div >
         </ValidForm>}
         {messages.length && <table style={[styles.table, styles.messages]}>

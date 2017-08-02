@@ -7,7 +7,6 @@ import Field from '../../../../common/components/Field/Field'
 import ModalHeader from '../../../../common/components/ModalHeader/ModalHeader'
 import styles from './nodeModal.styles'
 import Button from '../../../../common/components/Button/Button'
-import Anchor from '../../../../common/components/Anchor/Anchor'
 
 @Radium
 class NodeModal extends Component {
@@ -35,11 +34,15 @@ class NodeModal extends Component {
           <ValidForm extended={{ state }} autoComplete='off' onSubmit={(payload) => updateNode(data.id, payload)}>
             <div style={styles.row}>
               <div style={styles.label}>Name</div>
-              <Field required name='name' value={data.name} />
+              <div style={styles.field}>
+                <Field required name='name' value={data.name} />
+              </div>
             </div>
             <div style={styles.row}>
               <div style={styles.label}>Description</div>
-              <Field name='description' value={data.description} />
+              <div style={styles.field}>
+                <Field name='description' value={data.description} />
+              </div>
             </div>
             <div style={styles.row}>
               <div style={styles.label}>State</div>
@@ -71,8 +74,8 @@ class NodeModal extends Component {
               </div>
             </div>
             <div style={[styles.row, styles.controls]}>
-              <Anchor style={styles.controls.cancel} onClick={close}>Cancel</Anchor>
-              <Button style={styles.controls.submit}>{'Update'}</Button>
+              <Button style={styles.controls.submit} primary>{'Update'}</Button>
+              <Button style={styles.controls.cancel} onClick={close}>Cancel</Button>
             </div>
           </ValidForm>
         </div>}

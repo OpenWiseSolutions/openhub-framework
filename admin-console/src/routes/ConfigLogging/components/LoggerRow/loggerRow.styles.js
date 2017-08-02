@@ -1,5 +1,7 @@
+import tc from 'tinycolor2'
 import { gap, smallGap } from '../../../../styles/constants'
-import { primaryColor } from '../../../../styles/colors'
+import { secondaryColor } from '../../../../styles/colors'
+import styles from '../../../../styles/styles'
 
 export default {
   main: {
@@ -14,11 +16,10 @@ export default {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: primaryColor
+    ...styles.cell
   },
   label: {
-    flex: 1,
-    fontWeight: 800
+    flex: 1
   },
   controls: {
     flex: 1,
@@ -32,47 +33,47 @@ export default {
     paddingRight: smallGap,
     paddingTop: smallGap,
     paddingBottom: smallGap,
-    boxShadow: '0 1px 1px 0 silver',
     cursor: 'pointer',
-    backgroundColor: 'white',
+    marginRight: '1px',
+    backgroundColor: tc(secondaryColor).setAlpha(0.1),
     ':hover': {
-      backgroundColor: 'lightgray'
+      backgroundColor: tc(secondaryColor).setAlpha(0.2)
     }
   },
   trace: {
-    backgroundColor: 'yellow',
+    backgroundColor: tc('yellow').setAlpha(0.5),
     ':hover': {
-      backgroundColor: 'yellow'
+      backgroundColor: tc('yellow').setAlpha(0.5)
     }
   },
   debug: {
-    backgroundColor: 'green',
+    backgroundColor: tc('green').setAlpha(0.5),
     ':hover': {
-      backgroundColor: 'green'
+      backgroundColor: tc('green').setAlpha(0.5)
     }
   },
   info: {
-    backgroundColor: 'blue',
+    backgroundColor: tc('blue').setAlpha(0.5),
     ':hover': {
-      backgroundColor: 'blue'
+      backgroundColor: tc('blue').setAlpha(0.5)
     }
   },
   warn: {
-    backgroundColor: 'orange',
+    backgroundColor: tc('orange').setAlpha(0.5),
     ':hover': {
-      backgroundColor: 'orange'
+      backgroundColor: tc('orange').setAlpha(0.5)
     }
   },
   error: {
-    backgroundColor: 'red',
+    backgroundColor: tc('red').setAlpha(0.5),
     ':hover': {
-      backgroundColor: 'red'
+      backgroundColor: tc('red').setAlpha(0.5)
     }
   },
   off: {
-    backgroundColor: 'gray',
+    backgroundColor: tc('gray').setAlpha(0.5),
     ':hover': {
-      backgroundColor: 'gray'
+      backgroundColor: tc('gray').setAlpha(0.5)
     }
   }
 }

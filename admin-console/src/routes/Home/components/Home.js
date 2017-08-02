@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Radium from 'radium'
+import tc from 'tinycolor2'
 import { PieChart, Pie } from 'recharts'
 import ms2hrs from '../../../utils/ms2hrs'
 import styles from './home.styles'
@@ -52,8 +53,8 @@ class Home extends Component {
       outerRadius: 100,
       fill: secondaryColor,
       data: [
-        { value: metricsInfo['mem.free'], fill: positiveColor },
-        { value: metricsInfo['mem'], fill: secondaryColor }
+        { value: metricsInfo['mem.free'], fill: tc(positiveColor).setAlpha(0.8).toString() },
+        { value: metricsInfo['mem'], fill: tc(secondaryColor).setAlpha(0.3).toString() }
       ]
     }
 
@@ -64,8 +65,8 @@ class Home extends Component {
       outerRadius: 100,
       fill: secondaryColor,
       data: [
-        { value: metricsInfo['heap.committed'], fill: positiveColor },
-        { value: metricsInfo['heap'], fill: secondaryColor }
+        { value: metricsInfo['heap.committed'], fill: tc(positiveColor).setAlpha(0.8).toString() },
+        { value: metricsInfo['heap'], fill: tc(secondaryColor).setAlpha(0.3).toString() }
       ]
     }
 
@@ -139,7 +140,7 @@ class Home extends Component {
           </div>
         }
         <div style={styles.widgets}>
-          <Panel style={{ flexGrow: 1 }} title='Application'>
+          <Panel style={{ flexGrow: userData ? 1 : 0 }} title='Application'>
             <Table data={appTableData} />
           </Panel>
         </div>

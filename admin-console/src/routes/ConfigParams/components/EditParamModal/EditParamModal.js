@@ -8,7 +8,6 @@ import Field from '../../../../common/components/Field/Field'
 import ModalHeader from '../../../../common/components/ModalHeader/ModalHeader'
 import styles from './editParamModal.styles'
 import Button from '../../../../common/components/Button/Button'
-import Anchor from '../../../../common/components/Anchor/Anchor'
 
 const Value = ({ type, value, label, name }) => {
   const wrap = (child) => (
@@ -17,7 +16,9 @@ const Value = ({ type, value, label, name }) => {
         <span>{label}</span>
         <span style={{ color: 'red' }} >*</span>
       </div>
-      {child}
+      <div style={styles.field}>
+        {child}
+      </div>
     </div>
   )
 
@@ -59,14 +60,14 @@ class EditParamModal extends Component {
             <br />
             <div style={styles.row} >
               <div style={styles.label} >Validation</div>
-              <div>
+              <div style={styles.field}>
                 <Field name='validationRegEx' value={data.validationRegEx} />
               </div>
             </div>
             <br />
             <div style={[styles.row, styles.controls]} >
-              <Anchor style={styles.controls.cancel} onClick={close} >Cancel</Anchor>
-              <Button style={styles.controls.submit} >{updating ? 'Updating...' : 'Update'}</Button>
+              <Button primary style={styles.controls.submit} >{updating ? 'Updating...' : 'Update'}</Button>
+              <Button style={styles.controls.cancel} onClick={close} >Cancel</Button>
             </div>
           </ValidForm>
         </div>
