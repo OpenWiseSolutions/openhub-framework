@@ -47,7 +47,6 @@ import org.openhubframework.openhub.api.exception.validation.ValidationException
  * Error handler for the following exceptions:
  * <ul>
  *     <li>{@link IntegrationException}
- *     <li>{@link IntegrationException}
  *     <li>common Java exception (=raw error).
  * </ul>
  *

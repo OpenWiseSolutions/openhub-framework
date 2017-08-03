@@ -42,7 +42,6 @@ import org.openhubframework.openhub.web.RequestResponseLoggingFilter;
  * @author Tomas Hanus
  * @see AdminMvcConfig
  * @see AdminSecurityConfig
- * @see CustomFreemarkerConfig
  * @since 2.0
  */
 @Configuration

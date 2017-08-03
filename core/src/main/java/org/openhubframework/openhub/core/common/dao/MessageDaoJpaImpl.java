@@ -393,21 +393,6 @@ public class MessageDaoJpaImpl implements MessageDao {
     }
 
     @Override
-    public List<Message> findMessagesByContent(String substring) {
-        Assert.hasText("the substring must not be empty", substring);
-
-        String jSql = "SELECT m "
-                + "     FROM " + Message.class.getName() + " m "
-                + " WHERE (m.payload like :substring) ORDER BY m.msgId DESC";
-
-        TypedQuery<Message> q = em.createQuery(jSql, Message.class);
-        q.setParameter("substring", "%" + substring + "%");
-        q.setMaxResults(MAX_MESSAGES_IN_ONE_QUERY);
-
-        return q.getResultList();
-    }
-
-    @Override
     public List<Message> findMessagesByFilter(final MessageFilter filter, long limit) {
         Assert.notNull(filter, "the messageFilter must not be null");
 

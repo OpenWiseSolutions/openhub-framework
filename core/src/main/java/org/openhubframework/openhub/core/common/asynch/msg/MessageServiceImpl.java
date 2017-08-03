@@ -390,12 +390,6 @@ public class MessageServiceImpl implements MessageService {
         return messageDao.findEagerMessage(msgId);
     }
 
-    @Nullable
-    @Override
-    public Message findMessageByCorrelationId(String correlationId, @Nullable ExternalSystemExtEnum systemEnum) {
-        return messageDao.findByCorrelationId(correlationId, systemEnum);
-    }
-
     private void updateErrorMessage(Message msg, Exception ex, @Nullable ErrorExtEnum errCode,
             @Nullable String customData, Map<String, Object> props) {
 
@@ -427,13 +421,6 @@ public class MessageServiceImpl implements MessageService {
         MessageHelper.updateBusinessErrors(msg, props);
 
         messageDao.update(msg);
-    }
-
-    @Override
-    public List<Message> findMessagesByContent(String substring) {
-        Assert.hasText(substring, "the substring must not be empty");
-
-        return messageDao.findMessagesByContent(substring);
     }
 
     @Override

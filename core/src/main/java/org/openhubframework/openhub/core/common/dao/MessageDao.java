@@ -192,14 +192,6 @@ public interface MessageDao {
                 boolean excludeFailedState, String funnelCompId);
 
     /**
-     * Finds message by substring in message payload.
-     *
-     * @param substring the substring of payload
-     * @return list of message or {@code empty list} if not available
-     */
-    List<Message> findMessagesByContent(String substring);
-
-    /**
      * Finds messages by multiple fields, hold together in MessageFilter.
      *
      * @param messageFilter the filter.

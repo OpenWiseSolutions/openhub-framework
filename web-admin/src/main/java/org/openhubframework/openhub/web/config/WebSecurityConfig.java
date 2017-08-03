@@ -22,8 +22,11 @@ import static org.openhubframework.openhub.web.config.GlobalSecurityConfig.DEFAU
 
 import java.util.Collections;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.camel.component.spring.security.SpringSecurityAccessPolicy;
 import org.apache.camel.component.spring.security.SpringSecurityAuthorizationPolicy;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
@@ -41,6 +44,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 import org.openhubframework.openhub.api.route.RouteConstants;
 import org.openhubframework.openhub.core.config.CamelConfig;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.util.Assert;
 
 
 /**
@@ -64,22 +69,55 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Order(WsSecurityConfig.ORDER)
     public static class WsSecurityConfig extends WebSecurityConfig {
 
+        @Autowired
+        private SecurityProperties securityProperties;
+
         /**
          * Order of this {@link WsSecurityConfig}. Must be processed before standard 
          * {@link WebSecurityConfigurerAdapter}.
          */
         public static final int ORDER = 1;
 
+        /**
+         * WWW-Authenticate header name.
+         */
+        static final String WWW_AUTHENTICATE_HEADER = "WWW-Authenticate";
+
         @Override
         protected void configure(HttpSecurity http) throws Exception {
+
+
             // @formatter:off
             http.csrf().disable() // HTTP with disabled CSRF
                     .antMatcher(WS_URI_PREFIX + DEFAULT_PATH_PATTERN)
                     .authorizeRequests()
                         .anyRequest().hasAnyRole(GlobalSecurityConfig.AuthRole.WS.name())
                         .and()
-                    .httpBasic();
+                    .exceptionHandling()
+                        .authenticationEntryPoint(basicAuthenticationEntryPoint())
+                    .and()
+                    .httpBasic()
+            ;
             // @formatter:on
+        }
+
+        // Basic authentication entry point, does return 401 UNAUTHORIZED with WWW-Authenticate header set.
+        //
+        // Note: custom entry point is used, because the original spring BasicAuthenticationEntryPoint does set unauthorized
+        // by invoking HttpResponse.sendError. With current openhub configuration however, it is not handled correctly
+        // in standalone deployment. With "manually" setting status on HttpResponse, it works in both scenarios
+        // (standalone & deployment to servlet container).
+        private AuthenticationEntryPoint basicAuthenticationEntryPoint() {
+            return (request, response, authException) -> {
+                if (authException != null) {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    Assert.notNull(securityProperties, "the securityProperties must be set");
+                    Assert.notNull(securityProperties.getBasic(), "the security.basic must be set");
+                    final String realmName = securityProperties.getBasic().getRealm();
+                    response.addHeader(
+                            WWW_AUTHENTICATE_HEADER, "Basic realm=\"" + realmName + "\"");
+                }
+            };
         }
     }
 
