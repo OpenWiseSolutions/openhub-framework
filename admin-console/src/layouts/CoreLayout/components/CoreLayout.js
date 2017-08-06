@@ -1,9 +1,8 @@
-import React, { PropTypes, Component } from 'react'
-import Radium, { StyleRoot } from 'radium'
-import Navbar from '../../../common/components/Navbar/Navbar'
-import Sidebar from '../../../common/components/Sidebar/Sidebar'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import Radium from 'radium'
+import NavigationDrawer from 'react-md/lib/NavigationDrawers'
 import styles from './coreLayout.styles'
-import LoginModal from '../../../common/containers/loginModal.container'
 
 @Radium
 class CoreLayout extends Component {
@@ -11,39 +10,23 @@ class CoreLayout extends Component {
   render () {
     const {
       userData,
-      children,
-      sidebarExtended,
-      navbarUserExpanded,
-      actions,
-      authActions,
-      config
+      children
+      // config
     } = this.props
 
-    const bodyStyles = [
-      styles.body,
-      sidebarExtended && userData && styles.body.extended
-    ]
-
     return (
-      <StyleRoot>
-        <div style={styles.main}>
-          { config &&
-          <Sidebar config={config.menu} extended={sidebarExtended && !!userData} />}
-          <LoginModal />
-          <div style={bodyStyles}>
-            <Navbar
-              userData={userData}
-              logout={authActions.logoutUser}
-              navbarUserExpanded={navbarUserExpanded}
-              toggleUser={actions.toggleNavbarUser}
-              toggleLoginModal={authActions.toggleLoginModal}
-              toggleSidebar={actions.toggleSidebar} />
-            <div style={styles.contents} >
-              {children}
-            </div>
-          </div>
-        </div>
-      </StyleRoot>
+      <NavigationDrawer
+        ref={this._setContainer}
+        visible={!!userData}
+        drawerTitle={<div style={styles.logoWrapper} >
+          <div style={[styles.logoWrapper, styles.logo]} />
+        </div >}
+        defaultMedia={'desktop'}
+        toolbarProminent={false}
+        drawerType={NavigationDrawer.DrawerTypes.PERSISTENT}
+      >
+        {children}
+      </NavigationDrawer>
     )
   }
 }

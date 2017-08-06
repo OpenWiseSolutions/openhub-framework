@@ -125,6 +125,14 @@ webpackConfig.module.loaders = [{
   loader : 'json'
 }]
 
+// sass
+webpackConfig.module.loaders.push(
+  {
+    test: /\.scss$/,
+    loaders: ['style', 'css', 'sass']
+  }
+)
+
 // File loaders
 /* eslint-disable */
 webpackConfig.module.loaders.push(

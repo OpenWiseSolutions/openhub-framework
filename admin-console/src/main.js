@@ -1,9 +1,21 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import ApiService from './services/api.service'
+import WebFontLoader from 'webfontloader'
 import createStore from './store/createStore'
 import AppContainer from './common/containers/app.container'
 import 'whatwg-fetch'
+import 'react-md/src/scss/_react-md.scss'
+import 'react-md/src/scss/bundles/blue-indigo.scss'
+
+// ========================================================
+// Fonts Instantiation
+// ========================================================
+WebFontLoader.load({
+  google: {
+    families: ['Roboto:300,400,500,700', 'Material Icons']
+  }
+})
 
 // ========================================================
 // Store Instantiation

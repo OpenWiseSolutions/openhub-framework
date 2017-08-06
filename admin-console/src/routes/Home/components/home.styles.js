@@ -2,6 +2,15 @@ import { gap } from '../../../styles/constants'
 import { positiveColor, secondaryColor } from '../../../styles/colors'
 
 export default {
+  container: {
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '90vh'
+  },
   widgets: {
     display: 'flex',
     flexDirection: 'row',

@@ -123,7 +123,6 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 export const initialState = {
-  loginModalOpen: false,
   userData: null,
   config: null
 }
