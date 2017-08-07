@@ -43,7 +43,7 @@ class Item extends Component {
     ]
 
     return (
-      <div className='item' onClick={this.handleClick} style={computedStyle}>
+      <div onClick={this.handleClick} style={computedStyle}>
         <div style={labelStyle}>
           { icon && <span style={styles.icon}>{icon}</span> }
           <span>{label}</span>

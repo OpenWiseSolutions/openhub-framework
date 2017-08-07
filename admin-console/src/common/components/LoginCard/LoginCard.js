@@ -22,7 +22,8 @@ class LoginModal extends Component {
     }
   }
 
-  handleSubmit () {
+  handleSubmit (e) {
+    e.preventDefault()
     const { username, password } = this.state
     const errors = {}
 
@@ -45,7 +46,7 @@ class LoginModal extends Component {
     return (
       <Card className='md-block-centered' style={styles.card} >
         <CardTitle className='md-divider-border md-divider-border--bottom' title={name} subtitle={version} />
-        <form onSubmit={() => this.handleSubmit()} >
+        <form onSubmit={(e) => this.handleSubmit(e)} >
           <CardText >
             <TextField
               value={this.state.username}

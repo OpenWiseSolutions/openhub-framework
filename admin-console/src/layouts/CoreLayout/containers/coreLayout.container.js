@@ -3,8 +3,9 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import CoreLayout from '../components/CoreLayout'
 
-const mapStateToProps = ({ auth }) => ({
-  ...auth
+const mapStateToProps = ({ auth, layout }) => ({
+  ...auth,
+  ...layout
 })
 
 const mapDispatchToProps = (dispatch) => ({
