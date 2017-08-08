@@ -4,7 +4,14 @@ import { path } from 'ramda'
 import ListItem from 'react-md/lib/Lists/ListItem'
 import FontIcon from 'react-md/lib/FontIcons'
 
-const isActive = (url) => url === window.location.hash.substr(1)
+const isActive = (url) => {
+  const loc = window.location.hash.substr(1)
+  if (url.length > 1) {
+    return loc.includes(url)
+  }
+
+  return url === loc
+}
 
 export default (config) => {
   if (!config) return null

@@ -11,35 +11,35 @@ export const updateTitle = () => (dispatch, getState) => {
   const { auth: { userData } } = getState()
   const hash = window.location.hash.substr(1)
   let title = ''
-  switch (hash) {
-    case '/':
+  switch (hash.split('/')[1]) {
+    case '':
       title = 'Dashboard'
       break
-    case '/messages':
+    case 'messages':
       title = 'Messages'
       break
-    case '/nodes':
+    case 'nodes':
       title = 'Cluster Nodes'
       break
-    case '/wsdl':
+    case 'wsdl':
       title = 'WSDL'
       break
-    case '/config-params':
+    case 'config-params':
       title = 'Config Parameters'
       break
-    case '/config-logging':
+    case 'config-logging':
       title = 'Config Logging'
       break
-    case '/environment-properties':
+    case 'environment-properties':
       title = 'Environment Properties'
       break
-    case '/alerts':
+    case 'alerts':
       title = 'Alerts'
       break
-    case '/errors-overview':
+    case 'errors-overview':
       title = 'Errors Overview'
       break
-    case '/changes':
+    case 'changes':
       title = 'Changes'
       break
     default:

@@ -30,9 +30,6 @@ export const getMessagesSuccess = (data) => ({
 
 export const getMessages = (filter = {}) =>
   (dispatch) => {
-    const receivedFrom = filter.receivedFrom || moment().subtract(1, 'minute').format()
-    const payload = { ...filter, receivedFrom }
-
     const transformations = {
       receivedFrom: validDate,
       lastChangeFrom: validDate,
@@ -43,7 +40,7 @@ export const getMessages = (filter = {}) =>
     const safePayload = pipe(
       evolve(transformations),
       pickBy(nonEmpty)
-    )(payload)
+    )(filter)
 
     fetchMessages(safePayload)
       .then(({ data }) => {

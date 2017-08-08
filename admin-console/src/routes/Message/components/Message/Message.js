@@ -1,13 +1,22 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { hashHistory } from 'react-router'
 import moment from 'moment'
 import Radium from 'radium'
 import SyntaxHighlighter, { registerLanguage } from 'react-syntax-highlighter/dist/light'
 import xml from 'react-syntax-highlighter/dist/languages/xml'
 import xcode from 'react-syntax-highlighter/dist/styles/xcode'
+import LinearProgress from 'react-md/lib/Progress/LinearProgress'
+import Card from 'react-md/lib/Cards/Card'
+import CardTitle from 'react-md/lib/Cards/CardTitle'
+import Checkbox from 'react-md/lib/SelectionControls/Checkbox'
+import DataTable from 'react-md/lib/DataTables/DataTable'
+import TableHeader from 'react-md/lib/DataTables/TableHeader'
+import TableBody from 'react-md/lib/DataTables/TableBody'
+import TableRow from 'react-md/lib/DataTables/TableRow'
+import TableColumn from 'react-md/lib/DataTables/TableColumn'
+import Button from 'react-md/lib/Buttons/Button'
 import styles from './message.styles'
-import Panel from '../../../../common/components/Panel/Panel'
-import Button from '../../../../common/components/Button/Button'
 
 registerLanguage('xml', xml)
 
@@ -36,7 +45,8 @@ class Message extends Component {
   render () {
     const { message, restart, cancel } = this.props
     const states = ['OK', 'FAILED', 'CANCEL']
-    if (!message) return <div>Loading...</div>
+
+    if (!message) return <LinearProgress id='progress' />
 
     const rows = [
       { t: 'Msg ID', v: message.id },
@@ -60,8 +70,8 @@ class Message extends Component {
       { t: 'Exclude failed state', v: message.excludeFailedState },
       { t: 'Business error overview', v: message.businessError },
       { t: 'ID of parent message', v: message.parentMsgId },
-      { t: 'Content (body) of message', v: <SyntaxHighlighter style={codeStyle} >{message.body}</SyntaxHighlighter> },
-      { t: 'Whole incoming message', v: <SyntaxHighlighter style={codeStyle} >{message.envelope}</SyntaxHighlighter> },
+      { t: 'Content (body) of message', v: <SyntaxHighlighter style={codeStyle} >{message.body}</SyntaxHighlighter > },
+      { t: 'Whole incoming message', v: <SyntaxHighlighter style={codeStyle} >{message.envelope}</SyntaxHighlighter > },
       { t: 'Error description', v: message.failedDescription }
     ].map((item) => {
       if (typeof item.v === 'boolean') {
@@ -74,105 +84,125 @@ class Message extends Component {
     })
 
     return (
-      <div style={styles.main} >
-        <Panel style={styles.panel} title={'Message Details'} >
-          <table style={styles.table} >
-            <tbody>
-              <tr>
-                <th style={styles.header} >{'Attribute Name'}</th>
-                <th style={styles.header} >{'Attribute Value'}</th>
-              </tr>
+      <Card >
+        <Card >
+          <CardTitle
+            subtitle={<Button
+              onClick={() => hashHistory.push('/messages')}
+              label='Go Back To Messages'
+              icon >
+              keyboard_arrow_left
+            </Button >}
+          />
+          <DataTable plain >
+            <TableHeader >
+              <TableRow >
+                <TableColumn >Attribute Name</TableColumn >
+                <TableColumn adjusted >Attribute Value</TableColumn >
+              </TableRow >
+            </TableHeader >
+            <TableBody >
               {rows.map((row, index) => (
-                <tr key={row.t} style={index % 2 === 0 ? styles.even : styles.odd} >
-                  <td style={[styles.cell, styles.smallCell]} >{row.t}</td>
-                  <td style={[styles.cell, { width: 'auto' }]} >{row.v}</td>
-                </tr>
-            ))}
-            </tbody>
-          </table>
+                <TableRow key={row.t} >
+                  <TableColumn >{row.t}</TableColumn >
+                  <TableColumn adjusted >{row.v}</TableColumn >
+                </TableRow >
+              ))}
+            </TableBody >
+          </DataTable >
+        </Card >
+        <br />
+        <Card className='md-divider-border md-divider-border--top' >
           <div style={styles.controls} >
-            <div>
-              <input
-                value='total'
-                disabled={!states.includes(message.state)}
-                type='checkbox'
-                name='total'
-                onChange={() => this.toggle()}
-              /> total
-            </div>
+            <Checkbox
+              id='total'
+              name='total'
+              label='total'
+              disabled={!states.includes(message.state)}
+              value={this.state.totalCheckbox}
+              onChange={() => this.toggle()}
+            />
             <Button
+              raised
               disabled={!states.includes(message.state)}
               type='button'
               primary
               onClick={() => restart(message.id, this.state.totalCheckbox)}
-            >
-              Restart
-            </Button >
+              label={'Restart'}
+            />
             <Button
+              raised
               disabled={states.includes(message.state)}
               type='button'
               onClick={() => cancel(message.id)}
-            >Cancel
-            </Button >
-          </div>
-        </Panel>
-        <Panel style={styles.panel} title={'List of external calls'} >
-          <table style={styles.table}>
-            <tbody>
-              <tr>
-                <th style={styles.header} >{'Internal ID'}</th>
-                <th style={styles.header} >{'State'}</th>
-                <th style={styles.header} >{'Operation name'}</th>
-                <th style={styles.header} >{'ID of call'}</th>
-                <th style={styles.header} >{'Last change time'}</th>
-              </tr>
+              label={'Cancel'}
+            />
+          </div >
+        </Card >
+        <br />
+        <Card >
+          <CardTitle subtitle={'List of external calls'} />
+
+          <DataTable plain >
+            <TableHeader >
+              <TableRow >
+                <TableColumn >Internal ID</TableColumn >
+                <TableColumn >State</TableColumn >
+                <TableColumn >Operation Name</TableColumn >
+                <TableColumn >ID of Call</TableColumn >
+                <TableColumn >Last Change Time</TableColumn >
+              </TableRow >
+            </TableHeader >
+            <TableBody >
               {message.externalCalls.map((call, index) => (
-                <tr key={call.id} style={index % 2 === 0 ? styles.even : styles.odd}>
-                  <td style={styles.cell}>{call.id}</td>
-                  <td style={styles.cell}>{call.state}</td>
-                  <td style={styles.cell}>{call.operationName}</td>
-                  <td style={styles.cell}>{call.callId}</td>
-                  <td style={styles.cell}>{moment(call.lastChange).format('MMMM Do YYYY, hh:mm:ss')}</td>
-                </tr>
+                <TableRow key={call.id} >
+                  <TableColumn >{call.id}</TableColumn >
+                  <TableColumn >{call.state}</TableColumn >
+                  <TableColumn >{call.operationName}</TableColumn >
+                  <TableColumn >{call.callId}</TableColumn >
+                  <TableColumn >{moment(call.lastChange).format('MMMM Do YYYY, hh:mm:ss')}</TableColumn >
+                </TableRow >
               ))}
-            </tbody>
-          </table>
-        </Panel>
-        <Panel style={styles.panel} title={'Requests/responses to external systems'} >
-          <table style={styles.table}>
-            <tr>
-              <th rowSpan={2} style={styles.header} >{'ID of executing'}</th>
-              <th rowSpan={2} style={styles.header} >{'URI'}</th>
-              <th style={styles.header} >{'Timestamp of request'}</th>
-              <th style={styles.header} >{'Content of request'}</th>
-              <th rowSpan={2} style={styles.header} >{'State'}</th>
-            </tr>
-            <tr>
-              <th style={styles.header} >{'Timestamp of response'}</th>
-              <th style={styles.header} >{'Content of response'}</th>
-            </tr>
-            {message.requests.map((request, index) => (
-              <tbody key={request.id} style={index % 2 === 0 ? styles.even : styles.odd}>
-                <tr>
-                  <td rowSpan={2} style={styles.cell}>{request.id}</td>
-                  <td rowSpan={2} style={styles.cell}>{request.uri}</td>
-                  <td style={styles.cell}>{request.timestamp}</td>
-                  <td style={styles.cell}>
-                    <SyntaxHighlighter style={codeStyle} >{request.payload}</SyntaxHighlighter>
-                  </td>
-                  <td rowSpan={2} style={styles.cell}>{'N/A'}</td>
-                </tr>
-                <tr>
-                  <td style={styles.cell}>{request.response.timestamp}</td>
-                  <td style={styles.cell}>
-                    <SyntaxHighlighter style={codeStyle} >{request.response.payload}</SyntaxHighlighter>
-                  </td>
-                </tr>
-              </tbody>
+            </TableBody >
+          </DataTable >
+
+        </Card >
+        <br />
+        <Card >
+          <CardTitle subtitle={'Requests/responses to external systems'} />
+
+          <DataTable plain >
+            <TableHeader >
+              <TableRow >
+                <TableColumn >ID of Executing</TableColumn >
+                <TableColumn >URI</TableColumn >
+                <TableColumn >Timestamp of Request</TableColumn >
+                <TableColumn >Timestamp of Response</TableColumn >
+                <TableColumn >Content of Request</TableColumn >
+                <TableColumn >Content of Response</TableColumn >
+                <TableColumn >State</TableColumn >
+              </TableRow >
+            </TableHeader >
+            <TableBody >
+              {message.requests.map((request, index) => (
+                <TableRow key={request.id} >
+                  <TableColumn >{request.id}</TableColumn >
+                  <TableColumn >{request.uri}</TableColumn >
+                  <TableColumn >{request.timestamp}</TableColumn >
+                  <TableColumn >{request.response.timestamp}</TableColumn >
+                  <TableColumn >
+                    {<SyntaxHighlighter style={codeStyle} >{request.payload}</SyntaxHighlighter >}
+                  </TableColumn >
+                  <TableColumn >
+                    {<SyntaxHighlighter style={codeStyle} >{request.response.payload}</SyntaxHighlighter >}
+                  </TableColumn >
+                  <TableColumn >{request.state}</TableColumn >
+                </TableRow >
               ))}
-          </table>
-        </Panel>
-      </div >
+            </TableBody >
+          </DataTable >
+        </Card >
+      </Card >
     )
   }
 }
