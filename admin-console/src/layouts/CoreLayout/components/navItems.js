@@ -10,6 +10,7 @@ export default (config) => {
   if (!config) return null
   return [
     <ListItem
+      key='Dashboard'
       active={isActive('/')}
       onClick={() => hashHistory.push('/')}
       leftIcon={<FontIcon >home</FontIcon >}
@@ -17,7 +18,7 @@ export default (config) => {
     />,
 
     // Analytics
-    <div >
+    <div key='Analytics' >
       {config.analytics &&
       <ListItem
         primaryText={'Analytics'}
@@ -25,6 +26,7 @@ export default (config) => {
         leftIcon={<FontIcon >blur_linear</FontIcon >}
         nestedItems={[
           path(['analytics', 'messages', 'enabled'], config) && <ListItem
+            key='Messages'
             active={isActive('/messages')}
             onClick={() => hashHistory.push('/messages')}
             leftIcon={<FontIcon >drafts</FontIcon >}
@@ -35,7 +37,7 @@ export default (config) => {
     </div >,
 
     // Infrastructure
-    <div >
+    <div key='Infrastructure'>
       {config.cluster &&
       <ListItem
         primaryText={'Infrastructure'}
@@ -43,12 +45,14 @@ export default (config) => {
         defaultOpen
         nestedItems={[
           path(['cluster', 'nodes', 'enabled'], config) && <ListItem
+            key='Nodes'
             active={isActive('/nodes')}
             onClick={() => hashHistory.push('/nodes')}
             leftIcon={<FontIcon >device_hub</FontIcon >}
             primaryText={'Nodes'}
           />,
           path(['infrastructure', 'services', 'wsdl', 'enabled'], config) && <ListItem
+            key='WSDL'
             active={isActive('/wsdl')}
             onClick={() => hashHistory.push('/wsdl')}
             leftIcon={<FontIcon >device_hub</FontIcon >}
@@ -60,35 +64,41 @@ export default (config) => {
 
     // Configuration
     <ListItem
+      key='Configuration'
       primaryText={'Configuration'}
       leftIcon={<FontIcon >build</FontIcon >}
       defaultOpen
       nestedItems={[
         path(['configuration', 'systemParams', 'enabled'], config) && <ListItem
+          key='params'
           active={isActive('/config-params')}
           onClick={() => hashHistory.push('/config-params')}
           leftIcon={<FontIcon >extension</FontIcon >}
           primaryText={'Config Params'}
         />,
         path(['configuration', 'logging', 'enabled'], config) && <ListItem
+          key='logging'
           onClick={() => hashHistory.push('/config-logging')}
           active={isActive('/config-logging')}
           leftIcon={<FontIcon >info</FontIcon >}
           primaryText={'Config Logging'}
         />,
         path(['configuration', 'environment', 'enabled'], config) && <ListItem
+          key='properties'
           onClick={() => hashHistory.push('/environment-properties')}
           active={isActive('/environment-properties')}
           leftIcon={<FontIcon >filter_hdr</FontIcon >}
           primaryText={'Environment Properties'}
         />,
         path(['configuration', 'alerts', 'enabled'], config) && <ListItem
+          key='alerts'
           onClick={() => hashHistory.push('/alerts')}
           active={isActive('/alerts')}
           leftIcon={<FontIcon >notifications_active</FontIcon >}
           primaryText={'Alerts'}
         />,
         path(['configuration', 'errorCodeCatalog', 'enabled'], config) && <ListItem
+          key='errors'
           onClick={() => hashHistory.push('/errors-overview')}
           active={isActive('/errors-overview')}
           leftIcon={<FontIcon >bug_report</FontIcon >}
@@ -100,7 +110,7 @@ export default (config) => {
     { divider: true },
 
     // External
-    <div >
+    <div key='External' >
       {path(['externalLinks', 'enabled'], config) &&
       <ListItem
         primaryText={'External'}
@@ -110,6 +120,7 @@ export default (config) => {
             if (!enabled) return null
             return (
               <ListItem
+                key={title}
                 onClick={() => window.open(link, '_blank')}
                 leftIcon={<FontIcon >keyboard_arrow_right</FontIcon >}
                 primaryText={title}
@@ -120,7 +131,7 @@ export default (config) => {
     </div >,
 
     // Changes
-    <div >
+    <div key='Changes' >
       {path(['changes', 'enabled'], config) && <ListItem
         active={isActive('/changes')}
         onClick={() => hashHistory.push('/changes')}

@@ -7,26 +7,20 @@ import navItems from './navItems'
 
 @Radium
 class CoreLayout extends Component {
-
-  constructor (props) {
-    super(props)
-    this.state = {
-      toggle: true
-    }
-  }
-
   render () {
     const {
       userData,
       children,
+      sidebar,
+      toggleSidebar,
       config
     } = this.props
 
     return (
       <NavigationDrawer
         ref={this._setContainer}
-        visible={!!userData && this.state.toggle}
-        onVisibilityToggle={() => this.setState(({ toggle }) => ({ toggle: !toggle }))}
+        visible={!!userData && sidebar}
+        onVisibilityToggle={() => toggleSidebar(!sidebar)}
         navItems={config && navItems(config.menu)}
         toolbarTitle={this.props.title}
         drawerTitle={<div style={styles.logoWrapper} >
@@ -44,10 +38,8 @@ class CoreLayout extends Component {
 
 CoreLayout.propTypes = {
   children: PropTypes.element.isRequired,
-  sidebarExtended: PropTypes.bool,
-  actions: PropTypes.object,
-  authActions: PropTypes.object,
-  navbarUserExpanded: PropTypes.bool,
+  sidebar: PropTypes.bool,
+  toggleSidebar: PropTypes.func,
   userData: PropTypes.object,
   config: PropTypes.object,
   title: PropTypes.string

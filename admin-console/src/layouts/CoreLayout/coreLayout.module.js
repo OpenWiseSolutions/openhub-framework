@@ -2,11 +2,13 @@
 // Constants
 // ------------------------------------
 export const UPDATE_TITLE = 'UPDATE_TITLE'
+export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR'
 
 // ------------------------------------
 // Actions
 // ------------------------------------
-export const updateTitle = () => {
+export const updateTitle = () => (dispatch, getState) => {
+  const { auth: { userData } } = getState()
   const hash = window.location.hash.substr(1)
   let title = ''
   switch (hash) {
@@ -44,24 +46,40 @@ export const updateTitle = () => {
       title = ''
   }
 
-  return ({
+  if (!userData) {
+    title = 'Login'
+  }
+
+  dispatch({
     type: UPDATE_TITLE,
     title
   })
+}
+
+export const toggleSidebar = (sidebar) => ({
+  type: TOGGLE_SIDEBAR,
+  sidebar
+})
+
+export const actions = {
+  toggleSidebar,
+  updateTitle
 }
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [UPDATE_TITLE]: (state, { title }) => ({ ...state, title })
+  [UPDATE_TITLE]: (state, { title }) => ({ ...state, title }),
+  [TOGGLE_SIDEBAR]: (state, { sidebar }) => ({ ...state, sidebar })
 }
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
 const initialState = {
-  title: 'Login'
+  title: '',
+  sidebar: true
 }
 
 export default function (state = initialState, action) {

@@ -1,16 +1,15 @@
-import { actions as authActions } from '../../../common/modules/auth.module'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import CoreLayout from '../components/CoreLayout'
+import { actions } from '../coreLayout.module'
 
 const mapStateToProps = ({ auth, layout }) => ({
   ...auth,
   ...layout
 })
 
-const mapDispatchToProps = (dispatch) => ({
-  authActions: bindActionCreators(authActions, dispatch)
-})
+const mapDispatchToProps = {
+  ...actions
+}
 
 export default connect(
   mapStateToProps,

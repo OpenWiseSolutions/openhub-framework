@@ -49,6 +49,7 @@ class LoginModal extends Component {
         <form onSubmit={(e) => this.handleSubmit(e)} >
           <CardText >
             <TextField
+              id='username'
               value={this.state.username}
               onChange={(username) => this.setState(() => ({ username }))}
               error={this.state.errors.username}
@@ -57,6 +58,7 @@ class LoginModal extends Component {
               placeholder='username'
             />
             <TextField
+              id='password'
               value={this.state.password}
               onChange={(password) => this.setState(() => ({ password }))}
               error={this.state.errors.password}

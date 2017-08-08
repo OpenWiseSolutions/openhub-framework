@@ -3,6 +3,7 @@ import { toastr } from 'react-redux-toastr'
 import { getHealthInfo, getMetricsInfo } from '../../routes/Home/modules/home.module'
 import { login, userInfo, logout } from '../../services/auth.service'
 import { fetchConsoleConfig } from '../../services/appConfig.service'
+import { toggleSidebar, updateTitle } from '../../layouts/CoreLayout/coreLayout.module'
 
 // ------------------------------------
 // Constants
@@ -31,18 +32,6 @@ export const initAuth = () =>
     return dispatch({ type: INIT_AUTH, payload: userData })
   }
 
-export const toggleLoginModal = () => {
-  return {
-    type: LOGIN_TOGGLE
-  }
-}
-
-export const closeModal = () => {
-  return {
-    type: LOGIN_CLOSE
-  }
-}
-
 export const getConfig = () => (dispatch) => {
   return fetchConsoleConfig()
     .then((data) => {
@@ -69,12 +58,13 @@ export const logoutUser = () => (dispatch) => {
 
 export const loginSuccess = () =>
   (dispatch) => {
-    dispatch(closeModal())
     return userInfo()
       .then((payload) => {
         sessionStorage.setItem(AUTH_SESSION, true)
         dispatch({ type: LOGIN_SUCCESS, payload })
         dispatch(getConfig())
+        dispatch(updateTitle())
+        dispatch(toggleSidebar(true))
       })
   }
 
@@ -100,7 +90,6 @@ export const submitLogin = ({ username, password }) => {
 
 export const actions = {
   initAuth,
-  toggleLoginModal,
   logoutUser,
   login,
   loginError,

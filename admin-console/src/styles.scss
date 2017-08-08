@@ -1,0 +1,6 @@
+@import '~react-md/src/scss/react-md';
+@import '~react-md/src/scss/bundles/blue-light_blue.scss';
+
+$md-primary-color: #1aa6d7;
+
+@include react-md-everything;

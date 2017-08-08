@@ -15,19 +15,14 @@ export default {
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'center',
-    alignItems: 'flex-start'
+    justifyContent: 'space-around',
+    alignItems: 'inherit'
   },
-  memChart: {
+  widget: {
     position: 'relative',
-    paddingTop: gap,
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    paddingLeft: gap,
-    paddingBottom: gap
+    width: '48%',
+    marginTop: gap,
+    marginBottom: gap
   },
   info: {
     listStyle: 'none'
