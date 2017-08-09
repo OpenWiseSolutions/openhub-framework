@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Radium from 'radium'
 import { toLower } from 'ramda'
+import TableRow from 'react-md/lib/DataTables/TableRow'
+import TableColumn from 'react-md/lib/DataTables/TableColumn'
 import styles from './loggerRow.styles.js'
 
 @Radium
@@ -16,15 +18,17 @@ class LoggerRow extends Component {
     ]
 
     return (
-      <div style={styles.main} >
-        <div style={styles.label}>{label}</div>
-        <div style={styles.controls} >
-          {levels.map(l => <div
-            key={l}
-            onClick={() => updateLogger(label, l)}
-            style={buttonStyle(l)}>{l}</div>)}
-        </div>
-      </div>
+      <TableRow>
+        <TableColumn adjusted>{label}</TableColumn >
+        <TableColumn adjusted>
+          <div style={styles.controls} >
+            {levels.map(l => <div
+              key={l}
+              onClick={() => updateLogger(label, l)}
+              style={buttonStyle(l)} >{l}</div >)}
+          </div >
+        </TableColumn >
+      </TableRow >
     )
   }
 }

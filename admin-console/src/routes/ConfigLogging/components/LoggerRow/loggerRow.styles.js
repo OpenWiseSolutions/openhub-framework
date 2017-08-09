@@ -24,7 +24,7 @@ export default {
   controls: {
     flex: 1,
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     fontSize: '0.9em',
     alignItems: 'center'
   },

@@ -2,8 +2,16 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Radium from 'radium'
 import { reverse, length, take } from 'ramda'
-import Panel from '../../../../common/components/Panel/Panel'
-import Field from '../../../../common/components/Field/Field'
+import Card from 'react-md/lib/Cards/Card'
+import TextField from 'react-md/lib/TextFields'
+import FontIcon from 'react-md/lib/FontIcons'
+import LinearProgress from 'react-md/lib/Progress/LinearProgress'
+import DataTable from 'react-md/lib/DataTables/DataTable'
+import TableHeader from 'react-md/lib/DataTables/TableHeader'
+import TableBody from 'react-md/lib/DataTables/TableBody'
+import TableRow from 'react-md/lib/DataTables/TableRow'
+import TableColumn from 'react-md/lib/DataTables/TableColumn'
+import Button from 'react-md/lib/Buttons/Button'
 import styles from './configLogging.styles.js'
 import LoggerRow from '../LoggerRow/LoggerRow'
 
@@ -51,37 +59,52 @@ class ConfigLogging extends Component {
   render () {
     const { filtered, value, takes } = this.state
     const { loggingData, updateLogger } = this.props
-    if (!loggingData) return <div >Loading...</div >
+
+    if (!loggingData) return <LinearProgress id='progress' />
+
     const levels = reverse(loggingData.levels)
     const items = take(LIST_LENGTH * takes, filtered || loggingData.loggers)
     const count = `${length(filtered || loggingData.loggers)} / ${length(loggingData.loggers)}`
 
     return (
-      <Panel title='Config Logging' style={styles.panel} >
+      <Card >
         <div style={styles.main} >
           <div style={styles.searchBox} >
-            <Field onChange={(val) => this.updateSearchQuery(val)}
+            <TextField
+              onChange={(val) => this.updateSearchQuery(val)}
               value={value}
-              placeholder='filter'
-              name='searchQuery' />
-            <div style={styles.counts} >{count}</div >
+              leftIcon={<FontIcon >search</FontIcon >}
+              rightIcon={<div >{count}</div >}
+              placeholder='Filter'
+              name='searchQuery'
+            />
           </div >
-          <div style={styles.loggers} >
-            {items.map(logger => <LoggerRow
-              key={logger.name}
-              updateLogger={updateLogger}
-              configuredLevel={logger.data.configuredLevel}
-              levels={levels}
-              label={logger.name}
-            />)}
-          </div >
+          <br />
+          <br />
+          <DataTable plain >
+            <TableHeader >
+              <TableRow >
+                <TableColumn >Name</TableColumn >
+                <TableColumn >Actions</TableColumn >
+              </TableRow >
+            </TableHeader >
+            <TableBody >
+              {items.map(logger => <LoggerRow
+                key={logger.name}
+                updateLogger={updateLogger}
+                configuredLevel={logger.data.configuredLevel}
+                levels={levels}
+                label={logger.name}
+              />)}
+            </TableBody >
+          </DataTable >
           {items.length >= LIST_LENGTH && items.length < loggingData.loggers.length &&
-          <div >
-            <div key='showMore' onClick={() => this.showMore()} style={styles.listControl} >show more</div >
-            <div key='showAll' onClick={() => this.showAll()} style={styles.listControl} >show all</div >
+          <div style={styles.controls} >
+            <Button onClick={() => this.showMore()} flat label={'show more'} />
+            <Button onClick={() => this.showAll()} flat label={'show all'} />
           </div >}
         </div >
-      </Panel >
+      </Card >
     )
   }
 }

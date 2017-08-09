@@ -1,4 +1,3 @@
-import { secondaryColor } from '../../../../styles/colors'
 import { gap } from '../../../../styles/constants'
 import styles from '../../../../styles/styles'
 
@@ -21,14 +20,10 @@ export default {
   loggers: {
     marginTop: gap
   },
-  listControl: {
-    textAlign: 'center',
-    paddingTop: gap,
-    paddingBottom: gap,
-    color: secondaryColor,
-    cursor: 'pointer',
-    ':hover': {
-      textDecoration: 'underline'
-    }
+  controls: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 }
