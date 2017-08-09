@@ -4,12 +4,16 @@ import Radium from 'radium'
 import MdPlayArrow from 'react-icons/lib/md/play-arrow'
 import MdStop from 'react-icons/lib/md/stop'
 import MdInbox from 'react-icons/lib/md/inbox'
-import MdEdit from 'react-icons/lib/md/edit'
-import MdDelete from 'react-icons/lib/md/delete'
+import Button from 'react-md/lib/Buttons/Button'
+import LinearProgress from 'react-md/lib/Progress/LinearProgress'
+import Card from 'react-md/lib/Cards/Card'
+import DataTable from 'react-md/lib/DataTables/DataTable'
+import TableHeader from 'react-md/lib/DataTables/TableHeader'
+import TableBody from 'react-md/lib/DataTables/TableBody'
+import TableRow from 'react-md/lib/DataTables/TableRow'
+import TableColumn from 'react-md/lib/DataTables/TableColumn'
 import styles from './nodes.styles'
 import { positiveColor, negativeColor, warningColor } from '../../../../styles/colors'
-import Panel from '../../../../common/components/Panel/Panel'
-import Button from '../../../../common/components/Button/Button'
 import NodeModal from '../NodeModal/NodeModal'
 
 @Radium
@@ -24,22 +28,22 @@ class ConfigParams extends Component {
       case 'RUN':
         return <div title='The Node is Running' >
           <MdPlayArrow size={30} color={positiveColor} />
-        </div>
+        </div >
       case 'STOPPED':
         return <div title='The Node is Stopped' >
           <MdStop size={30} color={negativeColor} />
-        </div>
+        </div >
       case 'HANDLES_EXISTING_MESSAGES':
         return <div title='The Node handles only existing messages. New messages/requests are rejected' >
           <MdInbox size={25} color={warningColor} />
-        </div>
+        </div >
     }
   }
 
   render () {
     const { nodes, nodeDetail, closeNode, openNode, updateNode, deleteNode } = this.props
 
-    if (!nodes) return <div>Loading...</div>
+    if (!nodes) return <LinearProgress id='progress' />
 
     const computedStyles = [styles.main]
 
@@ -51,38 +55,36 @@ class ConfigParams extends Component {
           close={closeNode}
           isOpen={!!nodeDetail}
         />}
-        <Panel key={'ClusterNodes'} style={styles.panel} title={'Cluster Nodes'} >
-          <table style={styles.table} >
-            <tbody>
-              <tr>
-                <th style={styles.header} >Id</th>
-                <th style={styles.header} >Code</th>
-                <th style={styles.header} >Name</th>
-                <th style={styles.header} >Description</th>
-                <th style={styles.header} >State</th>
-                <th style={styles.header} >Actions</th>
-              </tr>
-              { nodes.map(({ id, code, name, description, state }, index) => (
-                <tr key={id} style={index % 2 === 0 ? styles.even : styles.odd} >
-                  <td style={styles.cell} >{id}</td>
-                  <td style={styles.cell} >{code}</td>
-                  <td style={styles.cell} >{name}</td>
-                  <td style={styles.cell} >{description}</td>
-                  <td style={styles.cell} >{this.getStateIcon(state)}</td>
-                  <td style={styles.cell} >
-                    <Button onClick={() => openNode(id)} style={styles.button} >
-                      <MdEdit size={30} />
-                    </Button>
-                    <Button onClick={() => deleteNode(id)} style={styles.button} >
-                      <MdDelete size={30} />
-                    </Button>
-                  </td>
-                </tr>
-            ))}
-            </tbody>
-          </table>
-        </Panel>
-      </div>
+        <Card >
+          <DataTable plain >
+            <TableHeader >
+              <TableRow >
+                <TableColumn >Id</TableColumn >
+                <TableColumn >Code</TableColumn >
+                <TableColumn >Name</TableColumn >
+                <TableColumn >Description</TableColumn >
+                <TableColumn >State</TableColumn >
+                <TableColumn >Actions</TableColumn >
+              </TableRow >
+            </TableHeader >
+            <TableBody >
+              {nodes.map(({ id, code, name, description, state }) => (
+                <TableRow key={id} >
+                  <TableColumn >{id}</TableColumn >
+                  <TableColumn >{code}</TableColumn >
+                  <TableColumn >{name}</TableColumn >
+                  <TableColumn >{description}</TableColumn >
+                  <TableColumn >{this.getStateIcon(state)}</TableColumn >
+                  <TableColumn >
+                    <Button onClick={() => openNode(id)} >edit</Button >
+                    <Button onClick={() => deleteNode(id)} >delete</Button >
+                  </TableColumn >
+                </TableRow >
+              ))}
+            </TableBody >
+          </DataTable >
+        </Card >
+      </div >
     )
   }
 }
