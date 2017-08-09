@@ -12,6 +12,9 @@ export default {
     width: '25px',
     height: '25px'
   },
+  value: {
+    lineHeight: '30px'
+  },
   green:{
     backgroundColor: positiveColor
   },

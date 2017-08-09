@@ -6,23 +6,29 @@ module.exports = [
     },
     response: {
       statusCode: 200,
-      body: JSON.stringify({
-        'data': [
-          {
-            'id': 5232,
-            'correlationId': '20301-2332-1321',
-            'sourceSystem': 'CRM',
-            'received': '2017-05-22T15:20:10',
-            'processingStarted': '2017-05-22T15:20:10',
-            'state': 'OK',
-            'errorCode': 'E114',
-            'serviceName': 'HELLO',
-            'operationName': 'check'
-          }
-        ],
-        'limit': 100,
-        'totalElements': 50
-      })
+      body: JSON.stringify(
+        {
+          "data": [{
+            "id": 3,
+            "correlationId": "C12345",
+            "sourceSystem": "ochmonek",
+            "received": "2017-08-09T09:22:02.873Z",
+            "processingStarted": "2017-08-09T09:22:03.009Z",
+            "state": "OK",
+            "serviceName": "dsfsaf",
+            "operationName": "asyncHello"
+          }, {
+            "id": 1,
+            "correlationId": "C1234",
+            "sourceSystem": "ochmonek",
+            "received": "2017-08-09T09:17:11.627Z",
+            "processingStarted": "2017-08-09T09:17:11.925Z",
+            "state": "OK",
+            "serviceName": "dsfsaf",
+            "operationName": "asyncHello"
+          }], "limit": 100, "totalElements": 2
+        }
+      )
     }
   },
   {

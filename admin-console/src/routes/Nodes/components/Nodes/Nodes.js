@@ -70,13 +70,13 @@ class ConfigParams extends Component {
             <TableBody >
               {nodes.map(({ id, code, name, description, state }) => (
                 <TableRow key={id} >
-                  <TableColumn >{id}</TableColumn >
-                  <TableColumn >{code}</TableColumn >
-                  <TableColumn >{name}</TableColumn >
-                  <TableColumn >{description}</TableColumn >
-                  <TableColumn >{this.getStateIcon(state)}</TableColumn >
+                  <TableColumn style={styles.value} >{id}</TableColumn >
+                  <TableColumn style={styles.value} >{code}</TableColumn >
+                  <TableColumn style={styles.value} >{name}</TableColumn >
+                  <TableColumn style={styles.value} >{description}</TableColumn >
+                  <TableColumn style={styles.value} >{this.getStateIcon(state)}</TableColumn >
                   <TableColumn >
-                    <Button onClick={() => openNode(id)} >edit</Button >
+                    <Button primary onClick={() => openNode(id)} >edit</Button >
                     <Button onClick={() => deleteNode(id)} >delete</Button >
                   </TableColumn >
                 </TableRow >

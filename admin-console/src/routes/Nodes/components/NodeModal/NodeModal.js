@@ -8,8 +8,6 @@ import TextField from 'react-md/lib/TextFields'
 import Button from 'react-md/lib/Buttons/Button'
 import Radio from 'react-md/lib/SelectionControls/Radio'
 
-import styles from './nodeModal.styles'
-
 @Radium
 class NodeModal extends Component {
   constructor (props) {
@@ -27,6 +25,11 @@ class NodeModal extends Component {
     e.preventDefault()
     const { data, updateNode } = this.props
     const { name, description, state } = this.state
+
+    if (!name || !description) {
+      return
+    }
+
     const payload = {
       name,
       description,
@@ -49,20 +52,18 @@ class NodeModal extends Component {
       >
         {isOpen && data &&
         <form autoComplete='off' onSubmit={this.handleSubmit.bind(this)} >
-          <div style={styles.row} >
-            <TextField
-              label={'Name'}
-              value={this.state.name}
-              onChange={(name) => this.setState(() => ({ name }))}
-            />
-          </div >
-          <div style={styles.row} >
-            <TextField
-              label={'Description'}
-              value={this.state.description}
-              onChange={(description) => this.setState(() => ({ description }))}
-            />
-          </div >
+          <TextField
+            label={'Name'}
+            required
+            value={this.state.name}
+            onChange={(name) => this.setState(() => ({ name }))}
+          />
+          <TextField
+            label={'Description'}
+            required
+            value={this.state.description}
+            onChange={(description) => this.setState(() => ({ description }))}
+          />
           <div style={{ marginLeft: '-15px' }} >
             <Radio
               id='run'

@@ -1,78 +1,146 @@
+/* eslint-disable react/jsx-no-bind,react/prop-types */
+
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import validator from 'validator'
 import Radium from 'radium'
-import Modal from 'react-modal'
-import { ValidForm, Toggle } from 'valid-react-form'
-import Field from '../../../../common/components/Field/Field'
-import ModalHeader from '../../../../common/components/ModalHeader/ModalHeader'
-import styles from './editParamModal.styles'
-import Button from '../../../../common/components/Button/Button'
+import Dialog from 'react-md/lib/Dialogs'
+import CardTitle from 'react-md/lib/Cards/CardTitle'
+import TextField from 'react-md/lib/TextFields'
+import Checkbox from 'react-md/lib/SelectionControls/Checkbox'
+import Button from 'react-md/lib/Buttons/Button'
 
-const Value = ({ type, value, label, name }) => {
-  const wrap = (child) => (
-    <div style={styles.row} >
-      <div style={styles.label} >
-        <span>{label}</span>
-        <span style={{ color: 'red' }} >*</span>
-      </div>
-      <div style={styles.field}>
-        {child}
-      </div>
-    </div>
-  )
-
+const Value = ({ type, value, label, name, update }) => {
   switch (type) {
     case 'BOOL':
-      return wrap(<div><Toggle name={name} value={value} /></div>)
+      return <Checkbox
+        label={label}
+        id={name}
+        name={name}
+        checked={value}
+        value={value}
+        onChange={(val) => update(name, val)}
+      />
     case 'INT':
-      return wrap(<Field required validator={{ err: (v) => validator.isInt(v) }} name={name} value={value} />)
+      return <TextField
+        required
+        label={label}
+        name={name}
+        id={name}
+        value={value}
+        onChange={(val) => update(name, val, (v) => validator.isInt(v))}
+      />
     case 'FLOAT':
-      return wrap(<Field required validator={{ err: (v) => validator.isFloat(v) }} name={name} value={value} />)
+      return <TextField
+        label={label}
+        required
+        name={name}
+        id={name}
+        value={value}
+        onChange={(val) => update(name, val, (v) => validator.isFloat(v))}
+      />
     case 'STRING':
     default:
-      return wrap(<Field required name={name} value={value} />)
+      return <TextField
+        required
+        label={label}
+        name={name}
+        id={name}
+        value={value}
+        onChange={(val) => update(name, val)}
+      />
   }
 }
 
 @Radium
 class EditParamModal extends Component {
+
+  constructor (props) {
+    super(props)
+    this.state = {
+      ...this.props.data
+    }
+  }
+
+  handleSubmit (e) {
+    e.preventDefault()
+    const { currentValue, defaultValue, validationRegEx } = this.state
+
+    if (typeof currentValue !== Boolean && currentValue === '') {
+      return
+    }
+
+    if (typeof defaultValue !== Boolean && defaultValue === '') {
+      return
+    }
+    const payload = {
+      ...this.props.data,
+      currentValue,
+      defaultValue,
+      validationRegEx
+    }
+
+    this.props.updateParam(payload)
+  }
+
+  update (field, value, validator) {
+    if (validator && value && !validator(value)) {
+      return
+    }
+
+    this.setState(() => ({
+      [field]: value
+    }))
+  }
+
   render () {
-    const { isOpen, close, data, updateParam, updating, updateError } = this.props
+    const { isOpen, close, data } = this.props
     return (
-      <Modal contentLabel='params' style={styles.main} isOpen={isOpen} >
-        <ModalHeader onClose={close} title={'Edit Parameter'} />
+      <Dialog
+        modal
+        id='modal'
+        dialogClassName='md-dialog--big'
+        title={'Edit Parameter'}
+        visible={isOpen}
+        actions={[
+          <Button onClick={this.handleSubmit.bind(this)} raised label={'Update'} primary />,
+          <Button raised label={'Cancel'} onClick={close} />
+        ]}
+      >
         {isOpen && data &&
-        <div style={styles.content} >
-          {updateError && <div style={styles.error} >Update failed!</div>}
-          <ValidForm autoComplete='off' onSubmit={(payload) => updateParam(data, payload)} >
-            <div style={styles.row} >
-              <div style={styles.label} >Code</div>
-              <div>{data.code}</div>
-            </div>
-            <div style={styles.row} >
-              <div style={styles.label} >Description</div>
-              <div>{data.description}</div>
-            </div>
-            <br />
-            <Value type={data.dataType} value={data.currentValue} label='Current Value' name='currentValue' />
-            <Value type={data.dataType} value={data.defaultValue} label='Default Value' name='defaultValue' />
-            <br />
-            <div style={styles.row} >
-              <div style={styles.label} >Validation</div>
-              <div style={styles.field}>
-                <Field name='validationRegEx' value={data.validationRegEx} />
-              </div>
-            </div>
-            <br />
-            <div style={[styles.row, styles.controls]} >
-              <Button primary style={styles.controls.submit} >{updating ? 'Updating...' : 'Update'}</Button>
-              <Button style={styles.controls.cancel} onClick={close} >Cancel</Button>
-            </div>
-          </ValidForm>
-        </div>
+        <form
+          autoComplete='off'
+          onSubmit={this.handleSubmit.bind(this)}
+        >
+          <CardTitle
+            style={{ paddingLeft: 0 }}
+            title={data.code}
+            subtitle={data.description}
+          />
+          <Value
+            update={this.update.bind(this)}
+            type={data.dataType}
+            value={this.state.currentValue}
+            label='Current Value'
+            name='currentValue'
+          />
+          <Value
+            update={this.update.bind(this)}
+            type={data.dataType}
+            value={this.state.defaultValue}
+            label='Default Value'
+            name='defaultValue'
+          />
+          <TextField
+            label='Validation'
+            name='validationRegEx'
+            id='validationRegEx'
+            value={this.state.validationRegEx}
+            onChange={(val) => this.update('validationRegEx', val)}
+          />
+        </form >
         }
-      </Modal>
+      </Dialog >
     )
   }
 }

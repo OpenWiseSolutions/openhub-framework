@@ -4,3 +4,15 @@
 $md-primary-color: #1aa6d7;
 
 @include react-md-everything;
+
+.md-dialog--big {
+  @include react-md-dialog-width(10);
+}
+
+.md-navbar-item--custom {
+  @include react-md-lists($light-theme: 'red');
+}
+
+.md-list--drawer {
+  background-color: #e6e6e6;
+}

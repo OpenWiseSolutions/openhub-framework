@@ -157,13 +157,13 @@ class Messages extends Component {
           <div className='md-text-right' >
             <Button
               className='md-cell md-cell--3'
-              fullWidth primary raised
+              primary raised
               type='submit'
               label={'Submit'}
             />
             <Button
               className='md-cell md-cell--3'
-              fullWidth raised
+              raised
               onClick={() => this.reset()}
               label={'Reset'} type='button'
             />

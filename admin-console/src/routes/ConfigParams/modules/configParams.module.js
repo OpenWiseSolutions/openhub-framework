@@ -49,6 +49,7 @@ export const updateParam = (data, payload) => {
       .then(() => {
         dispatch(getConfigParams())
         dispatch({ type: UPDATE_PARAM_SUCCESS })
+        dispatch(closeParam())
         toastr.success('Success', 'Parameter updated')
       })
       .catch(() => {
@@ -58,7 +59,7 @@ export const updateParam = (data, payload) => {
   }
 }
 
-export const closeParam = (id) => ({
+export const closeParam = () => ({
   type: CLOSE_PARAM
 })
 

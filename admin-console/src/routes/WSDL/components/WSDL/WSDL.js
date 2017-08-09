@@ -25,7 +25,7 @@ class WSDLOverview extends Component {
         <div className='md-grid'>
           { wsdlData && wsdlData.map(({ name, wsdl }) =>
             <Card className='md-cell md-cell--12' style={styles.item} key={name}>
-              <CardTitle subtitle={name} />
+              <CardTitle title={name} />
               <CardText>
                 <a href={wsdl} target='_blank'>{wsdl}</a>
               </CardText>

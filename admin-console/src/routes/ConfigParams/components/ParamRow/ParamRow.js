@@ -1,16 +1,16 @@
 import React, { PropTypes, Component } from 'react'
 import Radium from 'radium'
-import MdEdit from 'react-icons/lib/md/edit'
+import TableRow from 'react-md/lib/DataTables/TableRow'
+import Button from 'react-md/lib/Buttons/Button'
+import TableColumn from 'react-md/lib/DataTables/TableColumn'
 import { pipe, omit, values, map, append, addIndex, toString } from 'ramda'
-import styles from './paramRow.styles.js'
-import Button from '../../../../common/components/Button/Button'
+import styles from './paramRow.styles'
 
 @Radium
 class ParamRow extends Component {
 
   render () {
-    const { data, openParam, count } = this.props
-    const computedStyles = count % 2 === 0 ? styles.even : styles.odd
+    const { data, openParam } = this.props
     const id = data.id
 
     const ensureNumberOfCells = {
@@ -27,19 +27,17 @@ class ParamRow extends Component {
       omit(['id', 'categoryCode', 'dataType', 'mandatory', 'validationRegEx']),
       values,
       map((value) => typeof value !== 'string' ? toString(value) : value),
-      addIndex(map)((cell, index) => <td style={styles.cell} key={index} >{cell}</td>),
+      addIndex(map)((cell, index) => <TableColumn style={styles.value} key={index} >{cell}</TableColumn>),
       append(
-        <td key={id} style={styles.cell} >
-          <Button style={styles.button} fullWidth onClick={() => openParam(id)} >
-            <MdEdit size={30} />
-          </Button>
-        </td>)
+        <TableColumn key={id} >
+          <Button primary onClick={() => openParam(id)} >edit</Button >
+        </TableColumn>)
     )({ ...ensureNumberOfCells, ...data })
 
     return (
-      <tr style={computedStyles} >
+      <TableRow >
         {cells}
-      </tr>
+      </TableRow>
     )
   }
 }
