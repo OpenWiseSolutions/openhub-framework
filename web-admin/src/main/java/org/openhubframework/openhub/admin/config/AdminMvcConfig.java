@@ -18,8 +18,6 @@ package org.openhubframework.openhub.admin.config;
 
 import static org.springframework.util.StringUtils.hasText;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +25,6 @@ import org.springframework.boot.autoconfigure.web.ResourceProperties;
 import org.springframework.boot.autoconfigure.web.WebMvcProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
-import org.springframework.http.converter.ByteArrayHttpMessageConverter;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.ResourceHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter;
-import org.springframework.http.converter.xml.SourceHttpMessageConverter;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -57,17 +48,6 @@ public class AdminMvcConfig extends WebMvcConfigurerAdapter {
 
     @Autowired
     private WebMvcProperties mvcProperties = new WebMvcProperties();
-
-    @Autowired
-    private MappingJackson2HttpMessageConverter jackson;
-
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        //TODO (thanus, 27/01/2017, TASK: OHFJIRA-4) can be removed after new admin console will be developed 
-        registry.addResourceHandler("/**")
-                .addResourceLocations("/")
-                .setCachePeriod(0);
-    }
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
@@ -94,21 +74,5 @@ public class AdminMvcConfig extends WebMvcConfigurerAdapter {
 
         // default fallback
         return "/";
-    }
-
-    /**
-     * Configures HTTP converters, overrides default list of converters in Spring MVC.
-     */
-    @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        // add default converters
-        converters.add(new ByteArrayHttpMessageConverter());
-        converters.add(new ResourceHttpMessageConverter());
-        converters.add(new SourceHttpMessageConverter<>());
-        converters.add(new AllEncompassingFormHttpMessageConverter());
-
-        converters.add(jackson);
-
-        super.configureMessageConverters(converters);
     }
 }   

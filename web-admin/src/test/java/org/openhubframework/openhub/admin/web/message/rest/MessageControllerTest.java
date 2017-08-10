@@ -45,6 +45,13 @@ import org.apache.http.client.utils.URIBuilder;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+import org.openhubframework.openhub.api.exception.ErrorExtEnum;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.util.ReflectionUtils;
+
 import org.openhubframework.openhub.admin.AbstractAdminModuleRestTest;
 import org.openhubframework.openhub.api.entity.ExternalCall;
 import org.openhubframework.openhub.api.entity.ExternalCallStateEnum;
@@ -58,11 +65,6 @@ import org.openhubframework.openhub.test.data.EntityTypeTestEnum;
 import org.openhubframework.openhub.test.data.ErrorTestEnum;
 import org.openhubframework.openhub.test.data.ExternalSystemTestEnum;
 import org.openhubframework.openhub.test.data.ServiceTestEnum;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.util.ReflectionUtils;
 
 
 /**
@@ -137,15 +139,25 @@ public class MessageControllerTest extends AbstractAdminModuleRestTest {
         msg.setState(MsgStateEnum.OK);
         msg.setStartProcessTimestamp(dateTime.plusMinutes(1).toInstant());
         msg.setLastUpdateTimestamp(dateTime.plusHours(2).toInstant());
-        msg.setFailedErrorCode(ErrorTestEnum.E300);
+        msg.setFailedErrorCode(new ErrorExtEnum() {
+            @Override
+            public String getErrorCode() {
+                return ErrorTestEnum.E300.getErrorCode();
+            }
+
+            @Override
+            public String getErrDesc() {
+                return ErrorTestEnum.E300.getErrDesc();
+            }
+        });
         msg.setFailedCount(3);
-        msg.setSourceSystem(ExternalSystemTestEnum.CRM);
+        msg.setSourceSystem(() -> "CRM");
         msg.setReceiveTimestamp(dateTime.plusHours(1).toInstant());
         msg.setMsgTimestamp(dateTime.toInstant());
-        msg.setService(ServiceTestEnum.CUSTOMER);
+        msg.setService(() -> "CUSTOMER");
         msg.setOperationName("setCustomer");
         msg.setObjectId("customer42");
-        msg.setEntityType(EntityTypeTestEnum.ACCOUNT);
+        msg.setEntityType(() -> "ACCOUNT");
         msg.setFunnelValue("MSISDN");
         msg.setFunnelComponentId("componentId");
         msg.setGuaranteedOrder(Boolean.TRUE);

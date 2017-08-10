@@ -16,6 +16,7 @@
 
 package org.openhubframework.openhub.api.entity;
 
+
 /**
  * Contract for external system enums which should be extensible.
  * <p>

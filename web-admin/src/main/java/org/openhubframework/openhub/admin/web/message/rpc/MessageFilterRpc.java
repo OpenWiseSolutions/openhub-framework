@@ -23,7 +23,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.openhubframework.openhub.api.entity.MessageFilter;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * Message filter rpc object.
@@ -33,14 +32,9 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 public class MessageFilterRpc {
 
-    //TODO (kkovarik, 15.7.2017, TASK) setup global jackson binding, iso format to be default
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private OffsetDateTime receivedFrom;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private OffsetDateTime receivedTo;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private OffsetDateTime lastChangeFrom;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private OffsetDateTime lastChangeTo;
     private String sourceSystem;
     private String correlationId;

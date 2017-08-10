@@ -97,8 +97,8 @@ public class MessageRpc extends MessageBaseRpc {
         this.objectId = objectId;
     }
 
-    public EntityTypeExtEnum getEntityType() {
-        return entityType;
+    public String getEntityType() {
+        return entityType.getEntityType();
     }
 
     public void setEntityType(EntityTypeExtEnum entityType) {

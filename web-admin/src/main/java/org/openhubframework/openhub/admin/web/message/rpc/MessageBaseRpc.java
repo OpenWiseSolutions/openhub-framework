@@ -56,8 +56,8 @@ public abstract class MessageBaseRpc extends BaseRpc<Message, Long> {
         this.correlationId = correlationId;
     }
 
-    public ExternalSystemExtEnum getSourceSystem() {
-        return sourceSystem;
+    public String getSourceSystem() {
+        return sourceSystem.getSystemName();
     }
 
     public void setSourceSystem(ExternalSystemExtEnum sourceSystem) {
@@ -88,16 +88,16 @@ public abstract class MessageBaseRpc extends BaseRpc<Message, Long> {
         this.state = state;
     }
 
-    public ErrorExtEnum getErrorCode() {
-        return errorCode;
+    public String getErrorCode() {
+        return errorCode.getErrorCode();
     }
 
     public void setErrorCode(ErrorExtEnum errorCode) {
         this.errorCode = errorCode;
     }
 
-    public ServiceExtEnum getServiceName() {
-        return serviceName;
+    public String getServiceName() {
+        return serviceName.getServiceName();
     }
 
     public void setServiceName(ServiceExtEnum serviceName) {

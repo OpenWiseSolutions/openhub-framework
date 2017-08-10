@@ -16,28 +16,13 @@
 
 package org.openhubframework.openhub.test.rest;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.HttpEncodingAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.MultipartAutoConfiguration;
-import org.springframework.boot.autoconfigure.websocket.WebSocketAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.converter.ByteArrayHttpMessageConverter;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.ResourceHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter;
-import org.springframework.http.converter.xml.SourceHttpMessageConverter;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
@@ -55,30 +40,11 @@ import org.openhubframework.openhub.test.AbstractTest;
  * @author Petr Juza
  * @since 2.0
  */
-@Import(value = {TestRestPageableConfig.class})
-@EnableAutoConfiguration(exclude = {WebSocketAutoConfiguration.class, MultipartAutoConfiguration.class,
-        JacksonAutoConfiguration.class, HttpEncodingAutoConfiguration.class},
+@EnableAutoConfiguration(
         excludeName = {"org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration"})
 @EnableConfigurationProperties
 @WebAppConfiguration
-@EnableWebMvc
 public class TestRestConfig extends WebMvcConfigurerAdapter {
-
-    @Autowired
-    private MappingJackson2HttpMessageConverter jackson;
-
-    @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        // add default converters
-        converters.add(new ByteArrayHttpMessageConverter());
-        converters.add(new ResourceHttpMessageConverter());
-        converters.add(new SourceHttpMessageConverter<>());
-        converters.add(new AllEncompassingFormHttpMessageConverter());
-
-        converters.add(jackson);
-
-        super.configureMessageConverters(converters);
-    }
 
     /**
      * Creates bean with default {@link LocaleResolver}.
