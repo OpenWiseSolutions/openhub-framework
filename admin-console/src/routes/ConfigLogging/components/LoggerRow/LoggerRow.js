@@ -19,7 +19,7 @@ class LoggerRow extends Component {
 
     return (
       <TableRow>
-        <TableColumn adjusted>{label}</TableColumn >
+        <TableColumn style={styles.label} adjusted>{label}</TableColumn >
         <TableColumn adjusted>
           <div style={styles.controls} >
             {levels.map(l => <div

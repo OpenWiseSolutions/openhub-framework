@@ -1,6 +1,6 @@
 import tc from 'tinycolor2'
 import { gap, smallGap } from '../../../../styles/constants'
-import { secondaryColor } from '../../../../styles/colors'
+import { secondaryColor, lightColor } from '../../../../styles/colors'
 import styles from '../../../../styles/styles'
 
 export default {
@@ -19,7 +19,7 @@ export default {
     ...styles.cell
   },
   label: {
-    flex: 1
+    lineHeight: '40px'
   },
   controls: {
     flex: 1,
@@ -29,13 +29,13 @@ export default {
     alignItems: 'center'
   },
   button: {
-    paddingLeft: smallGap,
-    paddingRight: smallGap,
-    paddingTop: smallGap,
-    paddingBottom: smallGap,
+    paddingLeft: gap,
+    paddingRight: gap,
+    paddingTop: gap,
+    paddingBottom: gap,
     cursor: 'pointer',
     marginRight: '1px',
-    backgroundColor: tc(secondaryColor).setAlpha(0.1),
+    backgroundColor: tc(lightColor).setAlpha(0.5),
     ':hover': {
       backgroundColor: tc(secondaryColor).setAlpha(0.2)
     }
