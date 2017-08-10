@@ -27,7 +27,7 @@ class ParamRow extends Component {
       omit(['id', 'categoryCode', 'dataType', 'mandatory', 'validationRegEx']),
       values,
       map((value) => typeof value !== 'string' ? toString(value) : value),
-      addIndex(map)((cell, index) => <TableColumn style={styles.value} key={index} >{cell}</TableColumn>),
+      addIndex(map)((cell, index) => <TableColumn key={index} >{cell}</TableColumn>),
       append(
         <TableColumn key={id} >
           <Button primary onClick={() => openParam(id)} >edit</Button >

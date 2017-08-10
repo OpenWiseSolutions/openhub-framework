@@ -16,3 +16,9 @@ $md-primary-color: #1aa6d7;
 .md-list--drawer {
   background-color: #e6e6e6;
 }
+
+.md-data-table--plain .md-table-column--data, .md-data-table .md-table-column--plain {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  line-height: 30px;
+}
