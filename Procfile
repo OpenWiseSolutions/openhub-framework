@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -Dserver.port=${PORT} -Dspring.profiles.active=example-module,h2 -Dlogging.level.org.hibernate.SQL=warn -jar web-admin/target/openhub-exec.war
+web: java $JAVA_OPTS -Dserver.port=${PORT} -Dspring.profiles.active=example-module,postgresql -Dspring.datasource.url=${DB_URL} -Dspring.datasource.username=${DB_USER} -Dspring.datasource.password=${DB_PASS} -Dflyway.enabled=${DB_MIGRATION} -Dlogging.level.org.hibernate.SQL=warn -jar web-admin/target/openhub-exec.war
