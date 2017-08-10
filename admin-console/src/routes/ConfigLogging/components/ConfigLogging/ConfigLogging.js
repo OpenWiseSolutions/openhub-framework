@@ -78,6 +78,12 @@ class ConfigLogging extends Component {
               placeholder='Filter'
               name='searchQuery'
             />
+            <Button
+              style={{ marginTop: '3px', marginLeft: '20px', opacity: this.state.value ? 1 : 0 }}
+              onClick={() => this.updateSearchQuery('')}
+              icon
+            >close
+            </Button >
           </div >
           <br />
           <br />

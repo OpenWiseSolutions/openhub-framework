@@ -10,9 +10,10 @@ export default {
     paddingBottom: gap
   },
   searchBox: {
-    width: 300,
+    width: 400,
     display: 'flex',
-    alignItems: 'center'
+    flexDirection: 'row',
+    justifyContent: 'center'
   },
   counts: {
     marginLeft: gap
