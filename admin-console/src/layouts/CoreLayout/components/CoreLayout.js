@@ -4,6 +4,7 @@ import Radium from 'radium'
 import NavigationDrawer from 'react-md/lib/NavigationDrawers'
 import styles from './coreLayout.styles'
 import navItems from './navItems'
+import ToolbarMenu from '../containers/toolbarMenu.container'
 
 @Radium
 class CoreLayout extends Component {
@@ -29,6 +30,7 @@ class CoreLayout extends Component {
         defaultMedia={'desktop'}
         toolbarProminent={false}
         drawerType={NavigationDrawer.DrawerTypes.PERSISTENT}
+        toolbarActions={<ToolbarMenu />}
       >
         {children}
       </NavigationDrawer>
