@@ -29,6 +29,14 @@ class ConfigLogging extends Component {
     }
   }
 
+  componentDidUpdate (prevProps) {
+    const { value } = this.state
+    const { loggingData } = this.props
+    if (prevProps.loggingData !== loggingData) {
+      this.updateSearchQuery(value)
+    }
+  }
+
   componentDidMount () {
     const { getLoggers } = this.props
     getLoggers()
