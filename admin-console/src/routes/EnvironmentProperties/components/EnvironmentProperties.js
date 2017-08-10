@@ -1,8 +1,10 @@
 import React, { PropTypes, Component } from 'react'
 import Radium from 'radium'
 import ReactJson from 'react-json-view'
+import LinearProgress from 'react-md/lib/Progress/LinearProgress'
+import Card from 'react-md/lib/Cards/Card'
+import CardTitle from 'react-md/lib/Cards/CardTitle'
 import styles from './environmentProperties.styles.js'
-import Panel from '../../../common/components/Panel/Panel'
 
 @Radium
 class EnvironmentProperties extends Component {
@@ -17,18 +19,25 @@ class EnvironmentProperties extends Component {
       environmentData, configData
     } = this.props
 
+    if (!environmentData || !configData) {
+      return <LinearProgress id='progress' />
+    }
+
     return (
       <div style={styles.main}>
-        <Panel style={styles.panel} title={'Environment properties'}>
+        <Card >
+          <CardTitle title={'Environment properties'} />
           <div style={styles.json}>
             {environmentData && <ReactJson src={environmentData} />}
           </div>
-        </Panel>
-        <Panel style={styles.panel} title={'Config properties'}>
+        </Card>
+        <br />
+        <Card>
+          <CardTitle title={'Config properties'} />
           <div style={styles.json}>
             {configData && <ReactJson src={configData} />}
           </div>
-        </Panel>
+        </Card>
       </div>
     )
   }
