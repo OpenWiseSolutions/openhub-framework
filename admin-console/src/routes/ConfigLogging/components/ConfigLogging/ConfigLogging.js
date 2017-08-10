@@ -37,7 +37,7 @@ class ConfigLogging extends Component {
   updateSearchQuery (value) {
     const { loggingData } = this.props
     if (!loggingData) return
-    let filtered = loggingData.loggers.filter((item) => item.name.includes(value))
+    let filtered = loggingData.loggers.filter((item) => item.name.toLowerCase().includes(value.toLowerCase()))
     this.setState(() => ({
       value,
       filtered
