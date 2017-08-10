@@ -1,7 +1,7 @@
 --
 -- DB script for creating necessary tables (PostgreSQL 9.x)
 --
--- PREREQUISITE: there is "openhub" user role defined
+-- PREREQUISITE: there is "openhubusr" user role defined
 --
 
 SET statement_timeout = 0;
@@ -14,23 +14,14 @@ SET client_min_messages = warning;
 -- START: create schema (call once only)
 --
 
---DROP SCHEMA IF EXISTS openhub CASCADE;
---CREATE SCHEMA openhub;
-
 -- Note: Heroku runs the SQL below to create a user and database for you.
 -- You cannot create or modify databases and roles on Heroku Postgres.
 -- For simple use if we need upgrade database schema from command line, we uncomment privileges double lines which
 -- global configure privileges of created objects in schema for appropriate user
 
---ALTER SCHEMA openhub OWNER TO openhub;
-
---ALTER DEFAULT PRIVILEGES IN SCHEMA openhub GRANT SELECT, USAGE, UPDATE ON SEQUENCES TO openhub;
---ALTER DEFAULT PRIVILEGES IN SCHEMA openhub GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO openhub;
-
 --
 -- END: create schema
 --
-
 
 SET search_path = openhub, pg_catalog;
 
@@ -79,7 +70,7 @@ alter table message add column funnel_value varchar(50) null;
 drop index if exists funnel_value_idx;
 create index funnel_value_idx ON message (funnel_value);
 
-ALTER TABLE message OWNER TO openhub;
+-- ALTER TABLE message OWNER TO openhubusr;
 
 
 --
@@ -110,7 +101,7 @@ create index operation_name_idx ON external_call (operation_name);
 drop index if exists ext_state_idx;
 create index ext_state_idx ON external_call (state);
 
-ALTER TABLE external_call OWNER TO openhub;
+-- ALTER TABLE external_call OWNER TO openhubusr;
 
 --
 -- tables: request and response
@@ -142,8 +133,8 @@ create table response (
 
 alter table response add constraint fk_response_request foreign key (req_id) references request;
 
-ALTER TABLE request OWNER TO openhub;
-ALTER TABLE response OWNER TO openhub;
+-- ALTER TABLE request OWNER TO openhubusr;
+-- ALTER TABLE response OWNER TO openhubusr;
 
 
 --
@@ -432,7 +423,7 @@ create table configuration_item (
 DROP INDEX IF EXISTS configuration_item_cat_code_idx;
 CREATE INDEX configuration_item_cat_code_idx ON configuration_item (category_code);
 
-ALTER TABLE configuration_item OWNER TO openhub;
+-- ALTER TABLE configuration_item OWNER TO openhubusr;
 
 
 --
@@ -456,7 +447,7 @@ alter table node add constraint uq_node_name unique (name);
 drop index if exists node_code_idx;
 create index node_code_idx ON node (code);
 
-ALTER TABLE node OWNER TO openhub;
+-- ALTER TABLE node OWNER TO openhubusr;
 
 --
 -- sequence for node table
