@@ -26,7 +26,7 @@ module.exports = [
             'categoryCode': 'core.server',
             'currentValue': true,
             'defaultValue': true,
-            'dataType': 'BOOL',
+            'dataType': 'BOOLEAN',
             'mandatory': false,
             'description': 'enable/disable checking of localhostUri',
             'validationRegEx': '^(spring-ws|servlet).*$'
@@ -79,7 +79,7 @@ module.exports = [
             'categoryCode': 'core.async',
             'currentValue': false,
             'defaultValue': true,
-            'dataType': 'BOOL',
+            'dataType': 'BOOLEAN',
             'mandatory': true,
             'description': 'enable/disable checking of localhostUri',
             'validationRegEx': '^(spring-ws|servlet).*$'

@@ -14,7 +14,7 @@ import styles from './editParamModal.styles'
 
 const Value = ({ type, value, label, name, update, mandatory }) => {
   switch (type) {
-    case 'BOOL':
+    case 'BOOLEAN':
       return <Checkbox
         style={styles.checkbox}
         label={label}
