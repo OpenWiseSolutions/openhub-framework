@@ -27,10 +27,6 @@ import org.apache.camel.spring.boot.CamelConfigurationProperties;
 import org.apache.camel.spring.boot.CamelContextConfiguration;
 import org.apache.camel.spring.boot.RoutesCollector;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.HttpEncodingAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.MultipartAutoConfiguration;
-import org.springframework.boot.autoconfigure.websocket.WebSocketAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.*;
@@ -55,8 +51,7 @@ import org.openhubframework.openhub.test.route.ActiveRoutesCollector;
  * @since 2.0
  */
 @Configuration
-@EnableAutoConfiguration(exclude = {WebSocketAutoConfiguration.class, MultipartAutoConfiguration.class,
-        JacksonAutoConfiguration.class, HttpEncodingAutoConfiguration.class},
+@EnableAutoConfiguration(
         excludeName = {"org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration"})
 @ComponentScan(basePackages = {"org.openhubframework.openhub.common",
         "org.openhubframework.openhub.core", "org.openhubframework.openhub.test"},

@@ -83,7 +83,7 @@ public class MessageController extends AbstractOhfController {
      * List messages, by given filter.
      *
      * @param messageFilter the filter to filter messages.
-     * @return custom collection wrapper with messagelist elemenets.
+     * @return custom collection wrapper with message list elements.
      */
     @GetMapping(produces = {"application/xml", "application/json"})
     @ResponseStatus(HttpStatus.OK)

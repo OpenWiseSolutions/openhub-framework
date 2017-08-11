@@ -30,6 +30,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.web.servlet.MvcResult;
@@ -46,15 +47,23 @@ public final class TestRestUtils {
 
     public static final String UTF8 = "UTF-8";
 
+    final static Boolean ONE_BASED_PAGINATION = Boolean.TRUE;
+
+    final static int MAX_PAGE_SIZE = 100;
+
+    final static String PAGE_PARAMETER_NAME = "p";
+
+    final static String SIZE_PARAMETER_NAME = "s";
+
     // to avoid instantiate
     private TestRestUtils() {
     }
 
     /**
-     * Creates the {@code GET} pageable query based upon configuration.
+     * Formats the {@code GET} query based upon configuration.
      * <p/>
      * <pre>{@code
-     *  createPagePair(1,20) &rarr; p=1&s=20
+     *  createPageQuery(1,20) &rarr; p=1&s=20
      * }</pre>
      *
      * @param page the page number
@@ -62,7 +71,7 @@ public final class TestRestUtils {
      * @return the query
      */
     public static String createPageQuery(int page, int size) {
-        return TestRestPageableConfig.createPageQuery(page, size);
+        return PAGE_PARAMETER_NAME + "=" + page + "&" + SIZE_PARAMETER_NAME + "=" + size;
     }
 
     /**
@@ -78,8 +87,8 @@ public final class TestRestUtils {
      */
     public static List<NameValuePair> createPagePair(int page, int size) {
         List<NameValuePair> pageableQuery = new LinkedList<>();
-        pageableQuery.add(new BasicNameValuePair(TestRestPageableConfig.PAGE_PARAMETER_NAME, "" + page));
-        pageableQuery.add(new BasicNameValuePair(TestRestPageableConfig.SIZE_PARAMETER_NAME, "" + size));
+        pageableQuery.add(new BasicNameValuePair(PAGE_PARAMETER_NAME, "" + page));
+        pageableQuery.add(new BasicNameValuePair(SIZE_PARAMETER_NAME, "" + size));
         return pageableQuery;
     }
 
@@ -132,7 +141,7 @@ public final class TestRestUtils {
      * @return the {@link Pageable}
      */
     public static Pageable createPage(int page, int size) {
-        return TestRestPageableConfig.createPage(page, size);
+        return new PageRequest(ONE_BASED_PAGINATION ? page - 1 : page, size);
     }
 
     /**

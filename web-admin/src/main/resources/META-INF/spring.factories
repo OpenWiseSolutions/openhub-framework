@@ -1,3 +1,4 @@
 # Auto Configure
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-	org.openhubframework.openhub.web.config.GlobalSecurityConfig
+	org.openhubframework.openhub.web.config.GlobalSecurityConfig,\
+    org.openhubframework.openhub.web.config.MvcPageableConfiguration
