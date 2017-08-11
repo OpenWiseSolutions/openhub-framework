@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import { Router, hashHistory } from 'react-router'
 import ReduxToastr from 'react-redux-toastr'
 import { Provider } from 'react-redux'
-import { ValidStyles } from 'valid-react-form'
 
 class AppContainer extends Component {
   static propTypes = {

@@ -28,6 +28,9 @@ export default {
       padding: '20px'
     }
   },
+  checkbox: {
+    marginLeft: '-15px'
+  },
   content:{
     position: 'relative',
     top: 0,

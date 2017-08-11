@@ -4,7 +4,6 @@ import TableRow from 'react-md/lib/DataTables/TableRow'
 import Button from 'react-md/lib/Buttons/Button'
 import TableColumn from 'react-md/lib/DataTables/TableColumn'
 import { pipe, omit, values, map, append, addIndex, toString } from 'ramda'
-import styles from './paramRow.styles'
 
 @Radium
 class ParamRow extends Component {
