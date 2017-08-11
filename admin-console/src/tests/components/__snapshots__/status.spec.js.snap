@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders status DOWN 1`] = `
+<div
+  data-radium={true}
+  style={
+    Object {
+      "fontWeight": 800,
+    }
+  }
+>
+  <span
+    data-radium={true}
+    style={
+      Object {
+        "color": "#F04A44",
+      }
+    }
+  >
+     DOWN 
+  </span>
+</div>
+`;
+
+exports[`renders status UP 1`] = `
+<div
+  data-radium={true}
+  style={
+    Object {
+      "fontWeight": 800,
+    }
+  }
+>
+  <span
+    data-radium={true}
+    style={
+      Object {
+        "color": "#5fac40",
+      }
+    }
+  >
+     UP 
+  </span>
+</div>
+`;
