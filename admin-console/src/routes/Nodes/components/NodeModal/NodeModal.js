@@ -15,9 +15,9 @@ class NodeModal extends Component {
     const { data } = this.props
 
     this.state = {
-      name: data.name,
-      description: data.description,
-      state: data.state
+      name: data.name || '',
+      description: data.description || '',
+      state: data.state || ''
     }
   }
 
@@ -60,7 +60,6 @@ class NodeModal extends Component {
           />
           <TextField
             label={'Description'}
-            required
             value={this.state.description}
             onChange={(description) => this.setState(() => ({ description }))}
           />
