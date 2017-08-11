@@ -5,10 +5,12 @@ import PropTypes from 'prop-types'
 import validator from 'validator'
 import Radium from 'radium'
 import Dialog from 'react-md/lib/Dialogs'
+import Flatpickr from 'react-flatpickr'
 import CardTitle from 'react-md/lib/Cards/CardTitle'
 import TextField from 'react-md/lib/TextFields'
 import Checkbox from 'react-md/lib/SelectionControls/Checkbox'
 import Button from 'react-md/lib/Buttons/Button'
+import styles from './editParamModal.styles'
 
 const Value = ({ type, value, label, name, update }) => {
   switch (type) {
@@ -39,7 +41,14 @@ const Value = ({ type, value, label, name, update }) => {
         value={value}
         onChange={(val) => update(name, val, (v) => validator.isFloat(v))}
       />
+    case 'DATE':
+      return <Flatpickr
+        style={styles.datepicker}
+        value={value}
+        onChange={(val) => update(name, val)}
+      />
     case 'STRING':
+    case 'FILE':
     default:
       return <TextField
         required

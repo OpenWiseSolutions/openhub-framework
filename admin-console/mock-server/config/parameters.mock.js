@@ -30,6 +30,16 @@ module.exports = [
             'mandatory': false,
             'description': 'enable/disable checking of localhostUri',
             'validationRegEx': '^(spring-ws|servlet).*$'
+          }, {
+            'id': 523,
+            'code': 'ohf.server.lasdfl.check',
+            'categoryCode': 'core.server',
+            'currentValue': '',
+            'defaultValue': '',
+            'dataType': 'DATE',
+            'mandatory': false,
+            'description': 'enable/disable checking of localhostUri',
+            'validationRegEx': '^(spring-ws|servlet).*$'
           },
           {
             'id': 191,

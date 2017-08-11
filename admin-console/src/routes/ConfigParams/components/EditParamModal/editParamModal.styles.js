@@ -71,5 +71,22 @@ export default {
     paddingLeft: 10,
     paddingBottom: 10,
     paddingRight: 10
+  },
+  datepicker: {
+    boxSizing: 'border-box',
+    paddingTop: 0,
+    paddingBottom: 0,
+    marginTop: 0,
+    marginBottom: 0,
+    marginLeft: 0,
+    marginRight: 0,
+    width: '100%',
+    height: '40px',
+    border: 'none',
+    outline: 'none',
+    fontSize: '13px',
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+    borderBottomColor: 'lightgray'
   }
 }
