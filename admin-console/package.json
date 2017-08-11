@@ -79,7 +79,7 @@
       }
     },
     "test": {
-      "command": "node ./node_modules/karma/bin/karma start config/karma.config",
+      "command": "jest",
       "env": {
         "NODE_ENV": "test",
         "DEBUG": "app:*"
@@ -172,6 +172,7 @@
     "express-http-proxy": "^0.10.1",
     "express-mock-server": "^1.1.1",
     "husky": "^0.13.2",
+    "jest": "^20.0.4",
     "nodemon": "^1.10.2",
     "parallelshell": "^2.0.0",
     "react-addons-test-utils": "^15.0.0",
