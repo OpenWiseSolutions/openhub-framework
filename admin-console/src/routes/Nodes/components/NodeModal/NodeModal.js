@@ -35,7 +35,7 @@ class NodeModal extends Component {
       description,
       state
     }
-    updateNode(data.id, payload)
+    updateNode(data.id, payload, data)
   }
 
   render () {

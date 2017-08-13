@@ -36,7 +36,9 @@ export const closeNode = () => ({
   type: CLOSE_NODE
 })
 
-export const updateNode = (id, payload) => (dispatch) => {
+export const updateNode = (id, payload, data) => (dispatch) => {
+  const stateChanged = payload.state !== data.state
+
   const update = () => {
     return editNode(id, payload)
       .then(() => {
@@ -48,9 +50,14 @@ export const updateNode = (id, payload) => (dispatch) => {
         toastr.error('Node update failed')
       })
   }
-  toastr.confirm('Are you sure that you want to update this node?', {
-    onOk: () => update()
-  })
+
+  if (stateChanged) {
+    toastr.confirm('Are you sure that you want to update this node?', {
+      onOk: () => update()
+    })
+  } else {
+    update()
+  }
 }
 
 export const deleteNode = (id) => (dispatch) => {
