@@ -1,3 +1,4 @@
+import { toastr } from 'react-redux-toastr'
 import moment from 'moment'
 import { pipe, pickBy, evolve } from 'ramda'
 import { fetchMessages } from '../../../services/messages.service'
@@ -45,6 +46,9 @@ export const getMessages = (filter = {}) =>
     fetchMessages(safePayload)
       .then(({ data }) => {
         dispatch(getMessagesSuccess(data))
+      })
+      .catch(() => {
+        toastr.error('Unable to fetch messages')
       })
   }
 

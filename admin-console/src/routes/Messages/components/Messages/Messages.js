@@ -47,7 +47,7 @@ class Messages extends Component {
 
   reset () {
     this.setState(() => ({
-      receivedFrom: '',
+      receivedFrom: moment().subtract(5, 'minute').format(),
       lastChangeFrom: '',
       sourceSystem: '',
       processId: '',
@@ -168,7 +168,7 @@ class Messages extends Component {
           </div >
         </form >
 
-        <CardTitle subtitle={'Messages'} />
+        <CardTitle subtitle={messages.length > 0 ? 'Messages' : 'No Messages'} />
         {messages && messages.length > 0 &&
         <DataTable plain >
           <TableHeader >
@@ -188,8 +188,8 @@ class Messages extends Component {
               <TableRow style={styles.row} onClick={() => this.openDetail(message)} key={message.id} >
                 <TableColumn >{message.correlationId}</TableColumn >
                 <TableColumn >{message.sourceSystem}</TableColumn >
-                <TableColumn >{moment(message.received).format('MMMM Do YYYY, hh:mm:ss')}</TableColumn >
-                <TableColumn >{moment(message.processingStarted).format('MMMM Do YYYY, hh:mm:ss')}</TableColumn >
+                <TableColumn >{moment(message.received).format('YYYY-MM-DD hh:mm:ss')}</TableColumn >
+                <TableColumn >{moment(message.processingStarted).format('YYYY-MM-DD hh:mm:ss')}</TableColumn >
                 <TableColumn >{message.state}</TableColumn >
                 <TableColumn >{message.errorCode}</TableColumn >
                 <TableColumn >{message.serviceName}</TableColumn >

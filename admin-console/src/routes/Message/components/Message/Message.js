@@ -55,6 +55,7 @@ class Message extends Component {
       { t: 'The time when the process began processing', v: message.processingStarted },
       { t: 'The time of latest change', v: message.lastChange },
       { t: 'Error code', v: message.errorCode },
+      { t: 'Error description', v: message.failedDescription },
       { t: 'Failed count', v: message.failedCount },
       { t: 'Source system', v: message.sourceSystem },
       { t: 'The time when message was received', v: message.received },
@@ -70,8 +71,7 @@ class Message extends Component {
       { t: 'Business error overview', v: message.businessError },
       { t: 'ID of parent message', v: message.parentMsgId },
       { t: 'Content (body) of message', v: <SyntaxHighlighter style={codeStyle} >{message.body}</SyntaxHighlighter > },
-      { t: 'Whole incoming message', v: <SyntaxHighlighter style={codeStyle} >{message.envelope}</SyntaxHighlighter > },
-      { t: 'Error description', v: message.failedDescription }
+      { t: 'Whole incoming message', v: <SyntaxHighlighter style={codeStyle} >{message.envelope}</SyntaxHighlighter > }
     ].map((item) => {
       if (typeof item.v === 'boolean') {
         item.v = item.v ? 'YES' : 'NO'
@@ -159,7 +159,7 @@ class Message extends Component {
                   <TableColumn >{call.state}</TableColumn >
                   <TableColumn >{call.operationName}</TableColumn >
                   <TableColumn >{call.callId}</TableColumn >
-                  <TableColumn >{moment(call.lastChange).format('MMMM Do YYYY, hh:mm:ss')}</TableColumn >
+                  <TableColumn >{moment(call.lastChange).format('YYYY-MM-DD hh:mm:ss')}</TableColumn >
                 </TableRow >
               ))}
             </TableBody >
@@ -187,8 +187,8 @@ class Message extends Component {
                 <TableRow key={request.id} >
                   <TableColumn >{request.id}</TableColumn >
                   <TableColumn >{request.uri}</TableColumn >
-                  <TableColumn >{request.timestamp}</TableColumn >
-                  <TableColumn >{request.response.timestamp}</TableColumn >
+                  <TableColumn >{moment(request.timestamp).format('YYYY-MM-DD hh:mm:ss')}</TableColumn >
+                  <TableColumn >{moment(request.response.timestamp).format('YYYY-MM-DD hh:mm:ss')}</TableColumn >
                   <TableColumn >
                     {<SyntaxHighlighter style={codeStyle} >{request.payload}</SyntaxHighlighter >}
                   </TableColumn >
