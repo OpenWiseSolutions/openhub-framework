@@ -188,7 +188,7 @@ class Messages extends Component {
           </TableHeader >
           <TableBody >
             {messages.map((message, index) => (
-              <TableRow onClick={() => this.openDetail(message)} key={message.id} >
+              <TableRow style={styles.row} onClick={() => this.openDetail(message)} key={message.id} >
                 <TableColumn >{message.correlationId}</TableColumn >
                 <TableColumn >{message.sourceSystem}</TableColumn >
                 <TableColumn >{moment(message.received).format('MMMM Do YYYY, hh:mm:ss')}</TableColumn >

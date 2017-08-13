@@ -46,5 +46,8 @@ export default {
   cell: {
     ...styles.cell,
     cursor: 'pointer'
+  },
+  row: {
+    cursor: 'pointer'
   }
 }
