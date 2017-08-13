@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
+import { isEmpty } from 'ramda'
 import PropTypes from 'prop-types'
 import Radium from 'radium'
 import NavigationDrawer from 'react-md/lib/NavigationDrawers'
+import LinearProgress from 'react-md/lib/Progress/LinearProgress'
 import styles from './coreLayout.styles'
 import navItems from './navItems'
 import ToolbarMenu from '../containers/toolbarMenu.container'
@@ -14,7 +16,8 @@ class CoreLayout extends Component {
       children,
       sidebar,
       toggleSidebar,
-      config
+      config,
+      active
     } = this.props
 
     return (
@@ -32,7 +35,22 @@ class CoreLayout extends Component {
         drawerType={NavigationDrawer.DrawerTypes.PERSISTENT}
         toolbarActions={<ToolbarMenu />}
       >
-        {children}
+        <div style={{ width: '100%' }}>
+          <LinearProgress
+            id='progress'
+            style={{
+              margin: 0,
+              marginTop: '-64px',
+              marginBottom: '54px',
+              width: '100%',
+              height: '10px',
+              opacity: !isEmpty(active) ? 1 : 0,
+              zIndex: 20,
+              backgroundColor: 'transparent'
+            }}
+          />
+          {children}
+        </div>
       </NavigationDrawer>
     )
   }
@@ -44,7 +62,8 @@ CoreLayout.propTypes = {
   toggleSidebar: PropTypes.func,
   userData: PropTypes.object,
   config: PropTypes.object,
-  title: PropTypes.string
+  title: PropTypes.string,
+  active: PropTypes.object
 }
 
 export default CoreLayout

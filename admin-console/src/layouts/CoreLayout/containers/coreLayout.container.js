@@ -2,7 +2,8 @@ import { connect } from 'react-redux'
 import CoreLayout from '../components/CoreLayout'
 import { actions } from '../coreLayout.module'
 
-const mapStateToProps = ({ auth, layout }) => ({
+const mapStateToProps = ({ api, auth, layout }) => ({
+  ...api,
   ...auth,
   ...layout
 })

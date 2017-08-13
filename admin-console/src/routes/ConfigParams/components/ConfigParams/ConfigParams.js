@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Radium from 'radium'
-import LinearProgress from 'react-md/lib/Progress/LinearProgress'
 import Card from 'react-md/lib/Cards/Card'
 import CardTitle from 'react-md/lib/Cards/CardTitle'
 import DataTable from 'react-md/lib/DataTables/DataTable'
@@ -32,7 +31,7 @@ class ConfigParams extends Component {
       updateParam
     } = this.props
 
-    if (!configParams) return <LinearProgress id='loader' />
+    if (!configParams) return null
 
     const categories = configParams.reduce((acc, item) => {
       if (!acc[item.categoryCode]) acc[item.categoryCode] = []

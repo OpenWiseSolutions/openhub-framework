@@ -4,7 +4,6 @@ import Radium from 'radium'
 import Card from 'react-md/lib/Cards/Card'
 import CardTitle from 'react-md/lib/Cards/CardTitle'
 import CardText from 'react-md/lib/Cards/CardText'
-import LinearProgress from 'react-md/lib/Progress/LinearProgress'
 import styles from './wsdl.styles'
 
 @Radium
@@ -17,7 +16,7 @@ class WSDLOverview extends Component {
   render () {
     const { wsdlData } = this.props
 
-    if (!wsdlData) return <LinearProgress id='loading' />
+    if (!wsdlData) return null
 
     return (
       <Card>

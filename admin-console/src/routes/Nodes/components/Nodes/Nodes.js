@@ -5,7 +5,6 @@ import MdPlayArrow from 'react-icons/lib/md/play-arrow'
 import MdStop from 'react-icons/lib/md/stop'
 import MdInbox from 'react-icons/lib/md/inbox'
 import Button from 'react-md/lib/Buttons/Button'
-import LinearProgress from 'react-md/lib/Progress/LinearProgress'
 import Card from 'react-md/lib/Cards/Card'
 import DataTable from 'react-md/lib/DataTables/DataTable'
 import TableHeader from 'react-md/lib/DataTables/TableHeader'
@@ -43,7 +42,7 @@ class ConfigParams extends Component {
   render () {
     const { nodes, nodeDetail, closeNode, openNode, updateNode, deleteNode } = this.props
 
-    if (!nodes) return <LinearProgress id='progress' />
+    if (!nodes) return null
 
     const computedStyles = [styles.main]
 

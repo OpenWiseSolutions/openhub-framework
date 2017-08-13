@@ -1,11 +1,9 @@
 /* eslint-disable react/jsx-no-bind */
 import React, { Component } from 'react'
-import { isEmpty } from 'ramda'
 import PropTypes from 'prop-types'
 import Radium from 'radium'
 import moment from 'moment'
 import Flatpickr from 'react-flatpickr'
-import LinearProgress from 'react-md/lib/Progress/LinearProgress'
 import DataTable from 'react-md/lib/DataTables/DataTable'
 import TableHeader from 'react-md/lib/DataTables/TableHeader'
 import TableBody from 'react-md/lib/DataTables/TableBody'
@@ -171,7 +169,6 @@ class Messages extends Component {
         </form >
 
         <CardTitle subtitle={'Messages'} />
-        {isEmpty(messages) && <LinearProgress id='progress' />}
         {messages && messages.length > 0 &&
         <DataTable plain >
           <TableHeader >

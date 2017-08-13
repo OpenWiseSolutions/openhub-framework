@@ -5,7 +5,6 @@ import { reverse, length, take } from 'ramda'
 import Card from 'react-md/lib/Cards/Card'
 import TextField from 'react-md/lib/TextFields'
 import FontIcon from 'react-md/lib/FontIcons'
-import LinearProgress from 'react-md/lib/Progress/LinearProgress'
 import DataTable from 'react-md/lib/DataTables/DataTable'
 import TableHeader from 'react-md/lib/DataTables/TableHeader'
 import TableBody from 'react-md/lib/DataTables/TableBody'
@@ -68,7 +67,7 @@ class ConfigLogging extends Component {
     const { filtered, value, takes } = this.state
     const { loggingData, updateLogger } = this.props
 
-    if (!loggingData) return <LinearProgress id='progress' />
+    if (!loggingData) return null
 
     const levels = reverse(loggingData.levels)
     const items = take(LIST_LENGTH * takes, filtered || loggingData.loggers)

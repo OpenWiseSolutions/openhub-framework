@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Radium from 'radium'
-import LinearProgress from 'react-md/lib/Progress/LinearProgress'
 import styles from './errorsOverview.styles'
 import Card from 'react-md/lib/Cards/Card'
 import CardTitle from 'react-md/lib/Cards/CardTitle'
@@ -21,7 +20,7 @@ class ErrorsOverview extends Component {
   render () {
     const { errorsData } = this.props
 
-    if (!errorsData) return <LinearProgress id='progress' />
+    if (!errorsData) return null
 
     return (
       <div style={styles.main}>

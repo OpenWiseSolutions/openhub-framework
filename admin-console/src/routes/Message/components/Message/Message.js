@@ -6,7 +6,6 @@ import Radium from 'radium'
 import SyntaxHighlighter, { registerLanguage } from 'react-syntax-highlighter/dist/light'
 import xml from 'react-syntax-highlighter/dist/languages/xml'
 import xcode from 'react-syntax-highlighter/dist/styles/xcode'
-import LinearProgress from 'react-md/lib/Progress/LinearProgress'
 import Card from 'react-md/lib/Cards/Card'
 import CardTitle from 'react-md/lib/Cards/CardTitle'
 import Checkbox from 'react-md/lib/SelectionControls/Checkbox'
@@ -46,7 +45,7 @@ class Message extends Component {
     const { message, restart, cancel } = this.props
     const states = ['OK', 'FAILED', 'CANCEL']
 
-    if (!message) return <LinearProgress id='progress' />
+    if (!message) return null
 
     const rows = [
       { t: 'Msg ID', v: message.id },

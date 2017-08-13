@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import Radium from 'radium'
 import tc from 'tinycolor2'
 import { PieChart, Pie } from 'recharts'
-import LinearProgress from 'react-md/lib/Progress/LinearProgress'
 import Card from 'react-md/lib/Cards/Card'
 import CardTitle from 'react-md/lib/Cards/CardTitle'
 import Divider from 'react-md/lib/Dividers'
@@ -21,7 +20,7 @@ class Home extends Component {
     const { userData, dashboard: { healthInfo, openHubInfo, metricsInfo } } = this.props
 
     if (!openHubInfo && !healthInfo && !metricsInfo) {
-      return <LinearProgress id='progress' />
+      return null
     }
 
     if (!userData) {
@@ -98,7 +97,6 @@ class Home extends Component {
 
     return (
       <div >
-        { (!openHubInfo || !healthInfo || !metricsInfo) && <LinearProgress id='progress' /> }
         {userData &&
         <div style={styles.widgets} >
           {healthTableData && <Card style={styles.widget} >
