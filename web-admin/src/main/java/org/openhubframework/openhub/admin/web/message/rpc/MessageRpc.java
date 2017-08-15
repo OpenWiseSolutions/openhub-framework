@@ -55,6 +55,7 @@ public class MessageRpc extends MessageBaseRpc {
     private String body;
     private String envelope;
     private String failedDescription;
+    private String customData;
     private List<RequestInfoRpc> requests;
     private List<ExternalCallInfoRpc> externalCalls;
     private List<MessageActionType> allowedActions;
@@ -180,6 +181,14 @@ public class MessageRpc extends MessageBaseRpc {
         this.failedDescription = failedDescription;
     }
 
+    public String getCustomData() {
+        return customData;
+    }
+
+    public void setCustomData(String customData) {
+        this.customData = customData;
+    }
+
     public List<RequestInfoRpc> getRequests() {
         return requests;
     }
@@ -235,6 +244,7 @@ public class MessageRpc extends MessageBaseRpc {
             ret.setBody(source.getPayload());
             ret.setEnvelope(source.getEnvelope());
             ret.setFailedDescription(source.getFailedDesc());
+            ret.setCustomData(source.getCustomData());
             ret.setRequests(source.getRequests().stream()
                     .map(request -> RequestInfoRpc.fromRequest().convert(request))
                     .collect(Collectors.toList())
@@ -267,6 +277,7 @@ public class MessageRpc extends MessageBaseRpc {
                 // body skipped
                 // envelope skipped
                 .append("failedDescription", failedDescription)
+                .append("customData", customData)
                 .append("requests", requests)
                 .append("externalCalls", externalCalls)
                 .toString();
