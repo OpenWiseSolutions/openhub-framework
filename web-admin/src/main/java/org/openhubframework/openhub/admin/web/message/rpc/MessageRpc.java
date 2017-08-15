@@ -29,6 +29,8 @@ import org.openhubframework.openhub.api.entity.MessageActionType;
 import org.openhubframework.openhub.core.common.asynch.msg.MessageHelper;
 import org.springframework.core.convert.converter.Converter;
 
+import javax.annotation.Nullable;
+
 
 /**
  * Message detail RPC, with all attributes for detail queries.
@@ -97,8 +99,9 @@ public class MessageRpc extends MessageBaseRpc {
         this.objectId = objectId;
     }
 
+    @Nullable
     public String getEntityType() {
-        return entityType.getEntityType();
+        return entityType != null ? entityType.getEntityType() : null;
     }
 
     public void setEntityType(EntityTypeExtEnum entityType) {
