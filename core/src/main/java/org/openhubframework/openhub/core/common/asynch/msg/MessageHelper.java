@@ -47,12 +47,12 @@ public final class MessageHelper {
     /**
      * States in which RESTART operation is available.
      */
-    private static final Set<MsgStateEnum> RESTART_STATES = Stream.of(MsgStateEnum.OK, MsgStateEnum.FAILED, MsgStateEnum.CANCEL)
+    public static final Set<MsgStateEnum> RESTART_STATES = Stream.of(MsgStateEnum.OK, MsgStateEnum.FAILED, MsgStateEnum.CANCEL)
             .collect(Collectors.toSet());
     /**
      * States valid for CANCEL operation.
      */
-    private static final Set<MsgStateEnum> CANCEL_STATES = Stream.of(MsgStateEnum.values())
+    public static final Set<MsgStateEnum> CANCEL_STATES = Stream.of(MsgStateEnum.values())
             .filter(state -> !RESTART_STATES.contains(state))
             .collect(Collectors.toSet());
 

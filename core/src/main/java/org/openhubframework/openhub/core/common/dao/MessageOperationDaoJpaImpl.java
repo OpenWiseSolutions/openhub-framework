@@ -22,6 +22,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.openhubframework.openhub.core.common.asynch.msg.MessageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -61,7 +62,7 @@ public class MessageOperationDaoJpaImpl implements MessageOperationDao {
         q.setParameter(1, MsgStateEnum.PARTLY_FAILED);
         q.setParameter(2, Instant.now());
         q.setParameter(3, msg.getMsgId());
-        q.setParameter(4, Arrays.asList(MsgStateEnum.CANCEL, MsgStateEnum.FAILED));
+        q.setParameter(4, MessageHelper.RESTART_STATES);
 
         return q.executeUpdate() > 0;
     }
@@ -97,7 +98,7 @@ public class MessageOperationDaoJpaImpl implements MessageOperationDao {
         Query q = em.createQuery(jSql);
         q.setParameter(1, MsgStateEnum.CANCEL);
         q.setParameter(2, msg.getMsgId());
-        q.setParameter(3, Arrays.asList(MsgStateEnum.NEW, MsgStateEnum.PARTLY_FAILED, MsgStateEnum.POSTPONED));
+        q.setParameter(3, MessageHelper.CANCEL_STATES);
 
         return q.executeUpdate() > 0;
     }

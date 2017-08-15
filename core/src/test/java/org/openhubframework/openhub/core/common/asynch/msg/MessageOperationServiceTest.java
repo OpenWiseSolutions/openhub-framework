@@ -180,7 +180,7 @@ public class MessageOperationServiceTest extends AbstractCoreDbTest {
         Message[] messages = createAndSaveMessages(1, new MessageCallback() {
             @Override
             public void beforeInsert(Message message, int order) {
-                message.setState(MsgStateEnum.PROCESSING);
+                message.setState(MsgStateEnum.FAILED);
             }
         });
 
