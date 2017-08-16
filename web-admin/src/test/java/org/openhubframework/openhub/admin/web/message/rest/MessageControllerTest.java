@@ -249,6 +249,7 @@ public class MessageControllerTest extends AbstractAdminModuleRestTest {
         msg.setExcludeFailedState(Boolean.TRUE);
         msg.setBusinessError("Not enough balance in the account");
         msg.setParentMsgId(333L);
+        msg.setCustomData("my-custom-data");
         msg.setPayload("<hel:hello>Hello</hel:hello>");
         msg.setEnvelope("<soap:envelope><hel:hello>Hello</hel:hello></soap:envelope>");
         msg.setFailedDesc("Something went terribly wrong");
@@ -304,6 +305,7 @@ public class MessageControllerTest extends AbstractAdminModuleRestTest {
                 .andExpect(jsonPath("body", is("<hel:hello>Hello</hel:hello>")))
                 .andExpect(jsonPath("envelope", is("<soap:envelope><hel:hello>Hello</hel:hello></soap:envelope>")))
                 .andExpect(jsonPath("failedDescription", is("Something went terribly wrong")))
+                .andExpect(jsonPath("customData", is("my-custom-data")))
                 .andExpect(jsonPath("requests", hasSize(1)))
                 .andExpect(jsonPath("requests[0].id", is(421)))
                 .andExpect(jsonPath("requests[0].uri", is("spring-ws:http://helloservice.com")))

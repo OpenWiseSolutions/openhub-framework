@@ -29,6 +29,8 @@ import org.openhubframework.openhub.api.entity.ServiceExtEnum;
 import org.openhubframework.openhub.api.exception.ErrorExtEnum;
 import org.springframework.core.convert.converter.Converter;
 
+import javax.annotation.Nullable;
+
 
 /**
  * Base RPC for message entities.
@@ -88,8 +90,9 @@ public abstract class MessageBaseRpc extends BaseRpc<Message, Long> {
         this.state = state;
     }
 
+    @Nullable
     public String getErrorCode() {
-        return errorCode.getErrorCode();
+        return errorCode != null ? errorCode.getErrorCode() : null;
     }
 
     public void setErrorCode(ErrorExtEnum errorCode) {
