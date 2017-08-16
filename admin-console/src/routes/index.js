@@ -9,6 +9,8 @@ import EnvironmentProperties from './EnvironmentProperties'
 import ErrorsOverview from './ErrorsOverview'
 import Nodes from './Nodes'
 import WSDL from './WSDL'
+import Messages from './Messages'
+import Message from './Message'
 
 export const createRoutes = (store) => ({
   path: '/',
@@ -21,7 +23,9 @@ export const createRoutes = (store) => ({
     EnvironmentProperties(store),
     ErrorsOverview(store),
     Nodes(store),
-    WSDL(store)
+    WSDL(store),
+    Messages(store),
+    Message(store)
   ],
   onEnter: () => {
     store.dispatch(initAuth())

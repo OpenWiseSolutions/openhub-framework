@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Radium from 'radium'
 import Modal from 'react-modal'
-import { ValidForm, Field, ValidStyles } from 'valid-react-form'
+import { ValidForm } from 'valid-react-form'
+import Field from '../../../../common/components/Field/Field'
 import ModalHeader from '../../../../common/components/ModalHeader/ModalHeader'
 import styles from './nodeModal.styles'
 import Button from '../../../../common/components/Button/Button'
@@ -31,19 +32,18 @@ class NodeModal extends Component {
         <ModalHeader onClose={close} title={'Cluster Node Update'} />
         {isOpen && data &&
         <div style={styles.content}>
-          <ValidStyles>
-            <ValidForm extended={{ state }} autoComplete='off' onSubmit={(payload) => updateNode(data.id, payload)}>
-              <div style={styles.row}>
-                <div style={styles.label}>Name</div>
-                <Field required name='name' value={data.name} />
-              </div>
-              <div style={styles.row}>
-                <div style={styles.label}>Description</div>
-                <Field name='description' value={data.description} />
-              </div>
-              <div style={styles.row}>
-                <div style={styles.label}>State</div>
-                <div style={styles.state} onChange={(event) => this.changeState(event.target.value)}>
+          <ValidForm extended={{ state }} autoComplete='off' onSubmit={(payload) => updateNode(data.id, payload)}>
+            <div style={styles.row}>
+              <div style={styles.label}>Name</div>
+              <Field required name='name' value={data.name} />
+            </div>
+            <div style={styles.row}>
+              <div style={styles.label}>Description</div>
+              <Field name='description' value={data.description} />
+            </div>
+            <div style={styles.row}>
+              <div style={styles.label}>State</div>
+              <div style={styles.state} onChange={(event) => this.changeState(event.target.value)}>
                   Run
                   <input
                     defaultChecked={state === 'RUN'}
@@ -68,14 +68,13 @@ class NodeModal extends Component {
                     type='radio'
                     name='state'
                   />
-                </div>
               </div>
-              <div style={[styles.row, styles.controls]}>
-                <Anchor style={styles.controls.cancel} onClick={close}>Cancel</Anchor>
-                <Button style={styles.controls.submit}>{'Update'}</Button>
-              </div>
-            </ValidForm>
-          </ValidStyles>
+            </div>
+            <div style={[styles.row, styles.controls]}>
+              <Anchor style={styles.controls.cancel} onClick={close}>Cancel</Anchor>
+              <Button style={styles.controls.submit}>{'Update'}</Button>
+            </div>
+          </ValidForm>
         </div>}
       </Modal>
     )

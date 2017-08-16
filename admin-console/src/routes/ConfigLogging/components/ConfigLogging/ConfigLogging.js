@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Radium from 'radium'
 import { reverse, length, take } from 'ramda'
-import { Field, ValidStyles } from 'valid-react-form'
+import Field from '../../../../common/components/Field/Field'
 import styles from './configLogging.styles.js'
 import LoggerRow from '../LoggerRow/LoggerRow'
 
@@ -58,12 +58,10 @@ class ConfigLogging extends Component {
     return (
       <div style={styles.main}>
         <div style={styles.searchBox}>
-          <ValidStyles>
-            <Field onChange={(val) => this.updateSearchQuery(val)}
-              value={value}
-              placeholder='filter'
-              name='searchQuery' />
-          </ValidStyles>
+          <Field onChange={(val) => this.updateSearchQuery(val)}
+            value={value}
+            placeholder='filter'
+            name='searchQuery' />
           <div style={styles.counts}>{count}</div>
         </div>
         <div style={styles.loggers}>

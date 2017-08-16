@@ -10,7 +10,7 @@ export default class ApiService {
 
   http (path, config) {
     const relativePath = path.substr(this.base.length)
-    this.store.dispatch(fetchStart(relativePath))
+    this.store && this.store.dispatch(fetchStart(relativePath))
     return fetch(path, config)
       .then(res => {
         if (!res.ok) {
@@ -18,11 +18,11 @@ export default class ApiService {
           error.response = res
           return Promise.reject(error)
         }
-        this.store.dispatch(fetchStop(relativePath))
+        this.store && this.store.dispatch(fetchStop(relativePath))
         return this.resolveBody(res, config)
       })
       .catch(error => {
-        this.store.dispatch(fetchError(relativePath, error))
+        this.store && this.store.dispatch(fetchError(relativePath, error))
         return Promise.reject(error)
       })
   }

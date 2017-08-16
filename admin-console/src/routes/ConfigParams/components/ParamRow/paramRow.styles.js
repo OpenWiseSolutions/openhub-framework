@@ -1,19 +1,7 @@
-import { primaryColor, lightColor } from '../../../../styles/colors'
+import Styles from '../../../../styles/styles'
 
 export default {
-  even: {
-    backgroundColor: primaryColor
-  },
-  odd: {
-    backgroundColor: lightColor
-  },
-  cell: {
-    margin: 0,
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingLeft: 10,
-    paddingRight: 10
-  },
+  ...Styles,
   button: {
     textAlign: 'center',
     backgroundColor: 'transparent'
