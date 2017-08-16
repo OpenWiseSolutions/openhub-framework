@@ -1,7 +1,9 @@
-import { secondaryColor, lightColor, primaryColor } from '../../../../styles/colors'
+import styles from '../../../../styles/styles'
+import { secondaryColor, lightColor } from '../../../../styles/colors'
 import { gap, smallGap } from '../../../../styles/constants'
 
 export default {
+  ...styles,
   main: {
     boxSizing: 'border-box',
     paddingTop: gap,
@@ -30,17 +32,5 @@ export default {
     paddingBottom: gap,
     paddingLeft: gap,
     color: lightColor
-  },
-  table: {
-    position: 'relative',
-    width: '100%',
-    boxShadow: '0 2px 10px -2px silver',
-    borderSpacing: 1
-  },
-  header: {
-    fontSize: '0.7em',
-    textAlign: 'left',
-    backgroundColor: primaryColor,
-    minWidth: 80
   }
 }

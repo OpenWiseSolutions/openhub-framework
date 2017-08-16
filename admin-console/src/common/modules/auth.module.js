@@ -1,5 +1,6 @@
 import { hashHistory } from 'react-router'
 import { toastr } from 'react-redux-toastr'
+import { getHealthInfo, getMetricsInfo } from '../../routes/Home/modules/home.module'
 import { login, userInfo, logout } from '../../services/auth.service'
 import { fetchConsoleConfig } from '../../services/appConfig.service'
 
@@ -51,7 +52,6 @@ export const getConfig = () => (dispatch) => {
       })
     })
     .catch(() => {
-      dispatch(logoutUser())
       toastr.error('Failed to retrieve console config!')
     })
 }
@@ -76,15 +76,11 @@ export const loginSuccess = () =>
         dispatch({ type: LOGIN_SUCCESS, payload })
         dispatch(getConfig())
       })
-      .catch(() => {
-        dispatch(logout())
-      })
   }
 
 export const loginError = (res) => () => {
   sessionStorage.removeItem(AUTH_SESSION)
   toastr.error('Login Failed!')
-  // todo error handler
 }
 
 export const submitLogin = ({ username, password }) => {
@@ -93,7 +89,11 @@ export const submitLogin = ({ username, password }) => {
     params.append('username', username)
     params.append('password', password)
     return login(params)
-      .then((res) => dispatch(loginSuccess()))
+      .then(() => {
+        dispatch(loginSuccess())
+        dispatch(getHealthInfo())
+        dispatch(getMetricsInfo())
+      })
       .catch((res) => dispatch(loginError(res)))
   }
 }
@@ -123,7 +123,6 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 export const initialState = {
-  // todo zmenit nazvy ?
   loginModalOpen: false,
   userData: null,
   config: null

@@ -13,7 +13,10 @@ import Status from '../../../common/components/Status/Status'
 class Home extends Component {
 
   componentDidMount () {
-    const { getHealthInfo, getMetricsInfo } = this.props
+    const { userData, getHealthInfo, getMetricsInfo } = this.props
+
+    if (!userData) return
+
     getHealthInfo()
     getMetricsInfo()
   }
