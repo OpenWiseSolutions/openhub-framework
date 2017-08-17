@@ -111,11 +111,12 @@ class EditParamModal extends Component {
     const { isOpen, close, data } = this.props
     return (
       <Dialog
-        modal
+        closeOnEsc
         id='modal'
         dialogClassName='md-dialog--big'
         title={'Edit Parameter'}
         visible={isOpen}
+        onHide={close}
         actions={[
           <Button onClick={this.handleSubmit.bind(this)} raised label={'Update'} primary />,
           <Button raised label={'Cancel'} onClick={close} />

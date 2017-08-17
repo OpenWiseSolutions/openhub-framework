@@ -42,7 +42,8 @@ class NodeModal extends Component {
     const { isOpen, close, data } = this.props
     return (
       <Dialog
-        modal
+        closeOnEsc
+        onHide={close}
         title={'Cluster Node Update'}
         visible={isOpen}
         actions={[
