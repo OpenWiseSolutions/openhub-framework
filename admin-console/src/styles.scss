@@ -2,6 +2,7 @@
 @import '~react-md/src/scss/bundles/blue-light_blue.scss';
 
 $md-primary-color: #1aa6d7;
+$md-list-left-padding: 45px;
 
 @include react-md-everything;
 
