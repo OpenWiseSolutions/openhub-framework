@@ -24,6 +24,7 @@ class CoreLayout extends Component {
       <NavigationDrawer
         ref={this._setContainer}
         visible={!!userData && sidebar}
+        toolbarStyle={{ opacity: userData ? 1 : 0 }}
         onVisibilityToggle={() => toggleSidebar(!sidebar)}
         navItems={config && navItems(config.menu)}
         toolbarTitle={this.props.title}
