@@ -70,6 +70,7 @@ class Messages extends Component {
         <form onSubmit={this.submit.bind(this)} >
           <div className='md-grid' >
             <div className='md-cell md-cell--6' >
+              <label>Received From</label >
               <Flatpickr
                 style={styles.datepicker}
                 value={this.state.receivedFrom}
@@ -110,11 +111,11 @@ class Messages extends Component {
               />
             </div >
             <div className='md-cell md-cell--6' >
+              <label>Received To</label >
               <Flatpickr
                 style={styles.datepicker}
                 value={this.state.receivedTo}
                 onChange={(receivedTo) => this.setState(() => ({ receivedTo }))}
-                placeholder='Received To'
                 data-enable-time
               />
               <Flatpickr
@@ -157,7 +158,7 @@ class Messages extends Component {
               className='md-cell md-cell--3'
               primary raised
               type='submit'
-              label={'Submit'}
+              label={'Search'}
             />
             <Button
               className='md-cell md-cell--3'
