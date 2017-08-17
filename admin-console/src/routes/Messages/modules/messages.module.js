@@ -1,12 +1,14 @@
 import { toastr } from 'react-redux-toastr'
 import moment from 'moment'
-import { pipe, pickBy, evolve } from 'ramda'
+import { pipe, pickBy, evolve, assoc } from 'ramda'
 import { fetchMessages } from '../../../services/messages.service'
 
 // ------------------------------------
 // Constants
 // ------------------------------------
 export const GET_MESSAGES_SUCCESS = 'GET_MESSAGES_SUCCESS'
+export const UPDATE_FILTER = 'messages/update-filter'
+export const RESET_FILTER = 'messages/reset-filter'
 
 // ------------------------------------
 // Helpers
@@ -29,8 +31,9 @@ export const getMessagesSuccess = (data) => ({
   payload: data
 })
 
-export const getMessages = (filter = {}) =>
-  (dispatch) => {
+export const getMessages = () =>
+  (dispatch, getState) => {
+    const { messages: { filter } } = getState()
     const transformations = {
       receivedFrom: validDate,
       lastChangeFrom: validDate,
@@ -52,22 +55,56 @@ export const getMessages = (filter = {}) =>
       })
   }
 
+export const updateFilter = (field, value) =>
+  (dispatch) => {
+    dispatch({
+      type: UPDATE_FILTER,
+      field,
+      value
+    })
+  }
+
+export const resetFilter = () =>
+  (dispatch) => {
+    dispatch({
+      type: RESET_FILTER
+    })
+  }
+
 export const actions = {
-  getMessages
+  getMessages,
+  updateFilter,
+  resetFilter
 }
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [GET_MESSAGES_SUCCESS]: (state, { payload }) => ({ ...state, messages: payload })
+  [GET_MESSAGES_SUCCESS]: (state, { payload }) => ({ ...state, messages: payload }),
+  [UPDATE_FILTER]: (state, { field, value }) => ({ ...state, filter: assoc(field, value, state.filter) }),
+  [RESET_FILTER]: (state) => ({ ...state, filter: initialState.filter })
 }
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
 const initialState = {
-  messages: []
+  messages: [],
+  filter: {
+    receivedFrom: moment().subtract(5, 'minute').format(),
+    lastChangeFrom: '',
+    sourceSystem: '',
+    processId: '',
+    errorCode: '',
+    operationName: '',
+    receivedTo: '',
+    lastChangeTo: '',
+    correlationId: '',
+    state: '',
+    serviceName: '',
+    fulltext: ''
+  }
 }
 
 export default function (state = initialState, action) {

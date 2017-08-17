@@ -25,13 +25,6 @@ const states = [
 
 @Radium
 class Messages extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      receivedFrom: moment().subtract(5, 'minute').format()
-    }
-  }
-
   componentDidMount () {
     this.props.getMessages(this.state)
   }
@@ -45,110 +38,94 @@ class Messages extends Component {
     this.props.getMessages(this.state)
   }
 
-  reset () {
-    this.setState(() => ({
-      receivedFrom: moment().subtract(5, 'minute').format(),
-      lastChangeFrom: '',
-      sourceSystem: '',
-      processId: '',
-      errorCode: '',
-      operationName: '',
-      receivedTo: '',
-      lastChangeTo: '',
-      correlationId: '',
-      state: '',
-      serviceName: '',
-      fulltext: ''
-    }))
-  }
-
   render () {
-    const { messages } = this.props
+    const { messages, updateFilter, resetFilter, filter } = this.props
+    if (!filter) return null
     return (
-      <Card>
+      <Card >
         <CardTitle subtitle={'Filter'} />
         <form onSubmit={this.submit.bind(this)} >
           <div className='md-grid' >
             <div className='md-cell md-cell--6' >
-              <label>Received From</label >
+              <label >Received From</label >
               <Flatpickr
                 style={styles.datepicker}
-                value={this.state.receivedFrom}
-                onChange={(receivedFrom) => this.setState(() => ({ receivedFrom }))}
+                value={filter.receivedFrom}
+                onChange={(receivedFrom) => updateFilter('receivedFrom', receivedFrom)}
                 placeholder='Received From'
                 data-enable-time
               />
               <Flatpickr
                 style={styles.datepicker}
-                value={this.state.lastChangeFrom}
-                onChange={(lastChangeFrom) => this.setState(() => ({ lastChangeFrom }))}
+                value={filter.lastChangeFrom}
+                onChange={(lastChangeFrom) => updateFilter('lastChangeFrom', lastChangeFrom)}
                 placeholder='Last Change From'
                 data-enable-time
               />
               <TextField
                 id='sourceSystem'
-                value={this.state.sourceSystem}
-                onChange={(sourceSystem) => this.setState(() => ({ sourceSystem }))}
+                value={filter.sourceSystem}
+                onChange={(sourceSystem) => updateFilter('sourceSystem', sourceSystem)}
                 placeholder='Source System'
               />
               <TextField
                 id='processId'
-                value={this.state.processId}
-                onChange={(processId) => this.setState(() => ({ processId }))}
+                value={filter.processId}
+                onChange={(processId) => updateFilter('processId', processId)}
                 placeholder='Process ID'
               />
               <TextField
                 id='errorCode'
-                value={this.state.errorCode}
-                onChange={(errorCode) => this.setState(() => ({ errorCode }))}
+                value={filter.errorCode}
+                onChange={(errorCode) => updateFilter('errorCode', errorCode)}
                 placeholder='Error Code'
               />
               <TextField
                 id='operationName'
-                value={this.state.operationName}
-                onChange={(operationName) => this.setState(() => ({ operationName }))}
+                value={filter.operationName}
+                onChange={(operationName) => updateFilter('operationName', operationName)}
                 placeholder='Operation Name'
               />
             </div >
             <div className='md-cell md-cell--6' >
-              <label>Received To</label >
+              <label >Received To</label >
               <Flatpickr
                 style={styles.datepicker}
-                value={this.state.receivedTo}
-                onChange={(receivedTo) => this.setState(() => ({ receivedTo }))}
+                value={filter.receivedTo}
+                onChange={(receivedTo) => updateFilter('receivedTo', receivedTo)}
                 data-enable-time
               />
               <Flatpickr
                 style={styles.datepicker}
-                value={this.state.lastChangeTo}
-                onChange={(lastChangeTo) => this.setState(() => ({ lastChangeTo }))}
+                value={filter.lastChangeTo}
+                onChange={(lastChangeTo) => updateFilter('lastChangeTo', lastChangeTo)}
                 placeholder='Last Change To'
                 data-enable-time
               />
               <TextField
                 id='correlationId'
-                value={this.state.correlationId}
-                onChange={(correlationId) => this.setState(() => ({ correlationId }))}
+                value={filter.correlationId}
+                onChange={(correlationId) => updateFilter('correlationId', correlationId)}
                 placeholder='Correlation ID'
               />
               <SelectField
                 id='state'
                 fullWidth
-                value={this.state.state}
-                onChange={(state) => this.setState(() => ({ state }))}
+                value={filter.state}
+                onChange={(state) => updateFilter('state', state)}
                 menuItems={states}
                 placeholder='State'
               />
               <TextField
                 id='serviceName'
-                value={this.state.serviceName}
-                onChange={(serviceName) => this.setState(() => ({ serviceName }))}
+                value={filter.serviceName}
+                onChange={(serviceName) => updateFilter('serviceName', serviceName)}
                 placeholder='Service Name'
               />
               <TextField
                 id='fulltext'
-                value={this.state.fulltext}
-                onChange={(fulltext) => this.setState(() => ({ fulltext }))}
+                value={filter.fulltext}
+                onChange={(fulltext) => updateFilter('fulltext', fulltext)}
                 placeholder='Fulltext'
               />
             </div >
@@ -163,7 +140,7 @@ class Messages extends Component {
             <Button
               className='md-cell md-cell--3'
               raised
-              onClick={() => this.reset()}
+              onClick={() => resetFilter()}
               label={'Reset'} type='button'
             />
           </div >
@@ -204,13 +181,12 @@ class Messages extends Component {
   }
 }
 
-Messages.contextTypes = {
-  styles: PropTypes.object
-}
-
 Messages.propTypes = {
   messages: PropTypes.array,
-  getMessages: PropTypes.func
+  filter: PropTypes.object,
+  getMessages: PropTypes.func,
+  updateFilter: PropTypes.func,
+  resetFilter: PropTypes.func
 }
 
 export default Messages
