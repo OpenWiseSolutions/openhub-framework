@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Radium from 'radium'
@@ -113,8 +115,8 @@ class ConfigLogging extends Component {
           </DataTable >
           {items.length >= LIST_LENGTH && items.length < loggingData.loggers.length &&
           <div style={styles.controls} >
-            <Button onClick={() => this.showMore()} flat label={'show more'} />
-            <Button onClick={() => this.showAll()} flat label={'show all'} />
+            <Button onClick={() => this.showMore()} flat label={`show more (+${((takes + 1) * 10) > length(loggingData.loggers) ? length(loggingData.loggers) - (takes * 10) : 10})`} />
+            <Button onClick={() => this.showAll()} flat label={`show all (${length(loggingData.loggers)})`} />
           </div >}
         </div >
       </Card >
