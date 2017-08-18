@@ -76,7 +76,7 @@ class ConfigParams extends Component {
                   <TableColumn style={styles.value} >{this.getStateIcon(state)}</TableColumn >
                   <TableColumn >
                     <Button primary onClick={() => openNode(id)} >edit</Button >
-                    <Button onClick={() => deleteNode(id)} >delete</Button >
+                    { nodes.length > 1 && <Button onClick={() => deleteNode(id)} >delete</Button > }
                   </TableColumn >
                 </TableRow >
               ))}
