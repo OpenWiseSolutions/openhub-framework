@@ -21,7 +21,7 @@ export default {
     display: 'flex',
     flexDirection: 'row',
     height: '60px',
-    width: '300px',
+    width: '400px',
     justifyContent: 'space-between',
     alignItems: 'center'
   },

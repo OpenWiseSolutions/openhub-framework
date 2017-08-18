@@ -63,6 +63,7 @@ module.exports = [
         'guaranteedOrder': false,
         'excludeFailedState': true,
         'businessError': 'Not enough balance in the account',
+        'customData': 'Some custom data as string',
         'parentMsgId': 42,
         'body': '<hel:hello>Hello</hel:hello>',
         'envelope': '<note>\n<to>Tove</to>\n<from>X</from>\n<heading>Reminder</heading>\n<body>Dont forget this weekend!</body>\n</note>',
@@ -97,7 +98,11 @@ module.exports = [
       path: '/api/messages/:id/action'
     },
     response: {
-      statusCode: 200
+      statusCode: 200,
+      body: {
+        "result": "OK",
+        "resultDescription": "Message in wrong state"
+      }
     }
   }
 ]

@@ -25,24 +25,38 @@ export const getMessage = (id) => (dispatch) => {
 }
 
 export const restart = (id, total) =>
-  (dispatch) => {
+  () => {
     toastr.confirm('Are you sure that you want to restart this message?', {
       onOk: () => {
         restartMessage(id, total)
-          .then(() => {
-            toastr.success('Message reset successful')
+          .then((data) => {
+            if (data.result === 'OK') {
+              toastr.success(data.resultDescription)
+            } else {
+              toastr.error(data.resultDescription)
+            }
+          })
+          .catch(() => {
+            toastr.error('Message restart failed')
           })
       }
     })
   }
 
 export const cancel = (id) =>
-  (dispatch) => {
+  () => {
     toastr.confirm('Are you sure that you want to cancel this message?', {
       onOk: () => {
         cancelMessage(id)
-          .then(() => {
-            toastr.success('Message canceled')
+          .then((data) => {
+            if (data.result === 'OK') {
+              toastr.success(data.resultDescription)
+            } else {
+              toastr.error(data.resultDescription)
+            }
+          })
+          .catch(() => {
+            toastr.error('Message cancelation failed')
           })
       }
     })

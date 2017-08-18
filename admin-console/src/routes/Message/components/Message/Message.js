@@ -10,6 +10,7 @@ import Card from 'react-md/lib/Cards/Card'
 import CardTitle from 'react-md/lib/Cards/CardTitle'
 import Checkbox from 'react-md/lib/SelectionControls/Checkbox'
 import DataTable from 'react-md/lib/DataTables/DataTable'
+import Divider from 'react-md/lib/Dividers'
 import TableHeader from 'react-md/lib/DataTables/TableHeader'
 import TableBody from 'react-md/lib/DataTables/TableBody'
 import TableRow from 'react-md/lib/DataTables/TableRow'
@@ -71,7 +72,8 @@ class Message extends Component {
       { t: 'Business error overview', v: message.businessError },
       { t: 'ID of parent message', v: message.parentMsgId },
       { t: 'Content (body) of message', v: <SyntaxHighlighter style={codeStyle} >{message.body}</SyntaxHighlighter > },
-      { t: 'Whole incoming message', v: <SyntaxHighlighter style={codeStyle} >{message.envelope}</SyntaxHighlighter > }
+      { t: 'Whole incoming message', v: <SyntaxHighlighter style={codeStyle} >{message.envelope}</SyntaxHighlighter > },
+      { t: 'Custom data', v: message.customData }
     ].map((item) => {
       if (typeof item.v === 'boolean') {
         item.v = item.v ? 'YES' : 'NO'
@@ -127,14 +129,15 @@ class Message extends Component {
               type='button'
               primary
               onClick={() => restart(message.id, this.state.totalCheckbox)}
-              label={'Restart'}
+              label={'Restart Msg'}
             />
+            <Divider vertical />
             <Button
               raised
               disabled={states.includes(message.state)}
               type='button'
               onClick={() => cancel(message.id)}
-              label={'Cancel'}
+              label={'Cancel Msg'}
             />
           </div >
         </Card >
