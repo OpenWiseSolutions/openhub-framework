@@ -17,7 +17,8 @@ const sources = [
   require('./nodes/nodes.mock'),
   require('./config/console.mock'),
   require('./wsdl/wsdl.mock'),
-  require('./messages/messages.mock')
+  require('./messages/messages.mock'),
+  require('./catalogs/catalogs.mock')
 ]
 
 runServer(sources, opt_serverConfig)

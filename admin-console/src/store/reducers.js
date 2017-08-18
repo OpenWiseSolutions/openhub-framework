@@ -5,6 +5,7 @@ import apiReducer from '../services/api.module'
 import layoutReducer from '../layouts/CoreLayout/coreLayout.module'
 
 import authReducer from '../common/modules/auth.module'
+import catalogReducer from '../common/modules/catalog.module'
 
 export const makeRootReducer = (asyncReducers) => {
   return combineReducers({
@@ -12,6 +13,7 @@ export const makeRootReducer = (asyncReducers) => {
     auth: authReducer,
     toastr: toastrReducer,
     layout: layoutReducer,
+    catalogs: catalogReducer,
     api: apiReducer,
     ...asyncReducers
   })

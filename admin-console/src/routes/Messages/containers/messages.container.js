@@ -1,12 +1,15 @@
 import { connect } from 'react-redux'
 import Messages from '../components/Messages/Messages'
 import { actions } from '../modules/messages.module'
+import { getCatalog } from '../../../common/modules/catalog.module'
 
 const mapDispatchToProps = {
-  ...actions
+  ...actions,
+  getCatalog
 }
 
-const mapStateToProps = ({ messages }) => ({
+const mapStateToProps = ({ messages, catalogs }) => ({
+  messageStates: catalogs['messageState'],
   ...messages
 })
 

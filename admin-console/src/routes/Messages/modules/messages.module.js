@@ -6,7 +6,7 @@ import { fetchMessages } from '../../../services/messages.service'
 // ------------------------------------
 // Constants
 // ------------------------------------
-export const GET_MESSAGES_SUCCESS = 'GET_MESSAGES_SUCCESS'
+export const GET_MESSAGES_SUCCESS = 'messages/get-messages-success'
 export const UPDATE_FILTER = 'messages/update-filter'
 export const RESET_FILTER = 'messages/reset-filter'
 
@@ -26,10 +26,14 @@ const nonEmpty = (val, key) => val !== '' && val !== null && val !== undefined
 // Actions
 // ------------------------------------
 
-export const getMessagesSuccess = (data) => ({
-  type: GET_MESSAGES_SUCCESS,
-  payload: data
-})
+export const getMessagesSuccess = (data) => {
+  const noMessages = data.length === 0
+  return ({
+    type: GET_MESSAGES_SUCCESS,
+    payload: data,
+    noMessages
+  })
+}
 
 export const getMessages = () =>
   (dispatch, getState) => {
@@ -81,7 +85,7 @@ export const actions = {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [GET_MESSAGES_SUCCESS]: (state, { payload }) => ({ ...state, messages: payload }),
+  [GET_MESSAGES_SUCCESS]: (state, { payload, noMessages }) => ({ ...state, messages: payload, noMessages }),
   [UPDATE_FILTER]: (state, { field, value }) => ({ ...state, filter: assoc(field, value, state.filter) }),
   [RESET_FILTER]: (state) => ({ ...state, filter: initialState.filter })
 }
@@ -91,6 +95,7 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 const initialState = {
   messages: [],
+  noMessages: false,
   filter: {
     receivedFrom: moment().subtract(5, 'minute').format(),
     lastChangeFrom: '',

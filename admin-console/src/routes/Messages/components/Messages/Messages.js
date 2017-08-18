@@ -17,16 +17,10 @@ import CardTitle from 'react-md/lib/Cards/CardTitle'
 import { hashHistory } from 'react-router'
 import styles from './messages.styles.js'
 
-const states = [
-  { label: 'OK', value: 'OK' },
-  { label: 'FAILED', value: 'FAILED' },
-  { label: 'CANCEL', value: 'CANCEL' }
-]
-
 @Radium
 class Messages extends Component {
   componentDidMount () {
-    this.props.getMessages(this.state)
+    this.props.getCatalog('messageState')
   }
 
   openDetail ({ id }) {
@@ -39,15 +33,30 @@ class Messages extends Component {
   }
 
   render () {
-    const { messages, updateFilter, resetFilter, filter } = this.props
-    if (!filter) return null
+    const { messages, updateFilter, resetFilter, filter, messageStates, noMessages } = this.props
+    if (!filter || !messageStates) return null
+
+    const messageStatesOptions = messageStates
+      .map(({ code, description }) => ({
+        label: description,
+        value: code
+      }))
+
     return (
       <Card >
         <CardTitle subtitle={'Filter'} />
         <form onSubmit={this.submit.bind(this)} >
           <div className='md-grid' >
+            <div className='md-cell md-cell--12' >
+              <TextField
+                id='fulltext'
+                value={filter.fulltext}
+                onChange={(fulltext) => updateFilter('fulltext', fulltext)}
+                label='Fulltext'
+              />
+            </div >
             <div className='md-cell md-cell--6' >
-              <label >Received From</label >
+              <label style={{ color: 'gray' }} >Received From</label >
               <Flatpickr
                 style={styles.datepicker}
                 value={filter.receivedFrom}
@@ -66,29 +75,29 @@ class Messages extends Component {
                 id='sourceSystem'
                 value={filter.sourceSystem}
                 onChange={(sourceSystem) => updateFilter('sourceSystem', sourceSystem)}
-                placeholder='Source System'
+                label='Source System'
               />
               <TextField
                 id='processId'
                 value={filter.processId}
                 onChange={(processId) => updateFilter('processId', processId)}
-                placeholder='Process ID'
+                label='Process ID'
               />
               <TextField
                 id='errorCode'
                 value={filter.errorCode}
                 onChange={(errorCode) => updateFilter('errorCode', errorCode)}
-                placeholder='Error Code'
+                label='Error Code'
               />
               <TextField
                 id='operationName'
                 value={filter.operationName}
                 onChange={(operationName) => updateFilter('operationName', operationName)}
-                placeholder='Operation Name'
+                label='Operation Name'
               />
             </div >
             <div className='md-cell md-cell--6' >
-              <label >Received To</label >
+              <label style={{ color: 'gray' }} >Received To</label >
               <Flatpickr
                 style={styles.datepicker}
                 value={filter.receivedTo}
@@ -106,47 +115,42 @@ class Messages extends Component {
                 id='correlationId'
                 value={filter.correlationId}
                 onChange={(correlationId) => updateFilter('correlationId', correlationId)}
-                placeholder='Correlation ID'
+                label='Correlation ID'
               />
               <SelectField
                 id='state'
                 fullWidth
                 value={filter.state}
                 onChange={(state) => updateFilter('state', state)}
-                menuItems={states}
-                placeholder='State'
+                menuItems={messageStatesOptions}
+                label='State'
               />
               <TextField
                 id='serviceName'
                 value={filter.serviceName}
                 onChange={(serviceName) => updateFilter('serviceName', serviceName)}
-                placeholder='Service Name'
+                label='Service Name'
               />
-              <TextField
-                id='fulltext'
-                value={filter.fulltext}
-                onChange={(fulltext) => updateFilter('fulltext', fulltext)}
-                placeholder='Fulltext'
-              />
+              <div style={{ marginTop: '25px' }} >
+                <Button
+                  className='md-cell md-cell--6'
+                  primary raised
+                  type='submit'
+                  label={'Search'}
+                />
+                <Button
+                  className='md-cell md-cell--6'
+                  raised
+                  onClick={() => resetFilter()}
+                  label={'Reset'} type='button'
+                />
+              </div >
             </div >
           </div >
-          <div className='md-text-right' >
-            <Button
-              className='md-cell md-cell--3'
-              primary raised
-              type='submit'
-              label={'Search'}
-            />
-            <Button
-              className='md-cell md-cell--3'
-              raised
-              onClick={() => resetFilter()}
-              label={'Reset'} type='button'
-            />
-          </div >
         </form >
-
-        <CardTitle subtitle={messages.length > 0 ? 'Messages' : 'No Messages'} />
+        { noMessages && <div className='md-cell md-cell--12'>
+          <CardTitle subtitle={'No Messages'} />
+        </div>}
         {messages && messages.length > 0 &&
         <DataTable plain >
           <TableHeader >
@@ -184,9 +188,12 @@ class Messages extends Component {
 Messages.propTypes = {
   messages: PropTypes.array,
   filter: PropTypes.object,
+  messageStates: PropTypes.array,
   getMessages: PropTypes.func,
   updateFilter: PropTypes.func,
-  resetFilter: PropTypes.func
+  resetFilter: PropTypes.func,
+  getCatalog: PropTypes.func,
+  noMessages: PropTypes.bool
 }
 
 export default Messages

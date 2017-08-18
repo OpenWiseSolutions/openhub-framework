@@ -21,7 +21,7 @@ export default {
     marginLeft: 0,
     marginRight: 0,
     width: '100%',
-    height: '40px',
+    height: '55px',
     border: 'none',
     outline: 'none',
     fontSize: '13px',
