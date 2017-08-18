@@ -44,6 +44,7 @@ class NodeModal extends Component {
       <Dialog
         closeOnEsc
         onHide={close}
+        dialogClassName='md-dialog--big'
         title={'Cluster Node Update'}
         visible={isOpen}
         actions={[
