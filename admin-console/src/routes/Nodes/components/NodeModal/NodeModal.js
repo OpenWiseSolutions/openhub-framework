@@ -6,7 +6,6 @@ import Radium from 'radium'
 import Dialog from 'react-md/lib/Dialogs'
 import TextField from 'react-md/lib/TextFields'
 import Button from 'react-md/lib/Buttons/Button'
-import Radio from 'react-md/lib/SelectionControls/Radio'
 
 @Radium
 class NodeModal extends Component {
@@ -16,15 +15,14 @@ class NodeModal extends Component {
 
     this.state = {
       name: data.name || '',
-      description: data.description || '',
-      state: data.state || ''
+      description: data.description || ''
     }
   }
 
   handleSubmit (e) {
     e.preventDefault()
     const { data, updateNode } = this.props
-    const { name, description, state } = this.state
+    const { name, description } = this.state
 
     if (!name || !description) {
       return
@@ -32,8 +30,7 @@ class NodeModal extends Component {
 
     const payload = {
       name,
-      description,
-      state
+      description
     }
     updateNode(data.id, payload, data)
   }
@@ -65,32 +62,6 @@ class NodeModal extends Component {
             value={this.state.description}
             onChange={(description) => this.setState(() => ({ description }))}
           />
-          <div style={{ marginLeft: '-15px' }} >
-            <Radio
-              id='run'
-              name='run'
-              value='RUN'
-              label='Run'
-              checked={this.state.state === 'RUN'}
-              onChange={(state) => this.setState(() => ({ state }))}
-            />
-            <Radio
-              id='existing'
-              name='existing'
-              value='HANDLES_EXISTING_MESSAGES'
-              label='Handle existing messages'
-              checked={this.state.state === 'HANDLES_EXISTING_MESSAGES'}
-              onChange={(state) => this.setState(() => ({ state }))}
-            />
-            <Radio
-              id='stopped'
-              name='stopped'
-              value='STOPPED'
-              label='Stopped'
-              checked={this.state.state === 'STOPPED'}
-              onChange={(state) => this.setState(() => ({ state }))}
-            />
-          </div >
         </form >}
       </Dialog >
     )

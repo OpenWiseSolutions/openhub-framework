@@ -1,4 +1,3 @@
-import { gap } from '../../../../styles/constants'
 import { positiveColor, negativeColor, warningColor } from '../../../../styles/colors'
 import Styles from '../../../../styles/styles'
 
@@ -7,25 +6,18 @@ export default {
   main: {
     width: '100%'
   },
-  state: {
-    position: 'relative',
-    width: '25px',
-    height: '25px'
+  icon:{
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center'
   },
-  value: {
-    lineHeight: '30px'
+  positive: {
+    color: positiveColor
   },
-  green:{
-    backgroundColor: positiveColor
+  negative: {
+    color: negativeColor
   },
-  red:{
-    backgroundColor: negativeColor
-  },
-  orange:{
-    backgroundColor: warningColor
-  },
-  button: {
-    marginRight: gap,
-    backgroundColor: 'transparent'
+  neutral: {
+    color: warningColor
   }
 }

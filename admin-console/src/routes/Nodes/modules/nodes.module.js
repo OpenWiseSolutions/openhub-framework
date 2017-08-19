@@ -37,10 +37,13 @@ export const closeNode = () => ({
 })
 
 export const updateNode = (id, payload, data) => (dispatch) => {
-  const stateChanged = payload.state !== data.state
-
+  const stateChanged = !!payload.state
+  const mergedPayload = {
+    ...data,
+    ...payload
+  }
   const update = () => {
-    return editNode(id, payload)
+    return editNode(id, mergedPayload)
       .then(() => {
         dispatch(closeNode())
         dispatch(getNodes())

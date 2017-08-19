@@ -18,8 +18,14 @@ $md-list-left-padding: 45px;
   background-color: #e6e6e6;
 }
 
-.md-data-table--plain .md-table-column--data, .md-data-table .md-table-column--plain {
-  padding-top: 5px;
-  padding-bottom: 5px;
+%md-table-column--plain {
+  height: 30px;
   line-height: 30px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  vertical-align: top;
+}
+
+.md-select-field-column .md-select-field--btn {
+  height: 30px;
 }
