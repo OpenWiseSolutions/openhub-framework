@@ -8,6 +8,12 @@
     "node": ">=4.5.0",
     "npm": "^3.0.0"
   },
+  "jest": {
+    "automock": false,
+    "setupFiles": [
+      "./setupJest.js"
+    ]
+  },
   "scripts": {
     "clean": "rimraf dist",
     "compile": "better-npm-run compile",
@@ -173,12 +179,15 @@
     "express-http-proxy": "^0.10.1",
     "express-mock-server": "^1.1.1",
     "husky": "^0.13.2",
+    "isomorphic-fetch": "^2.2.1",
     "jest": "^20.0.4",
+    "jest-fetch-mock": "^1.2.1",
     "nodemon": "^1.10.2",
     "parallelshell": "^2.0.0",
     "react-addons-test-utils": "^15.0.0",
     "react-test-renderer": "^15.6.1",
     "redbox-react": "^1.2.10",
+    "redux-mock-store": "^1.2.3",
     "sinon": "^1.17.5",
     "sinon-chai": "^2.8.0",
     "webpack-dev-middleware": "^1.6.1",

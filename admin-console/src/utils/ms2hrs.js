@@ -1,4 +1,8 @@
 export default function (ms) {
+  if (!ms) {
+    return ''
+  }
+
   const time = new Date(ms)
   let str = ''
 

@@ -13,6 +13,8 @@
     "browser" : true
   },
   "globals": {
+    "test"         : false,
+    "describe"     : false,
     "it"           : false,
     "expect"       : false,
     "__DEV__"      : false,

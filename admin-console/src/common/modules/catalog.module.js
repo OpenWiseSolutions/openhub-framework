@@ -17,7 +17,7 @@ export const setCatalog = (name, data) => ({
 })
 
 export const getCatalog = (name) => (dispatch) => {
-  fetchCatalog(name)
+  return fetchCatalog(name)
     .then(({ data }) => {
       dispatch(setCatalog(name, data))
     })

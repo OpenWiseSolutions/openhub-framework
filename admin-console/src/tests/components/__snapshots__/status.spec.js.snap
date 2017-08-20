@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders status DOWN 1`] = `
+exports[`Status Component renders status DOWN 1`] = `
 <div
   data-radium={true}
   style={
@@ -22,7 +22,7 @@ exports[`renders status DOWN 1`] = `
 </div>
 `;
 
-exports[`renders status UP 1`] = `
+exports[`Status Component renders status UP 1`] = `
 <div
   data-radium={true}
   style={
