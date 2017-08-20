@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react'
 import Radium from 'radium'
+import FontIcon from 'react-md/lib/FontIcons'
 import TableRow from 'react-md/lib/DataTables/TableRow'
 import Button from 'react-md/lib/Buttons/Button'
 import TableColumn from 'react-md/lib/DataTables/TableColumn'
@@ -22,10 +23,19 @@ class ParamRow extends Component {
       validationRegEx: ''
     }
 
+    const formatType = (value) => {
+      if (typeof value === 'boolean') {
+        return value
+          ? <FontIcon style={{ marginTop: '5px', fontSize: '20px' }}>check_box</FontIcon>
+          : <FontIcon style={{ marginTop: '5px', fontSize: '20px' }}>check_box_outline_blank</FontIcon>
+      }
+      return typeof value !== 'string' ? toString(value) : value
+    }
+
     const cells = pipe(
       omit(['id', 'categoryCode', 'dataType', 'mandatory', 'validationRegEx']),
       values,
-      map((value) => typeof value !== 'string' ? toString(value) : value),
+      map(formatType),
       addIndex(map)((cell, index) => <TableColumn key={index} >{cell}</TableColumn>),
       append(
         <TableColumn key={id} >
