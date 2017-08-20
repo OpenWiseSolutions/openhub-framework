@@ -12,6 +12,24 @@ import Checkbox from 'react-md/lib/SelectionControls/Checkbox'
 import Button from 'react-md/lib/Buttons/Button'
 import styles from './editParamModal.styles'
 
+const intValidator = (value) => () => {
+  if (value === '-') {
+    return value
+  }
+  return validator.isInt(value)
+}
+const floatValidator = (value) => () => {
+  if (value === '-') {
+    return value
+  }
+  return validator.isFloat(value)
+}
+const preventDash = (name, val, update) => {
+  if (val === '-') {
+    update(name, '')
+  }
+}
+
 const Value = ({ type, value, label, name, update, mandatory }) => {
   switch (type) {
     case 'BOOLEAN':
@@ -31,7 +49,8 @@ const Value = ({ type, value, label, name, update, mandatory }) => {
         name={name}
         id={name}
         value={value}
-        onChange={(val) => update(name, val, (v) => validator.isInt(v))}
+        onBlur={(val) => preventDash(name, value, update)}
+        onChange={(val) => update(name, val, intValidator(val))}
       />
     case 'FLOAT':
       return <TextField
@@ -40,7 +59,8 @@ const Value = ({ type, value, label, name, update, mandatory }) => {
         name={name}
         id={name}
         value={value}
-        onChange={(val) => update(name, val, (v) => validator.isFloat(v))}
+        onBlur={(val) => preventDash(name, value, update)}
+        onChange={(val) => update(name, val, floatValidator(val))}
       />
     case 'DATE':
       return <Flatpickr
