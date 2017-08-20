@@ -87,14 +87,25 @@ class Message extends Component {
     return (
       <Card >
         <Card >
-          <CardTitle
-            subtitle={<Button
-              onClick={() => hashHistory.push('/messages')}
-              label='Go Back To Messages'
-              icon >
-              keyboard_arrow_left
-            </Button >}
-          />
+          <div className='md-grid'>
+            <div className='md-cell md-cell--6'>
+              <Button
+                onClick={() => hashHistory.push('/messages')}
+                label='Go Back To Messages'
+                icon >
+                keyboard_arrow_left
+              </Button >
+            </div>
+            <div className='md-cell md-cell--6 md-text-right'>
+              <Button
+                onClick={() => this.props.getMessage(message.id)}
+                tooltipLabel={'Refresh Message'}
+                tooltipPosition={'left'}
+                icon >
+                refresh
+              </Button >
+            </div>
+          </div>
           <DataTable plain >
             <TableHeader >
               <TableRow >
