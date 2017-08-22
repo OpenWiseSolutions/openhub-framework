@@ -9,6 +9,7 @@ import {
 // Constants
 // ------------------------------------
 export const GET_MESSAGE_SUCCESS = 'GET_MESSAGE_SUCCESS'
+export const GET_MESSAGE_INIT = 'GET_MESSAGE_INIT'
 
 // ------------------------------------
 // Actions
@@ -19,19 +20,25 @@ export const getMessageSuccess = (payload) => ({
   payload
 })
 
+export const getMessageInit = () => ({
+  type: GET_MESSAGE_INIT
+})
+
 export const getMessage = (id) => (dispatch) => {
-  fetchMessage(id)
+  dispatch(getMessageInit())
+  return fetchMessage(id)
     .then((data) => dispatch(getMessageSuccess(data)))
 }
 
 export const restart = (id, total) =>
-  () => {
+  (dispatch) => {
     toastr.confirm('Are you sure that you want to restart this message?', {
       onOk: () => {
         restartMessage(id, total)
           .then((data) => {
             if (data.result === 'OK') {
               toastr.success(data.resultDescription)
+              dispatch(getMessage(id))
             } else {
               toastr.error(data.resultDescription)
             }
@@ -44,13 +51,14 @@ export const restart = (id, total) =>
   }
 
 export const cancel = (id) =>
-  () => {
+  (dispatch) => {
     toastr.confirm('Are you sure that you want to cancel this message?', {
       onOk: () => {
         cancelMessage(id)
           .then((data) => {
             if (data.result === 'OK') {
               toastr.success(data.resultDescription)
+              dispatch(getMessage(id))
             } else {
               toastr.error(data.resultDescription)
             }
@@ -72,6 +80,7 @@ export const actions = {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
+  [GET_MESSAGE_INIT]: (state) => ({ ...state, message: null}),
   [GET_MESSAGE_SUCCESS]: (state, { payload }) => ({ ...state, message: payload })
 }
 
