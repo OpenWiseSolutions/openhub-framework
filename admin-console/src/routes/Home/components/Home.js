@@ -104,7 +104,7 @@ class Home extends Component {
             <Divider />
             <List >
               {healthTableData.map((i, k) => (
-                <ListItem key={i[0]} primaryText={i[0]} rightIcon={i[1]} />
+                <ListItem className='md-pointer--none' key={i[0]} primaryText={i[0]} rightIcon={i[1]} />
               ))}
             </List >
           </Card >}
@@ -114,7 +114,7 @@ class Home extends Component {
             <Divider />
             <List >
               {diskTableData.map((i, k) => (
-                <ListItem key={i[0]} primaryText={i[0]} rightIcon={i[1]} />
+                <ListItem className='md-pointer--none' key={i[0]} primaryText={i[0]} rightIcon={i[1]} />
               ))}
             </List >
           </Card >}
@@ -130,9 +130,9 @@ class Home extends Component {
                 </PieChart >
               </div >
               <List className='md-cell md-cell--6' >
-                <ListItem primaryText={'Free memory'} rightIcon={freeMemory} />
-                <ListItem primaryText={'Used memory'} rightIcon={usedMemory} />
-                <ListItem primaryText={'Total memory'} rightIcon={totalMemory} />
+                <ListItem className='md-pointer--none' primaryText={'Free memory'} rightIcon={freeMemory} />
+                <ListItem className='md-pointer--none' primaryText={'Used memory'} rightIcon={usedMemory} />
+                <ListItem className='md-pointer--none' primaryText={'Total memory'} rightIcon={totalMemory} />
               </List >
             </div >
           </Card >}
@@ -148,9 +148,9 @@ class Home extends Component {
                 </PieChart >
               </div >
               <List className='md-cell md-cell--6' >
-                <ListItem primaryText={'Free heap'} rightIcon={freeHeap} />
-                <ListItem primaryText={'Used heap'} rightIcon={usedHeap} />
-                <ListItem primaryText={'Total heap'} rightIcon={totalHeap} />
+                <ListItem className='md-pointer--none' primaryText={'Free heap'} rightIcon={freeHeap} />
+                <ListItem className='md-pointer--none' primaryText={'Used heap'} rightIcon={usedHeap} />
+                <ListItem className='md-pointer--none' primaryText={'Total heap'} rightIcon={totalHeap} />
               </List >
             </div >
           </Card >}
@@ -160,7 +160,7 @@ class Home extends Component {
             <Divider />
             <List >
               {JVMTableData.map((i, k) => (
-                <ListItem key={i[0]} primaryText={i[0]} rightIcon={i[1]} />
+                <ListItem className='md-pointer--none' key={i[0]} primaryText={i[0]} rightIcon={i[1]} />
               ))}
             </List >
           </Card >}
@@ -170,7 +170,7 @@ class Home extends Component {
             <Divider />
             <List >
               {appTableData.map((i, k) => (
-                <ListItem key={i[0]} primaryText={i[0]} rightIcon={i[1]} />
+                <ListItem className='md-pointer--none' key={i[0]} primaryText={i[0]} rightIcon={i[1]} />
               ))}
             </List >
           </Card >}
