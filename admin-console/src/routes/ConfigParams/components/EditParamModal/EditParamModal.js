@@ -200,6 +200,7 @@ class EditParamModal extends Component {
             label='Default Value'
             name='defaultValue'
           />
+          <button type='submit' hidden />
         </form >
         }
       </Dialog >

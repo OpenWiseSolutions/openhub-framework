@@ -40,7 +40,8 @@ class ConfigParams extends Component {
 
     return (
       <div style={styles.main} >
-        {!!paramDetail && <EditParamModal
+        {!!paramDetail &&
+        <EditParamModal
           updateError={updateError}
           updating={updating}
           close={closeParam}

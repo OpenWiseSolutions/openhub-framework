@@ -62,6 +62,7 @@ class NodeModal extends Component {
             value={this.state.description}
             onChange={(description) => this.setState(() => ({ description }))}
           />
+          <button type='submit' hidden />
         </form >}
       </Dialog >
     )
