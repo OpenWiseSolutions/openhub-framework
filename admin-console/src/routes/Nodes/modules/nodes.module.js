@@ -5,6 +5,7 @@ import { fetchNodes, editNode, removeNode } from '../../../services/nodes.servic
 // Constants
 // ------------------------------------
 const GET_NODES_SUCCESS = 'GET_NODES_SUCCESS'
+const INIT_NODES = 'INIT_NODES'
 const OPEN_NODE = 'OPEN_NODE_DETAIL'
 const CLOSE_NODE = 'CLOSE_NODE_DETAIL'
 
@@ -16,7 +17,12 @@ export const getNodesSuccess = ({ data }) => {
   return ({ type: GET_NODES_SUCCESS, payload: data })
 }
 
+export const initNodes = () => {
+  return ({ type: GET_NODES_SUCCESS })
+}
+
 export const getNodes = () => (dispatch) => {
+  dispatch(initNodes())
   return fetchNodes()
     .then((data) => {
       dispatch(getNodesSuccess(data))
@@ -56,7 +62,8 @@ export const updateNode = (id, payload, data) => (dispatch) => {
 
   if (stateChanged) {
     toastr.confirm('Are you sure that you want to update this node?', {
-      onOk: () => update()
+      onOk: () => update(),
+      onCancel: () => dispatch(getNodes())
     })
   } else {
     update()
@@ -84,6 +91,7 @@ export const deleteNode = (id) => (dispatch) => {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
+  [INIT_NODES]: (state) => ({ ...state, allNodes: null }),
   [GET_NODES_SUCCESS]: (state, { payload }) => ({ ...state, allNodes: payload }),
   [OPEN_NODE]: (state, { payload }) => ({ ...state, nodeDetail: payload }),
   [CLOSE_NODE]: (state, { payload }) => ({ ...state, nodeDetail: null })
