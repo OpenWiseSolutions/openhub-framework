@@ -63,7 +63,7 @@ export default (config) => {
             active={isActive('/wsdl')}
             onClick={() => hashHistory.push('/wsdl')}
             leftIcon={<FontIcon >device_hub</FontIcon >}
-            primaryText={'WSDL'}
+            primaryText={'Input web services overview'}
           />
         ]}
       />}
