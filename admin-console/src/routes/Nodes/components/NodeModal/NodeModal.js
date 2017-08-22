@@ -24,7 +24,7 @@ class NodeModal extends Component {
     const { data, updateNode } = this.props
     const { name, description } = this.state
 
-    if (!name || !description) {
+    if (!name) {
       return
     }
 
