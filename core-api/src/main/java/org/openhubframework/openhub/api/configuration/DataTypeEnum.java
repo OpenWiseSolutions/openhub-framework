@@ -21,6 +21,9 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.regex.Pattern;
 
+import org.openhubframework.openhub.common.converter.DataTypeConverter;
+import org.openhubframework.openhub.common.converter.TypeConverterEnum;
+
 
 /**
  * Enumeration of possible data types of configuration parameters.
@@ -33,42 +36,45 @@ public enum DataTypeEnum {
     /**
      * Text, string (default).
      */
-    STRING(String.class),
+    STRING(String.class, TypeConverterEnum.STRING),
 
     /**
      * Integer, whole number.
      */
-    INT(Integer.class),
+    INT(Integer.class, TypeConverterEnum.INT),
 
     /**
      * Floating number.
      */
-    FLOAT(Float.class),
+    FLOAT(Float.class, TypeConverterEnum.FLOAT),
 
     /**
      * Date (without time).
      */
-    DATE(LocalDate.class),
+    DATE(LocalDate.class, TypeConverterEnum.DATE),
 
     /**
      * Boolean.
      */
-    BOOLEAN(Boolean.class),
+    BOOLEAN(Boolean.class, TypeConverterEnum.BOOLEAN),
 
     /**
      * File.
      */
-    FILE(File.class),
+    FILE(File.class, TypeConverterEnum.FILE),
 
     /**
      * Regular pattern.
      */
-    PATTERN(Pattern.class);
+    PATTERN(Pattern.class, TypeConverterEnum.PATTERN);
 
     private Class<?> typeClass;
 
-    DataTypeEnum(Class<?> typeClass) {
+    private DataTypeConverter converter;
+
+    DataTypeEnum(Class<?> typeClass, DataTypeConverter converter) {
         this.typeClass = typeClass;
+        this.converter = converter;
     }
 
     /**
@@ -78,6 +84,15 @@ public enum DataTypeEnum {
      */
     public Class<?> getTypeClass() {
         return typeClass;
+    }
+
+    /**
+     * Gets data type converter.
+     *
+     * @return the DataTypeConverter implementation.
+     */
+    public DataTypeConverter getConverter() {
+        return converter;
     }
 
     /**

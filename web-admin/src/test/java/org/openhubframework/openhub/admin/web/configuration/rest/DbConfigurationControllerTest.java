@@ -20,6 +20,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.nullValue;
 import static org.openhubframework.openhub.test.rest.TestRestUtils.createGetUrl;
 import static org.openhubframework.openhub.test.rest.TestRestUtils.createJson;
 import static org.openhubframework.openhub.test.rest.TestRestUtils.createPagePair;
@@ -90,8 +91,57 @@ public class DbConfigurationControllerTest extends AbstractAdminModuleRestTest {
                     .andExpect(jsonPath("paging.totalPages", is(1)))
                     .andExpect(jsonPath("paging.number", is(1)))
                     .andExpect(jsonPath("data[0].code", is(param.getCode())))
-                    .andExpect(jsonPath("data[0].currentValue", is(param.getCurrentValue())))
+                    .andExpect(jsonPath("data[0].currentValue", is(1)))
                     .andExpect(jsonPath("data[0].dataType", is(param.getDataType().toString())));
+    }
+
+    @Test
+    public void testGet() throws Exception {
+        paramDao.insert(new DbConfigurationParam("ohf.mail.from", "desc", "core.mail", "openhub@openwise.cz",
+                null, DataTypeEnum.STRING, true, null));
+
+        final URIBuilder uriBuilder = createGetUrl(ROOT_URI + "/ohf.mail.from");
+
+        // performs GET: /api/config-params/ohf.mail.from
+        mockMvc.perform(get(toUrl(uriBuilder))
+                .accept(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.authentication(mockAuthentication("ADMIN"))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id", is("ohf.mail.from")))
+                .andExpect(jsonPath("code", is("ohf.mail.from")))
+                .andExpect(jsonPath("categoryCode", is("core.mail")))
+                .andExpect(jsonPath("currentValue", is("openhub@openwise.cz")))
+                .andExpect(jsonPath("defaultValue", is(nullValue())))
+                .andExpect(jsonPath("dataType", is("STRING")))
+                .andExpect(jsonPath("mandatory", is(true)))
+                .andExpect(jsonPath("description", is("desc")))
+                .andExpect(jsonPath("validationRegEx", is(nullValue())))
+        ;
+    }
+
+
+    @Test
+    public void testGet_boolean() throws Exception {
+        paramDao.insert(new DbConfigurationParam("ohf.requestSaving.enable", "desc", "core.requestSaving", "true",
+                "true", DataTypeEnum.BOOLEAN, true, null));
+
+        final URIBuilder uriBuilder = createGetUrl(ROOT_URI + "/ohf.requestSaving.enable");
+
+        // performs GET: /api/config-params/ohf.requestSaving.enable
+        mockMvc.perform(get(toUrl(uriBuilder))
+                .accept(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.authentication(mockAuthentication("ADMIN"))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id", is("ohf.requestSaving.enable")))
+                .andExpect(jsonPath("code", is("ohf.requestSaving.enable")))
+                .andExpect(jsonPath("categoryCode", is("core.requestSaving")))
+                .andExpect(jsonPath("currentValue", is(true)))
+                .andExpect(jsonPath("defaultValue", is(true)))
+                .andExpect(jsonPath("dataType", is("BOOLEAN")))
+                .andExpect(jsonPath("mandatory", is(true)))
+                .andExpect(jsonPath("description", is("desc")))
+                .andExpect(jsonPath("validationRegEx", is(nullValue())))
+        ;
     }
 
     @Test
@@ -102,8 +152,8 @@ public class DbConfigurationControllerTest extends AbstractAdminModuleRestTest {
                 .add("code", param.getCode())
                 .add("categoryCode", param.getCategoryCode())
                 .add("dataType", param.getDataType().name())
-                .add("currentValue", "222")
-                .add("defaultValue", "10")
+                .add("currentValue", 222)
+                .add("defaultValue", 10)
                 .build();
 
         // performs PUT: /api/config-params/ohf.async.concurrentConsumers
@@ -122,6 +172,37 @@ public class DbConfigurationControllerTest extends AbstractAdminModuleRestTest {
         assertThat(param.getDataType(), is(DataTypeEnum.INT));
         assertThat(param.isMandatory(), is(true));
     }
+
+    @Test
+    public void testUpdate_boolean() throws Exception {
+        paramDao.insert(new DbConfigurationParam("ohf.requestSaving.enable", "desc", "core.requestSaving", "true",
+        "true", DataTypeEnum.BOOLEAN, true, null));
+
+        final URIBuilder uriBuilder = createGetUrl(ROOT_URI + "/ohf.requestSaving.enable");
+
+        JsonObject request = createJson()
+                .add("code", "ohf.requestSaving.enable")
+                .add("categoryCode", "core.requestSaving")
+                .add("dataType", "BOOLEAN")
+                .add("currentValue", false)
+                .add("defaultValue", true)
+                .build();
+
+        // performs PUT: /api/config-params/ohf.requestSaving.enable
+        mockMvc.perform(put(toUrl(uriBuilder))
+                .content(request.toString())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .with(SecurityMockMvcRequestPostProcessors.authentication(mockAuthentication("ADMIN"))))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(isEmptyString()));
+
+        // check updated property
+        DbConfigurationParam dbParam = paramService.getParameter("ohf.requestSaving.enable");
+        assertThat(dbParam.getCurrentValueAsObject(), is(false));
+        assertThat(dbParam.getDefaultValueAsObject(), is(true));
+    }
+
 
     @Test
     public void testUpdate_wrongValueType() throws Exception {
