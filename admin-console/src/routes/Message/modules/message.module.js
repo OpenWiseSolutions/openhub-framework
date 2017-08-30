@@ -80,7 +80,7 @@ export const actions = {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [GET_MESSAGE_INIT]: (state) => ({ ...state, message: null}),
+  [GET_MESSAGE_INIT]: (state) => ({ ...state, message: null }),
   [GET_MESSAGE_SUCCESS]: (state, { payload }) => ({ ...state, message: payload })
 }
 
