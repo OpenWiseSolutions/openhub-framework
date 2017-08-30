@@ -22,7 +22,7 @@ export const updateTitle = () => (dispatch, getState) => {
       title = 'Cluster Nodes'
       break
     case 'wsdl':
-      title = 'WSDL'
+      title = 'Input web services overview'
       break
     case 'config-params':
       title = 'Config Parameters'
