@@ -124,35 +124,6 @@ class Message extends Component {
           </DataTable >
         </Card >
         <br />
-        <Card className='md-divider-border md-divider-border--top' >
-          <div style={styles.controls} >
-            <Checkbox
-              id='total'
-              name='total'
-              label='total'
-              disabled={!states.includes(message.state)}
-              value={this.state.totalCheckbox}
-              onChange={() => this.toggle()}
-            />
-            <Button
-              raised
-              disabled={!states.includes(message.state)}
-              type='button'
-              primary
-              onClick={() => restart(message.id, this.state.totalCheckbox)}
-              label={'Restart Msg'}
-            />
-            <Divider vertical />
-            <Button
-              raised
-              disabled={states.includes(message.state)}
-              type='button'
-              onClick={() => cancel(message.id)}
-              label={'Cancel Msg'}
-            />
-          </div >
-        </Card >
-        <br />
         <Card >
           <CardTitle subtitle={'List of external calls'} />
 
@@ -214,6 +185,35 @@ class Message extends Component {
               ))}
             </TableBody >
           </DataTable >
+        </Card >
+        <br />
+        <Card className='md-divider-border md-divider-border--top' >
+          <div style={styles.controls} >
+            <Checkbox
+              id='total'
+              name='total'
+              label='total'
+              disabled={!states.includes(message.state)}
+              value={this.state.totalCheckbox}
+              onChange={() => this.toggle()}
+            />
+            <Button
+              raised
+              disabled={!states.includes(message.state)}
+              type='button'
+              primary
+              onClick={() => restart(message.id, this.state.totalCheckbox)}
+              label={'Restart Msg'}
+            />
+            <Divider vertical />
+            <Button
+              raised
+              disabled={states.includes(message.state)}
+              type='button'
+              onClick={() => cancel(message.id)}
+              label={'Cancel Msg'}
+            />
+          </div >
         </Card >
       </Card >
     )
