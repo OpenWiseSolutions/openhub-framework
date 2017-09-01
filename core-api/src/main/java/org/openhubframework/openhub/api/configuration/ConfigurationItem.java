@@ -16,6 +16,8 @@
 
 package org.openhubframework.openhub.api.configuration;
 
+import java.io.Serializable;
+
 import org.openhubframework.openhub.api.exception.validation.ConfigurationException;
 
 
@@ -26,7 +28,7 @@ import org.openhubframework.openhub.api.exception.validation.ConfigurationExcept
  * @author Tomas Hanus
  * @since 2.0
  */
-public interface ConfigurationItem<T> {
+public interface ConfigurationItem<T extends Serializable> {
 
     /**
      * Gets required configuration item.

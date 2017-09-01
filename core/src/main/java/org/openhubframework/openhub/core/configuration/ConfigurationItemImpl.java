@@ -16,6 +16,8 @@
 
 package org.openhubframework.openhub.core.configuration;
 
+import java.io.Serializable;
+
 import org.openhubframework.openhub.api.configuration.ConfigurationItem;
 import org.openhubframework.openhub.api.exception.validation.ConfigurationException;
 
@@ -27,7 +29,7 @@ import org.openhubframework.openhub.api.exception.validation.ConfigurationExcept
  * @author Tomas Hanus
  * @since 2.0
  */
-public class ConfigurationItemImpl<T> implements ConfigurationItem<T> {
+public class ConfigurationItemImpl<T extends Serializable> implements ConfigurationItem<T> {
 
     private final ConfigurationService configurationService;
     private final Class<T> clazz;

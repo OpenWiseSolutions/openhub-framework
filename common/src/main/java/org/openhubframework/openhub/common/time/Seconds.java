@@ -16,6 +16,7 @@
 
 package org.openhubframework.openhub.common.time;
 
+import java.io.Serializable;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 
@@ -35,7 +36,9 @@ import org.springframework.util.NumberUtils;
  * @author Petr Juza
  * @since 2.0
  */
-public final class Seconds {
+public final class Seconds implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     public final static Seconds ZERO = Seconds.of(0);
 
