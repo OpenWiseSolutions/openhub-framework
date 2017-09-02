@@ -76,7 +76,8 @@
         <module>components</module>
         <module>examples</module>
         <module>test</module>
-        <module>web-admin</module>
+        <module>web</module>
+        <module>war</module>
     </modules>
 
     <profiles>
@@ -240,6 +241,7 @@
                 <groupId>${project.groupId}</groupId>
                 <artifactId>openhub-test</artifactId>
                 <version>${project.version}</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
@@ -249,6 +251,11 @@
             <dependency>
                 <groupId>org.openhubframework</groupId>
                 <artifactId>openhub-admin-console</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>openhub-web</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

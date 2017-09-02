@@ -28,7 +28,6 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
@@ -68,18 +67,6 @@ public class WebAdminConfigurer {
         bean.addUrlPatterns(WEB_URI_PREFIX_MAPPING);
 
         return bean;
-    }
-
-    /**
-     * Defines localized messages for admin console.
-     */
-    @Bean
-    @ConditionalOnMissingBean
-    public ReloadableResourceBundleMessageSource messageSource() {
-        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("classpath:messages/messages");
-        messageSource.setDefaultEncoding("UTF-8");
-        return messageSource;
     }
 
     /**
