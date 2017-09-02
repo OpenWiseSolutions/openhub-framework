@@ -16,6 +16,7 @@
 
 package org.openhubframework.openhub.api.configuration;
 
+import java.text.ParseException;
 import java.util.regex.PatternSyntaxException;
 import javax.annotation.Nullable;
 import javax.persistence.*;
@@ -180,6 +181,72 @@ public class DbConfigurationParam extends SuperEntity<String> {
         }
 
         return null;
+    }
+
+    /**
+     * Gets current value converted to the object of appropriate type (integer, boolean etc).
+     *
+     * @return the current raw value.
+     */
+    public Object getCurrentValueAsObject() {
+        try {
+            return getDataType().getConverter().convertToObject(getCurrentValue());
+        } catch (ParseException e) {
+            throw new ConfigurationException(
+                    Tools.fm("Current value '{}' can't be converted to target type {}",
+                            getCurrentValue(), getDataType().name()), getCode());
+        }
+    }
+
+    /**
+     * Sets current value from object of appropriate type directly, it will be converted to string
+     * to be stored in repository.
+     *
+     * @param currentValue the raw object of current value.
+     */
+    public void setCurrentValueAsObject(Object currentValue) {
+        try {
+            setCurrentValue(
+                    getDataType().getConverter().convertToString(currentValue)
+            );
+        } catch (IllegalArgumentException e) {
+            throw new ConfigurationException(
+                    Tools.fm("Current value '{}' can't be converted to target type {}",
+                            currentValue, getDataType().name()), getCode());
+        }
+    }
+
+    /**
+     * Gets default value converted to the object of appropriate type (integer, boolean etc).
+     *
+     * @return the default raw value.
+     */
+    public Object getDefaultValueAsObject() {
+        try {
+            return getDataType().getConverter().convertToObject(getDefaultValue());
+        } catch (ParseException e) {
+            throw new ConfigurationException(
+                    Tools.fm("Default value '{}' can't be converted to target type {}",
+                            getDefaultValue(), getDataType().name()), getCode());
+        }
+    }
+
+    /**
+     * Sets default value from object of appropriate type directly, it will be converted to string
+     * to be stored in repository.
+     *
+     * @param defaultValue the raw object of default value.
+     */
+    public void setDefaultValueAsObject(Object defaultValue) {
+        try {
+            setDefaultValue(
+                    getDataType().getConverter().convertToString(defaultValue)
+            );
+        } catch (IllegalArgumentException e) {
+            throw new ConfigurationException(
+                    Tools.fm("Default value '{}' can't be converted to target type {}",
+                            defaultValue, getDataType().name()), getCode());
+        }
     }
 
     /**
