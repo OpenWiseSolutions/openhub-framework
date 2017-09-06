@@ -161,7 +161,7 @@ public class Message extends SuperEntity<Long> {
     @Transient
     private int processingPriority;
 
-    @Column(name = "node_id", nullable = true, insertable = false, updatable = false)
+    @Column(name = "node_id", nullable = true)
     private Long nodeId;
 
     /**
