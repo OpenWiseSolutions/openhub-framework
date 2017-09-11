@@ -19,13 +19,13 @@ package org.openhubframework.openhub.web.config;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.data.web.SortHandlerMethodArgumentResolver;
 
 import org.openhubframework.openhub.admin.web.common.rpc.paging.OffsetBasedPagingProperties;
-import org.openhubframework.openhub.common.AutoConfiguration;
-
 
 /**
  * Spring configuration to pageable support.
@@ -34,7 +34,8 @@ import org.openhubframework.openhub.common.AutoConfiguration;
  * @since 2.0
  * @see org.springframework.context.support.PropertySourcesPlaceholderConfigurer
  */
-@AutoConfiguration
+@ConditionalOnWebApplication
+@Configuration
 public class MvcPageableConfiguration {
 
     @Autowired
