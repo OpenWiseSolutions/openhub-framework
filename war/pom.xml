@@ -1,3 +1,19 @@
+<!--
+  ~  Copyright 2017 the original author or authors.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
@@ -8,98 +24,22 @@
         <version>1.1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>openhub-web-admin</artifactId>
+    <artifactId>openhub-war</artifactId>
     <packaging>war</packaging>
 
-    <name>OpenHub Web Admin</name>
-    <description>OpenHub web administration</description>
+    <name>OpenHub Server</name>
+    <description>OpenHub WAR build</description>
 
     <dependencies>
         <!-- inner modules -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>openhub-core</artifactId>
+            <artifactId>openhub-web</artifactId>
         </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>openhub-components</artifactId>
-        </dependency>
+        <!-- example module -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>openhub-examples</artifactId>
-        </dependency>
-
-        <!-- Spring Boot -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-autoconfigure</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <exclusions>
-                <!-- Exclude embedded tomcat -->
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-tomcat</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <!-- default logger ability - logback implementation -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-logging</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency>
-        
-        <!-- support Java 1.8 date/time API -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jsr310</artifactId>
-        </dependency>
-        <!-- XML support-->
-        <dependency>
-            <groupId>com.fasterxml.jackson.dataformat</groupId>
-            <artifactId>jackson-dataformat-xml</artifactId>
-        </dependency>
-
-        <!-- monitoring -->
-        <dependency>
-            <groupId>net.bull.javamelody</groupId>
-            <artifactId>javamelody-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jolokia</groupId>
-            <artifactId>jolokia-core</artifactId>
-        </dependency>
-
-        <!-- logging -->
-        <dependency>
-            <groupId>org.codehaus.janino</groupId>
-            <artifactId>janino</artifactId>
-        </dependency>
-
-        <!-- test dependencies -->
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>openhub-test</artifactId>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -114,7 +54,7 @@
                     <name>!skipDefault</name>
                 </property>
             </activation>
-            
+
             <dependencies>
                 <!-- Admin console -->
                 <dependency>
@@ -135,11 +75,11 @@
                     <name>env.DYNO</name>
                 </property>
             </activation>
-            
+
             <properties>
                 <packaging.type>executable</packaging.type>
             </properties>
-            
+
             <dependencies>
                 <!-- we include H2 to support full standalone mode without not embedded database -->
                 <dependency>
@@ -177,7 +117,7 @@
                 </plugins>
             </build>
         </profile>
-        
+
         <profile>
             <!-- default settings common for all environments -->
             <id>esb.dev</id>
@@ -255,7 +195,7 @@
                 <directory>src/main/resources</directory>
             </resource>
         </resources>
-        
+
         <plugins>
             <plugin>
                 <groupId>pl.project13.maven</groupId>
@@ -264,14 +204,14 @@
                     <!-- .git folder should not be mandatory -->
                     <failOnNoGitDirectory>false</failOnNoGitDirectory>
                     <!-- @since 2.1.4 -->
-                    <!-- 
-                        Tell maven-git-commit-id to inject the git properties into all reactor projects not just 
-                        the current one. For details about why you might want to skip this, read this issue: 
+                    <!--
+                        Tell maven-git-commit-id to inject the git properties into all reactor projects not just
+                        the current one. For details about why you might want to skip this, read this issue:
                         https://github.com/ktoso/maven-git-commit-id-plugin/pull/65
-                        The property is set to ``false`` by default to prevent the overriding of properties 
+                        The property is set to ``false`` by default to prevent the overriding of properties
                         that may be unrelated to the project.
                     -->
-                    <injectAllReactorProjects>true</injectAllReactorProjects>                    
+                    <injectAllReactorProjects>true</injectAllReactorProjects>
                 </configuration>
             </plugin>
 
