@@ -25,7 +25,11 @@ import org.springframework.context.annotation.ComponentScan;
  * @author Petr Juza
  * @since 2.0
  */
-@ComponentScan(basePackages = {"org.openhubframework.openhub.web.common", "org.openhubframework.openhub.admin"})
+@ComponentScan(basePackages = {
+        "org.openhubframework.openhub.web.common",
+        "org.openhubframework.openhub.web.config",
+        "org.openhubframework.openhub.admin"
+})
 public class AdminTestConfig {
 
 }
