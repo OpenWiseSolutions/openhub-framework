@@ -82,7 +82,7 @@ public class DbConfigurationController extends AbstractOhfController {
      * @return configuration parameter
      * @throws NoDataFoundException if entity not found
      */
-    @RequestMapping(value = "/{code}", method = RequestMethod.GET, produces = {"application/xml", "application/json"})
+    @RequestMapping(value = "/{code:.+}", method = RequestMethod.GET, produces = {"application/xml", "application/json"})
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public DbConfigurationParamRpc getByCode(@PathVariable final String code) throws NoDataFoundException {

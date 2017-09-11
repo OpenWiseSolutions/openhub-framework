@@ -1,7 +1,8 @@
-import { secondaryColor } from '../../../../styles/colors'
 import { gap } from '../../../../styles/constants'
+import styles from '../../../../styles/styles'
 
 export default {
+  ...styles,
   main: {
     paddingTop: gap,
     paddingLeft: gap,
@@ -9,9 +10,10 @@ export default {
     paddingBottom: gap
   },
   searchBox: {
-    width: 300,
+    width: 400,
     display: 'flex',
-    alignItems: 'center'
+    flexDirection: 'row',
+    justifyContent: 'center'
   },
   counts: {
     marginLeft: gap
@@ -19,14 +21,10 @@ export default {
   loggers: {
     marginTop: gap
   },
-  listControl: {
-    textAlign: 'center',
-    paddingTop: gap,
-    paddingBottom: gap,
-    color: secondaryColor,
-    cursor: 'pointer',
-    ':hover': {
-      textDecoration: 'underline'
-    }
+  controls: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 }

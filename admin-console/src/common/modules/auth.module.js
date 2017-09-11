@@ -1,7 +1,9 @@
 import { hashHistory } from 'react-router'
 import { toastr } from 'react-redux-toastr'
+import { getHealthInfo, getMetricsInfo } from '../../routes/Home/modules/home.module'
 import { login, userInfo, logout } from '../../services/auth.service'
 import { fetchConsoleConfig } from '../../services/appConfig.service'
+import { toggleSidebar, updateTitle } from '../../layouts/CoreLayout/coreLayout.module'
 
 // ------------------------------------
 // Constants
@@ -30,18 +32,6 @@ export const initAuth = () =>
     return dispatch({ type: INIT_AUTH, payload: userData })
   }
 
-export const toggleLoginModal = () => {
-  return {
-    type: LOGIN_TOGGLE
-  }
-}
-
-export const closeModal = () => {
-  return {
-    type: LOGIN_CLOSE
-  }
-}
-
 export const getConfig = () => (dispatch) => {
   return fetchConsoleConfig()
     .then((data) => {
@@ -51,7 +41,6 @@ export const getConfig = () => (dispatch) => {
       })
     })
     .catch(() => {
-      dispatch(logoutUser())
       toastr.error('Failed to retrieve console config!')
     })
 }
@@ -69,22 +58,19 @@ export const logoutUser = () => (dispatch) => {
 
 export const loginSuccess = () =>
   (dispatch) => {
-    dispatch(closeModal())
     return userInfo()
       .then((payload) => {
         sessionStorage.setItem(AUTH_SESSION, true)
         dispatch({ type: LOGIN_SUCCESS, payload })
         dispatch(getConfig())
-      })
-      .catch(() => {
-        dispatch(logout())
+        dispatch(updateTitle())
+        dispatch(toggleSidebar(true))
       })
   }
 
 export const loginError = (res) => () => {
   sessionStorage.removeItem(AUTH_SESSION)
   toastr.error('Login Failed!')
-  // todo error handler
 }
 
 export const submitLogin = ({ username, password }) => {
@@ -93,14 +79,17 @@ export const submitLogin = ({ username, password }) => {
     params.append('username', username)
     params.append('password', password)
     return login(params)
-      .then((res) => dispatch(loginSuccess()))
+      .then(() => {
+        dispatch(loginSuccess())
+        dispatch(getHealthInfo())
+        dispatch(getMetricsInfo())
+      })
       .catch((res) => dispatch(loginError(res)))
   }
 }
 
 export const actions = {
   initAuth,
-  toggleLoginModal,
   logoutUser,
   login,
   loginError,
@@ -123,8 +112,6 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 export const initialState = {
-  // todo zmenit nazvy ?
-  loginModalOpen: false,
   userData: null,
   config: null
 }

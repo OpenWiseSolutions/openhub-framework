@@ -1,3 +1,8 @@
+**v0.2.0**
+----------
+- Added Material Design
+- Added Jest test framework
+
 **v0.1.0**
 ----------
 - Removed axios

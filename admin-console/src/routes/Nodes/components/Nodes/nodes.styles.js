@@ -1,52 +1,23 @@
-import { gap } from '../../../../styles/constants'
-import { primaryColor, lightColor, positiveColor, negativeColor, warningColor } from '../../../../styles/colors'
+import { positiveColor, negativeColor, warningColor } from '../../../../styles/colors'
+import Styles from '../../../../styles/styles'
 
 export default {
+  ...Styles,
   main: {
     width: '100%'
   },
-  panel: {
-    width: '98%'
+  icon:{
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center'
   },
-  table: {
-    position: 'relative',
-    width: '100%',
-    boxShadow: '0 2px 10px -2px silver',
-    borderSpacing: 1
+  positive: {
+    color: positiveColor
   },
-  header:{
-    textAlign: 'left',
-    paddingLeft: 10
+  negative: {
+    color: negativeColor
   },
-  even: {
-    backgroundColor: primaryColor
-  },
-  odd: {
-    backgroundColor: lightColor
-  },
-  cell: {
-    margin: 0,
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingLeft: 10,
-    paddingRight: 10
-  },
-  state: {
-    position: 'relative',
-    width: '25px',
-    height: '25px'
-  },
-  green:{
-    backgroundColor: positiveColor
-  },
-  red:{
-    backgroundColor: negativeColor
-  },
-  orange:{
-    backgroundColor: warningColor
-  },
-  button: {
-    marginRight: gap,
-    backgroundColor: 'transparent'
+  neutral: {
+    color: warningColor
   }
 }

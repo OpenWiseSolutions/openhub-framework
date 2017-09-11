@@ -1,26 +1,37 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Radium from 'radium'
+import tc from 'tinycolor2'
 import { PieChart, Pie } from 'recharts'
+import Card from 'react-md/lib/Cards/Card'
+import CardTitle from 'react-md/lib/Cards/CardTitle'
+import Divider from 'react-md/lib/Dividers'
+import List from 'react-md/lib/Lists/List'
+import ListItem from 'react-md/lib/Lists/ListItem'
 import ms2hrs from '../../../utils/ms2hrs'
 import styles from './home.styles'
 import { positiveColor, secondaryColor } from '../../../styles/colors'
-import Panel from '../../../common/components/Panel/Panel'
-import Table from '../../../common/components/Table/Table'
+import LoginCard from '../../../common/containers/loginCard.container'
 import Status from '../../../common/components/Status/Status'
 
 @Radium
 class Home extends Component {
-
-  componentDidMount () {
-    const { getHealthInfo, getMetricsInfo } = this.props
-    getHealthInfo()
-    getMetricsInfo()
-  }
-
   render () {
     const { userData, dashboard: { healthInfo, openHubInfo, metricsInfo } } = this.props
-    if (!openHubInfo && !healthInfo && !metricsInfo) return <div>Loading...</div>
+
+    if (!openHubInfo && !healthInfo && !metricsInfo) {
+      return null
+    }
+
+    if (!userData) {
+      return (
+        <div style={styles.container} >
+          <LoginCard
+            name={openHubInfo.name}
+            version={openHubInfo.version + ' (' + openHubInfo.core.version + ')'} />
+        </div >
+      )
+    }
 
     const isUp = (val) => val === 'UP'
 
@@ -49,8 +60,8 @@ class Home extends Component {
       outerRadius: 100,
       fill: secondaryColor,
       data: [
-        { value: metricsInfo['mem.free'], fill: positiveColor },
-        { value: metricsInfo['mem'], fill: secondaryColor }
+        { value: metricsInfo['mem.free'], fill: tc(positiveColor).setAlpha(0.8).toString() },
+        { value: metricsInfo['mem'], fill: tc(secondaryColor).setAlpha(0.3).toString() }
       ]
     }
 
@@ -61,86 +72,110 @@ class Home extends Component {
       outerRadius: 100,
       fill: secondaryColor,
       data: [
-        { value: metricsInfo['heap.committed'], fill: positiveColor },
-        { value: metricsInfo['heap'], fill: secondaryColor }
+        { value: metricsInfo['heap.committed'], fill: tc(positiveColor).setAlpha(0.8).toString() },
+        { value: metricsInfo['heap'], fill: tc(secondaryColor).setAlpha(0.3).toString() }
       ]
     }
 
     const JVMTableData = metricsInfo && [
-        ['Available CPUs', metricsInfo.processors],
-        ['Uptime', ms2hrs(metricsInfo.uptime)],
-        ['Current loaded classes', metricsInfo['classes.loaded']],
-        ['Total classes', metricsInfo['classes']],
-        ['Unloaded classes', metricsInfo['classes.unloaded']]
+      ['Available CPUs', metricsInfo.processors],
+      ['Uptime', ms2hrs(metricsInfo.uptime)],
+      ['Current loaded classes', metricsInfo['classes.loaded']],
+      ['Total classes', metricsInfo['classes']],
+      ['Unloaded classes', metricsInfo['classes.unloaded']]
     ]
 
-    const freeMemory = metricsInfo && `Free memory: ${(metricsInfo['mem.free'] / 1000).toFixed(2)} MB`
+    const freeMemory = metricsInfo && `${(metricsInfo['mem.free'] / 1000).toFixed(2)} MB`
     const usedMemory = metricsInfo &&
-      `Used memory: ${((metricsInfo['mem'] - metricsInfo['mem.free']) / 1000).toFixed(2)} MB`
-    const totalMemory = metricsInfo && `Total memory: ${(metricsInfo['mem'] / 1000).toFixed(2)} MB`
+      `${((metricsInfo['mem'] - metricsInfo['mem.free']) / 1000).toFixed(2)} MB`
+    const totalMemory = metricsInfo && `${(metricsInfo['mem'] / 1000).toFixed(2)} MB`
 
-    const freeHeap = metricsInfo && `Free heap: ${(metricsInfo['heap.committed'] / 1000).toFixed(2)} MB`
+    const freeHeap = metricsInfo && `${(metricsInfo['heap.committed'] / 1000).toFixed(2)} MB`
     const usedHeap = metricsInfo &&
-      `Used heap: ${((metricsInfo['heap'] - metricsInfo['heap.committed']) / 1000).toFixed(2)} MB`
-    const totalHeap = metricsInfo && `Total heap: ${(metricsInfo['heap'] / 1000).toFixed(2)} MB`
+      `${((metricsInfo['heap'] - metricsInfo['heap.committed']) / 1000).toFixed(2)} MB`
+    const totalHeap = metricsInfo && `${(metricsInfo['heap'] / 1000).toFixed(2)} MB`
 
     return (
-      <div style={styles.main}>
+      <div >
         {userData &&
-          <div style={styles.widgets}>
-            <Panel title='Health'>
-              <Table data={healthTableData} />
-            </Panel>
-            <Panel title='Disk'>
-              <Table data={diskTableData} />
-            </Panel>
-            <Panel title='Memory'>
-              <div style={styles.memChart}>
-                <PieChart width={200} height={200}>
+        <div style={styles.widgets} >
+          {healthTableData && <Card style={styles.widget} >
+            <CardTitle title={'Health'} />
+            <Divider />
+            <List >
+              {healthTableData.map((i, k) => (
+                <ListItem className='md-pointer--none' key={i[0]} primaryText={i[0]} rightIcon={i[1]} />
+              ))}
+            </List >
+          </Card >}
+
+          {diskTableData && <Card style={styles.widget} >
+            <CardTitle title={'Disk Usage'} />
+            <Divider />
+            <List >
+              {diskTableData.map((i, k) => (
+                <ListItem className='md-pointer--none' key={i[0]} primaryText={i[0]} rightIcon={i[1]} />
+              ))}
+            </List >
+          </Card >}
+
+          {memChartProps &&
+          <Card style={styles.widget} >
+            <CardTitle title={'Memory Usage'} />
+            <Divider />
+            <div className='md-grid' >
+              <div className='md-cell md-cell--6' >
+                <PieChart width={200} height={200} >
                   <Pie isAnimationActive={false} {...memChartProps} />
-                </PieChart>
-                <ul style={styles.info} >
-                  <li><div style={[styles.tag, styles.tag.free]} />
-                    {freeMemory}
-                  </li>
-                  <li><div style={[styles.tag, styles.tag.used]} />
-                    {usedMemory}
-                  </li>
-                  <li><b>
-                    {totalMemory}
-                  </b></li>
-                </ul>
-              </div>
-            </Panel>
-            <Panel title='Heap'>
-              <div style={styles.memChart}>
-                <PieChart width={200} height={200}>
+                </PieChart >
+              </div >
+              <List className='md-cell md-cell--6' >
+                <ListItem className='md-pointer--none' primaryText={'Free memory'} rightIcon={freeMemory} />
+                <ListItem className='md-pointer--none' primaryText={'Used memory'} rightIcon={usedMemory} />
+                <ListItem className='md-pointer--none' primaryText={'Total memory'} rightIcon={totalMemory} />
+              </List >
+            </div >
+          </Card >}
+
+          {heapChartProps &&
+          <Card style={styles.widget} >
+            <CardTitle title={'Memory Heap'} />
+            <Divider />
+            <div className='md-grid' >
+              <div className='md-cell md-cell--6' >
+                <PieChart width={200} height={200} >
                   <Pie isAnimationActive={false} {...heapChartProps} />
-                </PieChart>
-                <ul style={styles.info} >
-                  <li><div style={[styles.tag, styles.tag.free]} />
-                    {freeHeap}
-                  </li>
-                  <li><div style={[styles.tag, styles.tag.used]} />
-                    {usedHeap}
-                  </li>
-                  <li><b>
-                    {totalHeap}
-                  </b></li>
-                </ul>
-              </div>
-            </Panel>
-            <Panel style={{ flexGrow: 1 }} title='JVM Information'>
-              <Table data={JVMTableData} />
-            </Panel>
-          </div>
-        }
-        <div style={styles.widgets}>
-          <Panel style={{ flexGrow: 1 }} title='Application'>
-            <Table data={appTableData} />
-          </Panel>
-        </div>
-      </div>
+                </PieChart >
+              </div >
+              <List className='md-cell md-cell--6' >
+                <ListItem className='md-pointer--none' primaryText={'Free heap'} rightIcon={freeHeap} />
+                <ListItem className='md-pointer--none' primaryText={'Used heap'} rightIcon={usedHeap} />
+                <ListItem className='md-pointer--none' primaryText={'Total heap'} rightIcon={totalHeap} />
+              </List >
+            </div >
+          </Card >}
+
+          {JVMTableData && <Card style={styles.widget} >
+            <CardTitle title={'JVM Information'} />
+            <Divider />
+            <List >
+              {JVMTableData.map((i, k) => (
+                <ListItem className='md-pointer--none' key={i[0]} primaryText={i[0]} rightIcon={i[1]} />
+              ))}
+            </List >
+          </Card >}
+
+          {appTableData && <Card style={styles.widget} >
+            <CardTitle title={'Application Information'} />
+            <Divider />
+            <List >
+              {appTableData.map((i, k) => (
+                <ListItem className='md-pointer--none' key={i[0]} primaryText={i[0]} rightIcon={i[1]} />
+              ))}
+            </List >
+          </Card >}
+        </div >}
+      </div >
     )
   }
 }

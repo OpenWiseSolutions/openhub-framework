@@ -1,61 +1,70 @@
-import React, { PropTypes, Component } from 'react'
-import Radium, { StyleRoot } from 'radium'
-import Navbar from '../../../common/components/Navbar/Navbar'
-import Sidebar from '../../../common/components/Sidebar/Sidebar'
+import React, { Component } from 'react'
+import { isEmpty } from 'ramda'
+import PropTypes from 'prop-types'
+import Radium from 'radium'
+import NavigationDrawer from 'react-md/lib/NavigationDrawers'
+import LinearProgress from 'react-md/lib/Progress/LinearProgress'
 import styles from './coreLayout.styles'
-import LoginModal from '../../../common/containers/loginModal.container'
+import navItems from './navItems'
+import ToolbarMenu from '../containers/toolbarMenu.container'
 
 @Radium
 class CoreLayout extends Component {
-
   render () {
     const {
       userData,
       children,
-      sidebarExtended,
-      navbarUserExpanded,
-      actions,
-      authActions,
-      config
+      sidebar,
+      toggleSidebar,
+      config,
+      active
     } = this.props
 
-    const bodyStyles = [
-      styles.body,
-      sidebarExtended && userData && styles.body.extended
-    ]
-
     return (
-      <StyleRoot>
-        <div style={styles.main}>
-          { config &&
-          <Sidebar config={config.menu} extended={sidebarExtended && !!userData} />}
-          <LoginModal />
-          <div style={bodyStyles}>
-            <Navbar
-              userData={userData}
-              logout={authActions.logoutUser}
-              navbarUserExpanded={navbarUserExpanded}
-              toggleUser={actions.toggleNavbarUser}
-              toggleLoginModal={authActions.toggleLoginModal}
-              toggleSidebar={actions.toggleSidebar} />
-            <div style={styles.contents} >
-              {children}
-            </div>
-          </div>
+      <NavigationDrawer
+        ref={this._setContainer}
+        visible={!!userData && sidebar}
+        toolbarStyle={{ opacity: userData ? 1 : 0 }}
+        onVisibilityToggle={() => toggleSidebar(!sidebar)}
+        navItems={config && navItems(config.menu)}
+        toolbarTitle={this.props.title}
+        drawerTitle={<div style={styles.logoWrapper} >
+          <div style={[styles.logoWrapper, styles.logo]} />
+        </div >}
+        defaultMedia={'desktop'}
+        toolbarProminent={false}
+        drawerType={NavigationDrawer.DrawerTypes.PERSISTENT}
+        toolbarActions={<ToolbarMenu />}
+      >
+        <div style={{ width: '100%' }}>
+          <LinearProgress
+            id='progress'
+            style={{
+              margin: 0,
+              marginTop: '-64px',
+              marginBottom: '54px',
+              width: '100%',
+              height: '10px',
+              opacity: !isEmpty(active) ? 1 : 0,
+              zIndex: 20,
+              backgroundColor: 'transparent'
+            }}
+          />
+          {children}
         </div>
-      </StyleRoot>
+      </NavigationDrawer>
     )
   }
 }
 
 CoreLayout.propTypes = {
   children: PropTypes.element.isRequired,
-  sidebarExtended: PropTypes.bool,
-  actions: PropTypes.object,
-  authActions: PropTypes.object,
-  navbarUserExpanded: PropTypes.bool,
+  sidebar: PropTypes.bool,
+  toggleSidebar: PropTypes.func,
   userData: PropTypes.object,
-  config: PropTypes.object
+  config: PropTypes.object,
+  title: PropTypes.string,
+  active: PropTypes.object
 }
 
 export default CoreLayout

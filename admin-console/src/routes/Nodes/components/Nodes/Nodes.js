@@ -1,10 +1,25 @@
+/* eslint-disable max-len */
+
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Radium from 'radium'
+import FontIcon from 'react-md/lib/FontIcons'
+import Button from 'react-md/lib/Buttons/Button'
+import Card from 'react-md/lib/Cards/Card'
+import DataTable from 'react-md/lib/DataTables/DataTable'
+import TableHeader from 'react-md/lib/DataTables/TableHeader'
+import TableBody from 'react-md/lib/DataTables/TableBody'
+import TableRow from 'react-md/lib/DataTables/TableRow'
+import TableColumn from 'react-md/lib/DataTables/TableColumn'
+import SelectFieldColumn from 'react-md/lib/DataTables/SelectFieldColumn'
 import styles from './nodes.styles'
-import Panel from '../../../../common/components/Panel/Panel'
-import Button from '../../../../common/components/Button/Button'
 import NodeModal from '../NodeModal/NodeModal'
+
+const states = [
+  { value: 'RUN', label: <div style={styles.icon}><FontIcon style={styles.positive}>play_arrow</FontIcon>Run</div> },
+  { value: 'STOPPED', label: <div style={styles.icon}><FontIcon style={styles.negative} >stop</FontIcon>Stop</div> },
+  { value: 'HANDLES_EXISTING_MESSAGES', label: <div style={styles.icon}><FontIcon style={styles.neutral}>inbox</FontIcon>Handle Existing Messages</div> }
+]
 
 @Radium
 class ConfigParams extends Component {
@@ -13,64 +28,62 @@ class ConfigParams extends Component {
     this.props.getNodes()
   }
 
-  getIcon (state) {
-    switch (state) {
-      case 'RUN':
-        return <div title='The Node is Running' style={[styles.state, styles.green]} />
-      case 'STOPPED':
-        return <div title='The Node is Stopped' style={[styles.state, styles.red]} />
-      case 'HANDLES_EXISTING_MESSAGES':
-        return <div
-          title='The Node handles only existing messages. New messages/requests are rejected'
-          style={[styles.state, styles.orange]}
-        />
-    }
-  }
-
   render () {
-    const { nodes, nodeDetail, closeNode, openNode, updateNode, deleteNode } = this.props
+    const {
+      nodes,
+      nodeDetail,
+      closeNode,
+      openNode,
+      updateNode,
+      deleteNode
+    } = this.props
 
-    if (!nodes) return <div>Loading...</div>
+    if (!nodes) return null
 
     const computedStyles = [styles.main]
 
     return (
-      <div style={computedStyles}>
+      <div style={computedStyles} >
         {nodeDetail && <NodeModal
           updateNode={updateNode}
           data={nodeDetail}
           close={closeNode}
           isOpen={!!nodeDetail}
         />}
-        <Panel key={'ClusterNodes'} style={styles.panel} title={'Cluster Nodes'}>
-          <table style={styles.table}>
-            <tbody>
-              <tr>
-                <th style={styles.header}>Id</th>
-                <th style={styles.header}>Code</th>
-                <th style={styles.header}>Name</th>
-                <th style={styles.header}>Description</th>
-                <th style={styles.header}>State</th>
-                <th style={styles.header}>Actions</th>
-              </tr>
-              { nodes.map(({ id, code, name, description, state }, index) => (
-                <tr key={id} style={index % 2 === 0 ? styles.even : styles.odd}>
-                  <td style={styles.cell}>{id}</td>
-                  <td style={styles.cell}>{code}</td>
-                  <td style={styles.cell}>{name}</td>
-                  <td style={styles.cell}>{description}</td>
-                  <td style={styles.cell}>{this.getIcon(state)}</td>
-                  <td style={styles.cell}>
-                    <Button onClick={() => openNode(id)} style={styles.button}>Update</Button>
-                    <Button onClick={() => deleteNode(id)} style={styles.button}>Delete</Button>
-                  </td>
-                </tr>
-            ))}
-            </tbody>
-          </table>
-        </Panel>
-
-      </div>
+        <Card >
+          <DataTable plain style={{ overflow: 'hidden' }}>
+            <TableHeader >
+              <TableRow >
+                <TableColumn >Id</TableColumn >
+                <TableColumn >Code</TableColumn >
+                <TableColumn >Name</TableColumn >
+                <TableColumn >Description</TableColumn >
+                <TableColumn >State</TableColumn >
+                <TableColumn >Actions</TableColumn >
+              </TableRow >
+            </TableHeader >
+            <TableBody >
+              {nodes.map((data) => (
+                <TableRow key={data.id} >
+                  <TableColumn >{data.id}</TableColumn >
+                  <TableColumn >{data.code}</TableColumn >
+                  <TableColumn >{data.name}</TableColumn >
+                  <TableColumn >{data.description}</TableColumn >
+                  <SelectFieldColumn
+                    onChange={(s) => updateNode(data.id, { state: s }, data)}
+                    defaultValue={data.state}
+                    menuItems={states}
+                  />
+                  <TableColumn >
+                    <Button primary onClick={() => openNode(data.id)} >edit</Button >
+                    { nodes.length > 1 && <Button onClick={() => deleteNode(data.id)} >delete</Button > }
+                  </TableColumn >
+                </TableRow >
+              ))}
+            </TableBody >
+          </DataTable >
+        </Card >
+      </div >
     )
   }
 }

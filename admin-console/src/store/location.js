@@ -1,3 +1,4 @@
+import { updateTitle } from '../layouts/CoreLayout/coreLayout.module'
 // ------------------------------------
 // Constants
 // ------------------------------------
@@ -6,11 +7,9 @@ export const LOCATION_CHANGE = 'LOCATION_CHANGE'
 // ------------------------------------
 // Actions
 // ------------------------------------
-export function locationChange (location = '/') {
-  return {
-    type    : LOCATION_CHANGE,
-    payload : location
-  }
+export const locationChange = (location = '/') => (dispatch) => {
+  dispatch({ type: LOCATION_CHANGE, payload: location })
+  dispatch(updateTitle())
 }
 
 // ------------------------------------

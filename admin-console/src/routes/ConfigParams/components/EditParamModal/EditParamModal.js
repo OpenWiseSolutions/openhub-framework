@@ -1,85 +1,209 @@
+/* eslint-disable react/jsx-no-bind,react/prop-types */
+
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { isEmpty } from 'ramda'
 import validator from 'validator'
 import Radium from 'radium'
-import Modal from 'react-modal'
-import { ValidForm, Field, Toggle, ValidStyles } from 'valid-react-form'
-import ModalHeader from '../../../../common/components/ModalHeader/ModalHeader'
+import Dialog from 'react-md/lib/Dialogs'
+import Flatpickr from 'react-flatpickr'
+import TextField from 'react-md/lib/TextFields'
+import Checkbox from 'react-md/lib/SelectionControls/Checkbox'
+import Button from 'react-md/lib/Buttons/Button'
 import styles from './editParamModal.styles'
-import Button from '../../../../common/components/Button/Button'
-import Anchor from '../../../../common/components/Anchor/Anchor'
 
-const Value = ({ type, value, label, name }) => {
-  const wrap = (child) => (
-    <div style={styles.row}>
-      <div style={styles.label}>{label}</div>
-      {child}
-    </div>
-  )
+const intValidator = (value) => () => {
+  if (value === '-') {
+    return value
+  }
+  return validator.isInt(value)
+}
+const floatValidator = (value) => () => {
+  if (value === '-') {
+    return value
+  }
+  return validator.isFloat(value)
+}
+const preventDash = (name, val, update) => {
+  if (val === '-') {
+    update(name, '')
+  }
+}
 
+const Value = ({ type, value, label, name, update, mandatory }) => {
   switch (type) {
-    case 'BOOL':
-      return wrap(<div><Toggle name={name} value={value} /></div>)
+    case 'BOOLEAN':
+      return <Checkbox
+        style={styles.checkbox}
+        label={label}
+        id={name}
+        name={name}
+        checked={value}
+        value={value}
+        onChange={(val) => update(name, val)}
+      />
     case 'INT':
-      return wrap(<Field validator={{ err: (v) => validator.isInt(v) }} name={name} value={value} />)
+      return <TextField
+        required={mandatory}
+        label={label}
+        name={name}
+        id={name}
+        value={value}
+        onBlur={(val) => preventDash(name, value, update)}
+        onChange={(val) => update(name, val, intValidator(val))}
+      />
     case 'FLOAT':
-      return wrap(<Field validator={{ err: (v) => validator.isFloat(v) }} name={name} value={value} />)
+      return <TextField
+        label={label}
+        required={mandatory}
+        name={name}
+        id={name}
+        value={value}
+        onBlur={(val) => preventDash(name, value, update)}
+        onChange={(val) => update(name, val, floatValidator(val))}
+      />
+    case 'DATE':
+      return <Flatpickr
+        placeholder='Choose Date'
+        style={styles.datepicker}
+        value={value}
+        onChange={(val) => update(name, val)}
+      />
     case 'STRING':
+    case 'FILE':
     default:
-      return wrap(<Field name={name} value={value} />)
+      return <TextField
+        required={mandatory}
+        label={label}
+        name={name}
+        id={name}
+        value={value}
+        onChange={(val) => update(name, val)}
+      />
   }
 }
 
 @Radium
 class EditParamModal extends Component {
+
+  constructor (props) {
+    super(props)
+    this.state = {
+      ...this.props.data
+    }
+  }
+
+  handleSubmit (e) {
+    e.preventDefault()
+    const { data } = this.props
+    const { currentValue, defaultValue, validationRegEx } = this.state
+
+    if (data.mandatory) {
+      const res = [currentValue, defaultValue]
+        .filter((val) => !isEmpty(val))
+
+      if (!res.length) {
+        return
+      }
+    }
+
+    const payload = {
+      ...data,
+      currentValue,
+      defaultValue,
+      validationRegEx
+    }
+
+    this.props.updateParam(payload)
+  }
+
+  update (field, value, validator) {
+    if (validator && value && !validator(value)) {
+      return
+    }
+
+    this.setState(() => ({
+      [field]: value
+    }))
+  }
+
   render () {
-    const { isOpen, close, data, updateParam, updating, updateError } = this.props
+    const { isOpen, close, data } = this.props
     return (
-      <Modal contentLabel='params' style={styles.main} isOpen={isOpen}>
-        <ModalHeader onClose={close} title={'Edit Parameter'} />
+      <Dialog
+        closeOnEsc
+        id='modal'
+        dialogClassName='md-dialog--big'
+        title={'Edit Parameter'}
+        visible={isOpen}
+        onHide={close}
+        actions={[
+          <Button onClick={this.handleSubmit.bind(this)} raised label={'Update'} primary />,
+          <Button raised label={'Cancel'} onClick={close} />
+        ]}
+      >
         {isOpen && data &&
-        <div style={styles.content}>
-          {updateError && <div style={styles.error}>Update failed!</div>}
-          <ValidStyles>
-            <ValidForm autoComplete='off' onSubmit={(payload) => updateParam(data, payload)}>
-              <div style={styles.row}>
-                <div style={styles.label}>Code</div>
-                <div>{data.code}</div>
-              </div>
-              <div style={styles.row}>
-                <div style={styles.label}>Description</div>
-                <div>{data.description}</div>
-              </div>
-              <div style={styles.row}>
-                <div style={styles.label}>Data type</div>
-                <div>{data.dataType}</div>
-              </div>
-              <div style={styles.row}>
-                <div style={styles.label}>Mandatory</div>
-                <div>
-                  <Toggle name='mandatory' value={data.mandatory} />
-                </div>
-              </div>
-              <br />
-              <Value type={data.dataType} value={data.currentValue} label='Current Value' name='currentValue' />
-              <Value type={data.dataType} value={data.defaultValue} label='Default Value' name='defaultValue' />
-              <br />
-              <div style={styles.row}>
-                <div style={styles.label}>Validation</div>
-                <div>
-                  <Field name='validationRegEx' value={data.validationRegEx} />
-                </div>
-              </div>
-              <br />
-              <div style={[styles.row, styles.controls]}>
-                <Anchor style={styles.controls.cancel} onClick={close}>Cancel</Anchor>
-                <Button style={styles.controls.submit}>{updating ? 'Updating...' : 'Update'}</Button>
-              </div>
-            </ValidForm>
-          </ValidStyles>
-        </div>
+        <form
+          autoComplete='off'
+          onSubmit={this.handleSubmit.bind(this)}
+        >
+          <TextField
+            disabled
+            label='Code'
+            name='code'
+            id='code'
+            value={data.code}
+          />
+          <TextField
+            disabled
+            label='Description'
+            name='description'
+            id='description'
+            value={data.description}
+          />
+          <TextField
+            disabled
+            label='Validation (reg. expr.)'
+            name='validationRegEx'
+            id='validationRegEx'
+            value={data.validationRegEx}
+          />
+          <TextField
+            disabled
+            label='Data Type'
+            name='datatype'
+            id='datatype'
+            value={data.dataType}
+          />
+          <Checkbox
+            disabled
+            style={styles.checkbox}
+            label={'Mandatory'}
+            id='mandatory'
+            name='mandatory'
+            checked={data.mandatory}
+            value={data.mandatory}
+          />
+          <Value
+            update={this.update.bind(this)}
+            type={data.dataType}
+            value={this.state.currentValue}
+            mandatory={data.mandatory}
+            label='Current Value'
+            name='currentValue'
+          />
+          <Value
+            update={this.update.bind(this)}
+            type={data.dataType}
+            mandatory={data.mandatory}
+            value={this.state.defaultValue}
+            label='Default Value'
+            name='defaultValue'
+          />
+          <button type='submit' hidden />
+        </form >
         }
-      </Modal>
+      </Dialog >
     )
   }
 }

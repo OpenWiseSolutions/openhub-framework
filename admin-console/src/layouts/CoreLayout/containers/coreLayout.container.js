@@ -1,23 +1,15 @@
-import * as actionCreators from '../actions/coreLayout.actions'
-import { actions as authActions } from '../../../common/modules/auth.module'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import CoreLayout from '../components/CoreLayout'
+import { actions } from '../coreLayout.module'
 
-function mapStateToProps (state, props) {
-  return {
-    sidebarExtended: state.coreLayout.sidebarExtended,
-    navbarUserExpanded: state.coreLayout.navbarUserExpanded,
-    userData: state.auth.userData,
-    config: state.auth.config
-  }
-}
+const mapStateToProps = ({ api, auth, layout }) => ({
+  ...api,
+  ...auth,
+  ...layout
+})
 
-function mapDispatchToProps (dispatch) {
-  return {
-    actions: bindActionCreators(actionCreators, dispatch),
-    authActions: bindActionCreators(authActions, dispatch)
-  }
+const mapDispatchToProps = {
+  ...actions
 }
 
 export default connect(

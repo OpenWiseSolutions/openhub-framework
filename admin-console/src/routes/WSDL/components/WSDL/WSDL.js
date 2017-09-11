@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Radium from 'radium'
+import Card from 'react-md/lib/Cards/Card'
+import CardTitle from 'react-md/lib/Cards/CardTitle'
+import CardText from 'react-md/lib/Cards/CardText'
 import styles from './wsdl.styles'
-import Panel from '../../../../common/components/Panel/Panel'
 
 @Radium
 class WSDLOverview extends Component {
@@ -14,21 +16,22 @@ class WSDLOverview extends Component {
   render () {
     const { wsdlData } = this.props
 
-    if (!wsdlData) return <div>Loading...</div>
+    if (!wsdlData) return null
 
     return (
-      <Panel style={styles.panel} title={'Input web service overview'}>
-        <div>
+      <Card>
+        <CardTitle title={'Input web service overview'} />
+        <div className='md-grid'>
           { wsdlData && wsdlData.map(({ name, wsdl }) =>
-            <div key={name} style={styles.item}>
-              <h3 style={styles.title}>{name}</h3>
-              <div style={styles.content}>
+            <Card className='md-cell md-cell--12' style={styles.item} key={name}>
+              <CardTitle title={name} />
+              <CardText>
                 <a href={wsdl} target='_blank'>{wsdl}</a>
-              </div>
-            </div>
+              </CardText>
+            </Card>
           )}
         </div>
-      </Panel>
+      </Card>
     )
   }
 }

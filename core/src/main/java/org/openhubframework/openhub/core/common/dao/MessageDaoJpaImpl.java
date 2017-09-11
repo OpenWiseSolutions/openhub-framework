@@ -488,6 +488,6 @@ public class MessageDaoJpaImpl implements MessageDao {
      * @return the sql with placeholder.
      */
     protected String findMessagesByFilterFulltextSql(String placeholder) {
-        return "           AND m.payload like :" + placeholder;
+        return "           AND m.envelope like :" + placeholder;
     }
 }

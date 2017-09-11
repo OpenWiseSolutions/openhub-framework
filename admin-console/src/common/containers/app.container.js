@@ -17,8 +17,8 @@ class AppContainer extends Component {
     const { routes, store } = this.props
 
     return (
-      <Provider store={store}>
-        <div style={{ height: '100%' }}>
+      <Provider store={store} >
+        <div style={{ height: '100%' }} >
           <ReduxToastr
             timeOut={4000}
             newestOnTop={false}
@@ -28,8 +28,8 @@ class AppContainer extends Component {
             progressBar
           />
           <Router history={hashHistory} children={routes} />
-        </div>
-      </Provider>
+        </div >
+      </Provider >
     )
   }
 }

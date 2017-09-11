@@ -80,7 +80,7 @@ public class CoreProps {
     /**
      * Interval (in seconds) after that postponed messages will fail.
      */
-    public static final String ASYNCH_POSTPONED_INTERVAL_WHEN_FAILED_SEC = PREFIX + "asynch.postponedIntervalSecWhenFailedSec";
+    public static final String ASYNCH_POSTPONED_INTERVAL_WHEN_FAILED_SEC = PREFIX + "asynch.postponedIntervalWhenFailedSec";
 
     /**
      * Administrator email(s); if more emails, then separated them with semicolon, if empty then email won't be sent.

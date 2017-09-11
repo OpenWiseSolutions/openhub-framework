@@ -16,6 +16,8 @@
 
 package org.openhubframework.openhub.core.configuration;
 
+import java.io.Serializable;
+
 import org.openhubframework.openhub.api.common.Constraints;
 import org.openhubframework.openhub.api.configuration.ConfigurationItem;
 
@@ -27,7 +29,7 @@ import org.openhubframework.openhub.api.configuration.ConfigurationItem;
  * @author Petr Juza
  * @since 2.0
  */
-public class FixedConfigurationItem<T> implements ConfigurationItem<T> {
+public class FixedConfigurationItem<T extends Serializable> implements ConfigurationItem<T> {
 
     private final T value;
 

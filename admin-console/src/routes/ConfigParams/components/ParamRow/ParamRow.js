@@ -1,42 +1,60 @@
 import React, { PropTypes, Component } from 'react'
 import Radium from 'radium'
+import FontIcon from 'react-md/lib/FontIcons'
+import TableRow from 'react-md/lib/DataTables/TableRow'
+import Button from 'react-md/lib/Buttons/Button'
+import TableColumn from 'react-md/lib/DataTables/TableColumn'
 import { pipe, omit, values, map, append, addIndex, toString } from 'ramda'
-import styles from './paramRow.styles.js'
-import Button from '../../../../common/components/Button/Button'
 
 @Radium
 class ParamRow extends Component {
 
   render () {
-    const { data, openParam, count } = this.props
-
-    const computedStyles = count % 2 === 0 ? styles.even : styles.odd
-
+    const { data, openParam } = this.props
     const id = data.id
 
+    const ensureNumberOfCells = {
+      code: '',
+      currentValue: '',
+      defaultValue: '',
+      dataType: '',
+      mandatory: '',
+      description: '',
+      validationRegEx: ''
+    }
+
+    const formatType = (value) => {
+      if (typeof value === 'boolean') {
+        return value
+          ? <FontIcon style={{ marginTop: '5px', fontSize: '20px' }}>check_box</FontIcon>
+          : <FontIcon style={{ marginTop: '5px', fontSize: '20px' }}>check_box_outline_blank</FontIcon>
+      }
+      return typeof value !== 'string' ? toString(value) : value
+    }
+
     const cells = pipe(
-      omit(['id', 'categoryCode']),
+      omit(['id', 'categoryCode', 'dataType', 'mandatory', 'validationRegEx']),
       values,
-      map((value) => typeof value !== 'string' ? toString(value) : value),
-      addIndex(map)((cell, index) => <td style={styles.cell} key={index}>{cell}</td>),
+      map(formatType),
+      addIndex(map)((cell, index) => <TableColumn key={index} >{cell}</TableColumn>),
       append(
-        <td key={id}>
-          <Button style={styles.button} fullWidth onClick={() => openParam(id)} >Edit</Button>
-        </td>)
-    )(data)
+        <TableColumn key={id} >
+          <Button primary onClick={() => openParam(id)} >edit</Button >
+        </TableColumn>)
+    )({ ...ensureNumberOfCells, ...data })
 
     return (
-      <tr style={computedStyles}>
+      <TableRow >
         {cells}
-      </tr>
+      </TableRow>
     )
   }
 }
 
 ParamRow.propTypes = {
-  data     : PropTypes.object,
+  data: PropTypes.object,
   openParam: PropTypes.func,
-  count    : PropTypes.number
+  count: PropTypes.number
 }
 
 export default ParamRow

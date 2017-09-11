@@ -2,24 +2,27 @@ import { gap } from '../../../styles/constants'
 import { positiveColor, secondaryColor } from '../../../styles/colors'
 
 export default {
-  main: {},
+  container: {
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '90vh'
+  },
   widgets: {
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    alignContent: 'flex-start'
+    justifyContent: 'space-around',
+    alignItems: 'inherit'
   },
-  memChart: {
+  widget: {
     position: 'relative',
-    paddingTop: gap,
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    alignContent: 'flex-start'
+    width: '48%',
+    marginTop: gap,
+    marginBottom: gap
   },
   info: {
     listStyle: 'none'

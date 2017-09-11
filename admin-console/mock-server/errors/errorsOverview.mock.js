@@ -13,8 +13,8 @@ module.exports = [
             "codes": [
               {
                 "code": "E100",
-                "desc": "'unspecified error'",
-                "action": "'reprocess message'"
+                "desc": "unspecified error",
+                "action": "reprocess message"
               }
             ]
           },
@@ -23,8 +23,8 @@ module.exports = [
             "codes": [
               {
                 "code": "E100",
-                "desc": "'unspecified error'",
-                "action": "'reprocess message'"
+                "desc": "unspecified error",
+                "action": "reprocess message"
               }
             ]
           }

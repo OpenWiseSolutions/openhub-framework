@@ -28,6 +28,9 @@ export default {
       padding: '20px'
     }
   },
+  checkbox: {
+    marginLeft: '-15px'
+  },
   content:{
     position: 'relative',
     top: 0,
@@ -43,7 +46,11 @@ export default {
     paddingRight: 100
   },
   label: {
+    flex: 1,
     fontWeight: 600
+  },
+  field: {
+    flex: 1
   },
   controls: {
     height: '40px',
@@ -51,11 +58,11 @@ export default {
     paddingBottom: gap,
     justifyContent: 'flex-end',
     cancel: {
-      float: 'right',
-      paddingRight: gap
+      float: 'right'
     },
     submit: {
-      float: 'right'
+      float: 'right',
+      marginRight: gap
     }
   },
   error: {
@@ -67,5 +74,22 @@ export default {
     paddingLeft: 10,
     paddingBottom: 10,
     paddingRight: 10
+  },
+  datepicker: {
+    boxSizing: 'border-box',
+    paddingTop: 0,
+    paddingBottom: 0,
+    marginTop: 0,
+    marginBottom: 0,
+    marginLeft: 0,
+    marginRight: 0,
+    width: '100%',
+    height: '40px',
+    border: 'none',
+    outline: 'none',
+    fontSize: '13px',
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+    borderBottomColor: 'lightgray'
   }
 }

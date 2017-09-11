@@ -18,6 +18,7 @@ package org.openhubframework.openhub.core.configuration;
 
 import static org.springframework.util.StringUtils.hasText;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -58,11 +59,11 @@ public class ConfigurationItemProducer implements BeanPostProcessor {
      * @param field    that holds {@link ConfigurationItem}
      * @return configuration item as {@link ConfigurationItemImpl}
      */
-    private ConfigurationItem<?> produceConfigurationItem(String beanName, Field field) {
+    private <T extends Serializable> ConfigurationItem<T> produceConfigurationItem(String beanName, Field field) {
         ParameterizedType type = (ParameterizedType) field.getGenericType();
 
         Type[] typeArgs = type.getActualTypeArguments();
-        Class<?> configItemTypeClass = (Class<?>) typeArgs[0];
+        Class<T> configItemTypeClass = (Class<T>) typeArgs[0];
 
         final String effectiveKey = resolveKey(field);
 
@@ -79,8 +80,8 @@ public class ConfigurationItemProducer implements BeanPostProcessor {
      * @param service as contract to process items
      * @return the {@link ConfigurationItem} implementation
      */
-    protected ConfigurationItem<?> createConfigurationItem(
-            final Class<?> clazz,
+    protected <T extends Serializable> ConfigurationItem<T> createConfigurationItem(
+            final Class<T> clazz,
             final String effectiveKey,
             final ConfigurationService service) {
 

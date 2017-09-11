@@ -2,7 +2,13 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Radium from 'radium'
 import styles from './errorsOverview.styles'
-import Panel from '../../../../common/components/Panel/Panel'
+import Card from 'react-md/lib/Cards/Card'
+import CardTitle from 'react-md/lib/Cards/CardTitle'
+import DataTable from 'react-md/lib/DataTables/DataTable'
+import TableHeader from 'react-md/lib/DataTables/TableHeader'
+import TableBody from 'react-md/lib/DataTables/TableBody'
+import TableRow from 'react-md/lib/DataTables/TableRow'
+import TableColumn from 'react-md/lib/DataTables/TableColumn'
 
 @Radium
 class ErrorsOverview extends Component {
@@ -14,30 +20,32 @@ class ErrorsOverview extends Component {
   render () {
     const { errorsData } = this.props
 
-    if (!errorsData) return <div>Loading...</div>
+    if (!errorsData) return null
 
     return (
       <div style={styles.main}>
         { errorsData && errorsData.map(({ name, codes }) =>
-          <Panel key={name} style={styles.panel} title={name} >
-            <table style={styles.table}>
-              <tbody>
-                <tr>
-                  <th style={styles.header}>Code</th>
-                  <th style={styles.header}>Description</th>
-                  <th style={styles.header}>Recommended action</th>
-                </tr>
-                { codes.map(({ code, desc, action }, index) => (
-                  <tr key={code} style={index % 2 === 0 ? styles.even : styles.odd}>
-                    <td style={styles.cell}>{code}</td>
-                    <td style={styles.cell}>{desc}</td>
-                    <td style={styles.cell}>{action}</td>
-                  </tr>
-                ))
-                }
-              </tbody>
-            </table>
-          </Panel>
+          <Card style={styles.card} key={name} >
+            <CardTitle title={name} />
+            <DataTable plain >
+              <TableHeader >
+                <TableRow >
+                  <TableColumn >Code</TableColumn >
+                  <TableColumn >Description</TableColumn >
+                  <TableColumn >Recommended action</TableColumn >
+                </TableRow >
+              </TableHeader >
+              <TableBody >
+                {codes.map(({ code, desc, action }, index) => (
+                  <TableRow key={code} >
+                    <TableColumn>{code}</TableColumn>
+                    <TableColumn>{desc}</TableColumn>
+                    <TableColumn>{action}</TableColumn>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </DataTable>
+          </Card>
         )}
       </div>
     )

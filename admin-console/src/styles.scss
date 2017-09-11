@@ -1,0 +1,31 @@
+@import '~react-md/src/scss/react-md';
+@import '~react-md/src/scss/bundles/blue-light_blue.scss';
+
+$md-primary-color: #42a5f5;
+$md-list-left-padding: 45px;
+
+@include react-md-everything;
+
+.md-dialog--big {
+  @include react-md-dialog-width(10);
+}
+
+.md-navbar-item--custom {
+  @include react-md-lists($light-theme: 'red');
+}
+
+.md-list--drawer {
+  background-color: #e6e6e6;
+}
+
+%md-table-column--plain {
+  height: 30px;
+  line-height: 30px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  vertical-align: top;
+}
+
+.md-select-field-column .md-select-field--btn {
+  height: 30px;
+}

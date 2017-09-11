@@ -70,12 +70,12 @@ public class DbConfigurationParamRpc extends ChangeableRpc<DbConfigurationParam,
     /**
      * currentValue: true (string) - current value
      */
-    private String currentValue;
+    private Object currentValue;
 
     /**
      * defaultValue: true (string) - default value (used if current value is not filled)
      */
-    private String defaultValue;
+    private Object defaultValue;
 
     /**
      * dataType (enum[string]): data type of current and default value
@@ -116,8 +116,8 @@ public class DbConfigurationParamRpc extends ChangeableRpc<DbConfigurationParam,
 
         this.code = entity.getCode();
         this.categoryCode = entity.getCategoryCode();
-        this.currentValue = entity.getCurrentValue();
-        this.defaultValue = entity.getDefaultValue();
+        this.currentValue = entity.getCurrentValueAsObject();
+        this.defaultValue = entity.getDefaultValueAsObject();
         this.dataType = entity.getDataType().name();
         this.mandatory = entity.isMandatory();
         this.description = entity.getDescription();
@@ -145,8 +145,8 @@ public class DbConfigurationParamRpc extends ChangeableRpc<DbConfigurationParam,
 
         Assert.isTrue(!created, "Configuration parameter can be updated only");
 
-        param.setCurrentValue(getCurrentValue());
-        param.setDefaultValue(getDefaultValue());
+        param.setCurrentValueAsObject(getCurrentValue());
+        param.setDefaultValueAsObject(getDefaultValue());
         param.setValidationRegEx(getValidationRegEx());
     }
 
@@ -167,20 +167,20 @@ public class DbConfigurationParamRpc extends ChangeableRpc<DbConfigurationParam,
     }
 
     @Nullable
-    public String getCurrentValue() {
+    public Object getCurrentValue() {
         return currentValue;
     }
 
-    public void setCurrentValue(@Nullable String currentValue) {
+    public void setCurrentValue(@Nullable Object currentValue) {
         this.currentValue = currentValue;
     }
 
     @Nullable
-    public String getDefaultValue() {
+    public Object getDefaultValue() {
         return defaultValue;
     }
 
-    public void setDefaultValue(@Nullable String defaultValue) {
+    public void setDefaultValue(@Nullable Object defaultValue) {
         this.defaultValue = defaultValue;
     }
 

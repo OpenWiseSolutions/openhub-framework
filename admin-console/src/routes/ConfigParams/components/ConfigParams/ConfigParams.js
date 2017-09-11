@@ -1,6 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Radium from 'radium'
+import Card from 'react-md/lib/Cards/Card'
+import DataTable from 'react-md/lib/DataTables/DataTable'
+import TableHeader from 'react-md/lib/DataTables/TableHeader'
+import TableBody from 'react-md/lib/DataTables/TableBody'
+import TableRow from 'react-md/lib/DataTables/TableRow'
+import TableColumn from 'react-md/lib/DataTables/TableColumn'
 import styles from './configParams.styles'
 import ParamRow from '../ParamRow/ParamRow'
 import EditParamModal from '../EditParamModal/EditParamModal'
@@ -24,47 +30,46 @@ class ConfigParams extends Component {
       updateParam
     } = this.props
 
-    if (!configParams) return <div>Loading...</div>
+    if (!configParams) return null
 
-    const computedStyles = [styles.main]
     const categories = configParams.reduce((acc, item) => {
       if (!acc[item.categoryCode]) acc[item.categoryCode] = []
-      acc[item.categoryCode] = [ ...acc[item.categoryCode], item ]
+      acc[item.categoryCode] = [...acc[item.categoryCode], item]
       return acc
     }, {})
 
     return (
-      <div style={computedStyles} >
+      <div style={styles.main} >
+        {!!paramDetail &&
         <EditParamModal
           updateError={updateError}
           updating={updating}
           close={closeParam}
           updateParam={updateParam}
           data={paramDetail}
-          isOpen={!!paramDetail} />
-        { Object.keys(categories).map((cat) => (
-          <div key={cat} style={styles.category}>
-            <h4 style={styles.categoryTitle}>{cat}</h4>
-            <table style={styles.table}>
-              <tbody>
-                <tr>
-                  <th style={styles.header}>Code</th>
-                  <th style={styles.header}>Current Value</th>
-                  <th style={styles.header}>Default Value</th>
-                  <th style={styles.header}>Data Type</th>
-                  <th style={styles.header}>Mandatory</th>
-                  <th style={styles.header}>Description</th>
-                  <th style={styles.header}>Validation</th>
-                  <th style={styles.header}>Action</th>
-                </tr>
-                { categories[cat].map((row, count) => (
+          isOpen={!!paramDetail} />}
+        <Card style={styles.card} >
+          <DataTable plain >
+            <TableHeader >
+              <TableRow >
+                <TableColumn >Code</TableColumn >
+                <TableColumn >Current Value</TableColumn >
+                <TableColumn >Default Value</TableColumn >
+                <TableColumn >Description</TableColumn >
+                <TableColumn >Action</TableColumn >
+              </TableRow >
+            </TableHeader >
+            {Object.keys(categories).map((cat) => (
+              <TableBody key={cat} >
+                <h2 style={{ padding: '20px' }} >{cat}</h2 >
+                {categories[cat].map((row, count) => (
                   <ParamRow count={count} openParam={openParam} key={row.id} data={row} />
                 ))}
-              </tbody>
-            </table>
-          </div>
-        ))}
-      </div>
+              </TableBody >
+            ))}
+          </DataTable >
+        </Card >
+      </div >
     )
   }
 }

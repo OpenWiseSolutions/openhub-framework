@@ -219,7 +219,7 @@ public class MessageServiceTest extends AbstractCoreDbTest {
                     message.setOperationName("fakeOperation");
                     break;
                 case 9:
-                    message.setPayload("another payload");
+                    message.setEnvelope("another payload");
                     break;
 
             }
@@ -261,11 +261,11 @@ public class MessageServiceTest extends AbstractCoreDbTest {
         // prepare message
         createAndSaveMessages(4, (message, order) -> {
             if (order == 1) {
-                message.setPayload("car");
+                message.setEnvelope("car");
             } else if (order == 2) {
-                message.setPayload("carrot");
+                message.setEnvelope("carrot");
             } else if (order == 3) {
-                message.setPayload("scar");
+                message.setEnvelope("scar");
             }
         });
 
@@ -282,6 +282,7 @@ public class MessageServiceTest extends AbstractCoreDbTest {
         msg.setProcessId("123-456-789");
         msg.setReceiveTimestamp(received);
         msg.setLastUpdateTimestamp(lastUpdate);
+        msg.setEnvelope(msg.getPayload());
     }
 
     private void assertSetState(final MsgStateEnum initState, MessageCallback processor, final MsgStateEnum expState)
