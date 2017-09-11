@@ -41,11 +41,21 @@ export const openParam = (id) => {
   }
 }
 
-export const updateParam = (data, payload) => {
+export const updateParam = (data) => {
   return (dispatch) => {
-    const originalData = omit(['code'], data)
+    const payload = omit(['code'], data)
     dispatch({ type: UPDATE_PARAM_INIT })
-    return updateConfigParam(data.code, { ...originalData, ...payload })
+
+    if (payload.dataType === 'INT') {
+      payload.defaultValue = parseInt(payload.defaultValue)
+      payload.currentValue = parseInt(payload.currentValue)
+    }
+
+    if (payload.dataType === 'FLOAT') {
+      payload.defaultValue = parseFloat(payload.defaultValue)
+      payload.currentValue = parseFloat(payload.currentValue)
+    }
+    return updateConfigParam(data.code, { ...payload })
       .then(() => {
         dispatch(getConfigParams())
         dispatch({ type: UPDATE_PARAM_SUCCESS })
