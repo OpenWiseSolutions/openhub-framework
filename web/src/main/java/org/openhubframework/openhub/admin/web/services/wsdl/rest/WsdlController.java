@@ -97,6 +97,6 @@ public class WsdlController extends AbstractOhfController {
             throw new RuntimeException("Not valid request.requestURL for parsing:", e);
         }
         final String port = requestURL.getPort() == -1 ? "" : ":" + requestURL.getPort();
-        return requestURL.getProtocol() + "://" + requestURL.getHost() + port;
+        return requestURL.getProtocol() + "://" + requestURL.getHost() + port + request.getContextPath();
     }
 }

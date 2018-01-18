@@ -18,6 +18,8 @@ package org.openhubframework.openhub.config;
 
 import java.util.Map;
 import javax.servlet.DispatcherType;
+import javax.servlet.FilterRegistration;
+import javax.servlet.ServletContext;
 
 import net.bull.javamelody.MonitoringFilter;
 import net.bull.javamelody.SessionListener;
@@ -59,6 +61,9 @@ public class WebConfigurer {
 
     private static final Logger LOG = LoggerFactory.getLogger(WebConfigurer.class);
 
+    // java melody filter name
+    private static final String JAVAMELODY_FILTER_NAME = "javamelody";
+
     @Autowired
     private JavaMelodyConfigurationProperties javaMelodyProps;
 
@@ -69,14 +74,14 @@ public class WebConfigurer {
      * Creates {@link MonitoringFilter} filter.
      */
     @Bean
-    public FilterRegistrationBean monitoringJavaMelody() {
+    public FilterRegistrationBean monitoringJavaMelody(ServletContext servletContext) {
         LOG.info("JavaMelody initialization: " + javaMelodyProps.getInitParameters());
 
         final MonitoringFilter filter = new MonitoringFilter();
         filter.setApplicationType("OpenHub");
         FilterRegistrationBean registration = new FilterRegistrationBean(filter);
         registration.setAsyncSupported(true);
-        registration.setName("javamelody");
+        registration.setName(JAVAMELODY_FILTER_NAME);
         registration.setDispatcherTypes(DispatcherType.REQUEST, DispatcherType.ASYNC);
         registration.setEnabled(javaMelodyProps.isEnabled());
 
@@ -87,6 +92,19 @@ public class WebConfigurer {
 
         // Set the URL patterns to activate the monitoring filter for.
         registration.addUrlPatterns("/*");
+
+        // Check if javaMelody filter is already registered by container, if so, just configure it.
+        final FilterRegistration filterRegistration = servletContext.getFilterRegistration(JAVAMELODY_FILTER_NAME);
+        if (filterRegistration != null) {
+            LOG.info("JavaMelody filter already registered by container, just configure it:");
+            // disable this bean
+            registration.setEnabled(false);
+            // pass init parameters
+            for (final Map.Entry<String, String> entry : registration.getInitParameters().entrySet()) {
+                filterRegistration.setInitParameter(entry.getKey(), entry.getValue());
+            }
+        }
+
         return registration;
     }
 
