@@ -36,6 +36,8 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.util.Assert;
 import org.springframework.ws.soap.client.SoapFaultClientException;
 
@@ -72,21 +74,34 @@ public class ResponseReceiveEventNotifier extends EventNotifierBase<ExchangeSent
      * Pattern for filtering endpoints URI which requests/response should be saved.
      */
     @ConfigurableValue(key = REQUEST_SAVING_ENDPOINT_FILTER)
-    private ConfigurationItem<Pattern> endpointFilterPattern;
+    private ConfigurationItem<String> endpointFilter;
+
+    private Pattern endpointFilterPattern;
+
+    /**
+     * After all the db properties are set, set pattern for endpointFilter.
+     */
+    @EventListener
+    public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
+        if (StringUtils.isNotEmpty(endpointFilter.getValue(null))) {
+            endpointFilterPattern = Pattern.compile(endpointFilter.getValue());
+            LOG.debug("Initialized ResponseReceiveEventNotifier: enabled [{}], filterPattern [{}].", enable, endpointFilterPattern);
+        }
+    }
 
     @Autowired
     private RequestResponseService requestResponseService;
 
     @Override
     public boolean isEnabled(EventObject event) {
-        return super.isEnabled(event) && enable.getValue();
+        return super.isEnabled(event) && enable.getValue() && endpointFilterPattern != null;
     }
 
     @Override
     protected void doNotify(ExchangeSentEvent event) throws Exception {
         String endpointUri = event.getEndpoint().getEndpointUri();
 
-        if (RequestSendingEventNotifier.filter(endpointUri, endpointFilterPattern.getValue())) {
+        if (RequestSendingEventNotifier.filter(endpointUri, endpointFilterPattern)) {
             // get response
             String resStr;
             String failedReason = null;

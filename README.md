@@ -1,7 +1,7 @@
 # Welcome to OpenHub Framework 
 [![Build Status](https://travis-ci.org/OpenWiseSolutions/openhub-framework.svg?branch=develop)](https://travis-ci.org/OpenWiseSolutions/openhub-framework) [![Coverage Status](https://coveralls.io/repos/github/OpenWiseSolutions/openhub-framework/badge.svg?branch=develop)](https://coveralls.io/github/OpenWiseSolutions/openhub-framework?branch=develop) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.openhubframework/openhub/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.openhubframework/openhub)
 
-## Apache Camel, but improved
+## Apache Camel for enterprise
 
 * open source
 * power of Apache Camel community
@@ -17,6 +17,8 @@ We believe OpenHub framework is useful and effective integration framework, see 
 ### License
 
 [Apache License 2.0]
+
+> Apache Camel is open source project of The Apache Software Foundation. 
 
 ### Getting Started
 To help you get started, try the following links:
