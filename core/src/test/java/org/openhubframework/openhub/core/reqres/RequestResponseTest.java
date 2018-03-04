@@ -90,11 +90,11 @@ public class RequestResponseTest extends AbstractCoreDbTest {
     public void prepareConfiguration() {
         setPrivateField(reqSendingEventNotifier, "enable", new FixedConfigurationItem<>(Boolean.TRUE));
         setPrivateField(reqSendingEventNotifier, "endpointFilterPattern",
-                new FixedConfigurationItem<>(java.util.regex.Pattern.compile("^(direct.*target).*$")));
+                java.util.regex.Pattern.compile("^(direct.*target).*$"));
 
         setPrivateField(resReceiveEventNotifier, "enable", new FixedConfigurationItem<>(Boolean.TRUE));
         setPrivateField(resReceiveEventNotifier, "endpointFilterPattern",
-                new FixedConfigurationItem<>(java.util.regex.Pattern.compile("^(direct.*target).*$")));
+                java.util.regex.Pattern.compile("^(direct.*target).*$"));
     }
 
     @Before
@@ -128,10 +128,8 @@ public class RequestResponseTest extends AbstractCoreDbTest {
 
 
         // try it again but change pattern for filtering
-        setPrivateField(reqSendingEventNotifier, "endpointFilterPattern",
-                new FixedConfigurationItem<>(java.util.regex.Pattern.compile("^(noUrl).*$")));
-        setPrivateField(resReceiveEventNotifier, "endpointFilterPattern",
-                new FixedConfigurationItem<>(java.util.regex.Pattern.compile("^(noUrl).*$")));
+        setPrivateField(reqSendingEventNotifier, "endpointFilterPattern", java.util.regex.Pattern.compile("^(noUrl).*$"));
+        setPrivateField(resReceiveEventNotifier, "endpointFilterPattern", java.util.regex.Pattern.compile("^(noUrl).*$"));
 
         producer.sendBody(REQUEST);
 

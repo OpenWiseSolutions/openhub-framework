@@ -28,6 +28,8 @@ import org.apache.camel.management.event.ExchangeSendingEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.util.Assert;
 
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
@@ -37,6 +39,7 @@ import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.Request;
 import org.openhubframework.openhub.api.event.EventNotifier;
 import org.openhubframework.openhub.api.event.EventNotifierBase;
+import org.springframework.util.StringUtils;
 
 
 /**
@@ -67,21 +70,34 @@ public class RequestSendingEventNotifier extends EventNotifierBase<ExchangeSendi
      * Pattern for filtering endpoints URI which requests/response should be saved.
      */
     @ConfigurableValue(key = REQUEST_SAVING_ENDPOINT_FILTER)
-    private ConfigurationItem<Pattern> endpointFilterPattern;
+    private ConfigurationItem<String> endpointFilter;
+
+    private Pattern endpointFilterPattern;
+
+    /**
+     * After all the db properties are set, set pattern for endpointFilter.
+     */
+    @EventListener
+    public void onApplicationEvent(ApplicationReadyEvent event) {
+        if (StringUtils.hasText(endpointFilter.getValue(null))) {
+            endpointFilterPattern = Pattern.compile(endpointFilter.getValue());
+            LOG.debug("Initialized RequestSendingEventNotifier: enabled [{}], filterPattern [{}].", enable, endpointFilterPattern);
+        }
+    }
 
     @Autowired
     private RequestResponseService requestResponseService;
 
     @Override
     public boolean isEnabled(EventObject event) {
-        return super.isEnabled(event) && enable.getValue();
+        return super.isEnabled(event) && enable.getValue() && endpointFilterPattern != null;
     }
 
     @Override
     protected void doNotify(ExchangeSendingEvent event) throws Exception {
         String endpointUri = event.getEndpoint().getEndpointUri();
 
-        if (filter(endpointUri, endpointFilterPattern.getValue())) {
+        if (filter(endpointUri, endpointFilterPattern)) {
             Message msg = event.getExchange().getIn().getHeader(AsynchConstants.MSG_HEADER, Message.class);
 
             // create request
