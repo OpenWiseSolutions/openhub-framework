@@ -11,8 +11,9 @@ import './styles.scss'
 // Fonts Instantiation
 // ========================================================
 WebFontLoader.load({
-  google: {
-    families: ['Roboto:300,400,500,700', 'Material Icons']
+  custom: {
+    families: ['Roboto:300,400,500,700', 'Material Icons'],
+    urls: ['offline/fonts/index.css']
   }
 })
 
