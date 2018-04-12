@@ -9,11 +9,11 @@ const bowser = require('bowser')
 class BrowserSupport extends Component {
   render () {
     // docs: https://github.com/lancedikson/bowser
-    if (!bowser.isUnsupportedBrowser({ msie: '11', edge: '40' })) {
+    if (bowser.msie) {
       return (
         <div style={styles.wrapper} >
           <Card style={styles.card} className='md-block-centered' >
-            TODO: Text co ma user robit dalej...
+            This browser is not supported, please upgrade to latest version of Chrome, Firefox or Edge.
           </Card >
         </div >
       )
