@@ -3,6 +3,8 @@ import { Router, hashHistory } from 'react-router'
 import ReduxToastr from 'react-redux-toastr'
 import { Provider } from 'react-redux'
 
+import BrowserSupport from '../components/BowserSupport/BrowserSupport'
+
 class AppContainer extends Component {
   static propTypes = {
     routes: PropTypes.object.isRequired,
@@ -17,19 +19,21 @@ class AppContainer extends Component {
     const { routes, store } = this.props
 
     return (
-      <Provider store={store} >
-        <div style={{ height: '100%' }} >
-          <ReduxToastr
-            timeOut={4000}
-            newestOnTop={false}
-            position='top-right'
-            transitionIn='fadeIn'
-            transitionOut='fadeOut'
-            progressBar
-          />
-          <Router history={hashHistory} children={routes} />
-        </div >
-      </Provider >
+      <BrowserSupport >
+        <Provider store={store} >
+          <div style={{ height: '100%' }} >
+            <ReduxToastr
+              timeOut={4000}
+              newestOnTop={false}
+              position='top-right'
+              transitionIn='fadeIn'
+              transitionOut='fadeOut'
+              progressBar
+            />
+            <Router history={hashHistory} children={routes} />
+          </div >
+        </Provider >
+      </BrowserSupport >
     )
   }
 }
