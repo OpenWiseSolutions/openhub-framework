@@ -40,7 +40,6 @@ import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.Assert;
 
-import org.openhubframework.openhub.api.entity.ExternalSystemExtEnum;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
 import org.openhubframework.openhub.api.entity.Node;
@@ -336,6 +335,7 @@ public class MessageServiceImpl implements MessageService {
                 }
             });
         } catch (DataAccessException ex) {
+            LOG.warn("Caught DataAccessException during setStateInQueueForLock :", ex);
             result = false;
         }
 
@@ -365,6 +365,7 @@ public class MessageServiceImpl implements MessageService {
                 }
             });
         } catch (DataAccessException ex) {
+            LOG.warn("Caught DataAccessException during setStateProcessingForLock :", ex);
             result = false;
         }
 
