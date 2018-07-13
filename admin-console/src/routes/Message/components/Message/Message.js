@@ -72,7 +72,10 @@ class Message extends Component {
       { t: 'Business error overview', v: message.businessError },
       { t: 'ID of parent message', v: message.parentMsgId },
       { t: 'Content (body) of message', v: <SyntaxHighlighter style={codeStyle} >{message.body}</SyntaxHighlighter > },
-      { t: 'Whole incoming message', v: <SyntaxHighlighter style={codeStyle} >{message.envelope}</SyntaxHighlighter > },
+      { t: 'Whole incoming message',
+        v: <SyntaxHighlighter style={codeStyle} >
+          {(message.envelope !== null && message.envelope !== undefined) ? message.envelope : '-'}
+        </SyntaxHighlighter > },
       { t: 'Custom data', v: message.customData }
     ].map((item) => {
       if (typeof item.v === 'boolean') {
