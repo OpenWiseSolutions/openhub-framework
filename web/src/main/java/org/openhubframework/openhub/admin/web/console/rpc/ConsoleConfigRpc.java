@@ -18,9 +18,9 @@ package org.openhubframework.openhub.admin.web.console.rpc;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
 import org.openhubframework.openhub.common.OpenHubPropertyConstants;
+import org.springframework.stereotype.Component;
 
 
 /**
@@ -29,7 +29,7 @@ import org.openhubframework.openhub.common.OpenHubPropertyConstants;
  * @author Tomas Hanus
  * @since 2.0
  */
-@Configuration
+@Component
 // actually this object is autodetected via AOP and holds configuration, so we have to serializable only our properties
 @JsonAutoDetect(
         fieldVisibility = JsonAutoDetect.Visibility.NONE,
