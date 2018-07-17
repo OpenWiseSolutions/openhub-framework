@@ -5,6 +5,9 @@ import { login, userInfo, logout } from '../../services/auth.service'
 import { fetchConsoleConfig } from '../../services/appConfig.service'
 import { toggleSidebar, updateTitle } from '../../layouts/CoreLayout/coreLayout.module'
 
+// URLSearchParams polyfill for Microsoft Edge
+import 'url-search-params-polyfill'
+
 // ------------------------------------
 // Constants
 // ------------------------------------
