@@ -16,6 +16,8 @@
 
 package org.openhubframework.openhub.test;
 
+import static org.springframework.test.context.TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS;
+
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -24,11 +26,13 @@ import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 import org.apache.commons.lang3.StringUtils;
+import org.openhubframework.openhub.test.listener.DropAllObjectsTestExecutionListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
@@ -45,6 +49,10 @@ import org.openhubframework.openhub.test.data.ServiceTestEnum;
  *
  * @author Petr Juza
  */
+@TestExecutionListeners(
+        listeners = DropAllObjectsTestExecutionListener.class,
+        mergeMode = MERGE_WITH_DEFAULTS
+)
 @ActiveProfiles(profiles = Profiles.H2)
 public abstract class AbstractDbTest extends AbstractTest {
 
