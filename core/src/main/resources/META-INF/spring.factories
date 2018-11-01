@@ -1,5 +1,6 @@
 # Auto Configure
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+    org.openhubframework.openhub.core.config.datasource.OpenHubDatabaseConfiguration,\
 	org.openhubframework.openhub.core.configuration.AutoConfigurationItemProperties,\
 	org.openhubframework.openhub.core.throttling.ThrottlingAutoConfiguration,\
     org.openhubframework.openhub.core.config.ConverterAutoConfiguration
