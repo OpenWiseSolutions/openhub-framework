@@ -116,7 +116,7 @@ public class WebConfigurer {
 
     @ConditionalOnProperty(value = CorsProperties.CORS_ENABLED)
     @Bean
-    public FilterRegistrationBean corsFilter() {
+    public FilterRegistrationBean corsFilterRegistrationBean() {
         // it could be used also as http://docs.spring.io/spring-boot/docs/1.5.2.RELEASE/reference/htmlsingle/#boot-features-cors
         // but filter approach has more options
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
