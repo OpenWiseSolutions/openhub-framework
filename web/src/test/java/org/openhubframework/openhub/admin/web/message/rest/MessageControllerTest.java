@@ -181,8 +181,8 @@ public class MessageControllerTest extends AbstractAdminModuleRestTest {
                 .andExpect(jsonPath("$.data[0].id", is(84)))
                 .andExpect(jsonPath("$.data[0].correlationId", is("20301-2332-1321")))
                 .andExpect(jsonPath("$.data[0].sourceSystem", is("CRM")))
-                .andExpect(jsonPath("$.data[0].received", is(systemDefaultIsoDateTime(LocalDateTime.of(2017, 5, 27, 20, 5, 10)))))
-                .andExpect(jsonPath("$.data[0].processingStarted", is(systemDefaultIsoDateTime(LocalDateTime.of(2017, 5, 27, 19, 6, 10)))))
+                .andExpect(jsonPath("$.data[0].received", is(dateTimeString(LocalDateTime.of(2017, 5, 27, 20, 5, 10), dateTime))))
+                .andExpect(jsonPath("$.data[0].processingStarted", is(dateTimeString(LocalDateTime.of(2017, 5, 27, 19, 6, 10), dateTime))))
                 .andExpect(jsonPath("$.data[0].state", is("OK")))
                 .andExpect(jsonPath("$.data[0].errorCode", is("E300")))
                 .andExpect(jsonPath("$.data[0].serviceName", is("CUSTOMER")))
@@ -285,13 +285,13 @@ public class MessageControllerTest extends AbstractAdminModuleRestTest {
                 .andExpect(jsonPath("correlationId", is("123-456")))
                 .andExpect(jsonPath("processId", is("789-654")))
                 .andExpect(jsonPath("state", is("PROCESSING")))
-                .andExpect(jsonPath("processingStarted", is(systemDefaultIsoDateTime(LocalDateTime.of(2017, 5, 27, 19, 6, 10)))))
-                .andExpect(jsonPath("lastChange", is(systemDefaultIsoDateTime(LocalDateTime.of(2017, 5, 27, 21, 5, 10)))))
+                .andExpect(jsonPath("processingStarted", is(dateTimeString(LocalDateTime.of(2017, 5, 27, 19, 6, 10), zdt))))
+                .andExpect(jsonPath("lastChange", is(dateTimeString(LocalDateTime.of(2017, 5, 27, 21, 5, 10), zdt))))
                 .andExpect(jsonPath("errorCode", is("E300")))
                 .andExpect(jsonPath("failedCount", is(3)))
                 .andExpect(jsonPath("sourceSystem", is("CRM")))
-                .andExpect(jsonPath("received", is(systemDefaultIsoDateTime(LocalDateTime.of(2017, 5, 27, 20, 5, 10)))))
-                .andExpect(jsonPath("msgTimestamp", is(systemDefaultIsoDateTime(LocalDateTime.of(2017, 5, 27, 19, 5, 10)))))
+                .andExpect(jsonPath("received", is(dateTimeString(LocalDateTime.of(2017, 5, 27, 20, 5, 10), zdt))))
+                .andExpect(jsonPath("msgTimestamp", is(dateTimeString(LocalDateTime.of(2017, 5, 27, 19, 5, 10), zdt))))
                 .andExpect(jsonPath("serviceName", is("CUSTOMER")))
                 .andExpect(jsonPath("operationName", is("setCustomer")))
                 .andExpect(jsonPath("objectId", is("customer42")))
@@ -309,14 +309,14 @@ public class MessageControllerTest extends AbstractAdminModuleRestTest {
                 .andExpect(jsonPath("requests", hasSize(1)))
                 .andExpect(jsonPath("requests[0].id", is(421)))
                 .andExpect(jsonPath("requests[0].uri", is("spring-ws:http://helloservice.com")))
-                .andExpect(jsonPath("requests[0].timestamp", is(systemDefaultIsoDateTime(LocalDateTime.of(2017, 5, 27, 19, 5, 9)))))
+                .andExpect(jsonPath("requests[0].timestamp", is(dateTimeString(LocalDateTime.of(2017, 5, 27, 19, 5, 9), zdt))))
                 .andExpect(jsonPath("requests[0].payload", is("request-body")))
                 .andExpect(jsonPath("externalCalls", hasSize(1)))
                 .andExpect(jsonPath("externalCalls[0].id", is(327)))
                 .andExpect(jsonPath("externalCalls[0].state", is("OK")))
                 .andExpect(jsonPath("externalCalls[0].operationName", is("setCustomerExtCall")))
                 .andExpect(jsonPath("externalCalls[0].callId", is("CRM_4yEW32321")))
-                .andExpect(jsonPath("externalCalls[0].lastChange", is(systemDefaultIsoDateTime(LocalDateTime.of(2017, 5, 27, 19, 5, 8)))))
+                .andExpect(jsonPath("externalCalls[0].lastChange", is(dateTimeString(LocalDateTime.of(2017, 5, 27, 19, 5, 8), zdt))))
                 .andExpect(jsonPath("allowedActions", hasSize(1)))
                 .andExpect(jsonPath("allowedActions[0]", is("CANCEL")))
         ;
@@ -475,7 +475,7 @@ public class MessageControllerTest extends AbstractAdminModuleRestTest {
         Mockito.verify(messageOperationService, times(1)).restartMessage(eq(42L), eq(true));
     }
 
-    private static String systemDefaultIsoDateTime(final LocalDateTime localDateTime) {
-        return "" + localDateTime.atOffset(OffsetDateTime.now().getOffset());
+    private static String dateTimeString(final LocalDateTime localDateTime, final ZonedDateTime zonedDateTime) {
+        return "" + OffsetDateTime.of(localDateTime, zonedDateTime.getOffset());
     }
 }
