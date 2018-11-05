@@ -21,7 +21,7 @@
     See the following link for inspiration/documentation:
     https://github.com/hazelcast/hazelcast/blob/master/hazelcast/src/main/resources/hazelcast-full-example.xml
 -->
-<hazelcast xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.5.xsd"
+<hazelcast xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.7.xsd"
            xmlns="http://www.hazelcast.com/schema/config"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
@@ -31,19 +31,11 @@
     </group>
     <management-center enabled="false" update-interval="10">http://localhost:8080/mancenter</management-center>
     <network>
-        <port auto-increment="true" port-count="100">5701</port>
-        <outbound-ports>
-            <!--
-            Allowed port range when connecting to other nodes.
-            0 or * means use system provided port.
-            -->
-            <ports>0</ports>
-        </outbound-ports>
         <join>
-            <multicast enabled="true">
-                <multicast-group>224.2.2.3</multicast-group>
-                <multicast-port>54327</multicast-port>
-            </multicast>
+            <!-- by default cluster discovery is not configured -->
+            <multicast enabled="false" />
+            <tcp-ip enabled="false" />
+            <aws enabled="false" />
         </join>
     </network>
 
