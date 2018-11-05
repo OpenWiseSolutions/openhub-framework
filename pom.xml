@@ -15,7 +15,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.1.RELEASE</version>
+        <version>1.5.17.RELEASE</version>
     </parent>
 
     <licenses>
@@ -194,7 +194,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- OpenHub Spring Boot application -->
-        <spring-boot.version>1.5.1.RELEASE</spring-boot.version>
+        <spring-boot.version>1.5.17.RELEASE</spring-boot.version>
         <start-class>org.openhubframework.openhub.OpenHubApplication</start-class>
 
         <camel-version>2.18.2</camel-version>
@@ -206,7 +206,6 @@
         <javamelody-version>1.65.0</javamelody-version>
         <metrics-version>3.2.0</metrics-version>
         <jolokia-version>1.3.5</jolokia-version>
-        <spring-data-commons.version>1.12.8.RELEASE</spring-data-commons.version>
     </properties>
 
     <dependencyManagement>
@@ -257,6 +256,16 @@
                 <groupId>${project.groupId}</groupId>
                 <artifactId>openhub-web</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+
+            <!-- Spring boot dependencies -->
+            <!-- Note: too keep camel integration from overriding spring libraries -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
 
             <!-- Apache Camel -->
@@ -355,21 +364,6 @@
                 <groupId>com.google.code.findbugs</groupId>
                 <artifactId>jsr305</artifactId>
                 <version>3.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-aspects</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.data</groupId>
-                <artifactId>spring-data-commons</artifactId>
-                <version>${spring-data-commons.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-context-support</artifactId>
-                <version>${spring.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
