@@ -30,11 +30,13 @@ import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 import org.openhubframework.openhub.api.configuration.DbConfigurationParam;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.core.common.dao.DbConst;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.util.ClassUtils;
 
 
@@ -69,6 +71,28 @@ public class JpaConfig {
                 )
                 .persistenceUnit(DbConst.UNIT_NAME)
                 .build();
+    }
+
+    /**
+     * Primary transactionManager implementation, instance of JpaTransactionManager.
+     * Can be enabled or disabled by property. By default, it is disabled.
+     *
+     * Should be enabled only if multiple datasources are used, and each of them should
+     * have isolated transaction management. Otherwise it should be disabled, to leverage
+     * spring boot autoconfiguration.
+     *
+     * @param builder the EntityManagerFactoryBuilder.
+     * @param dataSource the OpenHub dataSource.
+     * @return instance of transactionManager.
+     * @since 2.1
+     * @see JpaTransactionManager
+     */
+    @ConditionalOnProperty(name = JpaConfigurationProperties.TRANSACTION_MANAGER_ENABLED)
+    @Primary
+    @Bean
+    public PlatformTransactionManager transactionManager(EntityManagerFactoryBuilder builder,
+               @OpenHubDataSource DataSource dataSource) {
+        return new JpaTransactionManager(entityManagerFactory(builder, dataSource).getObject());
     }
 
     /**
