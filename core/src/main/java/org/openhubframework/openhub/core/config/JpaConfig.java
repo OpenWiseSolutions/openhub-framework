@@ -16,16 +16,26 @@
 
 package org.openhubframework.openhub.core.config;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javax.sql.DataSource;
 
+import org.openhubframework.openhub.core.config.datasource.OpenHubDataSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 import org.openhubframework.openhub.api.configuration.DbConfigurationParam;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.core.common.dao.DbConst;
+import org.springframework.util.ClassUtils;
 
 
 /**
@@ -38,15 +48,46 @@ import org.openhubframework.openhub.core.common.dao.DbConst;
 public class JpaConfig {
 
     /**
+     * Configuration properties instance.
+     */
+    @Autowired
+    private JpaConfigurationProperties jpaConfigurationProperties;
+
+    /**
      * Configures JPA entity manager.
      */
     @Bean
+    @Primary
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder,
-            DataSource dataSource) {
+               @OpenHubDataSource DataSource dataSource) {
         return builder
                 .dataSource(dataSource)
-                .packages(Message.class, DbConfigurationParam.class)
+                .packages(mergePackages(
+                        jpaConfigurationProperties.getAdditionalPackages(),
+                        Message.class,
+                        DbConfigurationParam.class)
+                )
                 .persistenceUnit(DbConst.UNIT_NAME)
                 .build();
     }
+
+    /**
+     * Util method to merge packages from list of packages & some provided classes.
+     * Should remove all duplicites along the way.
+     *
+     * @param packageList list of packages.
+     * @param basePackageClasses the classes, whose package should be included as wel..
+     * @return array with string representation of packages.
+     */
+    private static String[] mergePackages(List<String> packageList, Class... basePackageClasses) {
+        final Set<String> baseClassesList = new HashSet<>();
+        // add all additional packages from list
+        baseClassesList.addAll(packageList);
+        // add all packages from classes
+        baseClassesList.addAll(Arrays.stream(basePackageClasses)
+                                     .map(ClassUtils::getPackageName)
+                                     .collect(Collectors.toSet()));
+        return baseClassesList.toArray(new String[0]);
+    }
+
 }
