@@ -102,12 +102,6 @@
             <artifactId>commons-collections4</artifactId>
         </dependency>
 
-
-        <dependency>
-            <groupId>jcifs</groupId>
-            <artifactId>jcifs</artifactId>
-        </dependency>
-
         <!-- test dependencies -->
         <dependency>
             <groupId>${project.groupId}</groupId>
