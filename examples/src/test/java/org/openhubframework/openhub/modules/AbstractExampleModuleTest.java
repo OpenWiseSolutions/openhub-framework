@@ -16,6 +16,7 @@
 
 package org.openhubframework.openhub.modules;
 
+import org.openhubframework.openhub.test.route.EnableTestWsUriBuilder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -30,6 +31,7 @@ import org.openhubframework.openhub.test.route.ActiveRoutes;
  *
  * @author Petr Juza
  */
+@EnableTestWsUriBuilder
 @ActiveRoutes(classes = ExceptionTranslationRoute.class)
 @ContextConfiguration(classes = ExampleTestConfig.class)
 @ActiveProfiles(profiles = ExampleProperties.EXAMPLE_PROFILE)

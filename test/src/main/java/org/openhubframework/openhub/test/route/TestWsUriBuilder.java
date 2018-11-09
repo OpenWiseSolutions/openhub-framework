@@ -19,8 +19,6 @@ package org.openhubframework.openhub.test.route;
 import javax.annotation.Nullable;
 import javax.xml.namespace.QName;
 
-import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import org.openhubframework.openhub.api.route.WebServiceUriBuilder;
@@ -41,8 +39,6 @@ import org.openhubframework.openhub.api.route.WebServiceUriBuilder;
  *
  * @author Petr Juza
  */
-@Component
-@Primary
 public class TestWsUriBuilder implements WebServiceUriBuilder {
 
     public static final String URI_WS_IN = "direct:inWS_";
