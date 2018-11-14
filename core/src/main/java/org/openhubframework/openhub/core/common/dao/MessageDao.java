@@ -49,6 +49,13 @@ public interface MessageDao {
     void update(Message msg);
 
     /**
+     * Delete message.
+     *
+     * @param msg the message.
+     */
+    void delete(Message msg);
+
+    /**
      * Finds message by its ID.
      *
      * @param msgId the message ID

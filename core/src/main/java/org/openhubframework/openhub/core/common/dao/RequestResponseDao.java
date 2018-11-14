@@ -69,4 +69,18 @@ public interface RequestResponseDao {
      * @return list of {@link Request}
      */
     List<Request> findByCriteria(Instant from, Instant to, @Nullable String subUri, @Nullable String subRequest);
+
+    /**
+     * Delete request.
+     *
+     * @param request the request to be deleted.
+     */
+    void deleteRequest(Request request);
+
+    /**
+     * Delete response.
+     *
+     * @param response the response to be deleted.
+     */
+    void deleteResponse(Response response);
 }

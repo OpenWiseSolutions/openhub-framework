@@ -59,6 +59,20 @@ public class RequestResponseDaoJpaImpl implements RequestResponseDao {
         em.persist(response);
     }
 
+    @Override
+    public void deleteRequest(final Request request) {
+        Assert.notNull(request, "the request must not be null.");
+
+        em.remove(em.contains(request) ? request : em.merge(request));
+    }
+
+    @Override
+    public void deleteResponse(final Response response) {
+        Assert.notNull(response, "the response must not be null.");
+
+        em.remove(em.contains(response) ? response : em.merge(response));
+    }
+
     @Nullable
     @Override
     public Request findLastRequest(String uri, String responseJoinId) {

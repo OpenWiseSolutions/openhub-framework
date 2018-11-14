@@ -23,6 +23,9 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.StringJoiner;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
@@ -66,6 +69,14 @@ public class MessageDaoJpaImpl implements MessageDao {
     @Transactional(propagation = Propagation.MANDATORY)
     public void update(Message msg) {
         em.merge(msg);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.MANDATORY)
+    public void delete(final Message msg) {
+        Assert.notNull(msg, "the msg must not be null.");
+
+        em.remove(em.contains(msg) ? msg : em.merge(msg));
     }
 
     @Override
@@ -395,52 +406,60 @@ public class MessageDaoJpaImpl implements MessageDao {
     @Override
     public List<Message> findMessagesByFilter(final MessageFilter filter, long limit) {
         Assert.notNull(filter, "the messageFilter must not be null");
+        verifyMessageFilter(filter);
 
         String jSql = "SELECT m "
                 + "         FROM " +  Message.class.getName() + " m " +
-                "           WHERE m.receiveTimestamp >= :receivedFrom ";
+                "           WHERE ";
 
+        final StringJoiner conditions = new StringJoiner(" AND ");
         // conditions
+        if (null != filter.getReceivedFrom()) {
+            conditions.add("m.receiveTimestamp >= :receivedFrom");
+        }
         if (null != filter.getReceivedTo()) {
-            jSql += "           AND m.receiveTimestamp <= :receivedTo";
+            conditions.add("m.receiveTimestamp <= :receivedTo");
         }
         if (null != filter.getLastChangeFrom()) {
-            jSql += "           AND m.lastUpdateTimestamp >= :lastChangeFrom";
+            conditions.add("m.lastUpdateTimestamp >= :lastChangeFrom");
         }
         if (null != filter.getLastChangeTo()) {
-            jSql += "           AND m.lastUpdateTimestamp <= :lastChangeTo";
+            conditions.add("m.lastUpdateTimestamp <= :lastChangeTo");
         }
         if (hasText(filter.getSourceSystem())) {
-            jSql += "           AND m.sourceSystemInternal like :sourceSystem";
+            conditions.add("m.sourceSystemInternal like :sourceSystem");
         }
         if (hasText(filter.getCorrelationId())) {
-            jSql += "           AND m.correlationId like :correlationId";
+            conditions.add("m.correlationId like :correlationId");
         }
         if (hasText(filter.getProcessId())) {
-            jSql += "           AND m.processId like :processId";
+            conditions.add("m.processId like :processId");
         }
         if (null != filter.getState()) {
-            jSql += "           AND m.state like :state";
+            conditions.add("m.state like :state");
         }
         if (hasText(filter.getErrorCode())) {
-            jSql += "           AND m.failedErrorCodeInternal like :errorCode";
+            conditions.add("m.failedErrorCodeInternal like :errorCode");
         }
         if (hasText(filter.getServiceName())) {
-            jSql += "           AND m.serviceInternal like :serviceName";
+            conditions.add("m.serviceInternal like :serviceName");
         }
         if (hasText(filter.getOperationName())) {
-            jSql += "           AND m.operationName like :operationName";
+            conditions.add("m.operationName like :operationName");
         }
         // fulltext
         if (hasText(filter.getFulltext())) {
-            jSql += findMessagesByFilterFulltextSql("fulltext");
+            conditions.add(findMessagesByFilterFulltextSql("fulltext"));
         }
 
+        // add conditions
+        jSql += conditions.toString();
         jSql += "           ORDER BY m.receiveTimestamp DESC";
 
         TypedQuery<Message> q = em.createQuery(jSql, Message.class);
-        q.setParameter("receivedFrom", filter.getReceivedFrom());
-
+        if (null != filter.getReceivedFrom()) {
+            q.setParameter("receivedFrom", filter.getReceivedFrom());
+        }
         if (null != filter.getReceivedTo()) {
             q.setParameter("receivedTo", filter.getReceivedTo());
         }
@@ -488,6 +507,26 @@ public class MessageDaoJpaImpl implements MessageDao {
      * @return the sql with placeholder.
      */
     protected String findMessagesByFilterFulltextSql(String placeholder) {
-        return "           AND m.envelope like :" + placeholder;
+        return "m.envelope like :" + placeholder;
+    }
+
+    private static void verifyMessageFilter(MessageFilter messageFilter) {
+        // verify at least one field in filled, otherwise it does not make sense
+        Assert.isTrue(
+                Stream.of(
+                    messageFilter.getCorrelationId(),
+                    messageFilter.getErrorCode(),
+                    messageFilter.getFulltext(),
+                    messageFilter.getLastChangeFrom(),
+                    messageFilter.getLastChangeTo(),
+                    messageFilter.getOperationName(),
+                    messageFilter.getProcessId(),
+                    messageFilter.getReceivedFrom(),
+                    messageFilter.getReceivedTo(),
+                    messageFilter.getServiceName(),
+                    messageFilter.getSourceSystem(),
+                    messageFilter.getState()
+                ).anyMatch(Objects::nonNull),
+                "Filter is not valid, at least one filter field must be set.");
     }
 }

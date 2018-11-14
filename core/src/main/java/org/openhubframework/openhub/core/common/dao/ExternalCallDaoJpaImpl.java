@@ -57,6 +57,13 @@ public class ExternalCallDaoJpaImpl implements ExternalCallDao {
     }
 
     @Override
+    public void delete(final ExternalCall externalCall) {
+        Assert.notNull(externalCall, "the externalCall must not be null.");
+
+        em.remove(em.contains(externalCall) ? externalCall : em.merge(externalCall));
+    }
+
+    @Override
     @Nullable
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public ExternalCall getExternalCall(String operationName, String entityId) {
