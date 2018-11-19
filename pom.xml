@@ -282,6 +282,24 @@
                 <scope>import</scope>
             </dependency>
 
+            <!-- Apache Camel libraries -->
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-quartz2</artifactId>
+                <version>${camel-version}</version>
+                <exclusions>
+                    <!-- using HikariCP artifact -->
+                    <exclusion>
+                        <groupId>com.zaxxer</groupId>
+                        <artifactId>HikariCP-java6</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.mchange</groupId>
+                        <artifactId>c3p0</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
             <!-- Enabled configuration properties in OHF classes -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
