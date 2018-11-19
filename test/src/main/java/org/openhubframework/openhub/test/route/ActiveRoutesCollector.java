@@ -129,9 +129,7 @@ public class ActiveRoutesCollector extends RoutesCollector {
         for (RoutesBuilder routesBuilder : applicationContext.getBeansOfType(RoutesBuilder.class).values()) {
             // filter out abstract classes
             boolean abs = Modifier.isAbstract(routesBuilder.getClass().getModifiers());
-            // filter out FatJarRouter which can be in the spring app context
-            boolean farJarRouter = FatJarRouter.class.equals(routesBuilder.getClass());
-            if (!abs && !farJarRouter) {
+            if (!abs) {
                 try {
                     if (initAllRoutes) {
                         LOG.debug("Injecting following route into the CamelContext: {}", routesBuilder);

@@ -197,7 +197,7 @@
         <spring-boot.version>1.5.17.RELEASE</spring-boot.version>
         <start-class>org.openhubframework.openhub.OpenHubApplication</start-class>
 
-        <camel-version>2.18.2</camel-version>
+        <camel-version>2.21.3</camel-version>
 
         <!-- persistence -->
         <postgresql-version>9.4-1201-jdbc41</postgresql-version>

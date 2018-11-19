@@ -176,54 +176,6 @@ public class RequestResponseTest extends AbstractCoreDbTest {
     }
 
     /**
-     * Test saving response only, there is no request.
-     */
-    @Test
-    public void testSavingResponseOnly() throws Exception {
-        setPrivateField(reqSendingEventNotifier, "enable", new FixedConfigurationItem<>(Boolean.FALSE));
-
-        // prepare target route
-        prepareTargetRoute(TARGET_URI, null);
-
-        // action
-        mock.expectedMessageCount(1);
-        producer.sendBody(REQUEST);
-
-        // verify
-        TypedQuery<Request> queryReq = em.createQuery("FROM " + Request.class.getName(), Request.class);
-        List<Request> requests = queryReq.getResultList();
-        assertThat(requests.size(), is(0));
-
-        TypedQuery<Response> queryRes = em.createQuery("FROM " + Response.class.getName(), Response.class);
-        List<Response> responses = queryRes.getResultList();
-        assertThat(responses.size(), is(1));
-    }
-
-    /**
-     * Test saving response with message only, there is no request.
-     */
-    @Test
-    @Transactional
-    public void testSavingResponseWithMsgOnly() throws Exception {
-        setPrivateField(reqSendingEventNotifier, "enable", new FixedConfigurationItem<>(Boolean.FALSE));
-
-        // prepare target route
-        prepareTargetRoute(TARGET_URI, null);
-
-        // action
-        mock.expectedMessageCount(1);
-
-        Message msg = insertMessage();
-
-        producer.sendBodyAndHeader(REQUEST, AsynchConstants.MSG_HEADER, msg);
-
-        // verify
-        TypedQuery<Response> queryRes = em.createQuery("FROM " + Response.class.getName(), Response.class);
-        List<Response> responses = queryRes.getResultList();
-        assertThat(responses.size(), is(1));
-    }
-
-    /**
      * Test saving asynchronous request/response with correct calling target endpoint.
      */
     @Test
