@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openhubframework.openhub.core.common.ws.transport.http;
+package org.openhubframework.openhub.common.ws.transport.http;
 
 import java.io.IOException;
 import java.net.URI;

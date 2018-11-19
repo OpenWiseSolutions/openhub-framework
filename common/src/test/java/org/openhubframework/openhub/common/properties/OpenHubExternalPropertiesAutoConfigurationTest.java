@@ -37,6 +37,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 import org.springframework.core.io.PathResource;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.util.ReflectionUtils;
 
 
@@ -85,6 +86,9 @@ public class OpenHubExternalPropertiesAutoConfigurationTest {
                     .loadClass(TestApplication.class.getName());
             Object instance = springApplicationClass.getConstructor(Object[].class)
                     .newInstance(new Object[] { new Object[] { testApplicationClass } });
+            // without web
+            ReflectionTestUtils.setField(instance, "webEnvironment", false);
+
             @SuppressWarnings("resource")
             ConfigurableApplicationContext ctx = (ConfigurableApplicationContext) ReflectionUtils
                     .findMethod(springApplicationClass, "run", String[].class)
