@@ -23,7 +23,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import javax.sql.DataSource;
 
-import org.openhubframework.openhub.core.config.datasource.OpenHubDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
@@ -59,9 +58,10 @@ public class JpaConfig {
      * Configures JPA entity manager.
      */
     @Bean
+    @OpenHub
     @Primary
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder,
-               @OpenHubDataSource DataSource dataSource) {
+               @OpenHub DataSource dataSource) {
         return builder
                 .dataSource(dataSource)
                 .packages(mergePackages(
@@ -89,9 +89,10 @@ public class JpaConfig {
      */
     @ConditionalOnProperty(name = JpaConfigurationProperties.TRANSACTION_MANAGER_ENABLED)
     @Primary
+    @OpenHub
     @Bean
     public PlatformTransactionManager transactionManager(EntityManagerFactoryBuilder builder,
-               @OpenHubDataSource DataSource dataSource) {
+               @OpenHub DataSource dataSource) {
         return new JpaTransactionManager(entityManagerFactory(builder, dataSource).getObject());
     }
 

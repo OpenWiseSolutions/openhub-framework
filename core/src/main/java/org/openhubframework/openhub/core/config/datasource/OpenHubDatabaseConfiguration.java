@@ -23,6 +23,7 @@ import javax.sql.DataSource;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.openhubframework.openhub.core.config.OpenHub;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,11 @@ public class OpenHubDatabaseConfiguration extends AbstractDatabaseConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(OpenHubDatabaseConfiguration.class);
 
+    /**
+     * Bean name for OpenHub datasource.
+     */
+    public static final String OPENHUB_DATASOURCE_BEAN_NAME = "openHubDataSource";
+
     @Autowired
     private OpenHubDatabaseProperties databaseProperties;
 
@@ -60,13 +66,13 @@ public class OpenHubDatabaseConfiguration extends AbstractDatabaseConfig {
     private HikariConfig hikariConfig;
 
     /**
-     * Creates {@link JdbcOperations} with OpenHub {@link DataSource} defined by {@link OpenHubDataSource} qualifier.
+     * Creates {@link JdbcOperations} with OpenHub {@link DataSource} defined by {@link OpenHub} qualifier.
      *
-     * @param dataSource as {@link OpenHubDataSource} type
+     * @param dataSource as {@link OpenHub} type
      * @return OpenHub {@link DataSource datasource}
      */
     @Bean
-    public JdbcOperations JdbcOperations(@OpenHubDataSource DataSource dataSource) {
+    public JdbcOperations JdbcOperations(@OpenHub DataSource dataSource) {
         Assert.notNull(dataSource, "OpenHub Datasource must not be null");
 
         return new JdbcTemplate(dataSource);
@@ -80,15 +86,16 @@ public class OpenHubDatabaseConfiguration extends AbstractDatabaseConfig {
      * @return {@link DataSource} as general OpenHub datasource
      * @see OpenHubDataSourceProperties
      */
-    @ConditionalOnMissingBean(name = OpenHubDataSource.BEAN_NAME)
+    @ConditionalOnMissingBean(value = DataSource.class, annotation = OpenHub.class)
     // do not create if not specified in configuration (must use SPEL expression as ConditionalOnProperty has AND semantic)
     // '${openhub.datasource.jndi-name}' != '' or '${openhub.datasource.url}' != ''
     @ConditionalOnExpression("'${" + OpenHubDatabaseProperties.DATASOURCE_PREFIX + "." + OpenHubDataSourceProperties.JNDI_NAME + ":}' != '' or '${" + OpenHubDatabaseProperties.DATASOURCE_PREFIX + "." + OpenHubDataSourceProperties.URL + ":}' != ''")
-    @Bean(destroyMethod = "", name = OpenHubDataSource.BEAN_NAME)
+    @Bean(destroyMethod = "", name = OPENHUB_DATASOURCE_BEAN_NAME)
+    @OpenHub
     @Primary // transactional datasource must be primary to be taken by spring boot always
     @Override
     public DataSource dataSource() {
-        return createDataSource(databaseProperties.getDatasource(), OpenHubDataSource.BEAN_NAME);
+        return createDataSource(databaseProperties.getDatasource(), OPENHUB_DATASOURCE_BEAN_NAME);
     }
 
     private DataSource createDataSource(OpenHubDataSourceProperties properties, String beanName) {

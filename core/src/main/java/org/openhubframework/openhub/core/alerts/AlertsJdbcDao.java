@@ -16,10 +16,9 @@
 
 package org.openhubframework.openhub.core.alerts;
 
-import org.openhubframework.openhub.core.config.datasource.OpenHubDataSource;
-
 import javax.sql.DataSource;
 
+import org.openhubframework.openhub.core.config.OpenHub;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -38,7 +37,7 @@ public class AlertsJdbcDao implements AlertsDao {
     private JdbcTemplate template;
 
     @Autowired
-    public void setDataSource(@OpenHubDataSource DataSource dataSource) {
+    public void setDataSource(@OpenHub DataSource dataSource) {
         Assert.notNull(dataSource, "dataSource must not be empty!");
 
         this.template = new JdbcTemplate(dataSource);
