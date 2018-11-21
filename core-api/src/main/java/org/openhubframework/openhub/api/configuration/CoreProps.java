@@ -83,6 +83,44 @@ public class CoreProps {
     public static final String ASYNCH_POSTPONED_INTERVAL_WHEN_FAILED_SEC = PREFIX + "asynch.postponedIntervalWhenFailedSec";
 
     /**
+     * Final messages processing enabled or disabled. Note: cannot be defined in database, needs to be in properties.
+     */
+    public static final String ASYNCH_FINAL_MESSAGES_PROCESSING_ENABLED = PREFIX + "asynch.finalMessages.processingEnabled";
+
+    /**
+     * Final messages processing job interval, in seconds.
+     */
+    public static final String ASYNCH_FINAL_MESSAGES_PROCESSING_INTERVAL_SEC = PREFIX + "asynch.finalMessages.processingIntervalSec";
+
+    /**
+     * Maximum number of messages processed per job.
+     */
+    public static final String ASYNCH_FINAL_MESSAGES_ITERATION_MESSAGE_LIMIT = PREFIX + "asynch.finalMessages.iterationMessageLimit";
+
+    /**
+     * Configuration of final message processor that does delete messages from the datastore.
+     * Note: final message processing needs to be enabled in order to do that.
+     */
+    public static final String ASYNCH_FINAL_MESSAGES_DELETE_PROCESSOR_ENABLED = PREFIX + "asynch.finalMessages.deleteProcessor.enabled";
+
+    /**
+     * Prefix for setting duration to keep messages in final states in the datastore.
+     * After this period expires and there is no other action with the message, it will be processed as final (deleted probably).
+     * Setting to '0' means, that messages will be processed as soon as possible (next scheduled job).
+     * Setting to '-1' means, that messages in given state will NOT be processed.
+     * Property is set for each state separately, in pattern:
+     * ASYNCH_FINAL_MESSAGES_PREFIX + <lower-case state name> + ASYNCH_FINAL_MESSAGES_SAVE_TIME_IN_SEC_SUFFIX
+     * Example:
+     * ohf.asynch.finalMessages.ok.saveTimeInSec
+     */
+    public static final String ASYNCH_FINAL_MESSAGES_PREFIX = PREFIX + "asynch.finalMessages.";
+
+    /**
+     * Suffix to be used in conjuction with {@link CoreProps.ASYNCH_FINAL_MESSAGES_PREFIX}.
+     */
+    public static final String ASYNCH_FINAL_MESSAGES_SAVE_TIME_IN_SEC_SUFFIX = ".saveTimeInSec";
+
+    /**
      * Administrator email(s); if more emails, then separated them with semicolon, if empty then email won't be sent.
      */
     public static final String MAIL_ADMIN = PREFIX + "mail.admin";

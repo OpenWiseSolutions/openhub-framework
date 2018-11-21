@@ -72,4 +72,21 @@ public final class LogContextHelper {
             LogContext.setContextValue(LogContextFilter.CTX_REQUEST_ID, new GUID().toString());
         }
     }
+
+    /**
+     * Remove context params, that are set in the {@link LogContextHelper#setLogContextParams(Message, String)}.
+     */
+    public static void removeLogContextParams() {
+        // source system
+        LogContext.removeContextValue(LogContextFilter.CTX_SOURCE_SYSTEM);
+
+        // correlation ID
+        LogContext.removeContextValue(LogContextFilter.CTX_CORRELATION_ID);
+
+        // process ID
+        LogContext.removeContextValue(LogContextFilter.CTX_PROCESS_ID);
+
+        // request ID
+        LogContext.removeContextValue(LogContextFilter.CTX_REQUEST_ID);
+    }
 }

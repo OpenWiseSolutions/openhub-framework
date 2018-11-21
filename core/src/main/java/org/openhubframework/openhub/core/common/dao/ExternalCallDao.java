@@ -47,6 +47,13 @@ public interface ExternalCallDao {
     void update(ExternalCall externalCall);
 
     /**
+     * Delete external call.
+     *
+     * @param externalCall the external call to be deleted.
+     */
+    void delete(ExternalCall externalCall);
+
+    /**
      * Finds an existing external call for the specified operation and entityId.
      *
      * @param operationName the operation name (uri) to find the call for
