@@ -197,7 +197,7 @@
         <spring-boot.version>1.5.17.RELEASE</spring-boot.version>
         <start-class>org.openhubframework.openhub.OpenHubApplication</start-class>
 
-        <camel-version>2.18.2</camel-version>
+        <camel-version>2.21.3</camel-version>
 
         <!-- persistence -->
         <postgresql-version>9.4-1201-jdbc41</postgresql-version>
@@ -280,6 +280,24 @@
                 <version>${camel-version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <!-- Apache Camel libraries -->
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-quartz2</artifactId>
+                <version>${camel-version}</version>
+                <exclusions>
+                    <!-- using HikariCP artifact -->
+                    <exclusion>
+                        <groupId>com.zaxxer</groupId>
+                        <artifactId>HikariCP-java6</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.mchange</groupId>
+                        <artifactId>c3p0</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <!-- Enabled configuration properties in OHF classes -->

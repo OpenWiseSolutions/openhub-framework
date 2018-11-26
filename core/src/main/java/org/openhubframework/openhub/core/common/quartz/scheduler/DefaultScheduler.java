@@ -441,6 +441,11 @@ public class DefaultScheduler implements Scheduler {
     }
 
     @Override
+    public void resetTriggerFromErrorState(final TriggerKey triggerKey) throws SchedulerException {
+        getScheduler().resetTriggerFromErrorState(triggerKey);
+    }
+
+    @Override
     public void addCalendar(String calName, Calendar calendar, boolean replace, boolean updateTriggers) throws SchedulerException {
         getScheduler().addCalendar(calName, calendar, replace, updateTriggers);
     }

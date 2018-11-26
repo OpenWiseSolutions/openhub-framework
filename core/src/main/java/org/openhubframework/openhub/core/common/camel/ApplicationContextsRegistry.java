@@ -33,6 +33,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ApplicationContextEvent;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.ContextStartedEvent;
+import org.springframework.core.Ordered;
 import org.springframework.util.Assert;
 
 /**
@@ -44,9 +45,16 @@ import org.springframework.util.Assert;
  * @see DefaultCamelContext#setRegistry(Registry)
  * @since 2.0
  */
-public class ApplicationContextsRegistry implements Registry, ApplicationListener<ApplicationContextEvent> {
+public class ApplicationContextsRegistry implements Registry, ApplicationListener<ApplicationContextEvent>, Ordered {
 
     private static final Logger LOG = LoggerFactory.getLogger(ApplicationContextsRegistry.class);
+
+    /**
+     * Order of listener for application events.
+     * It is important to receive event ContextRefreshedEvent before
+     * {@link org.apache.camel.spring.boot.RoutesCollector} does.
+     */
+    public static final int ORDER = LOWEST_PRECEDENCE - 20;
 
     /**
      * List of registers for all application contexts.
@@ -144,5 +152,10 @@ public class ApplicationContextsRegistry implements Registry, ApplicationListene
             LOG.info("Create new registry for context '{}.'", applicationContext.getDisplayName());
             applicationContextsRegistry.put(applicationContext, new ApplicationContextRegistry(applicationContext));
         }
+    }
+
+    @Override
+    public int getOrder() {
+        return ORDER;
     }
 }
