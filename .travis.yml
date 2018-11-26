@@ -1,4 +1,9 @@
 language: java
+addons:
+  sonarcloud:
+    organization: "openwisesolutions" # registered at sonarcloud.io
+    token:
+      secure: $SONAR_TOKEN
 jdk:
   - oraclejdk8
 env:
@@ -19,7 +24,8 @@ after_success:
   - .utility/push-javadoc-to-gh-pages.sh
   - .utility/publish-artifacts.sh
   # 'coveralls:report' goal is responsible for updating coverall.io stats once travisCI build completes  
-  - mvn coveralls:report  
+  - mvn coveralls:report
+  - mvn sonar:sonar -Dsonar.projectKey=OpenWiseSolutions_openhub-framework -Dsonar.organization=openwisesolutions
 cache:
   directories:
     - $HOME/.m2  

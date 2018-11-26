@@ -45,5 +45,6 @@ The OpenHub team!
 [building]: https://openhubframework.atlassian.net/wiki/x/foM
 [contributions]: https://github.com/OpenWiseSolutions/openhub-framework/blob/master/CONTRIBUTING.md
 [issue tracker]: https://openhubframework.atlassian.net/projects/OHFJIRA
+[sonar]: https://sonarcloud.io/dashboard?id=OpenWiseSolutions_openhub-framework
 [wiki]: https://openhubframework.atlassian.net/wiki
 [OpenHub Framework StackOverflow]: http://stackoverflow.com/questions/tagged/openhubframework
