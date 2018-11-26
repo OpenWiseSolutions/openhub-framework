@@ -157,7 +157,7 @@ public class ManifestVersionInfoSource implements VersionInfoSource, Application
                 throw e;
 
             } catch (PatternSyntaxException e) {
-                LOG.error("Unable to process version data, invalid filter '{}'", e, filter.toString());
+                LOG.error("Unable to process version data, invalid filter '{}'", e, filter != null ? filter.toString() : null);
             }
         }
         return result;

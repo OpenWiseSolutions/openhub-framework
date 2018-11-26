@@ -169,7 +169,7 @@ public abstract class AbstractDbTest extends AbstractTest {
                 Message[] messages = new Message[messageCount];
                 for (int i = 0; i < messages.length; i++) {
                     messages[i] = createMessage(sourceSystem, service, operationName, payload);
-                    messages[i].setMsgTimestamp(Instant.now().plusSeconds(i*5));
+                    messages[i].setMsgTimestamp(Instant.now().plusSeconds(i * 5L));
                     em.persist(messages[i]);
                 }
                 em.flush();

@@ -23,6 +23,7 @@ import java.io.StringWriter;
 import java.util.EventObject;
 import java.util.regex.Pattern;
 import javax.annotation.Nullable;
+import javax.xml.XMLConstants;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -207,7 +208,10 @@ public class ResponseReceiveEventNotifier extends EventNotifierBase<ExchangeSent
             try {
                 // An identity transformer
                 if (ex.getSoapFault() != null && ex.getSoapFault().getSource() != null) {
-                    Transformer transformer = TransformerFactory.newInstance().newTransformer();
+                    final TransformerFactory factory = TransformerFactory.newInstance();
+                    factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+
+                    Transformer transformer = factory.newTransformer();
                     StreamResult result = new StreamResult(writer);
                     transformer.transform(ex.getSoapFault().getSource(), result);
                     StringBuffer sb = writer.getBuffer();

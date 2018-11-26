@@ -18,7 +18,6 @@ package org.openhubframework.openhub.core.configuration;
 
 import java.util.List;
 import java.util.Optional;
-import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,7 +71,6 @@ public class DbConfigurationParamServiceImpl implements DbConfigurationParamServ
     }
 
     @Transactional(readOnly = true)
-    @Nullable
     @Override
     public Optional<DbConfigurationParam> findParameter(String code) {
         return paramDao.findParameter(code);
