@@ -47,7 +47,7 @@ public class HeaderAndPayloadValidatingInterceptor extends PayloadValidatingInte
     private static final String DEFAULT_FAULT_HEADER_REASON
             = InternalErrorEnum.E104.getErrorCode() + ": " + InternalErrorEnum.E104.getErrDesc();
 
-    public static QName TRACE_HEADER_ELM = new QName("http://openhubframework.org/ws/Common-v1", "traceHeader");
+    public static final QName TRACE_HEADER_ELM = new QName("http://openhubframework.org/ws/Common-v1", "traceHeader");
 
     private boolean validateHeader = true;
 

@@ -110,6 +110,7 @@ public final class SynchronizationExecutor {
                 try {
                     lockSyncValueType.wait();
                 } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                     throw new IllegalStateException("Error in wait method in '"
                             + SynchronizationExecutor.class.getSimpleName() + "'. Error: " + e.getMessage(), e);
                 }

@@ -64,7 +64,6 @@ public class DbConfigurationParamRpc extends ChangeableRpc<DbConfigurationParam,
     /**
      * categoryCode: core.server (string) - unique code for specific configuration scope/category
      */
-    @NotNull
     private String categoryCode;
 
     /**

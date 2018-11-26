@@ -206,6 +206,9 @@
         <javamelody-version>1.65.0</javamelody-version>
         <metrics-version>3.2.0</metrics-version>
         <jolokia-version>1.3.5</jolokia-version>
+        <!-- plugins -->
+        <spotbugs-maven-plugin.version>3.1.8</spotbugs-maven-plugin.version>
+        <sonar-maven-plugin.version>3.5.0.1254</sonar-maven-plugin.version>
         <!-- java ee -->
         <jaxb.version>2.2.11</jaxb.version>
         <jaxws.version>2.2.12</jaxws.version>
@@ -619,13 +622,12 @@
                 </plugin>
 
                 <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>findbugs-maven-plugin</artifactId>
-                    <version>3.0.4</version>
+                    <groupId>com.github.spotbugs</groupId>
+                    <artifactId>spotbugs-maven-plugin</artifactId>
+                    <version>${spotbugs-maven-plugin.version}</version>
                     <configuration>
-                        <findbugsXmlOutput>true</findbugsXmlOutput>
-                        <xmlOutput>true</xmlOutput>
-                        <excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>
+                        <failOnError>false</failOnError>
+                        <excludeFilterFile>spotbugs-exclude.xml</excludeFilterFile>
                     </configuration>
                 </plugin>
 
@@ -769,6 +771,12 @@
                         <goals>deploy</goals>
                     </configuration>
                 </plugin>
+
+                <plugin>
+                    <groupId>org.sonarsource.scanner.maven</groupId>
+                    <artifactId>sonar-maven-plugin</artifactId>
+                    <version>${sonar-maven-plugin.version}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
 
@@ -809,8 +817,8 @@
             </plugin>
 
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
             </plugin>
 
             <plugin>
@@ -851,6 +859,11 @@
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

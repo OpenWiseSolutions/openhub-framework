@@ -208,6 +208,7 @@ public class MessageDaoJpaImpl implements MessageDao {
     }
 
     @Override
+    @Transactional(propagation = Propagation.MANDATORY)
     public boolean updateMessageProcessingUnderLock(Message msg, Node processingNode) {
         Assert.notNull(msg, "the msg must not be null");
         Assert.notNull(processingNode, "processingNode must not be null");
@@ -230,6 +231,7 @@ public class MessageDaoJpaImpl implements MessageDao {
     }
 
     @Override
+    @Transactional(propagation = Propagation.MANDATORY)
     public boolean updateMessageInQueueUnderLock(Message msg, Node processingNode) {
         Assert.notNull(msg, "msg must not be null");
         Assert.notNull(processingNode, "processingNode must not be null");

@@ -18,6 +18,7 @@ package org.openhubframework.openhub.core.common.asynch.msg;
 
 import java.time.Instant;
 import javax.annotation.Nullable;
+import javax.xml.XMLConstants;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -150,7 +151,9 @@ public final class MessageTransformer {
         }
 
         try {
-            TransformerFactory tranFactory = TransformerFactory.newInstance();
+            final TransformerFactory tranFactory = TransformerFactory.newInstance();
+            tranFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+
             Transformer aTransformer = tranFactory.newTransformer();
 
             SpringWebserviceMessage inMsg = (SpringWebserviceMessage) exchange.getIn();
