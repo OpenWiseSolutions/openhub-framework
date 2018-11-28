@@ -26,7 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import org.openhubframework.openhub.common.Tools;
@@ -39,7 +39,7 @@ import org.openhubframework.openhub.spi.alerts.AlertInfo;
  * @author Petr Juza
  * @since 0.4
  */
-@Service
+@Component
 public class AlertsPropertiesConfiguration extends AbstractAlertsConfiguration {
 
     public static final String ALERT_PROP_PREFIX = "alerts.";
