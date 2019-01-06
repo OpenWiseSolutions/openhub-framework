@@ -6,7 +6,7 @@
     <groupId>org.openhubframework</groupId>
     <artifactId>openhub</artifactId>
     <packaging>pom</packaging>
-    <version>2.1.0</version>
+    <version>2.1.1-SNAPSHOT</version>
 
     <name>OpenHub Framework</name>
     <description>OpenHub integration framework</description>
