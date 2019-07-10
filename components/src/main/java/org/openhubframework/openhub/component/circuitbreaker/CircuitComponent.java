@@ -7,7 +7,7 @@ import org.apache.camel.Endpoint;
 import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.impl.DefaultComponent;
-import org.apache.camel.util.ObjectHelper;
+import org.apache.camel.util.StringHelper;
 import org.openhubframework.openhub.spi.circuitbreaker.CircuitBreaker;
 import org.openhubframework.openhub.spi.circuitbreaker.CircuitConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,14 +55,14 @@ public class CircuitComponent extends DefaultComponent {
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
         final CircuitEndpoint endpoint = new CircuitEndpoint(uri, this);
 
-        final String endpointURI = ObjectHelper.after(uri, ":");
+        final String endpointURI = StringHelper.after(uri, ":");
         Assert.hasText(endpointURI, "the endpointURI must not be empty");
 
-        final String name = ObjectHelper.before(endpointURI, ":");
+        final String name = StringHelper.before(endpointURI, ":");
         Assert.hasText(name, "the circuitName must not be empty.");
         final String trimmedName = name.replaceAll("/", "").trim();
         Assert.hasText(trimmedName, "the trimmed circuitName must not be empty.");
-        final String targetUri = ObjectHelper.after(endpointURI, ":");
+        final String targetUri = StringHelper.after(endpointURI, ":");
         Assert.hasText(targetUri, "the targetUri must not be empty.");
 
         endpoint.setCircuitName(trimmedName);

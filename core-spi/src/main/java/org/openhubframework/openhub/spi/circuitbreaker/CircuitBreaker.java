@@ -6,12 +6,12 @@ import org.springframework.util.Assert;
 
 
 /**
- * Contract for Circuit Breaker.
- *
- * Recommended to be used with org.openhubframework.openhub.component.circuitbreaker.CircuitComponent,
- * see its javadoc.
- *
- * Usage:
+ * Contract for <b>Circuit Breaker</b>.
+ * <p>
+ * Recommended to be used with {@link CircuitComponent}, see its javadoc.
+ * </p>
+ * <b>Usage:</b>
+ * <pre>
  * .doTry()
  *   .process(checkCircuitIsOpen())
  *   .to("external-system")
@@ -20,10 +20,14 @@ import org.springframework.util.Assert;
  * .doFinally()
  *   .process(updateCircuitState())
  * .end()
+ * </pre>
  *
- * Configuration:
- * instance of {@link CircuitConfiguration} is expected to be set in Exchange property
+ * <p>
+ * <b>Configuration:</b>
+ * <ul><li>instance of {@link CircuitConfiguration} is expected to be set in Exchange property
  * {@link CircuitBreaker#CONFIGURATION_PROPERTY}. See CircuitConfiguration for more info.
+ * </li></ul>
+ * </p>
  *
  * @author Karel Kovarik
  * @see CircuitConfiguration
@@ -65,7 +69,9 @@ public interface CircuitBreaker {
     default CircuitConfiguration getCircuitConfiguration(Exchange exchange) {
         final CircuitConfiguration circuitConfiguration =
                 exchange.getProperty(CONFIGURATION_PROPERTY, CircuitConfiguration.class);
-        Assert.notNull(circuitConfiguration, "the circuitConfiguration was not found");
+        Assert.notNull(circuitConfiguration, "the circuitConfiguration was not found,"
+                + "it is expected to be set in exchange property with name ["
+                + CircuitBreaker.CONFIGURATION_PROPERTY + "].");
 
         return circuitConfiguration;
     }

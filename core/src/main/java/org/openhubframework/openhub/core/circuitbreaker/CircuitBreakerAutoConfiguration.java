@@ -2,12 +2,14 @@ package org.openhubframework.openhub.core.circuitbreaker;
 
 import static org.openhubframework.openhub.common.OpenHubPropertyConstants.PREFIX;
 
+import com.hazelcast.core.HazelcastInstance;
 import org.openhubframework.openhub.common.AutoConfiguration;
 import org.openhubframework.openhub.spi.circuitbreaker.CircuitBreaker;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.hazelcast.HazelcastAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 
 /**
@@ -22,6 +24,9 @@ import org.springframework.context.annotation.Bean;
  * @since 2.2
  */
 @AutoConfiguration
+@AutoConfigureAfter({
+        HazelcastAutoConfiguration.class
+})
 @ConditionalOnProperty(
         name = CircuitBreakerAutoConfiguration.CIRCUIT_BREAKER_ENABLED,
         havingValue = "true")
@@ -43,6 +48,22 @@ public class CircuitBreakerAutoConfiguration {
     private static final String IN_MEMORY_CLASS_NAME
             = "org.openhubframework.openhub.core.circuitbreaker.CircuitBreakerInMemoryImpl";
 
+    /**
+     * Fully qualified name of Hazelcast based implementation.
+     */
+    private static final String HAZELCAST_CLASS_NAME
+            = "org.openhubframework.openhub.core.circuitbreaker.CircuitBreakerHazelcastImpl";
+
+    /**
+     * Hazelcast based implementation.
+     */
+    @ConditionalOnProperty(name = CIRCUIT_BREAKER_IMPL,
+            havingValue = HAZELCAST_CLASS_NAME)
+    @ConditionalOnBean(HazelcastInstance.class)
+    @Bean
+    public CircuitBreaker circuitBreakerHazelCastImpl() {
+        return new CircuitBreakerHazelcastImpl();
+    }
 
     /**
      * Default implementation is in-memory.

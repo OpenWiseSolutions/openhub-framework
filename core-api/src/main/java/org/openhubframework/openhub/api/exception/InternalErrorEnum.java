@@ -139,9 +139,13 @@ public enum InternalErrorEnum implements ErrorExtEnum {
     /**
      * the configuration error - error state of configuration item
      */
-    E122("the configuration error - error state of configuration item");
+    E122("the configuration error - error state of configuration item"),
 
-
+    /**
+     * Circuit breaker - circuit is down exception.
+     */
+    E123("the circuit breaker is down, target route will not be invoked.")
+    ;
 
     private String errDesc;
 

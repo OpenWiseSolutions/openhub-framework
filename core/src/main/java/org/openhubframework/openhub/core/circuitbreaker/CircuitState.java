@@ -1,8 +1,8 @@
 package org.openhubframework.openhub.core.circuitbreaker;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -16,8 +16,10 @@ public class CircuitState implements Serializable {
     static final long serialVersionUID = 1L;
 
     private long lastShortcutTimestamp;
-    private List<Long> successCallList = new CopyOnWriteArrayList<>();
-    private List<Long> failedCallList = new CopyOnWriteArrayList<>();
+    // chosen plain arrayList for performance reason, even if is not thread-safe,
+    // keep that in mind when working with it
+    private List<Long> successCallList = new ArrayList<>();
+    private List<Long> failedCallList = new ArrayList<>();
 
     public long getLastShortcutTimestamp() {
         return lastShortcutTimestamp;
@@ -32,7 +34,7 @@ public class CircuitState implements Serializable {
     }
 
     public void resetSuccessCallList() {
-        this.successCallList = new CopyOnWriteArrayList<>();
+        this.successCallList = new ArrayList<>();
     }
 
     public List<Long> getFailedCallList() {
@@ -40,7 +42,7 @@ public class CircuitState implements Serializable {
     }
 
     public void resetFailedCallList() {
-        this.failedCallList = new CopyOnWriteArrayList<>();
+        this.failedCallList = new ArrayList<>();
     }
 
     @Override

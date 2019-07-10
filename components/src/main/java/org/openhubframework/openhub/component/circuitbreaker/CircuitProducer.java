@@ -32,7 +32,9 @@ public class CircuitProducer extends DefaultProducer {
         // verify configuration is present, otherwise fail as it is misconfigured
         final CircuitConfiguration circuitConfiguration = exchange.getProperty(
                 CircuitBreaker.CONFIGURATION_PROPERTY, CircuitConfiguration.class);
-        Assert.notNull(circuitConfiguration, "the circuitConfiguration was not set.");
+        Assert.notNull(circuitConfiguration, "the circuitConfiguration was not found,"
+                + "it is expected to be set in exchange property with name ["
+                + CircuitBreaker.CONFIGURATION_PROPERTY + "].");
 
         // fill circuitName (if not set in configuration already)
         if (!hasText(circuitConfiguration.getCircuitName())) {
