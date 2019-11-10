@@ -3,7 +3,8 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
     org.openhubframework.openhub.core.config.datasource.OpenHubDatabaseConfiguration,\
 	org.openhubframework.openhub.core.configuration.AutoConfigurationItemProperties,\
 	org.openhubframework.openhub.core.throttling.ThrottlingAutoConfiguration,\
-    org.openhubframework.openhub.core.config.ConverterAutoConfiguration
+    org.openhubframework.openhub.core.config.ConverterAutoConfiguration,\
+    org.openhubframework.openhub.core.circuitbreaker.CircuitBreakerAutoConfiguration
 
 # Application Listeners
 org.springframework.context.ApplicationListener=\
