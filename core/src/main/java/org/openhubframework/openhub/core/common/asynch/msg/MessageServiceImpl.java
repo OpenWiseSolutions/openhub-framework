@@ -34,7 +34,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -62,6 +64,8 @@ public class MessageServiceImpl implements MessageService {
 
     private final TransactionTemplate transactionTemplate;
 
+    private final TransactionTemplate transactionTemplateRequiresNew;
+
     @Autowired
     private NodeService nodeService;
 
@@ -73,9 +77,11 @@ public class MessageServiceImpl implements MessageService {
         Assert.notNull(transactionManager, "the transactionManager must not be null");
 
         this.transactionTemplate = new TransactionTemplate(transactionManager);
+        this.transactionTemplateRequiresNew = new TransactionTemplate(transactionManager);
+        this.transactionTemplateRequiresNew.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
     public void insertMessage(Message message) {
         Assert.notNull(message, "the message must not be null");
@@ -88,7 +94,11 @@ public class MessageServiceImpl implements MessageService {
         LOG.debug("Inserted new message " + message.toHumanString());
     }
 
-    @Transactional
+    /**
+     * {@inheritDoc}
+     * Note: Does insert messages in nested transaction.
+     */
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
     public void insertMessages(Collection<Message> messages) {
         Assert.notNull(messages, "the messages must not be null");
@@ -315,6 +325,10 @@ public class MessageServiceImpl implements MessageService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * Note: does update message in nested transaction.
+     */
     @Override
     public boolean setStateInQueueForLock(final Message message) {
         Assert.notNull(message, "message must not be null");
@@ -328,7 +342,7 @@ public class MessageServiceImpl implements MessageService {
         boolean result;
         final Node actualNode = nodeService.getActualNode();
         try {
-            result = transactionTemplate.execute(new TransactionCallback<Boolean>() {
+            result = transactionTemplateRequiresNew.execute(new TransactionCallback<Boolean>() {
                 @Override
                 public Boolean doInTransaction(final TransactionStatus transactionStatus) {
                     return messageDao.updateMessageInQueueUnderLock(message, actualNode);
