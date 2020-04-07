@@ -19,16 +19,12 @@ package org.openhubframework.openhub.core.common.asynch.finalmessage;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.times;
+import static org.junit.Assert.assertThat;
 
 import javax.persistence.TypedQuery;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InOrder;
-import org.mockito.Mockito;
 import org.openhubframework.openhub.api.asynch.finalmessage.FinalMessageProcessor;
 import org.openhubframework.openhub.api.entity.ExternalCall;
 import org.openhubframework.openhub.api.entity.Message;
@@ -146,6 +142,33 @@ public class DeleteFinalMessageProcessorTest extends AbstractCoreDbTest {
         assertThat(countInTable(Response.class), is(0L));
     }
 
+    @Test
+    public void test_delete_withoutResponse() {
+        final Message message = createAndSaveMessage(
+                ExternalSystemTestEnum.CRM,
+                ServiceTestEnum.ACCOUNT,
+                "testOperation",
+                "payload");
+        final Long msgId = message.getId();
+
+        Request request = Request.createRequest("jms:test.queue", "join id", "request payload", message);
+        requestResponseService.insertRequest(request);
+
+        // verify data is present
+        assertThat(messageService.findMessageById(msgId), notNullValue());
+        assertThat(countInTable(Message.class), is(1L));
+        assertThat(countInTable(Request.class), is(1L));
+
+        // invoke tested
+        transactionTemplate.execute((TransactionStatus status) -> {
+            deleteFinalMessageProcessor.processMessage(message);
+            return null; // without result
+        });
+
+        assertThat(messageService.findMessageById(msgId), nullValue());
+        assertThat(countInTable(Message.class), is(0L));
+        assertThat(countInTable(Request.class), is(0L));
+    }
 
     private long countInTable(Class clazz) {
         TypedQuery<Long> query = em.createQuery(
