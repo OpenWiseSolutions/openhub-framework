@@ -26,6 +26,7 @@ import java.time.Instant;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.openhubframework.openhub.api.entity.Message;
@@ -38,6 +39,7 @@ import org.openhubframework.openhub.core.configuration.FixedConfigurationItem;
 import org.openhubframework.openhub.spi.node.NodeService;
 import org.openhubframework.openhub.test.data.ExternalSystemTestEnum;
 import org.openhubframework.openhub.test.data.ServiceTestEnum;
+import org.springframework.transaction.support.TransactionTemplate;
 
 
 /**
@@ -54,6 +56,15 @@ public class PartlyFailedMessagesPoolDbTest extends AbstractCoreDbTest {
     @Autowired
     private NodeService nodeService;
 
+    private TransactionTemplate transactionTemplate;
+
+    @Before
+    public void prepareMessage() throws Exception {
+        // setup transactionTemplate
+        transactionTemplate = new TransactionTemplate(transactionManager);
+        transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+    };
+
     @Before
     public void prepareData() {
         // set failed limit
@@ -63,7 +74,10 @@ public class PartlyFailedMessagesPoolDbTest extends AbstractCoreDbTest {
     @Test
     public void testGetNextMessage() {
         // add one message and try to lock it
-        insertNewMessage("1234_4567", MsgStateEnum.PARTLY_FAILED);
+        transactionTemplate.execute(status -> {
+            insertNewMessage("1234_4567", MsgStateEnum.PARTLY_FAILED);
+            return null;
+        });
 
         Message nextMsg = messagesPool.getNextMessage();
         assertThat(nextMsg, notNullValue());

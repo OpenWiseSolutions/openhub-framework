@@ -36,6 +36,7 @@ import org.apache.camel.util.concurrent.SynchronousExecutorService;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
@@ -63,6 +64,7 @@ import org.openhubframework.openhub.test.data.ErrorTestEnum;
 import org.openhubframework.openhub.test.data.ExternalSystemTestEnum;
 import org.openhubframework.openhub.test.data.ServiceTestEnum;
 import org.openhubframework.openhub.test.route.ActiveRoutes;
+import org.springframework.transaction.support.TransactionTemplate;
 
 
 /**
@@ -99,6 +101,8 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
 
     @EndpointInject(uri = "mock:test")
     private MockEndpoint mock;
+
+    private TransactionTemplate transactionTemplate;
 
     private Message msg;
 
@@ -159,6 +163,13 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
                 + AbstractBasicRoute.OUT_ROUTE_SUFFIX;
     }
 
+    @Before
+    public void prepareTransactionTemplate() throws Exception {
+        // setup transactionTemplate
+        transactionTemplate = new TransactionTemplate(transactionManager);
+        transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+    }
+
     /**
      * Successful processing {@link Message} with input into {@link AsynchMessageRoute#URI_SYNC_MSG}.
      */
@@ -214,21 +225,24 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
     public void testAsyncInOk() throws Exception {
         msg.setState(MsgStateEnum.NEW);
         // save message into DB
-        em.persist(msg);
-        em.flush();
+        messageService.insertMessage(msg);
 
         // send message
         producerAsyncIn.sendBodyAndHeader(msg, AsynchConstants.MSG_HEADER, msg);
 
-        // verify message
-        Message msgDB = em.find(Message.class, msg.getMsgId());
-        assertThat(msgDB, notNullValue());
-        assertThat(msgDB.getState(), is(MsgStateEnum.IN_QUEUE));
-        assertThat(msgDB.getNodeId(), is(nodeService.getActualNode().getNodeId()));
-        assertThat(msgDB.getStartInQueueTimestamp(), notNullValue());
-        assertThat(msgDB.getStartProcessTimestamp(), nullValue());
-        assertThat(msgDB.getBusinessError(), nullValue());
-        assertThat(eventListener.getEvent(), nullValue());
+        transactionTemplate.execute(status -> {
+            // verify message
+            Message msgDB = em.find(Message.class, msg.getMsgId());
+            assertThat(msgDB, notNullValue());
+            assertThat(msgDB.getState(), is(MsgStateEnum.IN_QUEUE));
+            assertThat(msgDB.getNodeId(), is(nodeService.getActualNode().getNodeId()));
+            assertThat(msgDB.getStartInQueueTimestamp(), notNullValue());
+            assertThat(msgDB.getStartProcessTimestamp(), nullValue());
+            assertThat(msgDB.getBusinessError(), nullValue());
+            assertThat(eventListener.getEvent(), nullValue());
+
+            return null;
+        });
     }
 
     /**
@@ -558,7 +572,6 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
         // send message
         producerSyncMsg.sendBodyAndHeader(msg, AsynchConstants.MSG_HEADER, msg);
 
-        // verify message
         Message msgDB = em.find(Message.class, msg.getMsgId());
         assertThat(msgDB, notNullValue());
         assertThat(msgDB.getState(), is(MsgStateEnum.FAILED));

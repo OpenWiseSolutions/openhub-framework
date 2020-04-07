@@ -30,6 +30,9 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.openhubframework.openhub.spi.msg.MessageService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.openhubframework.openhub.api.asynch.AsynchConstants;
@@ -40,6 +43,7 @@ import org.openhubframework.openhub.test.data.EntityTypeTestEnum;
 import org.openhubframework.openhub.test.data.ExternalSystemTestEnum;
 import org.openhubframework.openhub.test.data.ServiceTestEnum;
 import org.openhubframework.openhub.test.route.ActiveRoutes;
+import org.springframework.transaction.support.TransactionTemplate;
 
 
 /**
@@ -48,7 +52,6 @@ import org.openhubframework.openhub.test.route.ActiveRoutes;
  * @author Petr Juza
  */
 @ActiveRoutes(classes = {AsynchInMessageRoute.class, AsynchMessageRoute.class})
-@Transactional
 public class AsynchInMessageRouteGuaranteedOrderTest extends AbstractCoreDbTest {
 
     @Produce(uri = AsynchInMessageRoute.URI_GUARANTEED_ORDER_ROUTE)
@@ -57,17 +60,29 @@ public class AsynchInMessageRouteGuaranteedOrderTest extends AbstractCoreDbTest 
     @EndpointInject(uri = "mock:test")
     private MockEndpoint mock;
 
+    @Autowired
+    private MessageService messageService;
+
     private static final String FUNNEL_VALUE = "774724557";
+
+    private TransactionTemplate transactionTemplate;
 
     private Message firstMsg;
 
     @Before
     public void prepareMessage() throws Exception {
+        // setup transactionTemplate
+        transactionTemplate = new TransactionTemplate(transactionManager);
+        transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+
         firstMsg = createMessage(FUNNEL_VALUE);
         firstMsg.setGuaranteedOrder(true);
 
-        em.persist(firstMsg);
-        em.flush();
+        transactionTemplate.execute(status -> {
+            em.persist(firstMsg);
+            em.flush();
+            return null;
+        });
     }
 
     @Before
@@ -106,12 +121,15 @@ public class AsynchInMessageRouteGuaranteedOrderTest extends AbstractCoreDbTest 
     @Test
     public void testNoGuaranteedOrder() throws Exception {
         mock.setExpectedMessageCount(1);
-
         Message msg = createMessage(FUNNEL_VALUE);
         msg.setMsgTimestamp(firstMsg.getMsgTimestamp().plusSeconds(100)); // be after "first" message
         msg.setState(MsgStateEnum.NEW);
-        em.persist(msg);
-        em.flush();
+
+        transactionTemplate.execute(status -> {
+            em.persist(msg);
+            em.flush();
+            return null;
+        });
 
         // send message has "msgTimestamp" after another processing message => postpone it
         producer.sendBody(msg);
@@ -126,7 +144,11 @@ public class AsynchInMessageRouteGuaranteedOrderTest extends AbstractCoreDbTest 
     public void testGuaranteedOrder_onlyCurrentMessage() throws Exception {
         //set new state of message (message is new)
         firstMsg.setState(MsgStateEnum.NEW);
-        em.merge(firstMsg);
+
+        transactionTemplate.execute(status -> {
+            em.merge(firstMsg);
+            return null;
+        });
 
         mock.setExpectedMessageCount(1);
 
@@ -147,8 +169,11 @@ public class AsynchInMessageRouteGuaranteedOrderTest extends AbstractCoreDbTest 
         msg.setMsgTimestamp(firstMsg.getMsgTimestamp().minusSeconds(100)); // be before "first" message
         msg.setState(MsgStateEnum.NEW);
         msg.setGuaranteedOrder(true);
-        em.persist(msg);
-        em.flush();
+        transactionTemplate.execute(status -> {
+            em.persist(msg);
+            em.flush();
+            return null;
+        });
 
         // send message has "msgTimestamp" before another processing message
         producer.sendBodyAndHeader(msg, AsynchConstants.MSG_HEADER, msg);
@@ -158,6 +183,7 @@ public class AsynchInMessageRouteGuaranteedOrderTest extends AbstractCoreDbTest 
         Assert.assertThat(em.find(Message.class, msg.getMsgId()).getState(), CoreMatchers.is(MsgStateEnum.IN_QUEUE));
     }
 
+    @Transactional
     @Test
     public void testGuaranteedOrder_postponeMessage() throws Exception {
         mock.setExpectedMessageCount(1);
@@ -175,5 +201,9 @@ public class AsynchInMessageRouteGuaranteedOrderTest extends AbstractCoreDbTest 
         assertIsSatisfied(mock);
 
         Assert.assertThat(em.find(Message.class, msg.getMsgId()).getState(), CoreMatchers.is(MsgStateEnum.POSTPONED));
+    }
+
+    private void executeInTransaction() {
+
     }
 }
