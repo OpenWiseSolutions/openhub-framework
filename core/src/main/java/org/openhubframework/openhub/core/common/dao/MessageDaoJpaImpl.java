@@ -209,7 +209,7 @@ public class MessageDaoJpaImpl implements MessageDao {
 
     @Nullable
     @Override
-    public Message findPostponedOrPartlyFailedMessage(Duration postponedInterval, Duration partiallyFailedInterval) {
+    public Message findPostponedOrPartlyFailedMessage(Duration postponedInterval, Duration partlyFailedInterval) {
         // find message that was lastly processed before specified intervals
 
         String jSql = "SELECT m "
@@ -222,7 +222,7 @@ public class MessageDaoJpaImpl implements MessageDao {
 
         TypedQuery<Message> q = em.createQuery(jSql, Message.class);
         q.setParameter("lastTimePostponed", Instant.now().minus(postponedInterval));
-        q.setParameter("lastTimePartlyFailed", Instant.now().minus(partiallyFailedInterval));
+        q.setParameter("lastTimePartlyFailed", Instant.now().minus(partlyFailedInterval));
         q.setMaxResults(1);
         List<Message> messages = q.getResultList();
 

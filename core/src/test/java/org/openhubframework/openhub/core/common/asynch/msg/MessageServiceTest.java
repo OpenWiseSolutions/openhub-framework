@@ -171,6 +171,65 @@ public class MessageServiceTest extends AbstractCoreDbTest {
         assertThat(count, is(1));
     }
 
+    @Test
+    public void testFindPostponedMessage() {
+        // prepare message
+        createAndSaveMessages(2, (message, order) -> {
+            message.setState(MsgStateEnum.POSTPONED);
+            if (order == 2) {
+                message.setCorrelationId("id2");
+                message.setLastUpdateTimestamp(Instant.now().minusSeconds(120));
+            }
+        });
+
+        Message message = messageService.findPostponedMessage(Seconds.of(60).toDuration());
+        assertThat(message, notNullValue());
+        assertThat(message.getCorrelationId(), is("id2"));
+    }
+
+    @Test
+    public void testFindPartlyFailedMessage() {
+        // prepare message
+        createAndSaveMessages(2, (message, order) -> {
+            message.setState(MsgStateEnum.PARTLY_FAILED);
+            if (order == 2) {
+                message.setCorrelationId("id2");
+                message.setLastUpdateTimestamp(Instant.now().minusSeconds(350));
+            }
+        });
+
+        Message message = messageService.findPartlyFailedMessage(Seconds.of(300).toDuration());
+        assertThat(message, notNullValue());
+        assertThat(message.getCorrelationId(), is("id2"));
+    }
+
+    @Test
+    public void testFindPostponedOrPartlyFailedMessage() {
+        // prepare message
+        createAndSaveMessages(3, (message, order) -> {
+            switch (order) {
+                case 1:
+                    message.setState(MsgStateEnum.PARTLY_FAILED);
+                    message.setCorrelationId("id1");
+                    message.setLastUpdateTimestamp(Instant.now().minusSeconds(60));
+                    break;
+                case 2:
+                    message.setState(MsgStateEnum.POSTPONED);
+                    message.setCorrelationId("id2");
+                    message.setLastUpdateTimestamp(Instant.now().minusSeconds(60));
+                    break;
+                case 3:
+                    message.setState(MsgStateEnum.PARTLY_FAILED);
+                    message.setCorrelationId("id3");
+                    message.setLastUpdateTimestamp(Instant.now().minusSeconds(400));
+                    break;
+            }
+        });
+
+        Message message = messageService.findPostponedOrPartlyFailedMessage(Seconds.of(30).toDuration(), Seconds.of(300).toDuration());
+        assertThat(message, notNullValue());
+        assertThat(message.getCorrelationId(), is("id2"));
+    }
 
     @Test
     public void testFindMessagesByFilter_minimalOk() throws Exception {
