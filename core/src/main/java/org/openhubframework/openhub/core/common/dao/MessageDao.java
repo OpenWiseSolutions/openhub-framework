@@ -126,6 +126,16 @@ public interface MessageDao {
     Message findPostponedMessage(Duration interval);
 
     /**
+     * Finds ONE message in state {@link MsgStateEnum#POSTPONED} or {@link MsgStateEnum#PARTLY_FAILED}
+     *
+     * @param postponedInterval Interval (in seconds) after that can be postponed message processed again
+     * @param partiallyFailedInterval Interval (in seconds) after that can be partly failed message processed again
+     * @return message or null if there is no any message
+     */
+    @Nullable
+    Message findPostponedOrPartlyFailedMessage(Duration postponedInterval, Duration partiallyFailedInterval);
+
+    /**
      * Updates {@link Message} into state {@link MsgStateEnum#PROCESSING} (set start timestamp of processing)
      * - gets lock for message.
      *

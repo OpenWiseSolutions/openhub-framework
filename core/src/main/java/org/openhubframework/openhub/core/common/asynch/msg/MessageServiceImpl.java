@@ -511,4 +511,13 @@ public class MessageServiceImpl implements MessageService {
 
         return messageDao.findPartlyFailedMessage(interval);
     }
+
+    @Nullable
+    @Override
+    public Message findPostponedOrPartlyFailedMessage(Duration postponedInterval, Duration partiallyFailedInterval) {
+        Assert.notNull(postponedInterval, "postponed interval must not be null");
+        Assert.notNull(partiallyFailedInterval, "partly failed interval must not be null");
+
+        return messageDao.findPostponedOrPartlyFailedMessage(postponedInterval, partiallyFailedInterval);
+    }
 }
