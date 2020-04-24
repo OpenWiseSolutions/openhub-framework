@@ -96,7 +96,9 @@ public class DeleteFinalMessageProcessor extends AbstractFinalMessageProcessor {
             LOG.debug("Will delete request [{}] and response [{}].",
                     request.getId(),
                     request.getResponse() != null ? request.getResponse().getId() : null);
-            requestResponseDao.deleteResponse(request.getResponse());
+            if (request.getResponse() != null) {
+                requestResponseDao.deleteResponse(request.getResponse());
+            }
             requestResponseDao.deleteRequest(request);
         }
     }
