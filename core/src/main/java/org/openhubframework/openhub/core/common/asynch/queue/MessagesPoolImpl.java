@@ -64,12 +64,7 @@ public class MessagesPoolImpl implements MessagesPool {
         // is there next message for processing?
 
         // firstly try postponed messages
-        Message msg = findPostponedMessage();
-
-        // then partly failed messages
-        if (msg == null) {
-            msg = findPartlyFailedMessage();
-        }
+        Message msg = findPostponedOrPartlyFailedMessage();
 
         if (msg == null) {
             LOG.debug("No POSTPONED and PARTLY_FAILED message found for re-processing.");
@@ -86,12 +81,8 @@ public class MessagesPoolImpl implements MessagesPool {
     }
 
     @Nullable
-    private Message findPostponedMessage() {
-        return messageService.findPostponedMessage(postponedInterval.getValue().toDuration());
-    }
-
-    @Nullable
-    private Message findPartlyFailedMessage() {
-        return messageService.findPartlyFailedMessage(partlyFailedInterval.getValue().toDuration());
+    private Message findPostponedOrPartlyFailedMessage() {
+        return messageService.findPostponedOrPartlyFailedMessage(postponedInterval.getValue().toDuration(),
+                partlyFailedInterval.getValue().toDuration());
     }
 }

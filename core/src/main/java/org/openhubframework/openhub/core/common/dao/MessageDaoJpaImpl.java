@@ -207,6 +207,32 @@ public class MessageDaoJpaImpl implements MessageDao {
         }
     }
 
+    @Nullable
+    @Override
+    public Message findPostponedOrPartlyFailedMessage(Duration postponedInterval, Duration partlyFailedInterval) {
+        // find message that was lastly processed before specified intervals
+
+        String jSql = "SELECT m "
+                + "FROM " + Message.class.getName() + " m "
+                + "WHERE (m.state = '" + MsgStateEnum.POSTPONED + "'"
+                + "        AND m.lastUpdateTimestamp < :lastTimePostponed)"
+                + "   OR (m.state = '" + MsgStateEnum.PARTLY_FAILED + "'"
+                + "        AND m.lastUpdateTimestamp < :lastTimePartlyFailed)"
+                + " ORDER BY m.msgTimestamp";
+
+        TypedQuery<Message> q = em.createQuery(jSql, Message.class);
+        q.setParameter("lastTimePostponed", Instant.now().minus(postponedInterval));
+        q.setParameter("lastTimePartlyFailed", Instant.now().minus(partlyFailedInterval));
+        q.setMaxResults(1);
+        List<Message> messages = q.getResultList();
+
+        if (messages.isEmpty()) {
+            return null;
+        } else {
+            return messages.get(0);
+        }
+    }
+
     @Override
     @Transactional(propagation = Propagation.MANDATORY)
     public boolean updateMessageProcessingUnderLock(Message msg, Node processingNode) {

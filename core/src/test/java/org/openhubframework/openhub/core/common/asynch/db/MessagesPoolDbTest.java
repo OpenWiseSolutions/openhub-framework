@@ -46,7 +46,7 @@ import org.openhubframework.openhub.test.data.ServiceTestEnum;
  * @author Petr Juza
  */
 @Transactional
-public class PartlyFailedMessagesPoolDbTest extends AbstractCoreDbTest {
+public class MessagesPoolDbTest extends AbstractCoreDbTest {
 
     @Autowired
     private MessagesPool messagesPool;
@@ -56,14 +56,15 @@ public class PartlyFailedMessagesPoolDbTest extends AbstractCoreDbTest {
 
     @Before
     public void prepareData() {
-        // set failed limit
+        // set partly failed and postponed limit
         setPrivateField(messagesPool, "partlyFailedInterval", new FixedConfigurationItem<>(Seconds.ZERO));
+        setPrivateField(messagesPool, "postponedInterval", new FixedConfigurationItem<>(Seconds.ZERO));
     }
 
     @Test
     public void testGetNextMessage() {
         // add one message and try to lock it
-        insertNewMessage("1234_4567", MsgStateEnum.PARTLY_FAILED);
+        insertNewMessage("1234_4567", MsgStateEnum.PARTLY_FAILED, Instant.now());
 
         Message nextMsg = messagesPool.getNextMessage();
         assertThat(nextMsg, notNullValue());
@@ -84,7 +85,49 @@ public class PartlyFailedMessagesPoolDbTest extends AbstractCoreDbTest {
         assertThat(nextMsg, nullValue());
     }
 
-    private void insertNewMessage(String correlationId, MsgStateEnum state) {
+    @Test
+    public void testGetNextMessage_noFailedMessage() {
+        insertNewMessage("id1", MsgStateEnum.PARTLY_FAILED, Instant.now());
+        insertNewMessage("id2", MsgStateEnum.FAILED, Instant.now());
+        insertNewMessage("id3", MsgStateEnum.POSTPONED, Instant.now());
+
+        Message nextMsg = messagesPool.getNextMessage();
+        assertThat(nextMsg, notNullValue());
+        assertThat(nextMsg.getState(), is(MsgStateEnum.IN_QUEUE));
+        assertThat(nextMsg.getCorrelationId(), is("id1"));
+
+        nextMsg = messagesPool.getNextMessage();
+        assertThat(nextMsg, notNullValue());
+        assertThat(nextMsg.getState(), is(MsgStateEnum.IN_QUEUE));
+        assertThat(nextMsg.getCorrelationId(), is("id3"));
+
+        nextMsg = messagesPool.getNextMessage();
+        assertThat(nextMsg, nullValue());
+    }
+
+    @Test
+    public void testGetNextMessage_byPoolIntervals() {
+        setPrivateField(messagesPool, "partlyFailedInterval", new FixedConfigurationItem<>(Seconds.of(300)));
+        setPrivateField(messagesPool, "postponedInterval", new FixedConfigurationItem<>(Seconds.of(120)));
+
+        insertNewMessage("id1", MsgStateEnum.POSTPONED, Instant.now());
+        insertNewMessage("id2", MsgStateEnum.POSTPONED, Instant.now().minusSeconds(150));
+        insertNewMessage("id3", MsgStateEnum.PARTLY_FAILED, Instant.now().minusSeconds(150));
+        insertNewMessage("id4", MsgStateEnum.PARTLY_FAILED, Instant.now().minusSeconds(400));
+
+        Message nextMsg = messagesPool.getNextMessage();
+        assertThat(nextMsg, notNullValue());
+        assertThat(nextMsg.getCorrelationId(), is("id2"));
+
+        nextMsg = messagesPool.getNextMessage();
+        assertThat(nextMsg, notNullValue());
+        assertThat(nextMsg.getCorrelationId(), is("id4"));
+
+        nextMsg = messagesPool.getNextMessage();
+        assertThat(nextMsg, nullValue());
+    }
+
+    private void insertNewMessage(String correlationId, MsgStateEnum state, Instant lastUpdateTimestamp) {
         Instant currDate = Instant.now();
 
         Message msg = new Message();
@@ -92,7 +135,7 @@ public class PartlyFailedMessagesPoolDbTest extends AbstractCoreDbTest {
 
         msg.setMsgTimestamp(currDate);
         msg.setReceiveTimestamp(currDate);
-        msg.setLastUpdateTimestamp(currDate);
+        msg.setLastUpdateTimestamp(lastUpdateTimestamp);
         msg.setSourceSystem(ExternalSystemTestEnum.CRM);
         msg.setCorrelationId(correlationId);
 

@@ -30,7 +30,6 @@ import org.apache.camel.ExchangeProperty;
 import org.apache.camel.Header;
 import org.apache.camel.Properties;
 
-import org.openhubframework.openhub.api.entity.ExternalSystemExtEnum;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.entity.MessageFilter;
 import org.openhubframework.openhub.api.entity.MsgStateEnum;
@@ -259,4 +258,14 @@ public interface MessageService {
      */
     @Nullable
     Message findPartlyFailedMessage(Duration interval);
+
+    /**
+     * Finds one message in state {@link MsgStateEnum#POSTPONED} or {@link MsgStateEnum#PARTLY_FAILED}
+     *
+     * @param postponedInterval Interval (in seconds) after that can be postponed message processed again
+     * @param partlyFailedInterval Interval (in seconds) after that can be partly failed message processed again
+     * @return message or null if there is no any message
+     */
+    @Nullable
+    Message findPostponedOrPartlyFailedMessage(Duration postponedInterval, Duration partlyFailedInterval);
 }
