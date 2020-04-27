@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 the original author or authors.
+ * Copyright 2014-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package org.openhubframework.openhub.core.common.asynch.notification;
 
 import static org.openhubframework.openhub.api.configuration.CoreProps.MAIL_ADMIN;
+import static org.openhubframework.openhub.api.configuration.CoreProps.MAIL_ADMIN_ENABLED;
 import static org.openhubframework.openhub.api.configuration.CoreProps.MAIL_FROM;
 import static org.openhubframework.openhub.api.configuration.CoreProps.MAIL_SMTP_SERVER;
 
@@ -47,6 +48,12 @@ public class EmailServiceCamelSmtpImpl implements EmailService {
     private ProducerTemplate producerTemplate;
 
     /**
+     * Enabling sending emails to administrators.
+     */
+    @ConfigurableValue(key = MAIL_ADMIN_ENABLED)
+    private ConfigurationItem<Boolean> enabled;
+
+    /**
      * Administrator email address.
      */
     @ConfigurableValue(key = MAIL_ADMIN)
@@ -66,7 +73,9 @@ public class EmailServiceCamelSmtpImpl implements EmailService {
 
     @Override
     public void sendEmailToAdmins(String subject, String body) {
-        sendFormattedEmail(recipients.getValue(), subject, body);
+        if (enabled.getValue()) {
+            sendFormattedEmail(recipients.getValue(), subject, body);
+        }
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2016 the original author or authors.
+ * Copyright 2002-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -119,6 +119,11 @@ public class CoreProps {
      * Suffix to be used in conjuction with {@link CoreProps.ASYNCH_FINAL_MESSAGES_PREFIX}.
      */
     public static final String ASYNCH_FINAL_MESSAGES_SAVE_TIME_IN_SEC_SUFFIX = ".saveTimeInSec";
+
+    /**
+     * Sending emails to administrators enabled or disabled.
+     */
+    public static final String MAIL_ADMIN_ENABLED = PREFIX + "mail.admin.enabled";
 
     /**
      * Administrator email(s); if more emails, then separated them with semicolon, if empty then email won't be sent.
