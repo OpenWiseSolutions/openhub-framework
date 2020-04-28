@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 the original author or authors.
+ * Copyright 2014-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -395,6 +395,32 @@ public class MessageDaoJpaImpl implements MessageDao {
                 + " ORDER BY m.msgTimestamp";
 
         TypedQuery<Message> q = em.createQuery(jSql, Message.class);
+
+        return q.getResultList();
+    }
+
+    @Override
+    public List<Message> getMessagesForGuaranteedOrderForRoute(String funnelValue, boolean excludeFailedState, long limit) {
+        String jSql = "SELECT m "
+                + "FROM " + Message.class.getName() + " m "
+                + "WHERE (m.state = '" + MsgStateEnum.PROCESSING + "' "
+                + "         OR m.state = '" + MsgStateEnum.IN_QUEUE + "'"
+                + "         OR m.state = '" + MsgStateEnum.NEW + "'"
+                + "         OR m.state = '" + MsgStateEnum.WAITING + "'"
+                + "         OR m.state = '" + MsgStateEnum.PARTLY_FAILED + "'"
+                + "         OR m.state = '" + MsgStateEnum.POSTPONED + "'";
+
+        if (!excludeFailedState) {
+            jSql += "         OR m.state = '" + MsgStateEnum.FAILED + "'";
+        }
+
+        jSql += "         OR m.state = '" + MsgStateEnum.WAITING_FOR_RES + "')"
+                + "      AND m.funnelValue = '" + funnelValue + "'"
+                + "      AND m.guaranteedOrder is true"
+                + " ORDER BY m.msgTimestamp, m.msgId DESC";
+
+        TypedQuery<Message> q = em.createQuery(jSql, Message.class);
+        q.setMaxResults((int) limit);
 
         return q.getResultList();
     }

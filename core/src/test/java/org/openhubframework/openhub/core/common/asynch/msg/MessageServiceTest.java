@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2016 the original author or authors.
+ * Copyright 2002-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -229,6 +229,100 @@ public class MessageServiceTest extends AbstractCoreDbTest {
         Message message = messageService.findPostponedOrPartlyFailedMessage(Seconds.of(30).toDuration(), Seconds.of(300).toDuration());
         assertThat(message, notNullValue());
         assertThat(message.getCorrelationId(), is("id2"));
+    }
+
+    @Test
+    public void testGetMessagesForGuaranteedOrderForRoute() {
+        // prepare message
+        createAndSaveMessages(10, (message, order) -> {
+            message.setGuaranteedOrder(true);
+            message.setFunnelValue("funnel");
+            message.setState(MsgStateEnum.POSTPONED);
+            message.setStartProcessTimestamp(Instant.now());
+            if (order == 4) {
+                message.setCorrelationId("id1");
+                message.setMsgTimestamp(Instant.now().minusSeconds(60));
+            }
+        });
+
+        List<Message> dbMessages = messageService.getMessagesForGuaranteedOrderForRoute("funnel", false);
+        assertThat(dbMessages.size(), is(10)); // all messages
+        assertThat(dbMessages.get(0).getCorrelationId(), is("id1"));
+    }
+
+    @Test
+    public void testGetMessagesForGuaranteedOrderForRoute_limit() {
+        // prepare message
+        final Instant initMsgTimestamp = Instant.now().minusSeconds(60);
+        createAndSaveMessages(15, (message, order) -> {
+            message.setGuaranteedOrder(true);
+            message.setFunnelValue("funnel");
+            message.setState(MsgStateEnum.POSTPONED);
+            message.setStartProcessTimestamp(Instant.now());
+            switch (order) {
+                case 4:
+                    message.setCorrelationId("id1");
+                    message.setMsgTimestamp(initMsgTimestamp);
+                    break;
+                case 7:
+                    message.setCorrelationId("id2");
+                    message.setMsgTimestamp(initMsgTimestamp);
+                    break;
+            }
+        });
+
+        List<Message> dbMessages = messageService.getMessagesForGuaranteedOrderForRoute("funnel", false, 10L);
+        assertThat(dbMessages.size(), is(10)); // limit is set to 10
+        assertThat(dbMessages.get(0).getCorrelationId(), is("id2"));
+        assertThat(dbMessages.get(1).getCorrelationId(), is("id1"));
+    }
+
+    @Test
+    public void testGetMessagesForGuaranteedOrderForRoute_excludeFailed() {
+        // prepare message
+        createAndSaveMessages(10, (message, order) -> {
+            message.setGuaranteedOrder(true);
+            message.setFunnelValue("funnel");
+            message.setStartProcessTimestamp(Instant.now());
+            switch (order) {
+                case 1:
+                case 4:
+                case 5:
+                    message.setState(MsgStateEnum.FAILED);
+                    break;
+                case 2:
+                    message.setCorrelationId("id2");
+                    message.setMsgTimestamp(Instant.now().minusSeconds(120));
+                    break;
+                case 7:
+                    message.setFunnelValue("otherFunnel");
+                    break;
+            }
+        });
+
+        List<Message> dbMessages = messageService.getMessagesForGuaranteedOrderForRoute("funnel", true, 10L);
+        assertThat(dbMessages.size(), is(6));
+        assertThat(dbMessages.get(0).getCorrelationId(), is("id2"));
+    }
+
+    @Test
+    public void testGetMessagesForGuaranteedOrderForFunnel() {
+        // prepare message
+        createAndSaveMessages(10, (message, order) -> {
+            message.setFunnelValue("funnel");
+            message.setFunnelComponentId("funnelComp");
+            message.setState(MsgStateEnum.WAITING);
+            message.setStartProcessTimestamp(Instant.now());
+            if (order == 4) {
+                message.setCorrelationId("id1");
+                message.setMsgTimestamp(Instant.now().minusSeconds(60));
+            }
+        });
+
+        List<Message> dbMessages =
+                messageService.getMessagesForGuaranteedOrderForFunnel("funnel", Seconds.of(60).toDuration(), false, "funnelComp");
+        assertThat(dbMessages.size(), is(10));
+        assertThat(dbMessages.get(0).getCorrelationId(), is("id1"));
     }
 
     @Test

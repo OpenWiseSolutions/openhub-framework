@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 the original author or authors.
+ * Copyright 2014-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -190,9 +190,24 @@ public interface MessageDao {
      * @param funnelValue the funnel value
      * @param excludeFailedState {@link MsgStateEnum#FAILED FAILED} state is used by default;
      *                           use {@code true} if you want to exclude FAILED state
-     * @return list of messages ordered by {@link Message#getMsgTimestamp() message timestamp}
+     * @return list of all messages ordered by {@link Message#getMsgTimestamp() message timestamp}
+     * @deprecated use {@link #getMessagesForGuaranteedOrderForRoute(String, boolean, long)} instead, which returns
+     *             specified number of records
      */
+    @Deprecated
     List<Message> getMessagesForGuaranteedOrderForRoute(String funnelValue, boolean excludeFailedState);
+
+    /**
+     * Gets list of messages with specified funnel value for guaranteed processing order of whole routes.
+     *
+     * @param funnelValue the funnel value
+     * @param excludeFailedState {@link MsgStateEnum#FAILED FAILED} state is used by default;
+     *                           use {@code true} if you want to exclude FAILED state
+     * @param limit the limit of message count
+     * @return list of messages ordered by {@link Message#getMsgTimestamp() message timestamp} and
+     *         {@link Message#getMsgId() message id}
+     */
+    List<Message> getMessagesForGuaranteedOrderForRoute(String funnelValue, boolean excludeFailedState, long limit);
 
     /**
      * Gets list of messages with specified funnel value for guaranteed processing order of messages
