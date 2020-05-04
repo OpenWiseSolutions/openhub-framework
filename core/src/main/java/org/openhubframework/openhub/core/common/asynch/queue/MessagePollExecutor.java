@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 the original author or authors.
+ * Copyright 2014-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,6 +60,8 @@ public class MessagePollExecutor implements Runnable {
     private static final Logger LOG = LoggerFactory.getLogger(MessagePollExecutor.class);
 
     private static final int LOCK_FAILURE_LIMIT = 5;
+
+    private static final long GUARANTEED_ORDER_MESSAGES_LIMIT = 2L;
 
     @Autowired
     private MessagesPool messagesPool;
@@ -175,7 +177,7 @@ public class MessagePollExecutor implements Runnable {
         } else {
             // guaranteed order => is the message in the right order?
             List<Message> messages = messageService.getMessagesForGuaranteedOrderForRoute(msg.getFunnelValue(),
-                    msg.isExcludeFailedState());
+                    msg.isExcludeFailedState(), GUARANTEED_ORDER_MESSAGES_LIMIT);
 
             if (messages.size() == 1) {
                 LOG.debug("There is only one processing message with funnel value: " + msg.getFunnelValue()

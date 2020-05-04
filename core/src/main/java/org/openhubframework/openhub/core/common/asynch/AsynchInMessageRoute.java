@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 the original author or authors.
+ * Copyright 2014-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -84,6 +84,8 @@ public class AsynchInMessageRoute extends AbstractBasicRoute {
     static final String URI_GUARANTEED_ORDER_ROUTE = "direct:guaranteedOrderRoute";
 
     static final String ROUTE_ID_GUARANTEED_ORDER = "guaranteedOrder" + AbstractBasicRoute.ROUTE_SUFFIX;
+
+    private static final long GUARANTEED_ORDER_MESSAGES_LIMIT = 2L;
 
     @Autowired
     private ThrottlingProcessor throttlingProcessor;
@@ -269,7 +271,7 @@ public class AsynchInMessageRoute extends AbstractBasicRoute {
         } else {
             // guaranteed order => is the message in the right order?
             List<Message> messages = getBean(MessageService.class)
-                    .getMessagesForGuaranteedOrderForRoute(msg.getFunnelValue(), msg.isExcludeFailedState());
+                    .getMessagesForGuaranteedOrderForRoute(msg.getFunnelValue(), msg.isExcludeFailedState(), GUARANTEED_ORDER_MESSAGES_LIMIT);
 
             if (messages.size() == 1) {
                 LOG.debug("There is only one processing message with funnel value: " + msg.getFunnelValue()
