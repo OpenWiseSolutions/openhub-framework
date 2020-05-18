@@ -15,7 +15,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.17.RELEASE</version>
+        <version>1.5.22.RELEASE</version>
     </parent>
 
     <licenses>
@@ -194,21 +194,21 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- OpenHub Spring Boot application -->
-        <spring-boot.version>1.5.17.RELEASE</spring-boot.version>
+        <spring-boot.version>1.5.22.RELEASE</spring-boot.version>
         <start-class>org.openhubframework.openhub.OpenHubApplication</start-class>
 
-        <camel-version>2.21.3</camel-version>
+        <camel-version>2.21.5</camel-version>
 
         <!-- persistence -->
         <postgresql-version>9.4-1201-jdbc41</postgresql-version>
         <oracle-version>12.1.0.2</oracle-version>
 
-        <javamelody-version>1.74.0</javamelody-version>
-        <metrics-version>3.2.0</metrics-version>
-        <jolokia-version>1.5.0</jolokia-version>
+        <javamelody-version>1.82.0</javamelody-version>
+        <metrics-version>3.2.6</metrics-version>
+        <jolokia-version>1.6.2</jolokia-version>
         <!-- plugins -->
-        <spotbugs-maven-plugin.version>3.1.8</spotbugs-maven-plugin.version>
-        <sonar-maven-plugin.version>3.5.0.1254</sonar-maven-plugin.version>
+        <spotbugs-maven-plugin.version>3.1.12.2</spotbugs-maven-plugin.version>
+        <sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
         <!-- java ee -->
         <jaxb.version>2.2.11</jaxb.version>
         <jaxws.version>2.2.12</jaxws.version>
