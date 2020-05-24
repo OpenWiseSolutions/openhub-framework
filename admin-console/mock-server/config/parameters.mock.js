@@ -238,8 +238,8 @@ module.exports = [
           "description": "Pattern for all input URIs into ESB",
           "validationRegEx": null
         }, {
-          "id": "ohf.throttling.disable",
-          "code": "ohf.throttling.disable",
+          "id": "ohf.disable.throttling",
+          "code": "ohf.disable.throttling",
           "categoryCode": "core.throttling",
           "currentValue": "false",
           "defaultValue": "false",
