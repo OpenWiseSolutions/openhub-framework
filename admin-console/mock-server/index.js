@@ -1,6 +1,6 @@
-const { runServer } = require('express-mock-server');
+const { serverStart } = require('express-mock-server')
 
-const opt_serverConfig = {
+const optServerConfig = {
   port: 8080
 }
 
@@ -21,4 +21,4 @@ const sources = [
   require('./catalogs/catalogs.mock')
 ]
 
-runServer(sources, opt_serverConfig)
+serverStart(sources, optServerConfig)
