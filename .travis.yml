@@ -8,27 +8,27 @@ jdk:
   - openjdk8
 env:
   global:
-  - secure: Ba4t6j5JmDamuCPj8ed4900/X8Nqw8Iyh5bQmp+JBRvf5jcWmurSuddhuXp09puUgRFiOgMGMqE/LyvnnjYNMQFuagZNHMNO9gBdbLPsUs1SbiR399XIaIEnkur4VEjHZp6Jr9WseaOh8mZlNKNZmYKyb5nQLCbTgzdgWY/bFsDVVTvQq/SkBBUoPN/MHWsCOtDoixjkeAfkdHm1gOBrA5+UP4Yg/tJgJWpPecalbRp42o29S93Dh6h+0teeCib+t0Jy3qGIFCRA6NbRyXF44xj31WnD75Vj6iBr6JHz7p+Viu2CRL2LcCbdlMFV2et4Evk/KosmEih0yLgeHrFYvLXobPVike9SgsvDOsXiKoLK4huK6QJflyhXQlglA3Qak3ycLD1/SY2PmJ+ZxgFPcT4oubgpL/0L5G5lCtHb86s8P/Q29Tq0l/4WO8JtNVoxzdsqSu9glMeupumzP5rPZ479ZQ0Ice3rCcPuihqz4GAwhGC48lbhGgY2F+AFngGkvVELa4R0njgrZxFLxN792ykHFjBcwc1AlHWgCfe8/rzan3wK6TKpUeQ+PYMGWsaLYB9HaN4XPKn19xupHUw5xQ0sZKWZuknbLsabGmItiqlqfGY/nQbCoobfRhrYm24Zm6HJV90Nz04K3okiRMUPUs/EEb3gb+M6cBUhi6rZzUc=
-  - secure: Z85Pl13pMzIjobKmtb+6f/WSVL3au2keTuPmLvQB0yYP4RUUvIn1eYti33d6dVwwyZCMLZ94ZoM8X8RXQOMC8eJ1SOUUkEEvVwO6zkpDr9yclb5ALdWUtOEJccOi/fi1RGGMOfUruw23xmzx5vTzGDsEcj/s0ulD/+ed8TcHHdPc3TIkEhtZuOqAnGTi3b4MT/oFWTD4j7QnSUo8yjxpMvCFXkIOuSuyuAn/1e5iENGNRFxQRIixgCGyhR21OmktbY/bN8zOEMxzYywhuwR7RuT/IiRy8hwjkYOyH40ShO/BWFd5z8r/EduMUM6reFPk6yofVbAXZrd6PJji6Mdm4WpLMUdflnVwhqC9BPUV/5btCPi/zn0LOWKVyVhu4uT5zkScSPoLb4QEWN9SFbNESR0WGgvVxsDKxtO2O4i67/v5/bVRosZUbztkaTDvD/1oYIvsQ3UKRYaIOKO1jP0l1fAH+Zv9K7vbMt6+B13azKM7dD9CSN8voHR3pjbT9XqY5UlnhrU6Mj9dEor3Fm08iBIg8iUPyMXMcWbXQQQcKGQ2409aAxFttzIvjJ5pm3n7cLe6Yiev8p6aNvYakIsIRSn50MjRDQXceyGY6idEYBjme1AaPEd0NJ8LMICWamo/rzgE8mTl8kz3RJMqg+9YcWU+jO7URRnziEYa8Ax8mUA=
-  - secure: LkkvIq3yWVfZJyRRQiOTAHEmNNuRbadGhKLlMu/BhIA/GaTzIopUYvbdB+hXSiY3fJ40spamPW0j44Vjyegu4NOqwfw8GDnAkpX7PiXh26ClOkT+/7/xwCaI6eiQjLzskJcyimvfFaasu0sWEySCbVUj4sUBJ7l4+yWh1ddFFYN/uOlSZUY+yr2yCeLo+uRdH5qBQFAF9U/LBfRbGqCtGWlZADzUjuq+IB2EBeHbARHK6tLcjZ3Tnm3hG2Cfji/Kdyom8PGpMA+cddBojbYndlf38CtpS+6t2MdOG2UNjFQt/91yqJqVVZ/S9dYnqz32RjbB9/cwhZ5GpMr5VGOGpXvMgf1xwB4H9vtOJ4Znjt6C3MCo9eo+S3sAs8V35ojj8uTIvQ17Wq6u5ZSkQSwruL+kq5sEB89j7pNLuHPqry8ndy7UqEXqw1J90Qo3zVwUIFOeAXiSY9RtF8iy5NlK+c6abG6XalA9LEkLBE244MFet1HBrcQJtcDm+eEMacey2ib//j38pMMweVxraeJwTdQxbBHhMqr1O8po4dzgnx1mCYYAD1gN0Rm3qtt1L+SVsenCbqqybchCvUVIxJQKe8acIU6cg/8wNm5gdTh/YD6Eq0/XSI0EuJn0vsgeTAZXIepL8S+BoJO8Ct4UXWMLsogNyHvyO4oNzdJmUUbwdiQ=
-  - GPG_DIR="`pwd`/.utility"
-  - TRAVIS_NODE_VERSION="7" 
+    - secure: Ba4t6j5JmDamuCPj8ed4900/X8Nqw8Iyh5bQmp+JBRvf5jcWmurSuddhuXp09puUgRFiOgMGMqE/LyvnnjYNMQFuagZNHMNO9gBdbLPsUs1SbiR399XIaIEnkur4VEjHZp6Jr9WseaOh8mZlNKNZmYKyb5nQLCbTgzdgWY/bFsDVVTvQq/SkBBUoPN/MHWsCOtDoixjkeAfkdHm1gOBrA5+UP4Yg/tJgJWpPecalbRp42o29S93Dh6h+0teeCib+t0Jy3qGIFCRA6NbRyXF44xj31WnD75Vj6iBr6JHz7p+Viu2CRL2LcCbdlMFV2et4Evk/KosmEih0yLgeHrFYvLXobPVike9SgsvDOsXiKoLK4huK6QJflyhXQlglA3Qak3ycLD1/SY2PmJ+ZxgFPcT4oubgpL/0L5G5lCtHb86s8P/Q29Tq0l/4WO8JtNVoxzdsqSu9glMeupumzP5rPZ479ZQ0Ice3rCcPuihqz4GAwhGC48lbhGgY2F+AFngGkvVELa4R0njgrZxFLxN792ykHFjBcwc1AlHWgCfe8/rzan3wK6TKpUeQ+PYMGWsaLYB9HaN4XPKn19xupHUw5xQ0sZKWZuknbLsabGmItiqlqfGY/nQbCoobfRhrYm24Zm6HJV90Nz04K3okiRMUPUs/EEb3gb+M6cBUhi6rZzUc=
+    - secure: Z85Pl13pMzIjobKmtb+6f/WSVL3au2keTuPmLvQB0yYP4RUUvIn1eYti33d6dVwwyZCMLZ94ZoM8X8RXQOMC8eJ1SOUUkEEvVwO6zkpDr9yclb5ALdWUtOEJccOi/fi1RGGMOfUruw23xmzx5vTzGDsEcj/s0ulD/+ed8TcHHdPc3TIkEhtZuOqAnGTi3b4MT/oFWTD4j7QnSUo8yjxpMvCFXkIOuSuyuAn/1e5iENGNRFxQRIixgCGyhR21OmktbY/bN8zOEMxzYywhuwR7RuT/IiRy8hwjkYOyH40ShO/BWFd5z8r/EduMUM6reFPk6yofVbAXZrd6PJji6Mdm4WpLMUdflnVwhqC9BPUV/5btCPi/zn0LOWKVyVhu4uT5zkScSPoLb4QEWN9SFbNESR0WGgvVxsDKxtO2O4i67/v5/bVRosZUbztkaTDvD/1oYIvsQ3UKRYaIOKO1jP0l1fAH+Zv9K7vbMt6+B13azKM7dD9CSN8voHR3pjbT9XqY5UlnhrU6Mj9dEor3Fm08iBIg8iUPyMXMcWbXQQQcKGQ2409aAxFttzIvjJ5pm3n7cLe6Yiev8p6aNvYakIsIRSn50MjRDQXceyGY6idEYBjme1AaPEd0NJ8LMICWamo/rzgE8mTl8kz3RJMqg+9YcWU+jO7URRnziEYa8Ax8mUA=
+    - secure: LkkvIq3yWVfZJyRRQiOTAHEmNNuRbadGhKLlMu/BhIA/GaTzIopUYvbdB+hXSiY3fJ40spamPW0j44Vjyegu4NOqwfw8GDnAkpX7PiXh26ClOkT+/7/xwCaI6eiQjLzskJcyimvfFaasu0sWEySCbVUj4sUBJ7l4+yWh1ddFFYN/uOlSZUY+yr2yCeLo+uRdH5qBQFAF9U/LBfRbGqCtGWlZADzUjuq+IB2EBeHbARHK6tLcjZ3Tnm3hG2Cfji/Kdyom8PGpMA+cddBojbYndlf38CtpS+6t2MdOG2UNjFQt/91yqJqVVZ/S9dYnqz32RjbB9/cwhZ5GpMr5VGOGpXvMgf1xwB4H9vtOJ4Znjt6C3MCo9eo+S3sAs8V35ojj8uTIvQ17Wq6u5ZSkQSwruL+kq5sEB89j7pNLuHPqry8ndy7UqEXqw1J90Qo3zVwUIFOeAXiSY9RtF8iy5NlK+c6abG6XalA9LEkLBE244MFet1HBrcQJtcDm+eEMacey2ib//j38pMMweVxraeJwTdQxbBHhMqr1O8po4dzgnx1mCYYAD1gN0Rm3qtt1L+SVsenCbqqybchCvUVIxJQKe8acIU6cg/8wNm5gdTh/YD6Eq0/XSI0EuJn0vsgeTAZXIepL8S+BoJO8Ct4UXWMLsogNyHvyO4oNzdJmUUbwdiQ=
+    - GPG_DIR="`pwd`/.utility"
+    - TRAVIS_NODE_VERSION="8"
 before_install:
-  - nvm install 7
-  - nvm use 7
-  - chmod +x .utility/push-javadoc-to-gh-pages.sh 
-  - chmod +x .utility/publish-artifacts.sh 
+  - nvm install 8
+  - nvm use 8
+  - chmod +x .utility/push-javadoc-to-gh-pages.sh
+  - chmod +x .utility/publish-artifacts.sh
 install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -q
 script: mvn test javadoc:aggregate jacoco:report -Dlogging.level.org.openhubframework.openhub=INFO
-after_success:  
+after_success:
   - .utility/push-javadoc-to-gh-pages.sh
   - .utility/publish-artifacts.sh
-  # 'coveralls:report' goal is responsible for updating coverall.io stats once travisCI build completes  
+  # 'coveralls:report' goal is responsible for updating coverall.io stats once travisCI build completes
   - mvn coveralls:report
   - mvn sonar:sonar -Dsonar.projectKey=OpenWiseSolutions_openhub-framework -Dsonar.organization=openwisesolutions
 cache:
   directories:
-    - $HOME/.m2  
+    - $HOME/.m2
 notifications:
   email:
     - openhub_dev@openwise.cz
