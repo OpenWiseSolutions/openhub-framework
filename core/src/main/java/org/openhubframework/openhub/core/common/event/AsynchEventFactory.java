@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 the original author or authors.
+ * Copyright 2014-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package org.openhubframework.openhub.core.common.event;
 
+import org.openhubframework.openhub.api.event.CompletedGuaranteedOrderMsgAsynchEvent;
 import org.openhubframework.openhub.api.event.CompletedMsgAsynchEvent;
 import org.openhubframework.openhub.api.event.FailedMsgAsynchEvent;
 import org.openhubframework.openhub.api.event.PartlyFailedMsgAsynchEvent;
@@ -81,4 +82,11 @@ public interface AsynchEventFactory {
      */
     PostponedMsgAsynchEvent createPostponedMsgEvent(Exchange exchange);
 
+    /**
+     * Creates an {@link CompletedGuaranteedOrderMsgAsynchEvent} for successfully completed asynch message in guaranteed order.
+     *
+     * @param exchange the exchange
+     * @return the created event
+     */
+    CompletedGuaranteedOrderMsgAsynchEvent createCompletedGuaranteedOrderMsgEvent(Exchange exchange);
 }

@@ -553,6 +553,29 @@ public class MessageDaoJpaImpl implements MessageDao {
         return q.getResultList();
     }
 
+    @Nullable
+    @Override
+    public Message findPostponedMessage(String funnelValue) {
+        Assert.notNull(funnelValue, "the funnelValue must not be null");
+
+        String jSql = "SELECT m "
+                + "FROM " + Message.class.getName() + " m "
+                + "WHERE m.state = '" + MsgStateEnum.POSTPONED + "'"
+                + "      AND m.funnelValue = '" + funnelValue + "'"
+                + "      AND m.guaranteedOrder is true"
+                + " ORDER BY m.msgTimestamp";
+
+        TypedQuery<Message> q = em.createQuery(jSql, Message.class);
+        q.setMaxResults(1);
+        List<Message> messages = q.getResultList();
+
+        if (messages.isEmpty()) {
+            return null;
+        } else {
+            return messages.get(0);
+        }
+    }
+
     /**
      * Fulltext SQL used with fulltext field of messageFilter in operation findMessagesByFilter.
      * Note: it is protected, as it could be overriden.

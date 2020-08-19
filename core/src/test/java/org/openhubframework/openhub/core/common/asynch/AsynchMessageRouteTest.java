@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 the original author or authors.
+ * Copyright 2014-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,6 +45,7 @@ import org.openhubframework.openhub.api.asynch.msg.MsgSplitter;
 import org.openhubframework.openhub.api.entity.*;
 import org.openhubframework.openhub.api.entity.Message;
 import org.openhubframework.openhub.api.event.AbstractAsynchEvent;
+import org.openhubframework.openhub.api.event.CompletedGuaranteedOrderMsgAsynchEvent;
 import org.openhubframework.openhub.api.event.CompletedMsgAsynchEvent;
 import org.openhubframework.openhub.api.event.FailedMsgAsynchEvent;
 import org.openhubframework.openhub.api.event.PartlyFailedMsgAsynchEvent;
@@ -205,6 +206,42 @@ public class AsynchMessageRouteTest extends AbstractCoreDbTest {
         assertThat(msgDB.getNodeId(), is(nodeService.getActualNode().getNodeId()));
         assertThat(msgDB.getBusinessError(), containsString(ErrorTestEnum.E300.getErrDesc()));
         assertThat(eventListener.getEvent(), instanceOf(CompletedMsgAsynchEvent.class));
+    }
+
+    /**
+     * Successful processing {@link Message} in guaranteed order
+     */
+    @Test
+    public void testSyncOutOk_guaranteedOrder() throws Exception {
+        RouteBuilder route = new AbstractBasicRoute() {
+            @Override
+            public void doConfigure() throws Exception {
+                addEventNotifier(eventListener);
+
+                from(subRouteUri)
+                        .log("Starts test route ...");
+            }
+        };
+
+        getCamelContext().addRoutes(route);
+
+        // modify default message
+        msg.setGuaranteedOrder(true);
+        msg.setFunnelValue("funnelValue");
+
+        // save message into DB
+        em.persist(msg);
+        em.flush();
+
+        // send message
+        producerSyncMsg.sendBodyAndHeader(msg, AsynchConstants.MSG_HEADER, msg);
+
+        // verify message
+        Message msgDB = em.find(Message.class, msg.getMsgId());
+        assertThat(msgDB, notNullValue());
+        assertThat(msgDB.getState(), is(MsgStateEnum.OK));
+        assertThat(msgDB.getNodeId(), is(nodeService.getActualNode().getNodeId()));
+        assertThat(eventListener.getEvent(), instanceOf(CompletedGuaranteedOrderMsgAsynchEvent.class));
     }
 
     /**
