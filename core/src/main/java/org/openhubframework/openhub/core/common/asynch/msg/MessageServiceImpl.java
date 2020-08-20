@@ -525,4 +525,12 @@ public class MessageServiceImpl implements MessageService {
 
         return messageDao.findPostponedOrPartlyFailedMessage(postponedInterval, partlyFailedInterval);
     }
+
+    @Nullable
+    @Override
+    public Message findPostponedMessage(String funnelValue) {
+        Assert.hasText(funnelValue, "the funnelValue must not be empty");
+
+        return messageDao.findPostponedMessage(funnelValue);
+    }
 }

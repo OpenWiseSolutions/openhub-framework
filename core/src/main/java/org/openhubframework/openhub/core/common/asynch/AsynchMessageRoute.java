@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 the original author or authors.
+ * Copyright 2014-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -244,6 +244,7 @@ public class AsynchMessageRoute extends AbstractBasicRoute {
                                 AsynchEventHelper.notifyMsgCompleted(exchange);
                             }
                         })
+                        .bean(ROUTE_BEAN, "notifyCompletedGuaranteedOrderMsg")
 
                         .to(AsynchConstants.URI_POST_PROCESS_AFTER_OK)
                     .end()
@@ -505,6 +506,21 @@ public class AsynchMessageRoute extends AbstractBasicRoute {
 
         if (!nodeService.getActualNode().isAbleToHandleExistingMessages()) {
             throw new StoppingException("ESB has been stopped...");
+        }
+    }
+
+    /**
+     * Sends notifications event when message in guaranteed order completes successfully
+     *
+     * @param msg message which is completed
+     * @param exchange exchange of completed message
+     */
+    @Handler
+    public void notifyCompletedGuaranteedOrderMsg(@Header(MSG_HEADER) Message msg, Exchange exchange) {
+        Assert.notNull(msg, "the msg must not be null");
+
+        if (msg.isGuaranteedOrder()) {
+            AsynchEventHelper.notifyGuaranteedOrderMsgCompleted(exchange);
         }
     }
 }

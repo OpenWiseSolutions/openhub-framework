@@ -18,6 +18,7 @@ package org.openhubframework.openhub.core.common.asynch.msg;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -426,6 +427,44 @@ public class MessageServiceTest extends AbstractCoreDbTest {
         filter.setReceivedFrom(LocalDateTime.of(2017,5,27,19,17,10).toInstant(ZoneOffset.UTC));
         filter.setFulltext("car");
         assertThat(messageService.findMessagesByFilter(filter, 100L).size(), is(3));
+    }
+
+    @Test
+    public void findPostponedMessage_ok() {
+        // prepare messages
+        createAndSaveMessages(2, (message, order) -> {
+            message.setGuaranteedOrder(true);
+            message.setFunnelValue("funnel");
+            message.setState(MsgStateEnum.POSTPONED);
+            if (order == 1) {
+                message.setMsgTimestamp(Instant.now());
+            } else {
+                message.setMsgTimestamp(Instant.now().minusSeconds(100));
+            }
+        });
+
+        // verify
+        Message message = messageService.findPostponedMessage("funnel");
+        assertThat(message.getId(), is(2L));
+    }
+
+    @Test
+    public void findPostponedMessage_null() {
+        // prepare messages
+        createAndSaveMessages(2, (message, order) -> {
+            message.setGuaranteedOrder(true);
+            message.setFunnelValue("funnel");
+            message.setState(MsgStateEnum.OK);
+            if (order == 1) {
+                message.setMsgTimestamp(Instant.now());
+            } else {
+                message.setMsgTimestamp(Instant.now().minusSeconds(100));
+            }
+        });
+
+        // verify
+        Message message = messageService.findPostponedMessage("funnel");
+        assertThat(message, nullValue());
     }
 
     private static void findByFilter_messageFill(final Message msg) {

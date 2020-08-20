@@ -231,4 +231,13 @@ public interface MessageDao {
      * @return list of messages.
      */
     List<Message> findMessagesByFilter(MessageFilter messageFilter, long limit);
+
+    /**
+     * Finds one message with specified funnel value for guaranteed processing order of whole routes.
+     *
+     * @param funnelValue the funnel value
+     * @return the oldest message by {@link Message#getMsgTimestamp() message timestamp} or null
+     */
+    @Nullable
+    Message findPostponedMessage(String funnelValue);
 }
