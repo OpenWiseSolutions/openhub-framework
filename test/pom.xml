@@ -44,6 +44,10 @@
             <version>${spring-security.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
         <!-- persistence -->
         <dependency>
             <groupId>com.h2database</groupId>

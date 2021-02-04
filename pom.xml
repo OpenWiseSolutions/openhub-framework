@@ -15,7 +15,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.22.RELEASE</version>
+        <version>2.0.9.RELEASE</version>
     </parent>
 
     <licenses>
@@ -194,10 +194,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- OpenHub Spring Boot application -->
-        <spring-boot.version>1.5.22.RELEASE</spring-boot.version>
+        <spring-boot.version>2.0.9.RELEASE</spring-boot.version>
         <start-class>org.openhubframework.openhub.OpenHubApplication</start-class>
 
-        <camel-version>2.21.5</camel-version>
+        <camel-version>2.22.2</camel-version>
 
         <!-- persistence -->
         <postgresql-version>9.4-1201-jdbc41</postgresql-version>
@@ -294,7 +294,7 @@
                     <!-- using HikariCP artifact -->
                     <exclusion>
                         <groupId>com.zaxxer</groupId>
-                        <artifactId>HikariCP-java6</artifactId>
+                        <artifactId>HikariCP-java7</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>com.mchange</groupId>
@@ -325,7 +325,7 @@
             <dependency>
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
-                <version>1.4.186</version>
+                <version>1.4.199</version>
             </dependency>
 
             <!-- Java EE, neccessary for jdk 11 runtime, see OHFJIRA-84 -->
@@ -436,6 +436,13 @@
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjtools</artifactId>
         </dependency>
+
+        <!--https://stackoverflow.com/questions/52913597/springboot-org-hibernate-mappingexception-could-not-get-constructor-for-org-hi-->
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.23.1-GA</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -466,7 +473,7 @@
                         <showDeprecation>true</showDeprecation>
                         <showWarnings>true</showWarnings>
                     </configuration>
-                    <!-- compiler is disabled because of aspectj compiler -->
+                     <!-- compiler is disabled because of aspectj compiler -->
                     <executions>
                         <execution>
                             <id>default-compile</id>
@@ -551,7 +558,7 @@
                     <configuration>
                         <!-- Sets the VM argument line used when unit tests are run. -->
                         <!-- from jacoco doc, add jacoco java agent -->
-                        <argLine>${argLine} -Xmx1024m -XX:MaxPermSize=256m</argLine>
+                        <argLine>@{argLine} -Xmx1024m -XX:MaxPermSize=256m</argLine>
                     </configuration>
                 </plugin>
 
@@ -688,7 +695,7 @@
                             <link>http://www.javadoc.io/doc/org.springframework/spring-core/4.3.4.RELEASE/</link>
                         </links>
                         <failOnError>false</failOnError>
-                        <aggregate>true</aggregate>
+                        <!--<aggregate>true</aggregate>-->
                         <additionalDependencies>
                             <additionalDependency>
                                 <groupId>org.hibernate.javax.persistence</groupId>
@@ -697,7 +704,8 @@
                             </additionalDependency>
                         </additionalDependencies>
                         <!-- Turning off doclint in JDK 8 Javadoc: http://blog.joda.org/2014/02/turning-off-doclint-in-jdk-8-javadoc.html -->
-                        <additionalparam>${javadoc.doclint.none}</additionalparam>
+                        <doclint>none</doclint>
+                        <!--<additionalparam>${javadoc.doclint.none}</additionalparam>-->
                         <quiet>true</quiet>
                     </configuration>
                     <executions>

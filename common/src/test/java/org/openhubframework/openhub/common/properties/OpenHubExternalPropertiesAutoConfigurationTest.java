@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2016 the original author or authors.
+ * Copyright 2002-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.junit.Test;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -84,10 +85,10 @@ public class OpenHubExternalPropertiesAutoConfigurationTest {
             Class<?> springApplicationClass = loader.loadClass(SpringApplication.class.getName());
             Class<?> testApplicationClass = loader
                     .loadClass(TestApplication.class.getName());
-            Object instance = springApplicationClass.getConstructor(Object[].class)
-                    .newInstance(new Object[] { new Object[] { testApplicationClass } });
+            Object instance = springApplicationClass.getConstructor(Class[].class)
+                    .newInstance(new Class[][] { new Class[] { testApplicationClass } });
             // without web
-            ReflectionTestUtils.setField(instance, "webEnvironment", false);
+            ReflectionTestUtils.setField(instance, "webApplicationType", WebApplicationType.NONE);
 
             @SuppressWarnings("resource")
             ConfigurableApplicationContext ctx = (ConfigurableApplicationContext) ReflectionUtils

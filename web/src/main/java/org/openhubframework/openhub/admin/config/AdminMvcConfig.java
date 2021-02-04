@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,11 +22,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ResourceProperties;
-import org.springframework.boot.autoconfigure.web.WebMvcProperties;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.List;
 
 
 /**
@@ -39,7 +43,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 // note: If you want to keep Spring Boot MVC features, and you just want to add additional MVC configuration 
 // (interceptors, formatters, view controllers etc.) you can add your own @Bean of type WebMvcConfigurerAdapter, 
 // but without @EnableWebMvc.
-public class AdminMvcConfig extends WebMvcConfigurerAdapter {
+// WebMvcConfigurer interface, starting with Spring 5, contains default implementations for all its methods
+public class AdminMvcConfig implements WebMvcConfigurer {
 
     private static final Logger logger = LoggerFactory.getLogger(AdminMvcConfig.class);
 
@@ -51,12 +56,12 @@ public class AdminMvcConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        Resource page = this.resourceProperties.getWelcomePage();
-        if (page != null) {
+//        Resource page = this.resourceProperties.getWelcomePage();
+//        if (page != null) {
             final String welcomePagePath = getWelcomePagePath(mvcProperties);
-            logger.info("Adding welcome page ({}): {}", page, welcomePagePath);
+//            logger.info("Adding welcome page ({}): {}", page, welcomePagePath);
             registry.addViewController(welcomePagePath).setViewName("forward:index.html");
-        }
+//        }
     }
 
     /**
@@ -75,4 +80,4 @@ public class AdminMvcConfig extends WebMvcConfigurerAdapter {
         // default fallback
         return "/";
     }
-}   
+}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,12 @@ import javax.servlet.Filter;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.ApplicationPidFileWriter;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.system.ApplicationPidFileWriter;
-import org.springframework.boot.system.EmbeddedServerPortFileWriter;
+import org.springframework.boot.web.context.WebServerPortFileWriter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.boot.web.support.ErrorPageFilter;
-import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.boot.web.servlet.support.ErrorPageFilter;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.*;
 import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
@@ -122,7 +122,7 @@ public class OpenHubApplication extends SpringBootServletInitializer implements 
         final SpringApplicationBuilder ohf = createOpenHubApplicationBuilder();
         ohf.listeners(
                 new ApplicationPidFileWriter("ohf-app.pid"),
-                new EmbeddedServerPortFileWriter("ohf-app.port"));
+                new WebServerPortFileWriter("ohf-app.port"));
         ohf.run(args);
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2017 the original author or authors.
+ * Copyright 2002-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,11 @@
 
 package org.openhubframework.openhub.web.config;
 
-import static org.openhubframework.openhub.api.route.RouteConstants.WS_AUTH_POLICY;
-import static org.openhubframework.openhub.api.route.RouteConstants.WS_URI_PREFIX;
-import static org.openhubframework.openhub.web.config.GlobalSecurityConfig.DEFAULT_PATH_PATTERN;
-
-import java.util.Collections;
-
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.camel.component.spring.security.SpringSecurityAccessPolicy;
 import org.apache.camel.component.spring.security.SpringSecurityAuthorizationPolicy;
+import org.openhubframework.openhub.api.route.RouteConstants;
+import org.openhubframework.openhub.core.config.CamelConfig;
+import org.openhubframework.openhub.web.common.OhfBasicAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -42,10 +37,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
-import org.openhubframework.openhub.api.route.RouteConstants;
-import org.openhubframework.openhub.core.config.CamelConfig;
-import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.util.Assert;
+import java.util.Collections;
+
+import static org.openhubframework.openhub.api.route.RouteConstants.WS_AUTH_POLICY;
+import static org.openhubframework.openhub.api.route.RouteConstants.WS_URI_PREFIX;
+import static org.openhubframework.openhub.web.config.GlobalSecurityConfig.DEFAULT_PATH_PATTERN;
 
 
 /**
@@ -58,30 +54,30 @@ import org.springframework.util.Assert;
  */
 @EnableWebSecurity
 @AutoConfigureBefore(value = CamelConfig.class)
-// own custom access rules
-@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
+@Order(WebSecurityConfig.ACCESS_OVERRIDE_ORDER)
+//SecurityProperties no longer defines the ACCESS_OVERRIDE_ORDER constant for the @Order annotation.
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+
+    public static final int ACCESS_OVERRIDE_ORDER = SecurityProperties.BASIC_AUTH_ORDER - 2;
     /**
-     * Basic configuration for Web services, handled by {@link RouteConstants#WS_URI_PREFIX}. 
+     * Basic configuration for Web services, handled by {@link RouteConstants#WS_URI_PREFIX}.
      */
     @Configuration
     @Order(WsSecurityConfig.ORDER)
     public static class WsSecurityConfig extends WebSecurityConfig {
 
+//        @Autowired
+//        private SecurityProperties securityProperties;
+
         @Autowired
-        private SecurityProperties securityProperties;
+        private OhfBasicAuthenticationEntryPoint ohfBasicAuthenticationEntryPoint;
 
         /**
-         * Order of this {@link WsSecurityConfig}. Must be processed before standard 
+         * Order of this {@link WsSecurityConfig}. Must be processed before standard
          * {@link WebSecurityConfigurerAdapter}.
          */
         public static final int ORDER = 1;
-
-        /**
-         * WWW-Authenticate header name.
-         */
-        static final String WWW_AUTHENTICATE_HEADER = "WWW-Authenticate";
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
@@ -94,7 +90,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .anyRequest().hasAnyRole(GlobalSecurityConfig.AuthRole.WS.name())
                         .and()
                     .exceptionHandling()
-                        .authenticationEntryPoint(basicAuthenticationEntryPoint())
+                        .authenticationEntryPoint(ohfBasicAuthenticationEntryPoint)
                     .and()
                     .httpBasic()
             ;
@@ -107,7 +103,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // by invoking HttpResponse.sendError. With current openhub configuration however, it is not handled correctly
         // in standalone deployment. With "manually" setting status on HttpResponse, it works in both scenarios
         // (standalone & deployment to servlet container).
-        private AuthenticationEntryPoint basicAuthenticationEntryPoint() {
+        /*private AuthenticationEntryPoint basicAuthenticationEntryPoint() {
             return (request, response, authException) -> {
                 if (authException != null) {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -118,7 +114,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                             WWW_AUTHENTICATE_HEADER, "Basic realm=\"" + realmName + "\"");
                 }
             };
-        }
+        }*/
     }
 
     /**
@@ -148,6 +144,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         authPolicy.setSpringSecurityAccessPolicy(
                 new SpringSecurityAccessPolicy(GlobalSecurityConfig.AuthRole.WS.name()));
         return authPolicy;
+    }
+
+    @Override
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 }
 

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2017 the original author or authors.
+ *  Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,12 +57,12 @@ public class WebAdminConfigurer {
      * Registers {@link RequestResponseLoggingFilter}.
      */
     @Bean
-    public FilterRegistrationBean loggingRest() {
+    public FilterRegistrationBean<RequestResponseLoggingFilter> loggingRest() {
         LOG.info("REQ/RES logging initialization");
 
         RequestResponseLoggingFilter filter = new RequestResponseLoggingFilter();
         filter.setLogUnsupportedContentType(false);
-        final FilterRegistrationBean bean = new FilterRegistrationBean(filter);
+        final FilterRegistrationBean<RequestResponseLoggingFilter> bean = new FilterRegistrationBean<>(filter);
         // we use logging filter only for administration endpoints to avoid duplication log events
         bean.addUrlPatterns(WEB_URI_PREFIX_MAPPING);
 
@@ -89,11 +89,11 @@ public class WebAdminConfigurer {
      */
     @Bean(name = WEB_CONTEXT_ID)
     @ConditionalOnMissingBean(name = WEB_CONTEXT_ID)
-    public ServletRegistrationBean adminServlet(
+    public ServletRegistrationBean<DispatcherServlet> adminServlet(
             ConfigurableApplicationContext context,
             DispatcherServlet dispatcherServlet) {
 
-        ServletRegistrationBean bean = new ServletRegistrationBean(dispatcherServlet);
+        ServletRegistrationBean<DispatcherServlet> bean = new ServletRegistrationBean<>(dispatcherServlet);
         // sets corresponding ID (name) of web context
         context.setId(WEB_CONTEXT_ID);
         bean.addUrlMappings(WEB_URI_PREFIX_MAPPING);
