@@ -177,7 +177,7 @@ public class MessagePollExecutorTest extends AbstractCoreDbTest {
         }
     }
 
-    //TODO Jiri Hankovec 4.2.2021
+    //TODO (Jiri Hankovec 4.2.2021, TASK: OHFJIRA-118), sometimes fails when run by maven
     @Ignore("Test fails")
     @Test
     @Transactional
@@ -231,7 +231,7 @@ public class MessagePollExecutorTest extends AbstractCoreDbTest {
         Assert.assertThat(em.find(Message.class, msg.getMsgId()).getState(), CoreMatchers.is(MsgStateEnum.PROCESSING));
     }
 
-    //TODO Jiri Hankovec 4.2.2021
+    //TODO (Jiri Hankovec 4.2.2021, TASK: OHFJIRA-118), sometimes fails when run by maven
     @Ignore("Test fails")
     @Test
     @Transactional

@@ -18,6 +18,7 @@ package org.openhubframework.openhub;
 
 import javax.servlet.Filter;
 
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.ApplicationPidFileWriter;
@@ -130,7 +131,7 @@ public class OpenHubApplication extends SpringBootServletInitializer implements 
         return new SpringApplicationBuilder()
                 .parent(OpenHubApplication.class)
                 // explicitly request a web environment for standalone running
-                .web(true);
+                .web(WebApplicationType.SERVLET);
     }
     
 }

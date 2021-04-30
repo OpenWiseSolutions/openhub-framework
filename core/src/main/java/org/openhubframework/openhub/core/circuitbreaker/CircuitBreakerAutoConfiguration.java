@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Bean;
 /**
  * Circuit breaker AutoConfiguration.
  *
- * Can be enabled or disabled altogether via property {@link CircuitBreakerAutoConfiguration.CIRCUIT_BREAKER_ENABLED}.
+ * Can be enabled or disabled altogether via property {@value CircuitBreakerAutoConfiguration#CIRCUIT_BREAKER_ENABLED}.
  *
  * If enabled it does setup implementation of CircuitBreaker interface.
  * Either in-memory (default), or Hazelcast-based, based on configuration properties.

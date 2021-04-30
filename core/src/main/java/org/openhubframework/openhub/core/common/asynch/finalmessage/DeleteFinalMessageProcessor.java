@@ -87,7 +87,7 @@ public class DeleteFinalMessageProcessor extends AbstractFinalMessageProcessor {
     }
 
     /**
-     * Delete all request & responses for given Message.
+     * Delete all request {@literal &} responses for given Message.
      *
      * @param message the message to be deleted.
      */

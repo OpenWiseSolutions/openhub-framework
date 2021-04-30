@@ -20,9 +20,10 @@ import org.springframework.test.annotation.IfProfileValue;
 
 
 /**
+ * <p>
  * Defines test profiles which are useful when specific test runs with specific target environment
  * (=specific target system).
- * <p/>
+ * </p>
  * When you want to run some test for specific environment, then you have to run VM with system parameter
  * for target environment, e.g. {@code -Dintegration=ALL}
  *

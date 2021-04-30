@@ -47,13 +47,13 @@ import org.openhubframework.openhub.api.exception.validation.ConfigurationExcept
 /**
  * Configuration checker that is called when application context is initialized.
  * There are some predefined checks or you can define your own checking via {@link ConfCheck} interface.
- * <p/>
+ * <p></p>
  * Checks will be performed after the application is fully started, if running with embedded servlet container,
  * it will wait for its full initialization, see Spring {@link ApplicationReadyEvent} for more info.
- * <p/>
+ * <p></p>
  * Checking of {@link #checkLocalhostUri() localhost URI} must be explicitly enabled by setting
  * property "{@code ohf.server.localhostUri.check}".
- * <p/>
+ * <p></p>
  * Initialize this listener in child web application context only.
  *
  * @author Petr Juza

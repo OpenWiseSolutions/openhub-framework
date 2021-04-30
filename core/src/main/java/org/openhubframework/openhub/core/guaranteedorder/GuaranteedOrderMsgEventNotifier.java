@@ -33,7 +33,7 @@ import org.springframework.context.event.EventListener;
 
 /**
  * Listens to successfully completed message event {@link CompletedGuaranteedOrderMsgAsynchEvent}.
- * <p/>
+ * <p></p>
  * The following message in order is found using the funnel value and sent for next processing.
  *
  * @author Michal Sabol

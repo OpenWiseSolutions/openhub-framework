@@ -42,15 +42,15 @@ class Home extends Component {
 
     const healthTableData = healthInfo && [
       ['Application', <Status status={isUp(healthInfo.status)} />],
-      ['Datasources', <Status status={isUp(healthInfo.details.db.status)} />],
-      ['Database', healthInfo.details.db.details.database]
+      ['Datasources', <Status status={isUp(healthInfo.components.db.status)} />],
+      ['Database', healthInfo.components.db.details.database]
     ]
 
     const diskTableData = healthInfo && [
-      ['Status', <Status status={isUp(healthInfo.details.diskSpace.status)} />],
-      ['Free space', (healthInfo.details.diskSpace.details.free / 1000000000).toFixed(2) + ' GB'],
-      ['Total space', (healthInfo.details.diskSpace.details.total / 1000000000).toFixed(2) + ' GB'],
-      ['Threshold', (healthInfo.details.diskSpace.details.threshold / 1000000000).toFixed(2) + ' GB']
+      ['Status', <Status status={isUp(healthInfo.components.diskSpace.status)} />],
+      ['Free space', (healthInfo.components.diskSpace.details.free / 1000000000).toFixed(2) + ' GB'],
+      ['Total space', (healthInfo.components.diskSpace.details.total / 1000000000).toFixed(2) + ' GB'],
+      ['Threshold', (healthInfo.components.diskSpace.details.threshold / 1000000000).toFixed(2) + ' GB']
     ]
 
     const memChartProps = metricsInfo && {

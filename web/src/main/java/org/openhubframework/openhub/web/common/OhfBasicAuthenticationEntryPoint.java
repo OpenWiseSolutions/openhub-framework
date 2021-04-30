@@ -21,12 +21,17 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+/**
+ * Basic authentication entry point, does return 401 UNAUTHORIZED with WWW-Authenticate header set.
+ *
+ * @author Jiri Hankovec
+ * @since 2.3
+ */
 @Component
 public class OhfBasicAuthenticationEntryPoint extends BasicAuthenticationEntryPoint {
 
@@ -39,7 +44,7 @@ public class OhfBasicAuthenticationEntryPoint extends BasicAuthenticationEntryPo
     static final String WWW_AUTHENTICATE_HEADER = "WWW-Authenticate";
 
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.addHeader(
                 WWW_AUTHENTICATE_HEADER, "Basic realm=\"" + getRealmName() + "\"");
@@ -48,7 +53,7 @@ public class OhfBasicAuthenticationEntryPoint extends BasicAuthenticationEntryPo
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         setRealmName(realmName);
         super.afterPropertiesSet();
     }

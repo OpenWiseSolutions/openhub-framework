@@ -40,20 +40,22 @@ import org.openhubframework.openhub.api.exception.validation.ValidationException
  * <p>
  * There is the following lifecycle when entity is <strong>created</strong> from RPC -
  * calling {@link #createEntity()} or {@link #createEntity(BindingResult)} or {@link #createEntity(BindingResult, Map)}:
+ * </p>
  * <ol>
  *     <li>validates attributes and state of the RPC - {@link #validate(BindingResult, Identifiable)}
  *     <li>creates new entity instance - {@link #createEntityInstance(Map)}
  *     <li>updates attributes - {@link #updateAttributes(Identifiable, boolean)}, where second parameter is {@code true}
  * </ol>
  *
- * </p>
+ * <p>
  * There is the following lifecycle when entity is <strong>updated</strong> from RPC -
  * calling {@link #updateEntity(Identifiable)} or {@link #updateEntity(Identifiable, BindingResult)}:
+ * </p>
  * <ol>
  *     <li>validates attributes and state of the RPC - {@link #validate(BindingResult, Identifiable)}
  *     <li>updates attributes - {@link #updateAttributes(Identifiable, boolean)}, where second parameter is {@code false}
  * </ol>
- * </p>
+ *
  *
  * @author Petr Juza
  * @since 2.0

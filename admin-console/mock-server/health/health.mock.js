@@ -9,7 +9,7 @@ module.exports = [
       body: JSON.stringify(
         {
           'status': 'UP',
-          'details': {
+          'components': {
             'db': {
               'status': 'UP',
               'details': {

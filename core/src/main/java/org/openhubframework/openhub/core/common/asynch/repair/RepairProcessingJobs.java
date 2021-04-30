@@ -17,6 +17,7 @@ import org.openhubframework.openhub.core.common.quartz.OpenHubQuartzJob;
  * Jobs for for repair processing.
  * <p>
  * Contains two jobs:
+ * </p>
  * <ul>
  * <li>
  * {@value #EXT_CALL_REPAIR_JOB_NAME} - call method {@link RepairExternalCallService#repairProcessingExternalCalls()}
@@ -29,7 +30,6 @@ import org.openhubframework.openhub.core.common.quartz.OpenHubQuartzJob;
  * Job running concurrent in all nodes in cluster.
  * </li>
  * </ul>
- * </p>
  *
  * @author Roman Havlicek
  * @see RepairExternalCallService#repairProcessingExternalCalls()

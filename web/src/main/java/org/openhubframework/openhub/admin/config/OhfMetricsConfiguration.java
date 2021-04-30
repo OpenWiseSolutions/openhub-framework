@@ -25,6 +25,12 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 
+/**
+ * Auto configuration for OpenHub custom endpoints.
+ *
+ * @author Jiri Hankovec
+ * @since 2.3
+ */
 @AutoConfiguration
 @AutoConfigureAfter(MetricsEndpointAutoConfiguration.class)
 public class OhfMetricsConfiguration {

@@ -25,6 +25,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+/**
+ *  A custom {@link WebEndpoint} for exposing the metrics held by a MeterRegistry.
+ *
+ * @author Jiri Hankovec
+ * @since 2.3
+ */
 @WebEndpoint(id = "ohfmetrics")
 public class OhfMetricsEndpoint {
 

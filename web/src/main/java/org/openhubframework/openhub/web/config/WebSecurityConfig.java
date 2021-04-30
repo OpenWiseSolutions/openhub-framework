@@ -67,9 +67,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Order(WsSecurityConfig.ORDER)
     public static class WsSecurityConfig extends WebSecurityConfig {
 
-//        @Autowired
-//        private SecurityProperties securityProperties;
-
         @Autowired
         private OhfBasicAuthenticationEntryPoint ohfBasicAuthenticationEntryPoint;
 
@@ -96,25 +93,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             ;
             // @formatter:on
         }
-
-        // Basic authentication entry point, does return 401 UNAUTHORIZED with WWW-Authenticate header set.
-        //
-        // Note: custom entry point is used, because the original spring BasicAuthenticationEntryPoint does set unauthorized
-        // by invoking HttpResponse.sendError. With current openhub configuration however, it is not handled correctly
-        // in standalone deployment. With "manually" setting status on HttpResponse, it works in both scenarios
-        // (standalone & deployment to servlet container).
-        /*private AuthenticationEntryPoint basicAuthenticationEntryPoint() {
-            return (request, response, authException) -> {
-                if (authException != null) {
-                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    Assert.notNull(securityProperties, "the securityProperties must be set");
-                    Assert.notNull(securityProperties.getBasic(), "the security.basic must be set");
-                    final String realmName = securityProperties.getBasic().getRealm();
-                    response.addHeader(
-                            WWW_AUTHENTICATE_HEADER, "Basic realm=\"" + realmName + "\"");
-                }
-            };
-        }*/
     }
 
     /**

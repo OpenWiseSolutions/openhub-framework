@@ -74,7 +74,7 @@ public abstract class BaseRpc<T extends Identifiable<ID>, ID extends Serializabl
     }
 
     /**
-     * Inits RPC => override it for specified needs.
+     * Inits RPC =&gt; override it for specified needs.
      */
     protected void init() {
         // nothing to implement by default

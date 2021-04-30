@@ -109,14 +109,14 @@ public class CoreProps {
      * Setting to '0' means, that messages will be processed as soon as possible (next scheduled job).
      * Setting to '-1' means, that messages in given state will NOT be processed.
      * Property is set for each state separately, in pattern:
-     * ASYNCH_FINAL_MESSAGES_PREFIX + <lower-case state name> + ASYNCH_FINAL_MESSAGES_SAVE_TIME_IN_SEC_SUFFIX
+     * ASYNCH_FINAL_MESSAGES_PREFIX + &lt;lower-case state name&gt; + ASYNCH_FINAL_MESSAGES_SAVE_TIME_IN_SEC_SUFFIX
      * Example:
      * ohf.asynch.finalMessages.ok.saveTimeInSec
      */
     public static final String ASYNCH_FINAL_MESSAGES_PREFIX = PREFIX + "asynch.finalMessages.";
 
     /**
-     * Suffix to be used in conjuction with {@link CoreProps.ASYNCH_FINAL_MESSAGES_PREFIX}.
+     * Suffix to be used in conjuction with {@value CoreProps#ASYNCH_FINAL_MESSAGES_PREFIX}.
      */
     public static final String ASYNCH_FINAL_MESSAGES_SAVE_TIME_IN_SEC_SUFFIX = ".saveTimeInSec";
 

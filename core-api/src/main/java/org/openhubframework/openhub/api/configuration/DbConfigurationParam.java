@@ -33,6 +33,7 @@ import org.openhubframework.openhub.common.Tools;
 
 
 /**
+ * <p>
  * Entity represents one configuration parameter in database.
  * </p>
  * Call {@link #checkConsistency(ConversionService)} to check that parameter is consistent state.

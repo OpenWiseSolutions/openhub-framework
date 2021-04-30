@@ -16,21 +16,16 @@
 
 package org.openhubframework.openhub.admin.config;
 
-import static org.springframework.util.StringUtils.hasText;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ResourceProperties;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.Resource;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.List;
+import static org.springframework.util.StringUtils.hasText;
 
 
 /**
@@ -56,12 +51,8 @@ public class AdminMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-//        Resource page = this.resourceProperties.getWelcomePage();
-//        if (page != null) {
-            final String welcomePagePath = getWelcomePagePath(mvcProperties);
-//            logger.info("Adding welcome page ({}): {}", page, welcomePagePath);
-            registry.addViewController(welcomePagePath).setViewName("forward:index.html");
-//        }
+        final String welcomePagePath = getWelcomePagePath(mvcProperties);
+        registry.addViewController(welcomePagePath).setViewName("forward:index.html");
     }
 
     /**

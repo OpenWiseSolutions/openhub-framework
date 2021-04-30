@@ -17,11 +17,11 @@ import org.springframework.util.Assert;
  * Custom component for simple use of circuit breaker.
  *
  * Usage:
- * .to("circuit:<circuit-name>:<uri-to-call>"),
+ * .to("circuit:&lt;circuit-name&gt;:&lt;uri-to-call&gt;"),
  * where:
- *  <circuit-name> is unique name of circuit, recommended granularity
+ *  &lt;circuit-name&gt; is unique name of circuit, recommended granularity
  *  is one circuit per target system.
- *  <uri-to-call> is uri to be invoked if circuit is up.
+ *  &lt;uri-to-call&gt; is uri to be invoked if circuit is up.
  * Configuration:
  *  {@link CircuitConfiguration} in Exchange property {@link CircuitBreaker#CONFIGURATION_PROPERTY}
  *

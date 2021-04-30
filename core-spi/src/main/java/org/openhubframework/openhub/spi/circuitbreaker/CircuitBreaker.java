@@ -24,10 +24,10 @@ import org.springframework.util.Assert;
  *
  * <p>
  * <b>Configuration:</b>
+ * </p>
  * <ul><li>instance of {@link CircuitConfiguration} is expected to be set in Exchange property
  * {@link CircuitBreaker#CONFIGURATION_PROPERTY}. See CircuitConfiguration for more info.
  * </li></ul>
- * </p>
  *
  * @author Karel Kovarik
  * @see CircuitConfiguration
