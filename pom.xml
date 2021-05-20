@@ -15,7 +15,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.2</version>
+        <version>2.4.5</version>
     </parent>
 
     <licenses>
@@ -194,7 +194,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- OpenHub Spring Boot application -->
-        <spring-boot.version>2.4.2</spring-boot.version>
+        <spring-boot.version>2.4.5</spring-boot.version>
         <start-class>org.openhubframework.openhub.OpenHubApplication</start-class>
 
         <camel-version>2.22.2</camel-version>

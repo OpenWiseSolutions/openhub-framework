@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.config.ConfigFileApplicationListener;
+import org.springframework.boot.context.config.ConfigDataEnvironmentPostProcessor;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.Ordered;
@@ -54,10 +54,10 @@ public class DbExternalPropertiesAutoConfiguration
     private static final Logger LOG = LoggerFactory.getLogger(DbExternalPropertiesAutoConfiguration.class);
 
     /**
-     * Order of this listener. Must be processed after standard {@link ConfigFileApplicationListener}
+     * Order of this listener. Must be processed after standard {@link ConfigDataEnvironmentPostProcessor}
      * (processed application.properties).
      */
-    public static final int ORDER = ConfigFileApplicationListener.DEFAULT_ORDER + 10;
+    public static final int ORDER = ConfigDataEnvironmentPostProcessor.ORDER + 10;
 
     public static final String DB_CONF_PROPERTY_SOURCE_NAME = "dbConfiguration";
 

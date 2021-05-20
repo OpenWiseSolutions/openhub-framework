@@ -22,8 +22,8 @@ import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.context.config.ConfigFileApplicationListener;
 
+import org.springframework.boot.context.config.ConfigDataEnvironmentPostProcessor;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.boot.env.RandomValuePropertySource;
 import org.springframework.context.ApplicationListener;
@@ -46,10 +46,10 @@ public class FileExternalPropertiesAutoConfiguration
     private static final Logger LOG = LoggerFactory.getLogger(FileExternalPropertiesAutoConfiguration.class);
 
     /**
-     * Order of this listener. Must be processed after standard {@link ConfigFileApplicationListener} (processed
+     * Order of this listener. Must be processed after standard {@link ConfigDataEnvironmentPostProcessor} (processed
      * application.properties)
      */
-    public static final int ORDER = ConfigFileApplicationListener.DEFAULT_ORDER + 10;
+    public static final int ORDER = ConfigDataEnvironmentPostProcessor.ORDER + 10;
 
     public static final String OPENHUB_PROPERTIES_LOCATION = "/openhub.properties";
 
