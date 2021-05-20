@@ -36,7 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * (like THROTTLING, or ALERT_COUNT).
  * </p>
  * <p>
- * <b>Example:</b><br/>
+ * <b>Example:</b><br>
  * In this example increment for property count is synchronized by value SYNCHRONIZATION_VALUE in domain ALERT.
  * Method has no result.
  * <pre>
@@ -50,7 +50,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *      }
  * }, "ALERT", synchronizationValue);
  * </pre>
- * </p>
+ * <p></p>
  * <p>
  * Instance of this class gets by {@link #getInstance()}.
  * </p>

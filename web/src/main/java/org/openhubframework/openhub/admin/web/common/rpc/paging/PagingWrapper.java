@@ -39,13 +39,13 @@ import org.openhubframework.openhub.admin.web.common.rpc.paging.metadata.PagingM
  * </p>
  * <p>
  * Example of usage:
+ * </p>
  * <pre>
- *      Page<Order> foundOrders = service.findOrders(request);
- *      Page<OrderRpc> resultList = foundOrders.map(toRpc());
+ *      Page&lt;Order&gt; foundOrders = service.findOrders(request);
+ *      Page&lt;OrderRpc&gt; resultList = foundOrders.map(toRpc());
  *
  *      return PagingWrapper.withMetadata(resultList);
  * </pre>
- * </p>
  *
  * @param <T> - type of item in page result
  * @author <a href="mailto:tomas.hanus@openwise.cz">Tomas Hanus</a>

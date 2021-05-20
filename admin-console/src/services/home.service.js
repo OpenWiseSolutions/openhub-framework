@@ -3,7 +3,7 @@ import apiService from './api.service'
 export const URL = {
   getInfo: '/mgmt/info',
   getHealth: '/mgmt/health',
-  getMetrics: '/mgmt/metrics'
+  getMetrics: '/mgmt/ohfmetrics'
 }
 
 export const fetchInfo = () => apiService.get(URL.getInfo)

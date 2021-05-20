@@ -29,6 +29,7 @@ import org.quartz.Job;
  *
  * }
  * </pre>
+ * <p>
  * This example show that will be create job with group <i>groupName</i> and name <i>jobName</i> and
  * method <i>invokeJob</i> will be called every 1000 millis in all nodes in cluster.
  * </p>

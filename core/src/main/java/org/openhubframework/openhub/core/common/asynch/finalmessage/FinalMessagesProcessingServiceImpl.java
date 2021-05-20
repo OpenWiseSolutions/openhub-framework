@@ -52,7 +52,7 @@ import org.springframework.util.Assert;
 /**
  * Default implementation of {@link FinalMessagesProcessingService}.
  *
- * Does find messages in final states & configured last update time.
+ * Does find messages in final states {@literal &} configured last update time.
  * After startup, fast check if all required params are filled is performed.
  *
  * Note: there is technical limit on how many messages for each state are processed at most.

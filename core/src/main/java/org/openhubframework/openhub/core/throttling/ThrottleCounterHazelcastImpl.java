@@ -37,8 +37,9 @@ import org.openhubframework.openhub.spi.throttling.ThrottleScope;
  * Shared memory (aka memory grid or cache) implementation of {@link ThrottleCounter} interface
  * by Hazelcast' {@link IMap map} and {@link EntryProcessor}.
  * Suitable for running OpenHub in the cluster environment.
- * <p/>
- * Implementation prerequisites Hazelcast's map definition with the name '{@value #MAP_THROTTLING}'.
+ * <p></p>
+ * Implementation prerequisites Hazelcast's map definition with the name
+ * '{@value CacheNames#THROTTLING}'.
  *
  * @author Petr Juza
  * @since 2.0

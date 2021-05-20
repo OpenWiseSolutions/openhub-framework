@@ -42,15 +42,15 @@ class Home extends Component {
 
     const healthTableData = healthInfo && [
       ['Application', <Status status={isUp(healthInfo.status)} />],
-      ['Datasources', <Status status={isUp(healthInfo.db.status)} />],
-      ['Database', healthInfo.db.database]
+      ['Datasources', <Status status={isUp(healthInfo.components.db.status)} />],
+      ['Database', healthInfo.components.db.details.database]
     ]
 
     const diskTableData = healthInfo && [
-      ['Status', <Status status={isUp(healthInfo.diskSpace.status)} />],
-      ['Free space', (healthInfo.diskSpace.free / 1000000000).toFixed(2) + ' GB'],
-      ['Total space', (healthInfo.diskSpace.total / 1000000000).toFixed(2) + ' GB'],
-      ['Threshold', (healthInfo.diskSpace.threshold / 1000000000).toFixed(2) + ' GB']
+      ['Status', <Status status={isUp(healthInfo.components.diskSpace.status)} />],
+      ['Free space', (healthInfo.components.diskSpace.details.free / 1000000000).toFixed(2) + ' GB'],
+      ['Total space', (healthInfo.components.diskSpace.details.total / 1000000000).toFixed(2) + ' GB'],
+      ['Threshold', (healthInfo.components.diskSpace.details.threshold / 1000000000).toFixed(2) + ' GB']
     ]
 
     const memChartProps = metricsInfo && {
@@ -72,7 +72,7 @@ class Home extends Component {
       outerRadius: 100,
       fill: secondaryColor,
       data: [
-        { value: metricsInfo['heap.committed'], fill: tc(positiveColor).setAlpha(0.8).toString() },
+        { value: metricsInfo['heap.used'], fill: tc(positiveColor).setAlpha(0.8).toString() },
         { value: metricsInfo['heap'], fill: tc(secondaryColor).setAlpha(0.3).toString() }
       ]
     }
@@ -90,9 +90,9 @@ class Home extends Component {
       `${((metricsInfo['mem'] - metricsInfo['mem.free']) / 1000).toFixed(2)} MB`
     const totalMemory = metricsInfo && `${(metricsInfo['mem'] / 1000).toFixed(2)} MB`
 
-    const freeHeap = metricsInfo && `${(metricsInfo['heap.committed'] / 1000).toFixed(2)} MB`
+    const freeHeap = metricsInfo && `${(metricsInfo['heap.used'] / 1000).toFixed(2)} MB`
     const usedHeap = metricsInfo &&
-      `${((metricsInfo['heap'] - metricsInfo['heap.committed']) / 1000).toFixed(2)} MB`
+      `${((metricsInfo['heap'] - metricsInfo['heap.used']) / 1000).toFixed(2)} MB`
     const totalHeap = metricsInfo && `${(metricsInfo['heap'] / 1000).toFixed(2)} MB`
 
     return (

@@ -33,6 +33,7 @@ import org.openhubframework.openhub.spi.quartz.TriggerFactory;
  * Implementation of Quartz {@link Scheduler} that create {@link Trigger}s from {@link TriggerFactory}.
  * <p>
  * Scheduler has two constructors:
+ * </p>
  * <ul>
  * <li>
  * {@link DefaultScheduler#DefaultScheduler(String, JobExecuteTypeInCluster, Properties)} - create scheduler that store
@@ -43,7 +44,7 @@ import org.openhubframework.openhub.spi.quartz.TriggerFactory;
  * that store information about triggers and jobs into {@link DataSource}.
  * </li>
  * </ul>
- * </p>
+ *
  *
  * @author Roman Havlicek
  * @see TriggerFactory

@@ -23,7 +23,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import javax.sql.DataSource;
 
+import org.openhubframework.openhub.common.AutoConfiguration;
+import org.openhubframework.openhub.core.config.datasource.OpenHubDatabaseConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
@@ -45,7 +48,8 @@ import org.springframework.util.ClassUtils;
  * @author Petr Juza
  * @since 2.0
  */
-@Configuration
+@AutoConfiguration
+@AutoConfigureAfter(OpenHubDatabaseConfiguration.class)
 public class JpaConfig {
 
     /**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2016 the original author or authors.
+ * Copyright 2002-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,8 +82,8 @@ public abstract class AbstractOhfController {
      * @return sublist for the page
      */
     protected static <T> List<T> pageContentList(List<T> list, Pageable pageable) {
-        int start = pageable.getOffset();
-        int end = (start + pageable.getPageSize()) > list.size() ? list.size() : (start + pageable.getPageSize());
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), list.size());
 
         return list.subList(start, end);
     }

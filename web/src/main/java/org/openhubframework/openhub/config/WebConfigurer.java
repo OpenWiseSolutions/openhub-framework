@@ -1,5 +1,5 @@
 /*
- *  Copyright 2017 the original author or authors.
+ *  Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,12 +74,12 @@ public class WebConfigurer {
      * Creates {@link MonitoringFilter} filter.
      */
     @Bean
-    public FilterRegistrationBean monitoringJavaMelody(ServletContext servletContext) {
+    public FilterRegistrationBean<MonitoringFilter> monitoringJavaMelody(ServletContext servletContext) {
         LOG.info("JavaMelody initialization: " + javaMelodyProps.getInitParameters());
 
         final MonitoringFilter filter = new MonitoringFilter();
         filter.setApplicationType("OpenHub");
-        FilterRegistrationBean registration = new FilterRegistrationBean(filter);
+        FilterRegistrationBean<MonitoringFilter> registration = new FilterRegistrationBean<>(filter);
         registration.setAsyncSupported(true);
         registration.setName(JAVAMELODY_FILTER_NAME);
         registration.setDispatcherTypes(DispatcherType.REQUEST, DispatcherType.ASYNC);

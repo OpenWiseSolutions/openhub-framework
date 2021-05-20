@@ -9,16 +9,22 @@ module.exports = [
       body: JSON.stringify(
         {
           'status': 'UP',
-          'db': {
-            'status': 'UP',
-            'database': 'H2',
-            'hello': 'connection test'
-          },
-          'diskSpace': {
-            'status': 'UP',
-            'free': 164883804160,
-            'threshold': 10485760,
-            'total': 398313103360
+          'components': {
+            'db': {
+              'status': 'UP',
+              'details': {
+                'database': 'H2',
+                'hello': 'connection test'
+              }
+            },
+            'diskSpace': {
+              'status': 'UP',
+              'details': {
+                'free': 164883804160,
+                'threshold': 10485760,
+                'total': 398313103360
+              }
+            }
           }
         })
     }

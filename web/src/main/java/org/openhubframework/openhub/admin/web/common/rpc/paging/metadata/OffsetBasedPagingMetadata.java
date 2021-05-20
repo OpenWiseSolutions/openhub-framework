@@ -28,6 +28,7 @@ import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
  * Offset-based paging metadata descriptor.
  * <p>
  * It generates result for example in JSON:
+ * </p>
  * <pre>
  * {
  *      "first": true,
@@ -42,7 +43,6 @@ import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
  *      "numberOfElements": 1
  * }
  * </pre>
- * </p>
  *
  * @author <a href="mailto:tomas.hanus@openwise.cz">Tomas Hanus</a>
  * @since 2.0

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2017 the original author or authors.
+ *  Copyright 2017-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +20,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
+import org.springframework.security.config.annotation.authentication.configuration.GlobalAuthenticationConfigurerAdapter;
 
 import org.openhubframework.openhub.common.AutoConfiguration;
 import org.openhubframework.openhub.web.common.DefaultSecurityUsers;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 /**
@@ -50,14 +52,15 @@ public class GlobalSecurityConfig extends GlobalAuthenticationConfigurerAdapter 
     @Override
     public void init(AuthenticationManagerBuilder auth) throws Exception {
         // @formatter:off
+        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         auth.inMemoryAuthentication()
-                .withUser(defaultUsers.getWsUser()).password(defaultUsers.getWsPassword())
+                .withUser(defaultUsers.getWsUser()).password(encoder.encode(defaultUsers.getWsPassword()))
                     .roles(AuthRole.WS.name());
         auth.inMemoryAuthentication()
-                .withUser(defaultUsers.getWebUser()).password(defaultUsers.getWebPassword())
+                .withUser(defaultUsers.getWebUser()).password(encoder.encode(defaultUsers.getWebPassword()))
                     .roles(AuthRole.WEB.name(), AuthRole.WS.name(), AuthRole.MONITORING.name());
         auth.inMemoryAuthentication()
-                .withUser(defaultUsers.getMonitoringUser()).password(defaultUsers.getMonitoringPassword())
+                .withUser(defaultUsers.getMonitoringUser()).password(encoder.encode(defaultUsers.getMonitoringPassword()))
                     .roles(AuthRole.MONITORING.name());        
         // @formatter:on
     }

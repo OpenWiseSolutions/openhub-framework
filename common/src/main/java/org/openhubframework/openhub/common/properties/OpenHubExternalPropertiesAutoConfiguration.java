@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2016 the original author or authors.
+ * Copyright 2002-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@ import static org.springframework.util.ResourceUtils.CLASSPATH_URL_PREFIX;
 import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.context.config.ConfigFileApplicationListener;
-import org.springframework.boot.context.config.RandomValuePropertySource;
+import org.springframework.boot.context.config.ConfigDataEnvironmentPostProcessor;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
+import org.springframework.boot.env.RandomValuePropertySource;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.PropertySource;
@@ -43,9 +43,9 @@ public class OpenHubExternalPropertiesAutoConfiguration implements ApplicationLi
     private static final Logger LOG = LoggerFactory.getLogger(OpenHubExternalPropertiesAutoConfiguration.class);
 
     /**
-     * Order of this listener. Must be processed after standard ConfigFileApplicationListener (processed application.properties)
+     * Order of this listener. Must be processed after standard {@link ConfigDataEnvironmentPostProcessor} (processed application.properties)
      */
-    private static final int ORDER = ConfigFileApplicationListener.DEFAULT_ORDER + 10;
+    private static final int ORDER = ConfigDataEnvironmentPostProcessor.ORDER + 10;
 
     private static final String OH_PROPERTIES_LOCATION = "/openhub.properties";
     private static final String OH_PROPERTY_SOURCE_NAME = "openhub";

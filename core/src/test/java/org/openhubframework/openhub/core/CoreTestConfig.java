@@ -35,7 +35,7 @@ public class CoreTestConfig {
 
     @Bean
     @Primary
-    public EmailService emailService() {
+    public EmailService emailTestService() {
         return new DummyEmailServiceImpl();
     }
 }

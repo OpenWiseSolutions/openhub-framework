@@ -28,7 +28,7 @@ import org.springframework.transaction.PlatformTransactionManager;
  * Configuration for final messages processing.
  * Does declare all the necessary beans.
  *
- * For more info about final messages processing, see javadoc of {@link FinalMessagesProcessingService} &
+ * For more info about final messages processing, see javadoc of {@link FinalMessagesProcessingService} {@literal &}
  * {@link FinalMessageProcessor}.
  *
  * @author Karel Kovarik

@@ -60,8 +60,9 @@ public final class TestRestUtils {
     }
 
     /**
+     * <p>
      * Formats the {@code GET} query based upon configuration.
-     * <p/>
+     * </p>
      * <pre>{@code
      *  createPageQuery(1,20) &rarr; p=1&s=20
      * }</pre>
@@ -75,8 +76,9 @@ public final class TestRestUtils {
     }
 
     /**
+     * <p>
      * Creates the {@code GET} pageable query based upon configuration.
-     * <p/>
+     * </p>
      * <pre>{@code
      *  createPagePair(1,20) &rarr; p=1&s=20
      * }</pre>
@@ -93,10 +95,11 @@ public final class TestRestUtils {
     }
 
     /**
+     * <p>
      * Creates the {@code GET} sortable query based upon configuration. With this method it is necessary to use
      * URLDecoder#decode(String, String) to decode URL or use {@link #toUrl(URIBuilder)}.
      *
-     * <p/>
+     * </p>
      * <pre>{@code
      *  createSortPair(new Sort(new Sort.Order(Sort.Direction.DESC, "dateFrom"))) &rarr; sort=name&name,dir=desc
      * }</pre>
@@ -116,8 +119,9 @@ public final class TestRestUtils {
     }
 
     /**
+     * <p>
      * Creates the {@code GET} query for local date based upon configuration.
-     * <p/>
+     * </p>
      * <pre>{@code
      *  createDateQuery("dateFrom", LocalDate.now()) &rarr; dateFrom=2015-03-09
      * }</pre>
@@ -141,7 +145,7 @@ public final class TestRestUtils {
      * @return the {@link Pageable}
      */
     public static Pageable createPage(int page, int size) {
-        return new PageRequest(ONE_BASED_PAGINATION ? page - 1 : page, size);
+        return PageRequest.of(ONE_BASED_PAGINATION ? page - 1 : page, size);
     }
 
     /**
@@ -160,15 +164,16 @@ public final class TestRestUtils {
     }
 
     /**
+     * <p>
      * Construct an instance from the REST path which must be a valid URI.
-     * <p/>
+     * </p>
      * <pre>{@code
      * final String context = createGetUrl("/rpc/orders")
      *      .addParameters(createPagePair(1, 20))
      *      .addParameter("fulltext", "value")
-     *          .build().toString();}</pre>
+     *          .build().toString();}
      * </pre>
-     * Result: /rpc/orders?p=1&s=20&fulltext=value&createdFrom=2015-06-20
+     * Result: /rpc/orders?p=1{@literal &}s=20{@literal &}fulltext=value{@literal &}createdFrom=2015-06-20
      *
      * @param path a valid REST URI path in string form
      */

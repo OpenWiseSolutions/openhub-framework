@@ -38,7 +38,7 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
 /**
  * Simple request/response logging filter that writes the request URI
  * (and optionally the query string) including request content <strong>and also response content</strong> to the LogContext.
- * <p/>
+ * <p></p>
  * This filter is very useful to log REST layer.
  *
  * @author Tomas Hanus
