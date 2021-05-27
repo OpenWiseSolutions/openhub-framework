@@ -123,7 +123,7 @@
     "json-loader": "^0.5.4",
     "moment": "^2.17.1",
     "node-sass": "^4.5.3",
-    "object-path": "^0.11.3",
+    "object-path": "^0.11.5",
     "prop-types": "^15.5.10",
     "qs": "^6.4.0",
     "radium": "^0.18.1",
