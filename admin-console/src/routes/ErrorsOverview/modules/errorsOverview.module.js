@@ -3,14 +3,14 @@ import { fetchErrorCatalog } from '../../../services/errors.service.js'
 // ------------------------------------
 // Constants
 // ------------------------------------
-const GET_ENVIRONMENT_SUCCESS = 'GET_ENVIRONMENT_SUCCESS'
+const GET_ERRORS_OVERVIEW_SUCCESS = 'GET_ERRORS_OVERVIEW_SUCCESS'
 
 // ------------------------------------
 // Actions
 // ------------------------------------
 
 export const getErrorsOverviewSuccess = (payload) =>
-  ({ type: GET_ENVIRONMENT_SUCCESS, payload })
+  ({ type: GET_ERRORS_OVERVIEW_SUCCESS, payload })
 
 export const getErrorsOverview = () => (dispatch) => {
   return fetchErrorCatalog()
@@ -27,7 +27,7 @@ export const actions = {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [GET_ENVIRONMENT_SUCCESS]: (state, { payload }) => ({ ...state, errorsData: payload })
+  [GET_ERRORS_OVERVIEW_SUCCESS]: (state, { payload }) => ({ ...state, errorsData: payload })
 }
 
 // ------------------------------------
