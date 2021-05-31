@@ -6,7 +6,7 @@
     <groupId>org.openhubframework</groupId>
     <artifactId>openhub</artifactId>
     <packaging>pom</packaging>
-    <version>2.3.0</version>
+    <version>2.4.0-SNAPSHOT</version>
 
     <name>OpenHub Framework</name>
     <description>OpenHub integration framework</description>
@@ -50,7 +50,7 @@
         <connection>scm:git:https://github.com/OpenWiseSolutions/openhub-framework.git</connection>
         <developerConnection>scm:git:https://github.com/OpenWiseSolutions/openhub-framework.git</developerConnection>
         <url>https://github.com/OpenWiseSolutions/openhub-framework.git</url>
-        <tag>openhubframework-v2.3.0</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <distributionManagement>
