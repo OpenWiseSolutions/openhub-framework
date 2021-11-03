@@ -152,7 +152,7 @@
     "tinycolor2": "^1.4.1",
     "url-loader": "^0.5.6",
     "url-search-params-polyfill": "^3.0.0",
-    "validator": "^7.0.0",
+    "validator": "^13.7.0",
     "webfontloader": "^1.6.28",
     "webpack": "^1.12.14",
     "whatwg-fetch": "^2.0.3",
