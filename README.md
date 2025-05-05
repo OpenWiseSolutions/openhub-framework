@@ -1,3 +1,9 @@
+# ⚠️ This project is no longer maintained ⚠️
+
+This project is no longer actively developed or maintained. If you are looking for an alternative, we recommend exploring other integration frameworks based on Apache Camel.
+
+---
+
 # Welcome to OpenHub Framework 
 [![Build Status](https://travis-ci.org/OpenWiseSolutions/openhub-framework.svg?branch=develop)](https://travis-ci.org/OpenWiseSolutions/openhub-framework) [![Coverage Status](https://coveralls.io/repos/github/OpenWiseSolutions/openhub-framework/badge.svg?branch=develop)](https://coveralls.io/github/OpenWiseSolutions/openhub-framework?branch=develop) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.openhubframework/openhub/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.openhubframework/openhub)
 
